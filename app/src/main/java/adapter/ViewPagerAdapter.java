@@ -19,6 +19,7 @@ public class ViewPagerAdapter<T extends Fragment> extends FragmentPagerAdapter {
         mList = list;
     }
 
+
     @Override
     public Fragment getItem(int position) {
         return mList.get(position);
