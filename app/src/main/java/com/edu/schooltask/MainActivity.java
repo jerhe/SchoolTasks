@@ -68,7 +68,6 @@ public class MainActivity extends BaseActivity {
             }
         });
         bottomMenu.setPagePosition(0);
-        bottomMenu.setMessageNum(4);
     }
 
 }

@@ -17,7 +17,7 @@
             android:layout_gravity="center"/>
         <EditText
             android:id="@+id/it_input"
-
+            android:textSize="14sp"
             android:layout_width="match_parent"
             android:textColor="@color/fontColor"
             android:layout_height="match_parent"
