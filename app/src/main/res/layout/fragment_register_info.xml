@@ -20,10 +20,11 @@
         app:text="密码"
         app:inputType="password">
     </view.InputText>
-    <TextView
-        android:id="@+id/rp_next"
+    <Button
+        android:id="@+id/ri_finish"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:background="@drawable/shape_login_btn"
+        android:background="@drawable/shape_theme_btn"
         android:textColor="@color/white"
         android:layout_margin="20dp"
         android:gravity="center"
