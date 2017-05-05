@@ -14,9 +14,10 @@
         android:layout_height="50dp"
         app:text="密码">
     </view.InputText>
-    <TextView
+    <Button
+        android:id="@+id/login_login_btn"
         android:layout_width="match_parent"
-        android:background="@drawable/shape_login_btn"
+        android:background="@drawable/shape_theme_btn"
         android:textColor="@color/white"
         android:layout_margin="20dp"
         android:gravity="center"
