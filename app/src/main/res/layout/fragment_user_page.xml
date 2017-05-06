@@ -13,11 +13,10 @@
         <ImageView
             android:id="@+id/up_user_head"
             android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@color/white"/>
+            android:layout_height="70dp"/>
         <TextView
             android:id="@+id/up_user_name"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

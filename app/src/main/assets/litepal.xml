@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="SchoolTask"></dbname>
-    <version value="1"></version>
+    <version value="6"></version>
     <list>
-
+        <mapping class="beans.User"></mapping>
     </list>
 </litepal>

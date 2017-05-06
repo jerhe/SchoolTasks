@@ -1,13 +1,25 @@
 package com.edu.schooltask;
 
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ViewPagerAdapter;
+import beans.User;
 import fragment.HomeFragment;
 import fragment.OrderFragment;
 import fragment.TalkFragment;
@@ -22,6 +34,7 @@ public class MainActivity extends BaseActivity {
     Fragment orderFragment;
     Fragment userFragment;
     BottomMenu bottomMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +47,6 @@ public class MainActivity extends BaseActivity {
     private void bind(){
         viewPager = (ViewPager)findViewById(R.id.main_vp);
         bottomMenu = (BottomMenu)findViewById(R.id.main_bm);
-        //
     }
 
     private void initViewPager(){
@@ -58,6 +70,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
+        viewPager.setOffscreenPageLimit(4); //设置预加载页面数
     }
 
     private void initBottomMenu(){
@@ -70,4 +83,25 @@ public class MainActivity extends BaseActivity {
         bottomMenu.setPagePosition(0);
     }
 
+    /**
+     * 得到本地用户
+     */
+    private void getUser(){
+        List<User> users = DataSupport.findAll(User.class);
+        if(users.size() == 1){
+            user = users.get(0);
+        }
+        else{
+            user = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUser();
+        if(userFragment != null){
+            ((UserFragment)userFragment).updateUser(user);  //传入User
+        }
+    }
 }

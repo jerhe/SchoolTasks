@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <view.InputText
+        android:id="@+id/login_id"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="手机号">
@@ -13,8 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <view.InputText
+            android:id="@+id/login_pwd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            app:inputType="password"
             app:text="密码">
         </view.InputText>
         <TextView

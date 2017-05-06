@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.edu.schooltask">
 
+    <uses-permission android:name="android.permission.INTERNET"/>   <!-- 网络访问权限 -->
+
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"

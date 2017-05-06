@@ -10,9 +10,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.edu.schooltask.R;
+
+import utils.TextUtil;
 
 /**
  * Created by 夜夜通宵 on 2017/5/4.
@@ -46,5 +47,32 @@ public class InputText extends LinearLayout {
         if("password".equals(inputType)){
             inputText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
         }
+    }
+
+    public String getText(){
+        return inputText.getText().toString();
+    }
+
+
+    /**
+     * 设置过滤
+     * @param type 类型 0:手机 1...
+     */
+    public void setInputFilter(int type){
+        switch (type){
+            case 0:
+                TextUtil.setPhoneFilter(inputText);
+                break;
+            case 1:
+                TextUtil.setSchoolFilter(inputText);
+                break;
+            case 2:
+                TextUtil.setNameFilter(inputText);
+                break;
+            case 3:
+                TextUtil.setPwdFilter(inputText);
+                break;
+        }
+
     }
 }

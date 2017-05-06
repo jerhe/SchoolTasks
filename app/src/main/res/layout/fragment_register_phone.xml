@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <view.InputText
+        android:id="@+id/rpf_id"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="手机号">
