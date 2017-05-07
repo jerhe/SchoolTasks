@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:id="@+id/uf_bg"
         android:layout_width="match_parent"
@@ -14,15 +15,35 @@
             android:id="@+id/up_user_head"
             android:layout_width="70dp"
             android:layout_height="70dp"/>
-        <TextView
-            android:id="@+id/up_user_name"
+        <RelativeLayout
             android:layout_marginTop="20dp"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="登录/注册"/>
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+            <TextView
+                android:id="@+id/up_user_name"
+                android:textSize="16sp"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="登录/注册"/>
+            <TextView
+                android:id="@+id/up_user_level"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/up_user_name"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_level"
+                android:text="Lv.1"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/up_rv"
         android:fadingEdge="none"
