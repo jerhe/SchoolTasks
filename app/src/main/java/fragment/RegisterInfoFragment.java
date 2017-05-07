@@ -114,6 +114,7 @@ public class RegisterInfoFragment extends Fragment {
                                     user.save();
                                     //设置当前用户为注册用户
                                     ((BaseActivity)getActivity()).user = user;
+                                    TextUtil.hideBoard(getActivity());
                                     getActivity().finish();
                                 } catch (JSONException e) {
                                     e.printStackTrace();

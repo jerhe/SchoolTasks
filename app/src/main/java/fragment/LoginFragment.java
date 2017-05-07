@@ -94,6 +94,7 @@ public class LoginFragment extends Fragment {
                                 DataSupport.deleteAll(User.class);  //删除所有本地用户
                                 User user = User.jsonObjectToUser(data);
                                 user.save();
+                                TextUtil.hideBoard(getActivity());
                                 getActivity().finish();
                                 break;
                             case 1:

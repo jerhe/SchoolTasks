@@ -1,13 +1,17 @@
 package utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,5 +99,28 @@ public class TextUtil {
             sb.append(b[i]);
         }
         return sb.toString();
+    }
+
+    /**
+     * 弹出软键盘
+     * @param editText
+     */
+    public static void inputBoard(final EditText editText){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask(){
+            public void run(){
+                InputMethodManager inputManager = (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(editText, 0);
+            }
+        }, 300);    //延时300毫秒
+    }
+
+    /**
+     * 隐藏软键盘
+     * @param activity
+     */
+    public static void hideBoard(Activity activity){
+        InputMethodManager imm =  (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(),0);}
     }
 }

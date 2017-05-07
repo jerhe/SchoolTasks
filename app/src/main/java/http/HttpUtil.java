@@ -1,5 +1,9 @@
 package http;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,5 +65,22 @@ public class HttpUtil {
     public static void post(String url, RequestBody requestBody, HttpResponse httpResponse){
         Request request = new Request.Builder().url(url).post(requestBody).build();
         getInstance().newCall(request).enqueue(new HttpCallBack(httpResponse));
+    }
+
+    /**
+     * 判断网络连接
+     * @param context
+     * @return 有网络返回true,无返回false
+     */
+    public static boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
     }
 }

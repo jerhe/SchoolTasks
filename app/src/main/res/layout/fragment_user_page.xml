@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/uf_bg"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/background"
         android:gravity="center"
         android:orientation="vertical"
         android:layout_height="200dp">
@@ -34,7 +34,7 @@
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_level"
