@@ -12,6 +12,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import beans.User;
+
 /**
  * Created by 夜夜通宵 on 2017/5/4.
  */
@@ -19,6 +21,7 @@ import android.widget.TextView;
 public class BaseActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView titleText;
+    public static User user = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

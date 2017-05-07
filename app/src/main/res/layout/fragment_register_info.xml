@@ -5,16 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <view.InputText
+        android:id="@+id/ri_school"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="学校">
     </view.InputText>
     <view.InputText
+        android:id="@+id/ri_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="昵称">
     </view.InputText>
     <view.InputText
+        android:id="@+id/ri_pwd"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="密码"

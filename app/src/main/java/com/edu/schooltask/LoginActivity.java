@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ViewPagerAdapter;
+import beans.User;
 import fragment.LoginFragment;
 import fragment.RegisterInfoFragment;
 import fragment.RegisterPhoneFragment;
@@ -23,6 +24,7 @@ public class LoginActivity extends BaseActivity {
     private Fragment registerPhoneFragment;
     private Fragment registerInfoFragment;
     private MenuItem registerItem;
+    public String registerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
