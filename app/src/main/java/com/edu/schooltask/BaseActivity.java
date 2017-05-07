@@ -59,4 +59,5 @@ public class BaseActivity extends AppCompatActivity {
         super.onTitleChanged(title, color);
         if(titleText!=null) titleText.setText(title);
     }
+
 }

@@ -100,8 +100,8 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getUser();  //每次回到主页更新用户信息
-        if(userFragment != null){
-            ((UserFragment)userFragment).updateUser(user);  //传入User到用户页
-        }
+        if(userFragment != null) ((UserFragment)userFragment).updateUser(user);  //传入User到用户页
+        if(homeFragment != null) ((HomeFragment)homeFragment).updateUser(user);  //传入User到首页
+
     }
 }

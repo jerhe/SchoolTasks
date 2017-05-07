@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.edu.schooltask">
 
-    <uses-permission android:name="android.permission.INTERNET"/>   <!-- 网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />  <!-- 网络访问权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />  <!-- 读取网络状态权限 -->
+
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -19,7 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".AssessActivity" android:label="评价"></activity>
+        <activity
+            android:name=".AssessActivity"
+            android:label="评价" />
+        <activity android:name=".ReleaseActivity" android:label="发布任务"></activity>
     </application>
 
 </manifest>
