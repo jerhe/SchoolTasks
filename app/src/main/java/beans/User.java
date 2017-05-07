@@ -18,6 +18,7 @@ public class User extends DataSupport{
     private String sign;
     private int sex;
     private String birth;
+    private int level;
 
     public String getUserId() {
         return userId;
@@ -57,10 +58,12 @@ public class User extends DataSupport{
     public void setBirth(String birth) {
         this.birth = birth;
     }
+    public int getLevel(){return level;}
+    public void setLevel(int level){this. level = level;}
 
     public User(){}
 
-    public User(String userId, String token, String name, String school, String sign, int sex, String birth) {
+    public User(String userId, String token, String name, String school, String sign, int sex, String birth,int level) {
         super();
         this.userId = userId;
         this.token = token;
@@ -69,6 +72,7 @@ public class User extends DataSupport{
         this.sign = sign;
         this.sex = sex;
         this.birth = birth;
+        this.level = level;
     }
 
     public static User jsonObjectToUser(JSONObject data){
@@ -81,7 +85,8 @@ public class User extends DataSupport{
             Log.e("SIGN",sign);
             int sex = data.getInt("sex");
             String birth = data.getString("birth");
-            User user = new User(id, token, name, school, sign, sex, birth);
+            int level = data.getInt("level");
+            User user = new User(id, token, name, school, sign, sex, birth, level);
             return user;
         } catch (JSONException e) {
             e.printStackTrace();

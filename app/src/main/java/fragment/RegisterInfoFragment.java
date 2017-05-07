@@ -110,7 +110,7 @@ public class RegisterInfoFragment extends Fragment {
                                     DataSupport.deleteAll(User.class);
                                     //以下是自动登录操作
                                     //存储用户到本地数据库
-                                    User user = new User(id, token, name, school, "", -1, "");
+                                    User user = new User(id, token, name, school, "", -1, "", 1);
                                     user.save();
                                     //设置当前用户为注册用户
                                     ((BaseActivity)getActivity()).user = user;

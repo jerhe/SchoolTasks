@@ -49,6 +49,7 @@ public class UserFragment extends Fragment {
     private LinearLayout backgroundLayout;
 
     private TextView nameText;
+    private TextView levelText;
     private ImageView headImage;
     public UserFragment(){}
 
@@ -83,6 +84,7 @@ public class UserFragment extends Fragment {
                     }
                 });
         nameText = (TextView) view.findViewById(R.id.up_user_name);
+        levelText = (TextView) view.findViewById(R.id.up_user_level);
         userFunctionRecyclerView = (RecyclerView)view.findViewById(R.id.up_rv);
         FunctionAdapter userFunctionAdapter = new FunctionAdapter(R.layout.item_user_function, userFunctionItemList);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4,1);
@@ -137,6 +139,11 @@ public class UserFragment extends Fragment {
         super.onResume();
         if(user != null){
             nameText.setText(user.getName());
+            levelText.setVisibility(View.VISIBLE);
+            levelText.setText("Lv." + user.getLevel());
+        }
+        else{
+            levelText.setVisibility(View.GONE); //隐藏等级显示
         }
     }
 }
