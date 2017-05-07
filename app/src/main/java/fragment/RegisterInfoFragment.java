@@ -1,5 +1,6 @@
 package fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.edu.schooltask.BaseActivity;
 import com.edu.schooltask.LoginActivity;
 import com.edu.schooltask.R;
 
 import org.json.JSONException;
+import org.litepal.crud.DataSupport;
 
+import beans.User;
 import http.HttpResponse;
 import http.HttpUtil;
 import utils.TextUtil;
@@ -69,8 +73,9 @@ public class RegisterInfoFragment extends Fragment {
     }
 
     private void finish(){
+        if(!"完成".equals(finishBtn.getText()))return;
         final String school = schoolText.getText();
-        String name = nameText.getText();
+        final String name = nameText.getText();
         String pwd = pwdText.getText();
         if(school.length() == 0){
             TextUtil.toast(getContext(), "请输入学校");
@@ -88,19 +93,28 @@ public class RegisterInfoFragment extends Fragment {
             TextUtil.toast(getContext(), "密码长度至少为6位");
             return;
         }
-
-        String id = ((LoginActivity)getActivity()).registerId;
+        finishBtn.setText("正在提交请求...");
+        final String id = ((LoginActivity)getActivity()).registerId;
         HttpUtil.registerFinish(id, school, name, TextUtil.getMD5(pwd), new HttpResponse() {
             @Override
             public void handler() throws Exception {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        finishBtn.setText("完成");
                         switch (code){
                             case 0:
                                 try {
                                     String token = data.getString("token");
-                                    TextUtil.toast(getContext(), "注册成功" + token);
+                                    TextUtil.toast(getContext(), "注册成功");
+                                    DataSupport.deleteAll(User.class);
+                                    //以下是自动登录操作
+                                    //存储用户到本地数据库
+                                    User user = new User(id, token, name, school, "", -1, "");
+                                    user.save();
+                                    //设置当前用户为注册用户
+                                    ((BaseActivity)getActivity()).user = user;
+                                    getActivity().finish();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

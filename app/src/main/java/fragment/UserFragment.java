@@ -125,7 +125,7 @@ public class UserFragment extends Fragment {
     }
 
     /**
-     * 更新该页面用户信息
+     * 更新该页面User
      * @param user 从主页活动传入User
      */
     public void updateUser(User user){

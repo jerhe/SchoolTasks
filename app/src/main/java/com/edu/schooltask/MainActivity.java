@@ -99,9 +99,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getUser();
+        getUser();  //每次回到主页更新用户信息
         if(userFragment != null){
-            ((UserFragment)userFragment).updateUser(user);  //传入User
+            ((UserFragment)userFragment).updateUser(user);  //传入User到用户页
         }
     }
 }

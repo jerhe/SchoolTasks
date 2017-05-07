@@ -66,6 +66,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void login(){
+        if(!"登录".equals(loginBtn.getText()))return;
         final String id = idText.getText();
         String pwd = pwdText.getText();
         if(id.length() == 0){
@@ -80,12 +81,14 @@ public class LoginFragment extends Fragment {
             TextUtil.toast(getContext(), "请输入正确的密码");
             return;
         }
+        loginBtn.setText("登录中...");
         HttpUtil.login(id, TextUtil.getMD5(pwd), new HttpResponse() {
             @Override
             public void handler() throws Exception {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        loginBtn.setText("登录");
                         switch (code){
                             case 0:
                                 DataSupport.deleteAll(User.class);  //删除所有本地用户
