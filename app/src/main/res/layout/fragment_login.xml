@@ -8,7 +8,8 @@
         android:id="@+id/login_id"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:text="手机号">
+        app:text="手机号"
+        app:hint="请输入手机号">
     </view.InputText>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:inputType="password"
+            app:hint="请输入密码，至少6位"
             app:text="密码">
         </view.InputText>
         <TextView

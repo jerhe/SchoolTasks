@@ -3,6 +3,16 @@
 
     <declare-styleable name="InputText">
         <attr name="text" format="string"/>
+        <attr name="hint" format="string"/>
         <attr name="inputType" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="Content">
+        <attr name="maxLength" format="integer"/>
+        <attr name="contentHint" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="MenuItem">
+        <attr name="itemText" format="string"/>
     </declare-styleable>
 </resources>

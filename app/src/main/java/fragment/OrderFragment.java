@@ -50,10 +50,8 @@ public class OrderFragment extends Fragment {
 
     private void init(){
         allOrderFragment = new AllOrderFragment();
-        waitOrderFragment = new WaitOrderFragment();
         waitAssessFragment = new WaitAssessFragment();
         fragments.add(allOrderFragment);
-        fragments.add(waitOrderFragment);
         fragments.add(waitAssessFragment);
         viewPager = (ViewPager) view.findViewById(R.id.op_vp);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), fragments);

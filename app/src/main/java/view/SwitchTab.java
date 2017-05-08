@@ -16,8 +16,7 @@ import com.edu.schooltask.R;
 
 public class SwitchTab extends LinearLayout implements View.OnClickListener{
     public final static int PAGE_ALL_ORDER = 0;
-    public final static int PAGE_WAIT_ORDER = 1;
-    public final static int PAGE_WAIT_ASSESS = 2;
+    public final static int PAGE_WAIT_ASSESS = 1;
 
     public final static String NORMAL_COLOR = "#757575";
     public final static String LIGHT_COLOR = "#1B9DFF";
@@ -26,7 +25,6 @@ public class SwitchTab extends LinearLayout implements View.OnClickListener{
     private OnMenuSelectedListener onMenuSelectedListener;
 
     private TextView allOrderTab;
-    private TextView waitOrderTab;
     private TextView waitAssessTab;
 
     private View pointer;
@@ -36,11 +34,9 @@ public class SwitchTab extends LinearLayout implements View.OnClickListener{
         super(context, attrs);
         LinearLayout.inflate(context,R.layout.view_switch_tab,this);
         allOrderTab = (TextView) findViewById(R.id.st_all_order);
-        waitOrderTab = (TextView) findViewById(R.id.st_wait_order);
         waitAssessTab = (TextView) findViewById(R.id.st_wait_assess);
         pointer = findViewById(R.id.st_pointer);
         allOrderTab.setOnClickListener(this);
-        waitOrderTab.setOnClickListener(this);
         waitAssessTab.setOnClickListener(this);
 
     }
@@ -61,19 +57,11 @@ public class SwitchTab extends LinearLayout implements View.OnClickListener{
             case R.id.st_all_order:
                 onMenuSelectedListener.onMenuSelected(PAGE_ALL_ORDER);
                 allOrderTab.setTextColor(Color.parseColor(LIGHT_COLOR));
-                waitOrderTab.setTextColor(Color.parseColor(NORMAL_COLOR));
-                waitAssessTab.setTextColor(Color.parseColor(NORMAL_COLOR));
-                break;
-            case R.id.st_wait_order:
-                onMenuSelectedListener.onMenuSelected(PAGE_WAIT_ORDER);
-                allOrderTab.setTextColor(Color.parseColor(NORMAL_COLOR));
-                waitOrderTab.setTextColor(Color.parseColor(LIGHT_COLOR));
                 waitAssessTab.setTextColor(Color.parseColor(NORMAL_COLOR));
                 break;
             case R.id.st_wait_assess:
                 onMenuSelectedListener.onMenuSelected(PAGE_WAIT_ASSESS);
                 allOrderTab.setTextColor(Color.parseColor(NORMAL_COLOR));
-                waitOrderTab.setTextColor(Color.parseColor(NORMAL_COLOR));
                 waitAssessTab.setTextColor(Color.parseColor(LIGHT_COLOR));
                 break;
         }
@@ -98,9 +86,6 @@ public class SwitchTab extends LinearLayout implements View.OnClickListener{
                 setLight(R.id.st_all_order);
                 break;
             case 1:
-                setLight(R.id.st_wait_order);
-                break;
-            case 2:
                 setLight(R.id.st_wait_assess);
                 break;
         }

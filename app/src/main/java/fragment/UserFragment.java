@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.LoginActivity;
 import com.edu.schooltask.MainActivity;
 import com.edu.schooltask.R;
@@ -109,6 +110,14 @@ public class UserFragment extends Fragment {
         systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "设置"));
         systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "关于"));
 
+        //TEST
+        systemFunctionAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                DataSupport.deleteAll(User.class);
+                getActivity().finish();
+            }
+        });
 
         backgroundLayout = (LinearLayout) view.findViewById(R.id.uf_bg);
         backgroundLayout.setOnClickListener(new View.OnClickListener() {
