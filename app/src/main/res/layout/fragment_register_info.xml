@@ -8,19 +8,22 @@
         android:id="@+id/ri_school"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:text="学校">
+        app:text="学校"
+        app:hint="请输入学校">
     </view.InputText>
     <view.InputText
         android:id="@+id/ri_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:text="昵称">
+        app:text="昵称"
+        app:hint="请输入昵称，最大8个字">
     </view.InputText>
     <view.InputText
         android:id="@+id/ri_pwd"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="密码"
+        app:hint="请输入密码，至少6位"
         app:inputType="password">
     </view.InputText>
     <Button

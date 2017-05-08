@@ -108,7 +108,6 @@ public class LoginFragment extends Fragment {
                                 break;
                             default:
                                 TextUtil.toast(getContext(), "登录失败");
-                                break;
                         }
                     }
                 });

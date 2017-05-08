@@ -76,6 +76,50 @@ public class TextUtil {
         editText.setFilters(new InputFilter[]{filter});
     }
 
+    public static void setMoneyFilter(final EditText editText){
+        InputFilter filter=new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                String speChat="[0123456789.]";
+                Pattern pattern = Pattern.compile(speChat);
+                Matcher matcher = pattern.matcher(source.toString());
+                if(!matcher.find())return "";
+                return null;
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter});
+    }
+
+    public static void setNumFilter(final EditText editText){
+        InputFilter filter=new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                String speChat="[0123456789]";
+                Pattern pattern = Pattern.compile(speChat);
+                Matcher matcher = pattern.matcher(source.toString());
+                if(!matcher.find())return "";
+                return null;
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter});
+    }
+
+    /**
+     * 设置长度限制
+     * @param editText
+     * @param maxLength
+     */
+    public static void setLengthFilter(final EditText editText, final int maxLength){
+        InputFilter filter=new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if(source.length() + dest.length() > maxLength)return "";
+                return null;
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter});
+    }
+
     public static void toast(Context context, String msg){
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }

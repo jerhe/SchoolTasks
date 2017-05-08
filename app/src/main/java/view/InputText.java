@@ -3,6 +3,8 @@ package view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ public class InputText extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.view_input_text,this);
         TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.InputText);
         String text = typedArray.getString(R.styleable.InputText_text);
+        String hint = typedArray.getString(R.styleable.InputText_hint);
         String inputType = typedArray.getString(R.styleable.InputText_inputType);
         nameText = (TextView) findViewById(R.id.it_name);
         inputText = (EditText)findViewById(R.id.it_input);
@@ -44,9 +47,14 @@ public class InputText extends LinearLayout {
                 }
             }
         });
+        if(hint != null) inputText.setHint(hint);
         if("password".equals(inputType)){
             inputText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
         }
+    }
+
+    public void setText(String text){
+        inputText.setText(text);
     }
 
     public String getText(){
@@ -54,6 +62,11 @@ public class InputText extends LinearLayout {
     }
 
 
+
+    public void clean(){
+        inputText.setText("");
+        inputText.requestFocus();
+    }
     /**
      * 设置过滤
      * @param type 类型 0:手机 1...
@@ -72,7 +85,17 @@ public class InputText extends LinearLayout {
             case 3:
                 TextUtil.setPwdFilter(inputText);
                 break;
+            case 4:
+                TextUtil.setMoneyFilter(inputText);
+                break;
+            case 5:
+                TextUtil.setNumFilter(inputText);
+                break;
         }
+    }
 
+
+    public void setLengthFilter(int length){
+        TextUtil.setLengthFilter(inputText, length);
     }
 }

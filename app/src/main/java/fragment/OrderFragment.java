@@ -26,7 +26,6 @@ public class OrderFragment extends Fragment {
     private SwitchTab switchTab;
     private List<Fragment> fragments = new ArrayList<>();
     private Fragment allOrderFragment;
-    private Fragment waitOrderFragment;
     private Fragment waitAssessFragment;
 
     public OrderFragment() {
@@ -50,10 +49,8 @@ public class OrderFragment extends Fragment {
 
     private void init(){
         allOrderFragment = new AllOrderFragment();
-        waitOrderFragment = new WaitOrderFragment();
         waitAssessFragment = new WaitAssessFragment();
         fragments.add(allOrderFragment);
-        fragments.add(waitOrderFragment);
         fragments.add(waitAssessFragment);
         viewPager = (ViewPager) view.findViewById(R.id.op_vp);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), fragments);
