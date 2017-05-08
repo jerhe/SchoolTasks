@@ -94,8 +94,8 @@ public class UserFragment extends Fragment {
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
+        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "寻物启事"));
+        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "找兼职"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));

@@ -93,6 +93,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="10sp"
-            android:text="我的"/>
+            android:text="我"/>
     </LinearLayout>
 </LinearLayout>

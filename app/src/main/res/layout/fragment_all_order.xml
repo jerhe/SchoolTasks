@@ -15,9 +15,22 @@
         android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/ao_rv"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <TextView
+        android:id="@+id/ao_tip"
+        android:layout_marginTop="100dp"
+        android:gravity="center_horizontal"
+        android:elevation="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="没有订单"
+        android:textColor="@color/hintColor"
+        android:visibility="invisible"/>
+
 
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.edu.schooltask.R;
 
@@ -26,6 +27,7 @@ public class WaitAssessFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView tipText;
     private List<OrderWaitAssessItem> orderWaitAssessItemList = new ArrayList<>();
     public WaitAssessFragment() {
     }
@@ -48,13 +50,22 @@ public class WaitAssessFragment extends Fragment {
     private void init(){
         swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.wa_srl);
         recyclerView = (RecyclerView)view.findViewById(R.id.wa_rv);
+        tipText = (TextView) view.findViewById(R.id.wa_tip);
         OrderWaitAssessAdapter orderWaitAssessAdapter = new OrderWaitAssessAdapter(getActivity(), R.layout.item_order_wait_assess, orderWaitAssessItemList);
         recyclerView.setAdapter(orderWaitAssessAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         //TEST
-        OrderWaitAssessItem orderWaitAssessItem1 = new OrderWaitAssessItem("111","标题提提提提it","1211121313121");
-        OrderWaitAssessItem orderWaitAssessItem2 = new OrderWaitAssessItem("111","标题提提提提it","1211121313121");
-        orderWaitAssessItemList.add(orderWaitAssessItem1);
+        //OrderWaitAssessItem orderWaitAssessItem1 = new OrderWaitAssessItem("111","标题提提提提it","1211121313121");
+        //orderWaitAssessItemList.add(orderWaitAssessItem1);
+        checkEmpty();
+    }
+
+    public void checkEmpty(){
+        if(orderWaitAssessItemList.size() == 0){
+            tipText.setVisibility(View.VISIBLE);
+        }
+        else{
+            tipText.setVisibility(View.GONE);
+        }
     }
 }

@@ -26,7 +26,6 @@ public class OrderFragment extends Fragment {
     private SwitchTab switchTab;
     private List<Fragment> fragments = new ArrayList<>();
     private Fragment allOrderFragment;
-    private Fragment waitOrderFragment;
     private Fragment waitAssessFragment;
 
     public OrderFragment() {

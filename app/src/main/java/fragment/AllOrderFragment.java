@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -16,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import adapter.OrderAdapter;
 import item.OrderItem;
+import utils.TextUtil;
 import view.OrderTypeMenu;
 
 /**
@@ -33,6 +36,8 @@ public class AllOrderFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView tipText;
+    private List<OrderItem> typeOrderList = new ArrayList<>();
     private List<OrderItem> allOrderList = new ArrayList<>();
     private OrderTypeMenu orderTypeMenu;
     public AllOrderFragment() {
@@ -57,12 +62,14 @@ public class AllOrderFragment extends Fragment {
         orderTypeMenu = (OrderTypeMenu) view.findViewById(R.id.ao_menu);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.ao_srl);
         recyclerView = (RecyclerView) view.findViewById(R.id.ao_rv);
+        tipText = (TextView) view.findViewById(R.id.ao_tip);
         swipeRefreshLayout.setProgressViewOffset(true, 0,  (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50,
                 getResources().getDisplayMetrics()));   //改变刷新圆圈高度
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        OrderAdapter orderAdapter = new OrderAdapter(R.layout.item_order, allOrderList);
-        recyclerView.setAdapter(orderAdapter);
+        final OrderAdapter orderAdapter = new OrderAdapter(R.layout.item_order, typeOrderList);
         orderAdapter.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.header_order_empty,null));
+        orderAdapter.openLoadAnimation();
+        recyclerView.setAdapter(orderAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public boolean isScroll = false;
             int direction = 0;  //滚动方向  用于判断拖曳
@@ -107,11 +114,34 @@ public class AllOrderFragment extends Fragment {
                 }
             }
         });
-
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         orderTypeMenu.setOnMenuSelectedListener(new OrderTypeMenu.OnMenuItemSelectedListener() {
             @Override
             public void OnMenuItemSelected(int position) {
-
+                typeOrderList.clear();
+                typeOrderList.addAll(allOrderList);
+                switch (position){
+                    case 0:    //所有
+                        orderAdapter.notifyDataSetChanged();
+                        break;
+                    default:    //position对应订单状态
+                        for(OrderItem orderItem : allOrderList){
+                            if(orderItem.getState() != position - 1){
+                                int index = typeOrderList.indexOf(orderItem) + 1;
+                                typeOrderList.remove(orderItem);
+                                orderAdapter.notifyItemRemoved(index);
+                                orderAdapter.notifyItemRangeRemoved(1,index);
+                            }
+                        }
+                        break;
+                }
+                checkEmpty();
+            }
+        });
+        orderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                TextUtil.toast(getContext(), typeOrderList.get(position).getContent());
             }
         });
         //TEST
@@ -127,5 +157,16 @@ public class AllOrderFragment extends Fragment {
         allOrderList.add(orderItem4);
         allOrderList.add(orderItem5);
         allOrderList.add(orderItem6);
+
+        orderTypeMenu.setSelectItem(0);
+    }
+
+    public void checkEmpty(){
+        if(typeOrderList.size() == 0){
+            tipText.setVisibility(View.VISIBLE);
+        }
+        else{
+            tipText.setVisibility(View.GONE);
+        }
     }
 }

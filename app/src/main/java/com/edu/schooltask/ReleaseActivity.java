@@ -1,15 +1,26 @@
 package com.edu.schooltask;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.yuyh.library.imgsel.ImageLoader;
+import com.yuyh.library.imgsel.ImgSelActivity;
+import com.yuyh.library.imgsel.ImgSelConfig;
 
 import org.json.JSONException;
 import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import beans.User;
 import http.HttpCheckToken;
@@ -17,15 +28,29 @@ import http.HttpResponse;
 import http.HttpUtil;
 import utils.TextUtil;
 import view.Content;
+import view.ImageDisplayLoader;
 import view.InputText;
 
 public class ReleaseActivity extends BaseActivity {
+    private static final int REQUEST_CODE = 0;
+
     private InputText schoolText;
     private InputText titleText;
     private Content contentText;
     private InputText costText;
     private InputText limitTimeText;
     private Button releaseBtn;
+    private ImageDisplayLoader imageDisplayLoader;
+
+    List<String> paths = new ArrayList<>();
+    ImgSelConfig config;
+    ImageLoader loader = new ImageLoader() {
+        @Override
+        public void displayImage(Context context, String path, ImageView imageView) {
+            Glide.with(context).load(path).into(imageView);
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +62,7 @@ public class ReleaseActivity extends BaseActivity {
         costText = (InputText) findViewById(R.id.release_cost);
         limitTimeText = (InputText) findViewById(R.id.release_limit_time);
         releaseBtn = (Button) findViewById(R.id.release_release);
+        imageDisplayLoader = (ImageDisplayLoader) findViewById(R.id.release_idl);
 
         schoolText.setInputFilter(1);
         titleText.setLengthFilter(20);  //设置标题长度限制
@@ -53,6 +79,20 @@ public class ReleaseActivity extends BaseActivity {
         });
 
         titleText.requestFocus();   //设置标题为默认焦点
+
+        imageDisplayLoader.setOnAddClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multiSelect();
+            }
+        });
+
+        imageDisplayLoader.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multiSelect();
+            }
+        });
     }
 
     private void release(){
@@ -111,7 +151,8 @@ public class ReleaseActivity extends BaseActivity {
                     public void run() {
                         releaseBtn.setText("发布");
                         if(isSuccess){
-                            HttpUtil.release(user.getUserId(), school, title, content, money, time, new HttpResponse() {
+                            HttpUtil.release(user.getUserId(), school, title, content, money,
+                                    time, paths, new HttpResponse() {
                                 @Override
                                 public void handler() throws Exception {
                                     runOnUiThread(new Runnable() {
@@ -122,6 +163,10 @@ public class ReleaseActivity extends BaseActivity {
                                                 case 0:
                                                     TextUtil.toast(ReleaseActivity.this, "发布成功");
                                                     finish();
+                                                    break;
+                                                case 1:
+                                                    TextUtil.toast(ReleaseActivity.this, "您的余额不足以支付金额，请充值后再发布");
+                                                    //TODO 跳转到充值页面
                                                     break;
                                                 default:
                                                     TextUtil.toast(ReleaseActivity.this, "发布失败");
@@ -137,8 +182,45 @@ public class ReleaseActivity extends BaseActivity {
                         }
                     }
                 });
-
             }
         });
+    }
+
+    public void multiSelect() {
+        config = new ImgSelConfig.Builder(this, loader)
+                // 是否多选, 默认true
+                .multiSelect(true)
+                // 是否记住上次选中记录, 仅当multiSelect为true的时候配置，默认为true
+                .rememberSelected(true)
+                // “确定”按钮背景色
+                .btnBgColor(Color.WHITE)
+                // “确定”按钮文字颜色
+                .btnTextColor(Color.parseColor("#1B9DFF"))
+                // 使用沉浸式状态栏
+                .statusBarColor(Color.parseColor("#000000"))
+                // 返回图标ResId
+                .backResId(R.drawable.ic_action_back)
+                // 标题
+                .title("选择图片")
+                // 标题文字颜色
+                .titleColor(Color.WHITE)
+                // TitleBar背景色
+                .titleBgColor(Color.parseColor("#1B9DFF"))
+                // 第一个是否显示相机，默认true
+                .needCamera(true)
+                // 最大选择图片数量，默认9
+                .maxNum(3)
+                .build();
+        // 跳转到图片选择器
+        ImgSelActivity.startActivity(this, config, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            paths = data.getStringArrayListExtra(ImgSelActivity.INTENT_RESULT);
+            imageDisplayLoader.loadImages(paths);
+        }
     }
 }

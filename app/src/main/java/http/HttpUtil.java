@@ -8,12 +8,18 @@ import android.net.NetworkInfo;
 
 import com.edu.schooltask.LoginActivity;
 import com.edu.schooltask.ReleaseActivity;
+import com.yuyh.library.imgsel.common.Constant;
 
 import org.json.JSONException;
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
+import java.util.List;
+
 import beans.User;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -30,6 +36,7 @@ public class HttpUtil {
     final static String REGISTER_FINISH_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/finish";
     final static String RELEASE_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/release";
     final static String CHECK_TOKEN_URL ="http://192.168.191.1:8080/SchoolTaskServer/TokenController/checkToken";
+    final static String UPLOAD_ORDER_IMAGE_URL="http://192.168.191.1:8080/SchoolTaskServer/UploadImageController/orderImage";
 
     private static OkHttpClient client;
     private static OkHttpClient getInstance(){
@@ -65,21 +72,25 @@ public class HttpUtil {
         post(REGISTER_FINISH_URL, requestBody, httpResponse);
     }
 
-    public static void release(String userId, String school, String title, String content, float cost, int limitTime,
-                               HttpResponse httpResponse){
-        RequestBody requestBody = new FormBody.Builder()
-                .add("id", userId)
-                .add("school", school)
-                .add("title", title)
-                .add("content", content)
-                .add("cost", cost+"")
-                .add("limittime", limitTime+"")
-                .build();
+    public static void release(String userId, String school, String title, String content, float cost,
+                               int limitTime, List<String> paths, HttpResponse httpResponse){
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        for(int i=0; i < paths.size(); i++) {
+            File f=new File(paths.get(i));
+            if(f!=null) {
+                builder.addFormDataPart("image"+i, f.getName(), RequestBody.create(MediaType.parse("image/png"), f));
+            }
+        }
+        builder.addFormDataPart("id",userId);
+        builder.addFormDataPart("school", school);
+        builder.addFormDataPart("title", title);
+        builder.addFormDataPart("content", content);
+        builder.addFormDataPart("cost", cost+"");
+        builder.addFormDataPart("limittime", limitTime+"");
+        MultipartBody requestBody = builder.build();
         post(RELEASE_ORDER_URL, requestBody, httpResponse);
+
     }
-
-
-
 
 
 

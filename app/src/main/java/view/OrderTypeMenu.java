@@ -19,6 +19,7 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
     private MenuItem allItem;
     private MenuItem waitPayItem;
     private MenuItem waitAcceptItem;
+    private MenuItem waitFinishItem;
     private MenuItem waitAssessItem;
     private MenuItem assessFinishItem;
     private MenuItem unlessItem;
@@ -31,6 +32,7 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
         allItem = (MenuItem) findViewById(R.id.otm_all);
         waitPayItem = (MenuItem) findViewById(R.id.otm_wait_pay);
         waitAcceptItem = (MenuItem) findViewById(R.id.otm_wait_accept);
+        waitFinishItem = (MenuItem) findViewById(R.id.otm_wait_finish);
         waitAssessItem = (MenuItem) findViewById(R.id.otm_wait_assess);
         assessFinishItem = (MenuItem) findViewById(R.id.otm_assess_finish);
         unlessItem = (MenuItem) findViewById(R.id.otm_unless);
@@ -38,6 +40,7 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
         items.add(allItem);
         items.add(waitPayItem);
         items.add(waitAcceptItem);
+        items.add(waitFinishItem);
         items.add(waitAssessItem);
         items.add(assessFinishItem);
         items.add(unlessItem);
@@ -57,9 +60,14 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
         }
     }
 
+    public void setSelectItem(int position){
+        if(onMenuItemSelectedListener != null){
+            setLight(items.get(position).getId());
+        }
+    }
+
     public void setOnMenuSelectedListener(OnMenuItemSelectedListener onMenuItemSelectedListener){
         this.onMenuItemSelectedListener = onMenuItemSelectedListener;
-        setLight(R.id.otm_all); //默认选中第一个
     }
 
     @Override
