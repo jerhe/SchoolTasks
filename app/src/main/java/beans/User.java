@@ -6,11 +6,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Created by 夜夜通宵 on 2017/5/6.
  */
 
-public class User extends DataSupport{
+public class User extends DataSupport implements Serializable{
     private String userId;
     private String token;
     private String name;

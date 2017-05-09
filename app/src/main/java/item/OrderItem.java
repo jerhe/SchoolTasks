@@ -10,7 +10,6 @@ import org.litepal.crud.DataSupport;
 
 public class OrderItem extends DataSupport{
 
-    public final static int STATE_WAIT_PAY = 0;
     public final static int STATE_WAIT_ACCEPT = 1;
     public final static int STATE_WAIT_FINISH = 2;
     public final static int STATE_WAIT_ASSESS= 3;
@@ -18,7 +17,6 @@ public class OrderItem extends DataSupport{
     public final static int STATE_UNLESS = 5;
     public final static int STATE_CANCEL = 6;
 
-    public final static String STATE_WAIT_PAY_STR = "待支付";
     public final static String STATE_WAIT_ACCEPT_STR = "待接单";
     public final static String STATE_WAIT_FINISH_STR = "待完成";
     public final static String STATE_WAIT_ASSESS_STR = "待评价";
@@ -46,9 +44,6 @@ public class OrderItem extends DataSupport{
         this.cost = cost;
         this.state = state;
         switch (state){
-            case STATE_WAIT_PAY:
-                stateStr = STATE_WAIT_PAY_STR;
-                break;
             case STATE_WAIT_ACCEPT:
                 stateStr = STATE_WAIT_ACCEPT_STR;
                 break;

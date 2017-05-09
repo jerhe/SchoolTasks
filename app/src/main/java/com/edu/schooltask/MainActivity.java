@@ -1,17 +1,8 @@
 package com.edu.schooltask;
 
-import android.graphics.Bitmap;
-import android.support.v4.app.Fragment;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 
 import org.litepal.crud.DataSupport;
 
@@ -19,11 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ViewPagerAdapter;
+import base.BaseActivity;
 import beans.User;
-import fragment.HomeFragment;
-import fragment.OrderFragment;
-import fragment.TalkFragment;
-import fragment.UserFragment;
+import fragment.main.HomeFragment;
+import fragment.main.OrderFragment;
+import fragment.main.TalkFragment;
+import fragment.main.UserFragment;
 import view.BottomMenu;
 
 public class MainActivity extends BaseActivity {
@@ -96,12 +88,15 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void updateUser(){
+        if(userFragment != null) ((UserFragment)userFragment).updateUser(user);  //传入User到用户页
+        if(homeFragment != null) ((HomeFragment)homeFragment).updateUser(user);  //传入User到首页
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         getUser();  //每次回到主页更新用户信息
-        if(userFragment != null) ((UserFragment)userFragment).updateUser(user);  //传入User到用户页
-        if(homeFragment != null) ((HomeFragment)homeFragment).updateUser(user);  //传入User到首页
-
+        updateUser();
     }
 }

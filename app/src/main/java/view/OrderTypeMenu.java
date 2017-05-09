@@ -17,7 +17,6 @@ import java.util.List;
 public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
     private OnMenuItemSelectedListener onMenuItemSelectedListener;
     private MenuItem allItem;
-    private MenuItem waitPayItem;
     private MenuItem waitAcceptItem;
     private MenuItem waitFinishItem;
     private MenuItem waitAssessItem;
@@ -30,7 +29,6 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_order_type_menu,this);
         allItem = (MenuItem) findViewById(R.id.otm_all);
-        waitPayItem = (MenuItem) findViewById(R.id.otm_wait_pay);
         waitAcceptItem = (MenuItem) findViewById(R.id.otm_wait_accept);
         waitFinishItem = (MenuItem) findViewById(R.id.otm_wait_finish);
         waitAssessItem = (MenuItem) findViewById(R.id.otm_wait_assess);
@@ -38,7 +36,6 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
         unlessItem = (MenuItem) findViewById(R.id.otm_unless);
         cancleItem = (MenuItem) findViewById(R.id.otm_cancle);
         items.add(allItem);
-        items.add(waitPayItem);
         items.add(waitAcceptItem);
         items.add(waitFinishItem);
         items.add(waitAssessItem);

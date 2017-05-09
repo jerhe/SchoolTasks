@@ -4,25 +4,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
 import com.yuyh.library.imgsel.ImgSelConfig;
 
-import org.json.JSONException;
-import org.litepal.crud.DataSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import beans.User;
+import base.BaseActivity;
 import http.HttpCheckToken;
 import http.HttpResponse;
 import http.HttpUtil;
@@ -104,39 +99,39 @@ public class ReleaseActivity extends BaseActivity {
         final String limitTime = limitTimeText.getText();
 
         if(school.length() == 0){
-            TextUtil.toast(this, "请输入学校");
+            toastShort("请输入学校");
             return;
         }
         if(title.length() == 0){
-            TextUtil.toast(this, "请输入标题");
+            toastShort("请输入标题");
             return;
         }
         if(content.length() == 0){
-            TextUtil.toast(this, "请输入内容");
+            toastShort("请输入内容");
             return;
         }
         if(cost.length() == 0){
-            TextUtil.toast(this, "请输入金额");
+            toastShort("请输入金额");
             return;
         }
         if(limitTime.length() == 0){
-            TextUtil.toast(this, "请输入时限");
+            toastShort("请输入时限");
             return;
         }
         if(".".equals(cost)){
-            TextUtil.toast(this, "金额错误，请重新输入");
+            toastShort("金额错误，请重新输入");
             costText.clean();
             return;
         }
         final float money = Float.parseFloat(cost);
         if(money < 1){
-            TextUtil.toast(this, "最小金额为1元，请重新输入");
+            toastShort("最小金额为1元，请重新输入");
             costText.clean();
             return;
         }
         final int time = Integer.parseInt(limitTime);
         if(time == 0 || time >= 7 * 24){
-            TextUtil.toast(this, "时限错误,请重新输入");
+            toastShort("时限错误,请重新输入");
             limitTimeText.clean();
             return;
         }
@@ -161,15 +156,15 @@ public class ReleaseActivity extends BaseActivity {
                                             progressDialog.dismiss();
                                             switch (code){
                                                 case 0:
-                                                    TextUtil.toast(ReleaseActivity.this, "发布成功");
+                                                    toastShort("发布成功");
                                                     finish();
                                                     break;
                                                 case 1:
-                                                    TextUtil.toast(ReleaseActivity.this, "您的余额不足以支付金额，请充值后再发布");
+                                                    toastShort("您的余额不足以支付金额，请充值后再发布");
                                                     //TODO 跳转到充值页面
                                                     break;
                                                 default:
-                                                    TextUtil.toast(ReleaseActivity.this, "发布失败");
+                                                    toastShort("发布失败");
                                             }
                                         }
                                     });

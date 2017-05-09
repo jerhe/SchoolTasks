@@ -1,17 +1,11 @@
-package fragment;
+package fragment.main;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.edu.schooltask.LoginActivity;
 import com.edu.schooltask.R;
@@ -23,17 +17,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import adapter.BannerViewPagerAdapter;
+import base.BaseFragment;
 import beans.User;
 import http.HttpUtil;
 import listener.BannerViewPagerPointer;
-import utils.TextUtil;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
-public class HomeFragment extends Fragment {
-    private View view;
+public class HomeFragment extends BaseFragment {
     private User user;
     private ViewPager bannerViewPager;
     private List<ImageView> bannerViewPagerList = new ArrayList<>();
@@ -42,23 +35,11 @@ public class HomeFragment extends Fragment {
     private Button acceptBtn;
 
     public HomeFragment() {
+        super(R.layout.fragment_home_page);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (null != view) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (null != parent) {
-                parent.removeView(view);
-            }
-        } else {
-            view = inflater.inflate(R.layout.fragment_home_page,container,false);
-            init();
-        }
-        return view;
-    }
-
-    private void init(){
+    protected void init(){
         //图片轮播
         bannerViewPager = (ViewPager) view.findViewById(R.id.home_vp);
         bannerViewPagerList.addAll(getBanner());
@@ -93,13 +74,13 @@ public class HomeFragment extends Fragment {
                         startActivity(intent);
                     }
                     else{
-                        TextUtil.toast(getContext(),"请先登录");
+                        toastShort("请先登录");
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);
                     }
                 }
                 else{
-                    TextUtil.toast(getContext(),"请检查网络连接");
+                    toastShort("请检查网络连接");
                 }
             }
         });
@@ -111,13 +92,13 @@ public class HomeFragment extends Fragment {
                         //TODO
                     }
                     else{
-                        TextUtil.toast(getContext(),"请先登录");
+                        toastShort("请先登录");
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);
                     }
                 }
                 else{
-                    TextUtil.toast(getContext(),"请检查网络连接");
+                    toastShort("请检查网络连接");
                 }
             }
         });

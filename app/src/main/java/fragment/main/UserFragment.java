@@ -1,4 +1,4 @@
-package fragment;
+package fragment.main;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +10,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.LoginActivity;
-import com.edu.schooltask.MainActivity;
 import com.edu.schooltask.R;
 
 import org.litepal.crud.DataSupport;
@@ -32,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.FunctionAdapter;
+import base.BaseFragment;
 import beans.User;
 import item.FunctionItem;
 
@@ -40,9 +39,8 @@ import item.FunctionItem;
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
-public class UserFragment extends Fragment {
+public class UserFragment extends BaseFragment {
     private User user;
-    private View view;
     private RecyclerView userFunctionRecyclerView;
     private List<FunctionItem> userFunctionItemList = new ArrayList<>();
     private RecyclerView systemFunctionRecyclerView;
@@ -52,23 +50,12 @@ public class UserFragment extends Fragment {
     private TextView nameText;
     private TextView levelText;
     private ImageView headImage;
-    public UserFragment(){}
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (null != view) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (null != parent) {
-                parent.removeView(view);
-            }
-        } else {
-            view = inflater.inflate(R.layout.fragment_user_page,container,false);
-            init();
-        }
-        return view;
+    public UserFragment(){
+        super(R.layout.fragment_user_page);
     }
 
-    private void init(){
+    @Override
+    protected void init(){
         //头像
         headImage = (ImageView) view.findViewById(R.id.up_user_head);
         Glide.with(getContext())

@@ -120,10 +120,6 @@ public class TextUtil {
         editText.setFilters(new InputFilter[]{filter});
     }
 
-    public static void toast(Context context, String msg){
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-    }
-
 
     public static String getMD5(String val) {
         MessageDigest md5 = null;
@@ -145,26 +141,5 @@ public class TextUtil {
         return sb.toString();
     }
 
-    /**
-     * 弹出软键盘
-     * @param editText
-     */
-    public static void inputBoard(final EditText editText){
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask(){
-            public void run(){
-                InputMethodManager inputManager = (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.showSoftInput(editText, 0);
-            }
-        }, 300);    //延时300毫秒
-    }
 
-    /**
-     * 隐藏软键盘
-     * @param activity
-     */
-    public static void hideBoard(Activity activity){
-        InputMethodManager imm =  (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm != null) {imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(),0);}
-    }
 }

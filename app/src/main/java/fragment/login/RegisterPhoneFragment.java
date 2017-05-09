@@ -1,62 +1,42 @@
-package fragment;
+package fragment.login;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.edu.schooltask.LoginActivity;
 import com.edu.schooltask.R;
 
-import org.json.JSONException;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
-import beans.User;
+import base.BaseFragment;
 import http.HttpResponse;
 import http.HttpUtil;
-import utils.TextUtil;
 import view.InputText;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
-public class RegisterPhoneFragment extends Fragment {
-    private View view;
+public class RegisterPhoneFragment extends BaseFragment {
     private Button nextBtn;
     private InputText idText;
     private Button getCodeBtn;
     private ViewPager viewPager;
 
-    public RegisterPhoneFragment(){}
+    public RegisterPhoneFragment(){
+    }
 
     @SuppressLint("ValidFragment")
     public RegisterPhoneFragment(ViewPager viewPager) {
+        super(R.layout.fragment_register_phone);
         this.viewPager = viewPager;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (null != view) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (null != parent) {
-                parent.removeView(view);
-            }
-        } else {
-            view = inflater.inflate(R.layout.fragment_register_phone,container,false);
-            init();
-        }
-        return view;
-    }
-
-    private void init(){
+    protected void init(){
         getCodeBtn = (Button) view.findViewById(R.id.rp_get_code);
         nextBtn = (Button) view.findViewById(R.id.rp_next);
 
@@ -89,7 +69,7 @@ public class RegisterPhoneFragment extends Fragment {
     public void getCode(){
         String id = idText.getText();
         if(id.length() != 11){
-            TextUtil.toast(getContext(), "请输入正确的手机号");
+            toastShort("请输入正确的手机号");
             return;
         }
         //发送请求
@@ -102,13 +82,13 @@ public class RegisterPhoneFragment extends Fragment {
                         switch (code){
                             case 0: //获取成功
                                 startCoundDown();
-                                TextUtil.toast(getContext(), "验证码已经通过短信发送至您的手机");
+                                toastShort("验证码已经通过短信发送至您的手机");
                                 break;
                             case 1: //用户已存在
-                                TextUtil.toast(getContext(), "用户已存在");
+                                toastShort("用户已存在");
                                 break;
                             default:    //获取失败
-                                TextUtil.toast(getContext(), "获取验证码失败");
+                                toastShort("获取验证码失败");
                         }
                     }
                 });

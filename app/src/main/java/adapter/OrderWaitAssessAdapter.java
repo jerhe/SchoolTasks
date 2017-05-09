@@ -8,12 +8,10 @@ import android.widget.Button;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.AssessActivity;
-import com.edu.schooltask.BaseActivity;
 import com.edu.schooltask.R;
 
 import java.util.List;
 
-import item.OrderItem;
 import item.OrderWaitAssessItem;
 
 /**

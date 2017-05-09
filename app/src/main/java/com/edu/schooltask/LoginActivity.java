@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ViewPagerAdapter;
-import beans.User;
-import fragment.LoginFragment;
-import fragment.RegisterInfoFragment;
-import fragment.RegisterPhoneFragment;
+import base.BaseActivity;
+import fragment.login.LoginFragment;
+import fragment.login.RegisterInfoFragment;
+import fragment.login.RegisterPhoneFragment;
 
 public class LoginActivity extends BaseActivity {
     private ViewPager viewPager;

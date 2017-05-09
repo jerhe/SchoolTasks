@@ -1,7 +1,8 @@
 package com.edu.schooltask;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import base.BaseActivity;
 
 public class AssessActivity extends BaseActivity {
 

@@ -1,14 +1,11 @@
 package http;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.edu.schooltask.LoginActivity;
-import com.edu.schooltask.ReleaseActivity;
-import com.yuyh.library.imgsel.common.Constant;
 
 import org.json.JSONException;
 import org.litepal.crud.DataSupport;
@@ -16,6 +13,7 @@ import org.litepal.crud.DataSupport;
 import java.io.File;
 import java.util.List;
 
+import base.BaseActivity;
 import beans.User;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -23,8 +21,6 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import utils.TextUtil;
-import view.Content;
 
 /**
  * Created by 夜夜通宵 on 2017/5/6.
@@ -107,7 +103,7 @@ public class HttpUtil {
      * @param user
      * @param httpCheckToken
      */
-    public static void postWithToken(final Activity activity, final User user, final HttpCheckToken httpCheckToken){
+    public static void postWithToken(final BaseActivity activity, final User user, final HttpCheckToken httpCheckToken){
         checkToken(user.getToken(), new HttpResponse() {
             @Override
             public void handler() throws Exception {
@@ -129,12 +125,12 @@ public class HttpUtil {
                                 break;
                             case 2: //令牌错误
                                 DataSupport.deleteAll(User.class);
-                                TextUtil.toast(activity, "账号错误，请重新登录");
+                                activity.toastShort("账号错误，请重新登录");
                                 Intent intent = new Intent(activity, LoginActivity.class);
                                 activity.startActivity(intent);
                                 break;
                             case -1: //连接服务器失败
-                                TextUtil.toast(activity, "连接失败,请检查网络");
+                                activity.toastShort("连接失败,请检查网络");
                                 break;
                         }
                         httpCheckToken.handler();

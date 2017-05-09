@@ -10,10 +10,10 @@
         android:textColor="@color/white"
         android:gravity="center"
         android:textSize="18sp"/>
-    <view.SwitchTab
-        android:id="@+id/op_st"
+    <view.ViewPagerTab
+        android:id="@+id/op_vpt"
         android:layout_width="match_parent"
-        android:layout_height="32dp" />
+        android:layout_height="32dp"></view.ViewPagerTab>
     <View android:layout_height="0.1dp"
         android:layout_width="match_parent"
         android:background="@color/lineColor"/>
