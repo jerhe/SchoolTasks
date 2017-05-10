@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.edu.schooltask.MainActivity">
+    tools:context="com.edu.schooltask.activity.MainActivity">
     <android.support.v4.view.ViewPager
         android:id="@+id/main_vp"
         android:layout_width="match_parent"
@@ -16,10 +16,10 @@
     <View android:background="@color/lineColor"
         android:layout_height="0.1dp"
         android:layout_width="match_parent"/>
-    <view.BottomMenu
+    <com.edu.schooltask.view.BottomMenu
         android:id="@+id/main_bm"
         android:layout_width="match_parent"
         android:layout_height="50dp">
-    </view.BottomMenu>
+    </com.edu.schooltask.view.BottomMenu>
 
 </LinearLayout>

@@ -1,0 +1,211 @@
+package com.edu.schooltask.fragment.order;
+
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.edu.schooltask.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.edu.schooltask.adapter.OrderAdapter;
+import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.base.BaseFragment;
+import com.edu.schooltask.http.HttpCheckToken;
+import com.edu.schooltask.http.HttpResponse;
+import com.edu.schooltask.http.HttpUtil;
+import com.edu.schooltask.item.OrderItem;
+import com.edu.schooltask.view.OrderTypeMenu;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ * Created by 夜夜通宵 on 2017/5/3.
+ */
+
+public class AllOrderFragment extends BaseFragment {
+
+    private RecyclerView recyclerView;
+    private OrderAdapter orderAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView tipText;
+    private List<OrderItem> typeOrderList = new ArrayList<>();
+    private List<OrderItem> allOrderList = new ArrayList<>();
+    private OrderTypeMenu orderTypeMenu;
+    public AllOrderFragment() {
+        super(R.layout.fragment_all_order);
+    }
+
+    @Override
+    protected void init(){
+        orderTypeMenu = (OrderTypeMenu) view.findViewById(R.id.ao_menu);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.ao_srl);
+        recyclerView = (RecyclerView) view.findViewById(R.id.ao_rv);
+        tipText = (TextView) view.findViewById(R.id.ao_tip);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUserOrder();
+            }
+        });
+        swipeRefreshLayout.setProgressViewOffset(true, 0,  (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50,
+                getResources().getDisplayMetrics()));   //改变刷新圆圈高度
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        orderAdapter = new OrderAdapter(R.layout.item_order, typeOrderList);
+        orderAdapter.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.header_order_empty,null));
+        orderAdapter.openLoadAnimation();
+        recyclerView.setAdapter(orderAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            public boolean isScroll = false;
+            int direction = 0;  //滚动方向  用于判断拖曳
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == 0) {
+                    isScroll = false;
+                    direction = 0;
+                }
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy < 0) {
+                    if(direction == -1) isScroll = false;
+                    direction = 1;
+                }
+                if(dy > 0){
+                    if(direction == 1) isScroll = false;
+                    direction = -1;
+                }
+                if(!isScroll) {
+                    isScroll = true;
+                    if (dy < 0) {
+                        if(!orderTypeMenu.isShown()){
+                            orderTypeMenu.setVisibility(View.VISIBLE);
+                            orderTypeMenu.startAnimation(
+                                    AnimationUtils.loadAnimation(getContext(),R.anim.translate_up_to_down));
+                        }
+                    } else if(dy > 0){
+                        if(orderTypeMenu.isShown()){
+                            orderTypeMenu.setVisibility(View.INVISIBLE);
+                            orderTypeMenu.startAnimation(
+                                    AnimationUtils.loadAnimation(getContext(),R.anim.translate_down_to_up));
+                        }
+                    }
+                    if(dy == 0) {
+                        isScroll = false;
+                        direction = 0;
+                    }
+                }
+            }
+        });
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        orderTypeMenu.setOnMenuSelectedListener(new OrderTypeMenu.OnMenuItemSelectedListener() {
+            @Override
+            public void OnMenuItemSelected(int position) {
+                addToTypeOrderList(position);
+            }
+        });
+        orderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                toastShort(typeOrderList.get(position).getContent());
+            }
+        });
+        orderTypeMenu.setSelectItem(0);
+        getUserOrder();
+    }
+
+    private void addToTypeOrderList(int position){
+        typeOrderList.clear();
+        switch (position){
+            case 0:    //所有
+                typeOrderList.addAll(allOrderList);
+                break;
+            default:    //position对应订单状态
+                for(OrderItem orderItem : allOrderList){
+                    if(orderItem.getState() == position - 1){
+                        typeOrderList.add(orderItem);
+                    }
+                }
+                break;
+        }
+        orderAdapter.notifyDataSetChanged();
+        checkEmpty();
+    }
+    public void checkEmpty(){
+        if(typeOrderList.size() == 0){
+            tipText.setVisibility(View.VISIBLE);
+            tipText.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
+        }
+        else{
+            tipText.setVisibility(View.GONE);
+        }
+    }
+
+
+    public void getUserOrder(){
+        if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
+        tipText.setVisibility(View.GONE);
+        HttpUtil.postWithToken((BaseActivity)getActivity(), user, new HttpCheckToken() {
+            @Override
+            public void handler() {
+                if(isSuccess){
+                    HttpUtil.getUserOrder(user.getUserId(), new HttpResponse() {
+                        @Override
+                        public void handler() throws Exception {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
+                            });
+                            switch (code){
+                                case 0:
+                                    JSONArray jsonArray = data.getJSONArray("orders");
+                                    List<OrderItem> orders = new ArrayList<>();
+                                    for(int i=0; i<jsonArray.length(); i++){
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        OrderItem order = new OrderItem(
+                                                jsonObject.getInt("index"),
+                                                jsonObject.getString("orderid"),
+                                                jsonObject.getInt("type"),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getString("content"),
+                                                (float)jsonObject.getDouble("cost"),
+                                                jsonObject.getInt("state"));
+                                        orders.add(order);
+                                    }
+                                    allOrderList.clear();
+                                    allOrderList.addAll(orders);
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addToTypeOrderList(orderTypeMenu.getPosition());
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    toastShort("连接失败,请检查网络"+code);
+                            }
+                        }
+                    });
+                }
+                else{
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }
+}

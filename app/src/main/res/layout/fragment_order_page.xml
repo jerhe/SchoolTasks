@@ -10,10 +10,10 @@
         android:textColor="@color/white"
         android:gravity="center"
         android:textSize="18sp"/>
-    <view.ViewPagerTab
+    <com.edu.schooltask.view.ViewPagerTab
         android:id="@+id/op_vpt"
         android:layout_width="match_parent"
-        android:layout_height="32dp"></view.ViewPagerTab>
+        android:layout_height="32dp"></com.edu.schooltask.view.ViewPagerTab>
     <View android:layout_height="0.1dp"
         android:layout_width="match_parent"
         android:background="@color/lineColor"/>

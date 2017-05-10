@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.edu.schooltask">
 
-    <uses-permission android:name="android.permission.INTERNET" />  <!-- 网络访问权限 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />  <!-- 读取网络状态权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络访问权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 读取网络状态权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -15,18 +15,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".activity.LoginActivity" />
         <activity
-            android:name=".AssessActivity"
+            android:name=".activity.AssessActivity"
             android:label="评价" />
-        <activity android:name=".ReleaseActivity" android:label="发布任务"></activity>
+        <activity
+            android:name=".activity.ReleaseActivity"
+            android:label="发布任务" />
+        <activity android:name=".activity.MoneyActivity" android:label="我的钱包"></activity>
     </application>
 
 </manifest>
