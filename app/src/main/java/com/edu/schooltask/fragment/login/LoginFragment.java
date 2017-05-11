@@ -1,16 +1,22 @@
 package com.edu.schooltask.fragment.login;
 
+import android.support.annotation.MainThread;
 import android.view.View;
 import android.widget.Button;
 
 import com.edu.schooltask.R;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.crud.DataSupport;
 
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
-import com.edu.schooltask.http.HttpResponse;
+import com.edu.schooltask.event.LoginEvent;
+import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.http.HttpUtil;
+import com.edu.schooltask.utils.ACache;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.TextUtil;
 import com.edu.schooltask.view.InputText;
@@ -29,6 +35,18 @@ public class LoginFragment extends BaseFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void init() {
         idText = (InputText) view.findViewById(R.id.login_id);
         pwdText = (InputText) view.findViewById(R.id.login_pwd);
@@ -41,6 +59,21 @@ public class LoginFragment extends BaseFragment {
         });
         idText.setInputFilter(0);
         pwdText.setInputFilter(3);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogin(LoginEvent event){
+        loginBtn.setText("登录");
+        if(event.isOk()){
+            User user = User.jsonObjectToUser(event.getData());
+            mDataCache.saveUser(user);
+            toastShort("登录成功");
+            EventBus.getDefault().post(new LoginSuccessEvent());
+            finish();
+        }
+        else{
+            toastShort(event.getError());
+        }
     }
 
     private void login(){
@@ -60,36 +93,6 @@ public class LoginFragment extends BaseFragment {
             return;
         }
         loginBtn.setText("登录中...");
-        HttpUtil.login(id, TextUtil.getMD5(pwd), new HttpResponse() {
-            @Override
-            public void handler() throws Exception {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loginBtn.setText("登录");
-                        switch (code){
-                            case 0:
-                                DataSupport.deleteAll(User.class);  //删除所有本地用户
-                                User user = User.jsonObjectToUser(data);
-                                user.save();
-                                KeyBoardUtil.hideKeyBoard(getActivity());
-                                getActivity().finish();
-                                break;
-                            case 1:
-                                toastShort("手机号未注册");
-                                break;
-                            case 2:
-                                toastShort("密码错误");
-                                break;
-                            case -1:
-                                toastShort("连接失败，请检查网络");
-                                break;
-                            default:
-                                toastShort("登录失败");
-                        }
-                    }
-                });
-            }
-        });
+        HttpUtil.login(id, TextUtil.getMD5(pwd));
     }
 }

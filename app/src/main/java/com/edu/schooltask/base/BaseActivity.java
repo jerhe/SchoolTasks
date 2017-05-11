@@ -18,6 +18,9 @@ import android.widget.Toast;
 import com.edu.schooltask.R;
 
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.data.DataCache;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by 夜夜通宵 on 2017/5/4.
@@ -27,13 +30,7 @@ public class BaseActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView titleText;
     private Toast toast;
-    public static User user = null;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
+    protected static DataCache mDataCache;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {

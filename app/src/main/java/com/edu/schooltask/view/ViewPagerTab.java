@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
+import com.edu.schooltask.event.TabSelectedEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +29,16 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
     private int textLightColor;
     private int pointLightColor;
 
-    private OnTabSelectedListener onTabSelectedListener;
     private LinearLayout layout;
     private LinearLayout pointLayout;
 
+    private ViewPager viewPager;
+
+    private boolean useEventBus;
+
     private List<String> texts = new ArrayList<>();
-    private List<TextView> textViews = new ArrayList<>();
-    private List<View> pointViews = new ArrayList<>();
+    public List<TextView> textViews = new ArrayList<>();
+    public List<View> pointViews = new ArrayList<>();
     private int oldPosition = 0;
     public ViewPagerTab(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -63,6 +70,7 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
     }
 
     public void setViewPager(final ViewPager viewPager){
+        this.viewPager = viewPager;
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -83,10 +91,10 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
 
 
 
-    public void setDefaultTab(int position){
+    public void setSelect(int position){
         if(textViews.size() >= position){
             setTab(position);
-            oldPosition = 0;
+            oldPosition = position;
         }
     }
 
@@ -95,6 +103,11 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
             textViews.get(oldPosition).setTextColor(Color.parseColor(textColor));
             textViews.get(position).setTextColor(textLightColor);
             oldPosition = position;
+            if(viewPager != null) viewPager.setCurrentItem(position);
+            else {
+                View pointView = pointViews.get(0);
+                pointView.setX(pointView.getWidth() * position);
+            }
         }
     }
 
@@ -126,19 +139,16 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
         if(pointViews.size() > 0)pointViews.get(0).setBackgroundColor(color);
     }
 
-    public void setOnTabSelectedListener(OnTabSelectedListener listener){
-        onTabSelectedListener = listener;
-    }
-
     @Override
     public void onClick(View v) {
         int position = textViews.indexOf(v);
         setTab(position);
-        onTabSelectedListener.onTabSelected(position);
+        if(useEventBus){
+            EventBus.getDefault().post(new TabSelectedEvent(position));
+        }
     }
 
-
-    public interface  OnTabSelectedListener{
-        void onTabSelected(int position);
+    public void setEventBus(boolean isUse){
+        useEventBus = isUse;
     }
 }

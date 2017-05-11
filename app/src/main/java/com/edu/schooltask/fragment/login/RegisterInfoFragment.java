@@ -6,13 +6,16 @@ import android.widget.Button;
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.R;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
-import com.edu.schooltask.http.HttpResponse;
+import com.edu.schooltask.event.RegisterFinishEvent;
 import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.TextUtil;
@@ -48,12 +51,27 @@ public class RegisterInfoFragment extends BaseFragment {
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                registerFinish();
             }
         });
     }
 
-    private void finish(){
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRegisterFinish(RegisterFinishEvent event){
+        if (event.isOk()){
+            JSONObject userJSON = event.getData();
+            User user = User.jsonObjectToUser(userJSON);
+            toastShort("注册成功");
+            mDataCache.saveUser(user);
+            KeyBoardUtil.hideKeyBoard(getActivity());
+            finish();
+        }
+        else{
+            toastShort(event.getError());
+        }
+    }
+
+    private void registerFinish(){
         if(!"完成".equals(finishBtn.getText()))return;
         final String school = schoolText.getText();
         final String name = nameText.getText();
@@ -76,44 +94,6 @@ public class RegisterInfoFragment extends BaseFragment {
         }
         finishBtn.setText("正在提交请求...");
         final String id = ((LoginActivity)getActivity()).registerId;
-        HttpUtil.registerFinish(id, school, name, TextUtil.getMD5(pwd), new HttpResponse() {
-            @Override
-            public void handler() throws Exception {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        finishBtn.setText("完成");
-                        switch (code){
-                            case 0:
-                                try {
-                                    String token = data.getString("token");
-                                    toastShort("注册成功");
-                                    DataSupport.deleteAll(User.class);
-                                    //以下是自动登录操作
-                                    //存储用户到本地数据库
-                                    User user = new User(id, token, name, school, "", -1, "", 1);
-                                    user.save();
-                                    //设置当前用户为注册用户
-                                    ((BaseActivity)getActivity()).user = user;
-                                    KeyBoardUtil.hideKeyBoard(getActivity());
-                                    getActivity().finish();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case 1:
-                                toastShort("昵称已存在");
-                                break;
-                            case -1:
-                                toastShort("发送失败,请检查网络");
-                                break;
-                            default:
-                                toastShort("注册失败");
-                                break;
-                        }
-                    }
-                });
-            }
-        });
+        HttpUtil.registerFinish(id, school, name, TextUtil.getMD5(pwd));
     }
 }

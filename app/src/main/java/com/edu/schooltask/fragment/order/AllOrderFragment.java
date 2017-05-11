@@ -1,5 +1,7 @@
 package com.edu.schooltask.fragment.order;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,23 +19,32 @@ import com.edu.schooltask.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.adapter.OrderAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
+import com.edu.schooltask.beans.User;
+import com.edu.schooltask.event.GetUserOrderEvent;
+import com.edu.schooltask.event.LoginEvent;
+import com.edu.schooltask.event.LoginSuccessEvent;
+import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.http.HttpCheckToken;
-import com.edu.schooltask.http.HttpResponse;
 import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.item.OrderItem;
 import com.edu.schooltask.view.OrderTypeMenu;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
-public class AllOrderFragment extends BaseFragment {
+public class AllOrderFragment extends BaseFragment{
 
     private RecyclerView recyclerView;
     private OrderAdapter orderAdapter;
@@ -124,7 +135,25 @@ public class AllOrderFragment extends BaseFragment {
             }
         });
         orderTypeMenu.setSelectItem(0);
-        getUserOrder();
+        if(mDataCache.getUser() == null){
+            tipText.setText("请先登录");
+        }
+        else{   //本地用户已存在
+            tipText.setText("您没有相关的订单");
+            getUserOrder();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void addToTypeOrderList(int position){
@@ -144,6 +173,7 @@ public class AllOrderFragment extends BaseFragment {
         orderAdapter.notifyDataSetChanged();
         checkEmpty();
     }
+
     public void checkEmpty(){
         if(typeOrderList.size() == 0){
             tipText.setVisibility(View.VISIBLE);
@@ -154,58 +184,67 @@ public class AllOrderFragment extends BaseFragment {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetUserOrder(GetUserOrderEvent event){
+        swipeRefreshLayout.setRefreshing(false);
+        if(event.isOk()){
+            tipText.setText("您没有相关的订单");
+            try{
+                JSONArray jsonArray = event.getData().getJSONArray("orders");
+                List<OrderItem> orders = new ArrayList<>();
+                for(int i=0; i<jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    OrderItem order = new OrderItem(
+                            jsonObject.getInt("index"),
+                            jsonObject.getString("orderid"),
+                            jsonObject.getInt("type"),
+                            jsonObject.getString("title"),
+                            jsonObject.getString("content"),
+                            (float)jsonObject.getDouble("cost"),
+                            jsonObject.getInt("state"));
+                    orders.add(order);
+                }
+                allOrderList.clear();
+                allOrderList.addAll(orders);
+            }catch (JSONException e){
+                toastShort("数据异常");
+                e.printStackTrace();
+            }
+            addToTypeOrderList(orderTypeMenu.getPosition());
+        }
+        else{
+            tipText.setText("获取订单失败，请重试");
+            checkEmpty();
+            toastShort(event.getError());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginSuccess(LoginSuccessEvent event){
+        tipText.setText("您没有相关的订单");
+        getUserOrder();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogout(LogoutEvent event){
+        allOrderList.clear();
+        typeOrderList.clear();
+        orderAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
+        tipText.setText("请先登录");
+        tipText.setVisibility(View.VISIBLE);
+    }
 
     public void getUserOrder(){
-        if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
-        tipText.setVisibility(View.GONE);
-        HttpUtil.postWithToken((BaseActivity)getActivity(), user, new HttpCheckToken() {
-            @Override
-            public void handler() {
-                if(isSuccess){
-                    HttpUtil.getUserOrder(user.getUserId(), new HttpResponse() {
-                        @Override
-                        public void handler() throws Exception {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    swipeRefreshLayout.setRefreshing(false);
-                                }
-                            });
-                            switch (code){
-                                case 0:
-                                    JSONArray jsonArray = data.getJSONArray("orders");
-                                    List<OrderItem> orders = new ArrayList<>();
-                                    for(int i=0; i<jsonArray.length(); i++){
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                        OrderItem order = new OrderItem(
-                                                jsonObject.getInt("index"),
-                                                jsonObject.getString("orderid"),
-                                                jsonObject.getInt("type"),
-                                                jsonObject.getString("title"),
-                                                jsonObject.getString("content"),
-                                                (float)jsonObject.getDouble("cost"),
-                                                jsonObject.getInt("state"));
-                                        orders.add(order);
-                                    }
-                                    allOrderList.clear();
-                                    allOrderList.addAll(orders);
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            addToTypeOrderList(orderTypeMenu.getPosition());
-                                        }
-                                    });
-                                    break;
-                                default:
-                                    toastShort("连接失败,请检查网络"+code);
-                            }
-                        }
-                    });
-                }
-                else{
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
+        if(mDataCache.getUser() != null){
+            if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
+            tipText.setVisibility(View.GONE);
+            User user = mDataCache.getUser();
+            HttpUtil.getUserOrder(user.getToken(), user.getUserId());
+        }
+        else{
+            swipeRefreshLayout.setRefreshing(false);
+            openActivity(LoginActivity.class);
+        }
     }
 }

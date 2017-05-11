@@ -6,5 +6,6 @@ package com.edu.schooltask.http;
 
 public abstract class HttpCheckToken{
     public boolean isSuccess = false;
-    public abstract void handler();
+    public abstract void onSuccess();
+    public abstract void onFailure();
 }

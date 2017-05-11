@@ -1,4 +1,4 @@
-package com.edu.schooltask.listener;
+package com.edu.schooltask.other;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

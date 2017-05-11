@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.edu.schooltask.R;
+import com.edu.schooltask.beans.User;
+import com.edu.schooltask.event.ReleaseEvent;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
 import com.yuyh.library.imgsel.ImgSelConfig;
@@ -20,11 +22,14 @@ import java.util.List;
 
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.http.HttpCheckToken;
-import com.edu.schooltask.http.HttpResponse;
 import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.view.Content;
 import com.edu.schooltask.view.ImageDisplayLoader;
 import com.edu.schooltask.view.InputText;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class ReleaseActivity extends BaseActivity {
     private static final int REQUEST_CODE = 0;
@@ -36,6 +41,8 @@ public class ReleaseActivity extends BaseActivity {
     private InputText limitTimeText;
     private Button releaseBtn;
     private ImageDisplayLoader imageDisplayLoader;
+
+    ProgressDialog progressDialog;
 
     List<String> paths = new ArrayList<>();
     ImgSelConfig config;
@@ -51,6 +58,7 @@ public class ReleaseActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_release);
+        EventBus.getDefault().register(this);
         schoolText = (InputText) findViewById(R.id.release_school);
         titleText = (InputText) findViewById(R.id.release_title);
         contentText = (Content) findViewById(R.id.release_content);
@@ -64,7 +72,7 @@ public class ReleaseActivity extends BaseActivity {
         costText.setInputFilter(4);
         limitTimeText.setInputFilter(5);
 
-        schoolText.setText(user.getSchool());
+        schoolText.setText(mDataCache.getUser().getSchool());
 
         releaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +96,28 @@ public class ReleaseActivity extends BaseActivity {
                 multiSelect();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRelease(ReleaseEvent event){
+        releaseBtn.setText("发布");
+        if(progressDialog.isShowing())progressDialog.dismiss();
+        if(event.isOk()){
+            toastShort("发布成功");
+            finish();
+        }
+        else{
+            toastShort(event.getError());
+            if(event.getCode() == 1){
+                //TODO 跳转到充值页面
+            }
+        }
     }
 
     private void release(){
@@ -135,50 +165,13 @@ public class ReleaseActivity extends BaseActivity {
             limitTimeText.clean();
             return;
         }
-
-        releaseBtn.setText("发布中...");
-        final ProgressDialog progressDialog = ProgressDialog.show(this, "", "发布中...", true, false);
-        HttpUtil.postWithToken(this, user, new HttpCheckToken() {
-            @Override
-            public void handler() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        releaseBtn.setText("发布");
-                        if(isSuccess){
-                            HttpUtil.release(user.getUserId(), school, title, content, money,
-                                    time, paths, new HttpResponse() {
-                                @Override
-                                public void handler() throws Exception {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            progressDialog.dismiss();
-                                            switch (code){
-                                                case 0:
-                                                    toastShort("发布成功");
-                                                    finish();
-                                                    break;
-                                                case 1:
-                                                    toastShort("您的余额不足以支付金额，请充值后再发布");
-                                                    //TODO 跳转到充值页面
-                                                    break;
-                                                default:
-                                                    toastShort("发布失败");
-                                            }
-                                        }
-                                    });
-
-                                }
-                            });
-                        }
-                        else{
-                            progressDialog.dismiss();
-                        }
-                    }
-                });
-            }
-        });
+        User user = mDataCache.getUser();
+        if(user != null){
+            releaseBtn.setText("发布中...");
+            progressDialog = ProgressDialog.show(this, "", "发布中...", true, false);
+            HttpUtil.release(user.getToken(), user.getUserId(), school, title, content, money,
+                    time, paths);
+        }
     }
 
     public void multiSelect() {

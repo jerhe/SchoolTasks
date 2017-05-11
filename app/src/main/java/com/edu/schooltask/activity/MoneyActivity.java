@@ -7,9 +7,16 @@ import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.beans.User;
+import com.edu.schooltask.event.GetMoneyEvent;
+import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.http.HttpCheckToken;
-import com.edu.schooltask.http.HttpResponse;
 import com.edu.schooltask.http.HttpUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 
 import static android.view.View.GONE;
 
@@ -18,6 +25,19 @@ public class MoneyActivity extends BaseActivity {
     private TextView rechargeBtn;
     private TextView pushMoneyBtn;
     private ProgressBar progressBar;
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,42 +50,27 @@ public class MoneyActivity extends BaseActivity {
         getMoney();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMoney(GetMoneyEvent event) throws JSONException {
+        progressBar.setVisibility(GONE);
+        if (event.isOk()){
+            float money = (float)event.getData().getDouble("money");
+            moneyText.setText(money+"");
+        }
+        else{
+            toastShort(event.getError());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogout(LogoutEvent event) throws JSONException {
+        finish();
+    }
+
     private void getMoney(){
-        HttpUtil.postWithToken(this, user, new HttpCheckToken() {
-            @Override
-            public void handler() {
-                if(isSuccess){
-                    HttpUtil.getMoney(user.getUserId(), new HttpResponse() {
-                        @Override
-                        public void handler() throws Exception {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(GONE);
-                                }
-                            });
-                            switch (code){
-                                case 0:
-                                    final float money = (float)data.getDouble("money");
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            moneyText.setText(money+"");
-                                        }
-                                    });
-                                    break;
-                                case 1:
-                                    break;
-                                default:
-                                    toastShort("连接失败,请检查网络");
-                            }
-                        }
-                    });
-                }
-                else{
-                    finish();
-                }
-            }
-        });
+        User user = mDataCache.getUser();
+        if(user != null){
+            HttpUtil.getMoney(user.getToken(), user.getUserId());
+        }
     }
 }

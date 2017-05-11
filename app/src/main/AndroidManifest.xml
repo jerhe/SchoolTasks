@@ -29,7 +29,10 @@
         <activity
             android:name=".activity.ReleaseActivity"
             android:label="发布任务" />
-        <activity android:name=".activity.MoneyActivity" android:label="我的钱包"></activity>
+        <activity
+            android:name=".activity.MoneyActivity"
+            android:label="我的钱包" />
+        <activity android:name=".activity.OrderActivity"></activity>
     </application>
 
 </manifest>

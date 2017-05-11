@@ -44,21 +44,6 @@ public class OrderFragment extends BaseFragment {
         viewPagerTab.setViewPager(viewPager);
         viewPagerTab.addTab("所有订单");
         viewPagerTab.addTab("待评价");
-        viewPagerTab.setOnTabSelectedListener(new ViewPagerTab.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(int position) {
-                viewPager.setCurrentItem(position);
-            }
-        });
-        viewPagerTab.setDefaultTab(0);
-
-        //SwitchTab 的点击事件监听器
-        /*viewPagerTab.setOnMenuSelectedListener(new SwitchTab.OnMenuSelectedListener() {
-            @Override
-            public void onMenuSelected(int position) {
-                viewPager.setCurrentItem(position,false);
-            }
-        });
-        switchTab.setPagePosition(0);*/
+        viewPagerTab.setSelect(0);
     }
 }

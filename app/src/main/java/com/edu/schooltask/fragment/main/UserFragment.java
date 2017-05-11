@@ -2,6 +2,8 @@ package com.edu.schooltask.fragment.main;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +21,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.R;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -28,6 +33,9 @@ import com.edu.schooltask.activity.MoneyActivity;
 import com.edu.schooltask.adapter.FunctionAdapter;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.event.LoginEvent;
+import com.edu.schooltask.event.LoginSuccessEvent;
+import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.item.FunctionItem;
 
 
@@ -84,7 +92,8 @@ public class UserFragment extends BaseFragment {
         userFunctionAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(user == null){
+                if(mDataCache.getUser() == null){
+                    toastShort("请先登录");
                     openActivity(LoginActivity.class);
                 }
                 else{
@@ -114,7 +123,7 @@ public class UserFragment extends BaseFragment {
         backgroundLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user == null){
+                if(mDataCache.getUser() == null){
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(loginIntent);
                 }
@@ -124,18 +133,36 @@ public class UserFragment extends BaseFragment {
 
             }
         });
+
+        onLoginSuccess(null);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginSuccess(LoginSuccessEvent event){
+        User user = mDataCache.getUser();
         if(user != null){
             nameText.setText(user.getName());
             levelText.setVisibility(View.VISIBLE);
             levelText.setText("Lv." + user.getLevel());
         }
-        else{
-            levelText.setVisibility(View.GONE); //隐藏等级显示
-        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogout(LogoutEvent event){
+        mDataCache.removeUser();
+        nameText.setText("登录/注册");
+        levelText.setVisibility(View.GONE);
     }
 }

@@ -77,6 +77,13 @@ public class User extends DataSupport implements Serializable{
         this.level = level;
     }
 
+    public User(String userId, String name, String school, int sex){
+        this.userId = userId;
+        this.name = name;
+        this.school = school;
+        this.sex = sex;
+    }
+
     public static User jsonObjectToUser(JSONObject data){
         try {
             String id = data.getString("userid");
@@ -84,7 +91,6 @@ public class User extends DataSupport implements Serializable{
             String name = data.getString("name");
             String school = data.getString("school");
             String sign = data.getString("sign");
-            Log.e("SIGN",sign);
             int sex = data.getInt("sex");
             String birth = data.getString("birth");
             int level = data.getInt("level");

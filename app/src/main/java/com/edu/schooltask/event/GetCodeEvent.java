@@ -6,8 +6,8 @@ import com.edu.schooltask.beans.User;
  * Created by 夜夜通宵 on 2017/5/10.
  */
 
-public class LoginEvent extends BaseHttpEvent<User> {
-    public LoginEvent() {
+public class GetCodeEvent extends BaseHttpEvent<User> {
+    public GetCodeEvent() {
         super();
     }
 }

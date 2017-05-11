@@ -3,9 +3,13 @@ package com.edu.schooltask.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.edu.schooltask.R;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -14,10 +18,15 @@ import java.util.List;
 import com.edu.schooltask.adapter.ViewPagerAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.data.DataCache;
+import com.edu.schooltask.event.CheckTokenEvent;
+import com.edu.schooltask.event.LoginSuccessEvent;
+import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.fragment.main.HomeFragment;
 import com.edu.schooltask.fragment.main.OrderFragment;
 import com.edu.schooltask.fragment.main.TalkFragment;
 import com.edu.schooltask.fragment.main.UserFragment;
+import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.view.BottomMenu;
 
 public class MainActivity extends BaseActivity {
@@ -36,6 +45,15 @@ public class MainActivity extends BaseActivity {
         bind();
         initViewPager();
         initBottomMenu();
+        EventBus.getDefault().register(this);
+        mDataCache = new DataCache(this);
+        HttpUtil.setDataCache(mDataCache);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void bind(){
@@ -77,27 +95,18 @@ public class MainActivity extends BaseActivity {
         bottomMenu.setPagePosition(0);
     }
 
-    /**
-     * 得到本地用户
-     */
-    private void getUser(){
-        List<User> users = DataSupport.findAll(User.class);
-        if(users.size() == 1){
-            user = users.get(0);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCheckToken(CheckTokenEvent event){
+        if (!event.isOk()){
+            mDataCache.removeUser();
+            openActivity(LoginActivity.class);
+            EventBus.getDefault().post(new LogoutEvent());
+            toastShort("账号异常，请重新登录");
         }
-        else{
-            user = null;
-        }
-    }
-
-    private void updateUser(){
-        if(homeFragment != null) ((HomeFragment)homeFragment).updateUser(user);  //传入User到首页
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getUser();  //每次回到主页更新用户信息
-        updateUser();
     }
 }

@@ -1,5 +1,7 @@
 package com.edu.schooltask.item;
 
+import com.edu.schooltask.beans.User;
+
 import org.litepal.crud.DataSupport;
 
 /**
@@ -29,7 +31,9 @@ public class OrderItem {
     String content;
     float cost;
     int state;
+    String releaseTime;
     String stateStr;
+    User releaseUser;
 
     public OrderItem(){
 
@@ -63,6 +67,25 @@ public class OrderItem {
                 stateStr = STATE_UNLESS_STR;
                 break;
         }
+    }
+
+
+    //用于待评价订单
+    public OrderItem(int index, String id, String tilte, String content, String releaseTime){
+        this.index = index;
+        this.id = id;
+        this.title = tilte;
+        this.content = content;
+        this.releaseTime = releaseTime;
+    }
+
+    //用于首页附近任务订单
+    public OrderItem(int index, String id, String content, float cost, User user){
+        this.index = index;
+        this.id = id;
+        this.content = content;
+        this.cost = cost;
+        this.releaseUser = user;
     }
 
     public int getIndex() {
@@ -128,5 +151,21 @@ public class OrderItem {
 
     public void setCost(float cost) {
         this.cost = cost;
+    }
+
+    public String getReleaseTime(){
+        return this.releaseTime;
+    }
+
+    public void  setReleaseTime(String releaseTime){
+        this.releaseTime = releaseTime;
+    }
+
+    public User getReleaseUser(){
+        return this.releaseUser;
+    }
+
+    public void setReleaseUser(User user){
+        this.releaseUser = user;
     }
 }

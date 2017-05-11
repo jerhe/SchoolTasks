@@ -12,9 +12,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.edu.schooltask.base.BaseFragment;
-import com.edu.schooltask.http.HttpResponse;
+import com.edu.schooltask.event.GetCodeEvent;
 import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.view.InputText;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
@@ -60,7 +63,17 @@ public class RegisterPhoneFragment extends BaseFragment {
             }
         });
 
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetCode(GetCodeEvent event){
+        if(event.isOk()){
+            startCoundDown();
+            toastShort("验证码已经通过短信发送至您的手机");
+        }
+        else{
+            toastShort(event.getError());
+        }
     }
 
     /**
@@ -72,28 +85,7 @@ public class RegisterPhoneFragment extends BaseFragment {
             toastShort("请输入正确的手机号");
             return;
         }
-        //发送请求
-        HttpUtil.getCode(id, new HttpResponse() {
-            @Override
-            public void handler() throws Exception {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        switch (code){
-                            case 0: //获取成功
-                                startCoundDown();
-                                toastShort("验证码已经通过短信发送至您的手机");
-                                break;
-                            case 1: //用户已存在
-                                toastShort("用户已存在");
-                                break;
-                            default:    //获取失败
-                                toastShort("获取验证码失败");
-                        }
-                    }
-                });
-            }
-        });
+        HttpUtil.getCode(id);
     }
 
     /**

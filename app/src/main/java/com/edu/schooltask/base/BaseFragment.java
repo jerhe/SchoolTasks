@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.data.DataCache;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by 夜夜通宵 on 2017/5/9.
@@ -19,13 +22,20 @@ import com.edu.schooltask.beans.User;
 public abstract class BaseFragment extends Fragment {
     protected int redId;
     protected View view;
-    protected static User user;
+    protected static DataCache mDataCache;
 
     public BaseFragment(){}
 
     @SuppressLint("ValidFragment")
     public BaseFragment(int redId){
         this.redId = redId;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDataCache = new DataCache(getContext());
     }
 
     @Nullable
@@ -45,13 +55,10 @@ public abstract class BaseFragment extends Fragment {
         return view;
     }
 
+
     //-----------------------------------------------------------
 
     protected abstract void init();
-
-    public void updateUser(User user){
-        this.user = user;
-    }
 
     //-----------------------------------------------------------
 
@@ -70,5 +77,9 @@ public abstract class BaseFragment extends Fragment {
 
     public void toastLong(String text){
         ((BaseActivity)getActivity()).toast(text, Toast.LENGTH_LONG);
+    }
+
+    public void finish(){
+        getActivity().finish();
     }
 }
