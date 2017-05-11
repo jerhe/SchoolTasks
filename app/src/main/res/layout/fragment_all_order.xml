@@ -3,12 +3,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <view.OrderTypeMenu
+    <com.edu.schooltask.view.OrderTypeMenu
         android:elevation="1dp"
         android:id="@+id/ao_menu"
         android:layout_width="match_parent"
-        android:layout_height="30dp">
-    </view.OrderTypeMenu>
+        android:layout_height="40dp">
+    </com.edu.schooltask.view.OrderTypeMenu>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/ao_srl"
         android:layout_width="match_parent"
@@ -23,14 +23,11 @@
     </android.support.v4.widget.SwipeRefreshLayout>
     <TextView
         android:id="@+id/ao_tip"
-        android:layout_marginTop="100dp"
         android:gravity="center_horizontal"
+        android:paddingTop="100dp"
         android:elevation="1dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="没有订单"
-        android:textColor="@color/hintColor"
-        android:visibility="invisible"/>
-
-
+        android:text="请先登录"
+        android:textColor="@color/hintColor"/>
 </RelativeLayout>

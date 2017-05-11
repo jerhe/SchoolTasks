@@ -9,19 +9,19 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:text="图片"/>
-    <view.ImageDisplayItem
+    <com.edu.schooltask.view.ImageDisplayItem
         android:id="@+id/idl_image_1"
         android:layout_marginRight="10dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:visibility="gone"/>
-    <view.ImageDisplayItem
+    <com.edu.schooltask.view.ImageDisplayItem
         android:id="@+id/idl_image_2"
         android:layout_marginRight="10dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:visibility="gone"/>
-    <view.ImageDisplayItem
+    <com.edu.schooltask.view.ImageDisplayItem
         android:id="@+id/idl_image_3"
         android:layout_marginRight="10dp"
         android:layout_width="50dp"

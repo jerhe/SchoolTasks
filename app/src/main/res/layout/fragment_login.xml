@@ -4,24 +4,24 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <view.InputText
+    <com.edu.schooltask.view.InputText
         android:id="@+id/login_id"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="手机号"
         app:hint="请输入手机号">
-    </view.InputText>
+    </com.edu.schooltask.view.InputText>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">
-        <view.InputText
+        <com.edu.schooltask.view.InputText
             android:id="@+id/login_pwd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:inputType="password"
-            app:hint="请输入密码，至少6位"
+            app:hint="请输入密码"
             app:text="密码">
-        </view.InputText>
+        </com.edu.schooltask.view.InputText>
         <TextView
             android:layout_gravity="right"
             android:layout_alignParentRight="true"

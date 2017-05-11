@@ -1,57 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/home_top"
     android:orientation="vertical"
-    android:background="@color/mainBackgroundColor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_rv"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-        <android.support.v4.view.ViewPager
-            android:id="@+id/home_vp"
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
-        </android.support.v4.view.ViewPager>
-        <LinearLayout
-            android:id="@+id/home_vp_pointer"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="10dp"/>  <!-- 指示器 -->
-    </RelativeLayout>
-    <LinearLayout
-        android:orientation="horizontal"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+    <com.edu.schooltask.view.ViewPagerTab
+        android:id="@+id/home_tab"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
-        <Button
-            android:id="@+id/home_release_btn"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@drawable/shape_release_task_btn"
-            android:textColor="@color/white"
-            android:textSize="23dp"
-            android:text="发布任务"/>
-        <Button
-            android:id="@+id/home_accept_btn"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@drawable/shape_accept_task_btn"
-            android:textColor="@color/white"
-            android:textSize="23dp"
-            android:text="接受任务"/>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_height="35dp"
+        android:visibility="invisible">
+    </com.edu.schooltask.view.ViewPagerTab>
+</RelativeLayout>

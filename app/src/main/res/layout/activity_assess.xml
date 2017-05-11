@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/white"
     android:gravity="center_horizontal"
-    tools:context="com.edu.schooltask.AssessActivity">
+    tools:context="com.edu.schooltask.activity.AssessActivity">
     <include layout="@layout/toolbar"/>
     <ImageView
         android:layout_marginTop="30dp"
@@ -21,11 +21,11 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="昵称"/>
-    <view.ViewAssess
+    <com.edu.schooltask.view.ViewAssess
         android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </view.ViewAssess>
+    </com.edu.schooltask.view.ViewAssess>
     <EditText
         android:layout_margin="20dp"
         android:padding="10dp"
