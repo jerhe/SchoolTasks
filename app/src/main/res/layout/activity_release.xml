@@ -17,13 +17,6 @@
         app:hint="请输入学校">
     </com.edu.schooltask.view.InputText>
     <com.edu.schooltask.view.InputText
-        android:id="@+id/release_title"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:text="标题"
-        app:hint="请输入任务标题">
-    </com.edu.schooltask.view.InputText>
-    <com.edu.schooltask.view.InputText
         android:id="@+id/release_cost"
         android:layout_width="match_parent"
         android:layout_height="50dp"

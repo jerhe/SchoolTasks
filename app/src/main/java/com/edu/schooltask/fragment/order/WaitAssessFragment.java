@@ -120,7 +120,6 @@ public class WaitAssessFragment extends BaseFragment{
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         OrderItem order = new OrderItem(
                                 jsonObject.getString("orderid"),
-                                jsonObject.getString("title"),
                                 jsonObject.getString("content"),
                                 jsonObject.getString("releasetime"));
                         if(order.getState() == 2) orders.add(order);    //只加入待评价订单

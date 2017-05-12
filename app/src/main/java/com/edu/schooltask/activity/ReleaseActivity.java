@@ -21,11 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.http.HttpCheckToken;
 import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.view.Content;
 import com.edu.schooltask.view.ImageDisplayLoader;
 import com.edu.schooltask.view.InputText;
+
+import net.bither.util.NativeUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +36,6 @@ public class ReleaseActivity extends BaseActivity {
     private static final int REQUEST_CODE = 0;
 
     private InputText schoolText;
-    private InputText titleText;
     private Content contentText;
     private InputText costText;
     private InputText limitTimeText;
@@ -60,7 +60,6 @@ public class ReleaseActivity extends BaseActivity {
         setContentView(R.layout.activity_release);
         EventBus.getDefault().register(this);
         schoolText = (InputText) findViewById(R.id.release_school);
-        titleText = (InputText) findViewById(R.id.release_title);
         contentText = (Content) findViewById(R.id.release_content);
         costText = (InputText) findViewById(R.id.release_cost);
         limitTimeText = (InputText) findViewById(R.id.release_limit_time);
@@ -68,7 +67,6 @@ public class ReleaseActivity extends BaseActivity {
         imageDisplayLoader = (ImageDisplayLoader) findViewById(R.id.release_idl);
 
         schoolText.setInputFilter(1);
-        titleText.setLengthFilter(20);  //设置标题长度限制
         costText.setInputFilter(4);
         limitTimeText.setInputFilter(5);
 
@@ -81,7 +79,7 @@ public class ReleaseActivity extends BaseActivity {
             }
         });
 
-        titleText.requestFocus();   //设置标题为默认焦点
+        costText.requestFocus();   //设置标题为默认焦点
 
         imageDisplayLoader.setOnAddClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +106,9 @@ public class ReleaseActivity extends BaseActivity {
     public void onRelease(ReleaseEvent event){
         releaseBtn.setText("发布");
         if(progressDialog.isShowing())progressDialog.dismiss();
+        for(String path : paths){
+            NativeUtil.deleteBitmap(path);
+        }
         if(event.isOk()){
             toastShort("发布成功");
             finish();
@@ -123,7 +124,6 @@ public class ReleaseActivity extends BaseActivity {
     private void release(){
         if(releaseBtn.getText().equals("发布中..."))return;
         final String school = schoolText.getText();
-        final String title = titleText.getText();
         final String content = contentText.getText();
         final String cost = costText.getText();
         final String limitTime = limitTimeText.getText();
@@ -132,10 +132,7 @@ public class ReleaseActivity extends BaseActivity {
             toastShort("请输入学校");
             return;
         }
-        if(title.length() == 0){
-            toastShort("请输入标题");
-            return;
-        }
+
         if(content.length() == 0){
             toastShort("请输入内容");
             return;
@@ -168,9 +165,16 @@ public class ReleaseActivity extends BaseActivity {
         User user = mDataCache.getUser();
         if(user != null){
             releaseBtn.setText("发布中...");
+            //压缩图片
             progressDialog = ProgressDialog.show(this, "", "发布中...", true, false);
-            HttpUtil.release(user.getToken(), user.getUserId(), school, title, content, money,
-                    time, paths);
+            for(int i=0; i<paths.size(); i++){
+                String path = paths.get(i);
+                int pointIndex = path.lastIndexOf(".");
+                String tempPath = path.substring(0,pointIndex) + "_temp" + path.substring(pointIndex);
+                NativeUtil.compressBitmap(path, tempPath);
+                paths.set(i,tempPath);
+            }
+            HttpUtil.release(user.getToken(), user.getUserId(), school, content, money, time, paths);
         }
     }
 

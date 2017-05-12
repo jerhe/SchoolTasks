@@ -26,7 +26,7 @@ public class OrderWaitAssessAdapter extends BaseQuickAdapter<OrderItem, BaseView
 
     @Override
     protected void convert(final BaseViewHolder helper, OrderItem item) {
-        helper.setText(R.id.owa_title, item.getTitle());
+        helper.setText(R.id.owa_content, item.getContent());
         helper.setText(R.id.owa_time, "发布时间："+item.getReleaseTime());
         Button assessBtn = helper.getView(R.id.owa_assess_btn);
         assessBtn.setOnClickListener(new View.OnClickListener() {

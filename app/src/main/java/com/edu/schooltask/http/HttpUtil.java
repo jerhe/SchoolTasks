@@ -39,14 +39,16 @@ import okhttp3.Response;
 
 public class HttpUtil {
     private static DataCache mDataCache;
-    final static String LOGIN_URL = "http://192.168.191.1:8080/SchoolTaskServer/LoginController/login";
-    final static String GET_CODE_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/get_code";
-    final static String REGISTER_FINISH_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/finish";
-    final static String RELEASE_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/release";
-    final static String CHECK_TOKEN_URL ="http://192.168.191.1:8080/SchoolTaskServer/TokenController/checkToken";
-    final static String GET_MONEY_URL ="http://192.168.191.1:8080/SchoolTaskServer/MoneyController/getMoney";
-    final static String GET_USER_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getUserOrder";
-    final static String GET_SCHOOL_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getSchoolOrder";
+    final static String LOGIN_URL = "http://192.168.191.1:8080/SchoolTaskServer/LoginController/login.do";
+    final static String GET_CODE_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/get_code.do";
+    final static String REGISTER_FINISH_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/finish.do";
+    final static String RELEASE_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/release.do";
+    final static String CHECK_TOKEN_URL ="http://192.168.191.1:8080/SchoolTaskServer/TokenController/checkToken.do";
+    final static String GET_MONEY_URL ="http://192.168.191.1:8080/SchoolTaskServer/MoneyController/getMoney.do";
+    final static String GET_USER_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getUserOrder.do";
+    final static String GET_SCHOOL_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getSchoolOrder.do";
+
+    public final static String ORDER_IMAGE_URL = "http://192.168.191.1:8080/SchoolTaskServer/static/images/";
 
     public static void setDataCache(DataCache mDataCache){
         HttpUtil.mDataCache = mDataCache;
@@ -88,8 +90,9 @@ public class HttpUtil {
         post(REGISTER_FINISH_URL, requestBody, new BaseCallBack(new RegisterFinishEvent()));
     }
 
-    public static void release(String token, final String userId, final String school, final String title,
-                               final String content, final float cost, final int limitTime, final List<String> paths){
+    public static void release(String token, final String userId, final String school,
+                               final String content, final float cost, final int limitTime,
+                               final List<String> paths){
         checkToken(token, new HttpCheckToken() {
             @Override
             public void onSuccess() {
@@ -102,7 +105,6 @@ public class HttpUtil {
                 }
                 builder.addFormDataPart("id",userId);
                 builder.addFormDataPart("school", school);
-                builder.addFormDataPart("title", title);
                 builder.addFormDataPart("content", content);
                 builder.addFormDataPart("cost", cost+"");
                 builder.addFormDataPart("limittime", limitTime+"");
@@ -151,12 +153,12 @@ public class HttpUtil {
         });
     }
 
-    public static void getSchoolOrder(String token, final String school){
+    public static void getSchoolOrder(String token, final String school, final int pageIndex){
         checkToken(token, new HttpCheckToken() {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("school",school).build();
+                        .add("school",school).add("pageindex",pageIndex+"").build();
                 post(GET_SCHOOL_ORDER_URL, requestBody, new BaseCallBack(new GetSchoolOrderEvent()));
             }
 

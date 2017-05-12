@@ -28,9 +28,8 @@ public class OrderAdapter extends BaseQuickAdapter<OrderItem, BaseViewHolder> {
         if(item.getType() == 0) typeGrad.setColor(Color.parseColor("#1b9dff"));
         else typeGrad.setColor(Color.parseColor("#ffa500"));
         typeText.setText(item.getType() == 0 ? "发" : "接");
-        helper.setText(R.id.ao_title, item.getTitle());
         helper.setText(R.id.ao_content, item.getContent());
-        helper.setText(R.id.ao_cost, "￥"+item.getCost());
+        helper.setText(R.id.ao_cost, "¥"+item.getCost());
         helper.setText(R.id.ao_state, item.getStateStr());
     }
 }

@@ -26,7 +26,6 @@ public class OrderItem {
 
     String id;
     int type;
-    String title;
     String content;
     float cost;
     int state;
@@ -40,10 +39,9 @@ public class OrderItem {
 
     }
 
-    public OrderItem(String id, int type, String title, String content, float cost, int state){
+    public OrderItem(String id, int type, String content, float cost, int state){
         this.id = id;
         this.type = type;
-        this.title = title;
         this.content = content;
         this.cost = cost;
         this.state = state;
@@ -71,9 +69,8 @@ public class OrderItem {
 
 
     //用于待评价订单
-    public OrderItem(String id, String title, String content, String releaseTime){
+    public OrderItem(String id, String content, String releaseTime){
         this.id = id;
-        this.title = title;
         this.content = content;
         this.releaseTime = releaseTime;
     }
@@ -105,14 +102,6 @@ public class OrderItem {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContent() {

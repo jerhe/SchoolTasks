@@ -26,14 +26,13 @@
                 android:gravity="center"
                 android:background="@drawable/shape_order_type"/>
             <TextView
-                android:id="@+id/ao_title"
+                android:id="@+id/ao_content"
                 android:layout_width="0dp"
                 android:layout_weight="3"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:textStyle="bold"
-                android:text="标题"
-                android:textSize="16sp"/>
+                android:maxLines="1"
+                android:text="内容"/>
             <View
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent"
@@ -48,16 +47,7 @@
                 android:text="订单状态"/>
         </LinearLayout>
 
-        <TextView
-            android:paddingLeft="20dp"
-            android:id="@+id/ao_content"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:maxLines="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="内容"/>
+
 
         <View
             android:background="@color/lineColor"

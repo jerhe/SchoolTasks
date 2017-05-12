@@ -210,7 +210,6 @@ public class AllOrderFragment extends BaseFragment{
                         OrderItem order = new OrderItem(
                                 jsonObject.getString("orderid"),
                                 jsonObject.getInt("type"),
-                                jsonObject.getString("title"),
                                 jsonObject.getString("content"),
                                 (float)jsonObject.getDouble("cost"),
                                 jsonObject.getInt("state"));

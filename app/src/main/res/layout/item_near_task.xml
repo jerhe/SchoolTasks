@@ -32,22 +32,32 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/nt_school"
-            android:layout_marginTop="3dp"
-            android:layout_below="@id/nt_name"
-            android:layout_alignLeft="@id/nt_name"
+            android:layout_alignTop="@id/nt_name"
+            android:layout_alignLeft="@id/nt_sex"
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="学校"/>
+        <TextView
+            android:id="@+id/nt_release_time"
+            android:layout_marginTop="3dp"
+            android:textSize="12sp"
+            android:layout_alignLeft="@id/nt_name"
+            android:layout_below="@id/nt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刚刚"/>
         <TextView
             android:id="@+id/nt_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/nt_name"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
             android:textSize="16sp"
             android:textColor="@color/red"
-            android:text="￥1399"/>
+            android:text="¥1399"/>
     </RelativeLayout>
     <TextView
         android:id="@+id/nt_content"
@@ -59,12 +69,14 @@
         android:maxLines="2"
         android:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"/>
     <LinearLayout
+        android:id="@+id/nt_image_layout"
         android:layout_width="match_parent"
         android:padding="10dp"
-        android:layout_height="100dp">
+        android:layout_height="120dp">
         <ImageView
             android:id="@+id/nt_image_1"
             android:layout_width="0dp"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_icon_img"
             android:layout_marginRight="10dp"
             android:layout_height="match_parent"
@@ -74,12 +86,14 @@
             android:src="@drawable/ic_icon_img"
             android:layout_width="0dp"
             android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
         <ImageView
             android:id="@+id/nt_image_3"
             android:src="@drawable/ic_icon_img"
             android:layout_width="0dp"
+            android:scaleType="fitXY"
             android:layout_marginRight="5dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
@@ -89,6 +103,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
-        android:layout_height="0.1dp"
+        android:layout_height="0.5dp"
         android:background="@color/lineColor"/>
 </LinearLayout>
