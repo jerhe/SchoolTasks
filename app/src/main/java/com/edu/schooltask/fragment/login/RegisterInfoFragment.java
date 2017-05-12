@@ -1,11 +1,14 @@
 package com.edu.schooltask.fragment.login;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.R;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
@@ -15,6 +18,7 @@ import org.litepal.crud.DataSupport;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.RegisterFinishEvent;
 import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
@@ -35,6 +39,17 @@ public class RegisterInfoFragment extends BaseFragment {
         super(R.layout.fragment_register_info);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     protected void init(){
@@ -63,7 +78,7 @@ public class RegisterInfoFragment extends BaseFragment {
             User user = User.jsonObjectToUser(userJSON);
             toastShort("注册成功");
             mDataCache.saveUser(user);
-            KeyBoardUtil.hideKeyBoard(getActivity());
+            EventBus.getDefault().post(new LoginSuccessEvent());
             finish();
         }
         else{
@@ -94,6 +109,7 @@ public class RegisterInfoFragment extends BaseFragment {
         }
         finishBtn.setText("正在提交请求...");
         final String id = ((LoginActivity)getActivity()).registerId;
+        KeyBoardUtil.hideKeyBoard(getActivity());
         HttpUtil.registerFinish(id, school, name, TextUtil.getMD5(pwd));
     }
 }

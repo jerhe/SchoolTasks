@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.adapter.OrderWaitAssessAdapter;
@@ -41,6 +42,9 @@ public class WaitAssessFragment extends BaseFragment{
     private TextView tipText;
     private List<OrderItem> orderItemList = new ArrayList<>();
     private OrderWaitAssessAdapter orderWaitAssessAdapter;
+
+    int pageIndex = 0;
+
     public WaitAssessFragment() {
         super(R.layout.fragment_wait_assess);
     }
@@ -55,9 +59,18 @@ public class WaitAssessFragment extends BaseFragment{
         recyclerView.setAdapter(orderWaitAssessAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        orderWaitAssessAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getUserOrder();
+            }
+        }, recyclerView);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                orderItemList.clear();
+                pageIndex = 0;
                 getUserOrder();
             }
         });
@@ -95,33 +108,41 @@ public class WaitAssessFragment extends BaseFragment{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetUserOrder(GetUserOrderEvent event){
-        swipeRefreshLayout.setRefreshing(false);
-        if(event.isOk()){
-            tipText.setText("您没有相关的订单");
-            try{
-                JSONArray jsonArray = event.getData().getJSONArray("orders");
-                List<OrderItem> orders = new ArrayList<>();
-                for(int i=0; i<jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    OrderItem order = new OrderItem(
-                            jsonObject.getInt("index"),
-                            jsonObject.getString("orderid"),
-                            jsonObject.getString("title"),
-                            jsonObject.getString("content"),
-                            jsonObject.getString("releasetime"));
-                    if(order.getState() == 2) orders.add(order);    //只加入待评价订单
+        if(event.type == 1){
+            swipeRefreshLayout.setRefreshing(false);
+            if(event.isOk()){
+                pageIndex ++;
+                tipText.setText("您没有相关的订单");
+                try{
+                    JSONArray jsonArray = event.getData().getJSONArray("orders");
+                    List<OrderItem> orders = new ArrayList<>();
+                    for(int i=0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        OrderItem order = new OrderItem(
+                                jsonObject.getString("orderid"),
+                                jsonObject.getString("title"),
+                                jsonObject.getString("content"),
+                                jsonObject.getString("releasetime"));
+                        if(order.getState() == 2) orders.add(order);    //只加入待评价订单
+                    }
+                    orderWaitAssessAdapter.loadMoreComplete();
+                    if(orders.size() < 5){
+                        orderWaitAssessAdapter.loadMoreEnd();
+                    }
+                    orderItemList.addAll(orders);
+                }catch (JSONException e){
+                    toastShort("数据异常");
+                    e.printStackTrace();
                 }
-                orderItemList.addAll(orders);
-            }catch (JSONException e){
-                toastShort("数据异常");
-                e.printStackTrace();
             }
+            else{
+                tipText.setText("获取订单失败，请重试");
+                orderWaitAssessAdapter.loadMoreFail();
+                toastShort(event.getError());
+            }
+            checkEmpty();
         }
-        else{
-            tipText.setText("获取订单失败，请重试");
-            toastShort(event.getError());
-        }
-        checkEmpty();
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -137,6 +158,7 @@ public class WaitAssessFragment extends BaseFragment{
         swipeRefreshLayout.setRefreshing(false);
         tipText.setText("请先登录");
         tipText.setVisibility(View.VISIBLE);
+        pageIndex = 0;
     }
 
     public void getUserOrder(){
@@ -144,7 +166,7 @@ public class WaitAssessFragment extends BaseFragment{
             if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
             tipText.setVisibility(View.GONE);
             User user = mDataCache.getUser();
-            HttpUtil.getUserOrder(user.getToken(), user.getUserId());
+            HttpUtil.getUserOrder(user.getToken(), user.getUserId(), pageIndex, 1);
         }
         else{
             swipeRefreshLayout.setRefreshing(false);

@@ -10,6 +10,7 @@ import com.edu.schooltask.data.DataCache;
 import com.edu.schooltask.event.CheckTokenEvent;
 import com.edu.schooltask.event.GetCodeEvent;
 import com.edu.schooltask.event.GetMoneyEvent;
+import com.edu.schooltask.event.GetSchoolOrderEvent;
 import com.edu.schooltask.event.GetUserOrderEvent;
 import com.edu.schooltask.event.LoginEvent;
 import com.edu.schooltask.event.RegisterFinishEvent;
@@ -45,6 +46,7 @@ public class HttpUtil {
     final static String CHECK_TOKEN_URL ="http://192.168.191.1:8080/SchoolTaskServer/TokenController/checkToken";
     final static String GET_MONEY_URL ="http://192.168.191.1:8080/SchoolTaskServer/MoneyController/getMoney";
     final static String GET_USER_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getUserOrder";
+    final static String GET_SCHOOL_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getSchoolOrder";
 
     public static void setDataCache(DataCache mDataCache){
         HttpUtil.mDataCache = mDataCache;
@@ -132,22 +134,38 @@ public class HttpUtil {
 
     }
 
-    public static void getUserOrder(String token, final String id){
+    public static void getUserOrder(String token, final String id, final int pageIndex, final int type){
         checkToken(token, new HttpCheckToken() {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("userid",id).build();
-                post(GET_USER_ORDER_URL, requestBody, new BaseCallBack(new GetUserOrderEvent()));
+                        .add("userid",id)
+                        .add("pageindex",pageIndex+"").build();
+                post(GET_USER_ORDER_URL, requestBody, new BaseCallBack(new GetUserOrderEvent(type)));
             }
 
             @Override
             public void onFailure() {
-                EventBus.getDefault().post(new GetUserOrderEvent(false));
+                EventBus.getDefault().post(new GetUserOrderEvent(false, type));
             }
         });
     }
 
+    public static void getSchoolOrder(String token, final String school){
+        checkToken(token, new HttpCheckToken() {
+            @Override
+            public void onSuccess() {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("school",school).build();
+                post(GET_SCHOOL_ORDER_URL, requestBody, new BaseCallBack(new GetSchoolOrderEvent()));
+            }
+
+            @Override
+            public void onFailure() {
+                EventBus.getDefault().post(new GetSchoolOrderEvent(false));
+            }
+        });
+    }
     //------------------------------------------------------------------------
 
     public static void checkToken(String token, final HttpCheckToken httpCheckToken){

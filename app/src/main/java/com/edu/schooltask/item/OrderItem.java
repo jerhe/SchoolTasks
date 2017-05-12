@@ -24,23 +24,23 @@ public class OrderItem {
     public final static String STATE_UNLESS_STR = "已失效";
     public final static String STATE_CANCEL_STR = "已取消";
 
-    int index;
     String id;
     int type;
     String title;
     String content;
     float cost;
     int state;
+    String school;
     String releaseTime;
     String stateStr;
+    int imageNum;
     User releaseUser;
 
     public OrderItem(){
 
     }
 
-    public OrderItem(int index, String id, int type, String title, String content, float cost, int state){
-        this.index = index;
+    public OrderItem(String id, int type, String title, String content, float cost, int state){
         this.id = id;
         this.type = type;
         this.title = title;
@@ -71,30 +71,24 @@ public class OrderItem {
 
 
     //用于待评价订单
-    public OrderItem(int index, String id, String tilte, String content, String releaseTime){
-        this.index = index;
+    public OrderItem(String id, String title, String content, String releaseTime){
         this.id = id;
-        this.title = tilte;
+        this.title = title;
         this.content = content;
         this.releaseTime = releaseTime;
     }
 
     //用于首页附近任务订单
-    public OrderItem(int index, String id, String content, float cost, User user){
-        this.index = index;
+    public OrderItem(String id, String school, String content, float cost, String releaseTime, int imageNum, User user){
         this.id = id;
         this.content = content;
         this.cost = cost;
+        this.school = school;
+        this.releaseTime = releaseTime;
+        this.imageNum = imageNum;
         this.releaseUser = user;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
 
     public String getId() {
@@ -145,6 +139,14 @@ public class OrderItem {
         this.stateStr = stateStr;
     }
 
+    public void setSchool(String school){
+        this.school =school;
+    }
+
+    public String getSchool(){
+        return school;
+    }
+
     public float getCost() {
         return cost;
     }
@@ -159,6 +161,14 @@ public class OrderItem {
 
     public void  setReleaseTime(String releaseTime){
         this.releaseTime = releaseTime;
+    }
+
+    public int getImageNum(){
+        return imageNum;
+    }
+
+    public void setImageNum(int imageNum){
+        this.imageNum = imageNum;
     }
 
     public User getReleaseUser(){

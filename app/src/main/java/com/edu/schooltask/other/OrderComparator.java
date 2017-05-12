@@ -11,8 +11,7 @@ import java.util.Comparator;
 public class OrderComparator implements Comparator<OrderItem> {
     @Override
     public int compare(OrderItem o1, OrderItem o2) {
-        if(o1.getIndex() > o2.getIndex()) return 1;
-        else return -1;
+        return -1;
     }
 
     @Override

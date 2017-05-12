@@ -53,6 +53,9 @@ public class AllOrderFragment extends BaseFragment{
     private List<OrderItem> typeOrderList = new ArrayList<>();
     private List<OrderItem> allOrderList = new ArrayList<>();
     private OrderTypeMenu orderTypeMenu;
+
+    int pageIndex = 0;
+
     public AllOrderFragment() {
         super(R.layout.fragment_all_order);
     }
@@ -67,6 +70,8 @@ public class AllOrderFragment extends BaseFragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                allOrderList.clear();
+                pageIndex = 0;
                 getUserOrder();
             }
         });
@@ -122,6 +127,12 @@ public class AllOrderFragment extends BaseFragment{
             }
         });
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        orderAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getUserOrder();
+            }
+        }, recyclerView);
         orderTypeMenu.setOnMenuSelectedListener(new OrderTypeMenu.OnMenuItemSelectedListener() {
             @Override
             public void OnMenuItemSelected(int position) {
@@ -186,36 +197,42 @@ public class AllOrderFragment extends BaseFragment{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetUserOrder(GetUserOrderEvent event){
-        swipeRefreshLayout.setRefreshing(false);
-        if(event.isOk()){
-            tipText.setText("您没有相关的订单");
-            try{
-                JSONArray jsonArray = event.getData().getJSONArray("orders");
-                List<OrderItem> orders = new ArrayList<>();
-                for(int i=0; i<jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    OrderItem order = new OrderItem(
-                            jsonObject.getInt("index"),
-                            jsonObject.getString("orderid"),
-                            jsonObject.getInt("type"),
-                            jsonObject.getString("title"),
-                            jsonObject.getString("content"),
-                            (float)jsonObject.getDouble("cost"),
-                            jsonObject.getInt("state"));
-                    orders.add(order);
+        if(event.type == 0){
+            swipeRefreshLayout.setRefreshing(false);
+            if(event.isOk()){
+                tipText.setText("您没有相关的订单");
+                pageIndex ++;
+                try{
+                    JSONArray jsonArray = event.getData().getJSONArray("orders");
+                    List<OrderItem> orders = new ArrayList<>();
+                    for(int i=0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        OrderItem order = new OrderItem(
+                                jsonObject.getString("orderid"),
+                                jsonObject.getInt("type"),
+                                jsonObject.getString("title"),
+                                jsonObject.getString("content"),
+                                (float)jsonObject.getDouble("cost"),
+                                jsonObject.getInt("state"));
+                        orders.add(order);
+                    }
+                    orderAdapter.loadMoreComplete();
+                    if(orders.size() < 5){
+                        orderAdapter.loadMoreEnd();
+                    }
+                    allOrderList.addAll(orders);
+                }catch (JSONException e){
+                    toastShort("数据异常");
+                    e.printStackTrace();
                 }
-                allOrderList.clear();
-                allOrderList.addAll(orders);
-            }catch (JSONException e){
-                toastShort("数据异常");
-                e.printStackTrace();
+                addToTypeOrderList(orderTypeMenu.getPosition());
             }
-            addToTypeOrderList(orderTypeMenu.getPosition());
-        }
-        else{
-            tipText.setText("获取订单失败，请重试");
-            checkEmpty();
-            toastShort(event.getError());
+            else{
+                orderAdapter.loadMoreFail();
+                tipText.setText("获取订单失败，请重试");
+                checkEmpty();
+                toastShort(event.getError());
+            }
         }
     }
 
@@ -233,6 +250,7 @@ public class AllOrderFragment extends BaseFragment{
         swipeRefreshLayout.setRefreshing(false);
         tipText.setText("请先登录");
         tipText.setVisibility(View.VISIBLE);
+        pageIndex = 0;
     }
 
     public void getUserOrder(){
@@ -240,7 +258,7 @@ public class AllOrderFragment extends BaseFragment{
             if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
             tipText.setVisibility(View.GONE);
             User user = mDataCache.getUser();
-            HttpUtil.getUserOrder(user.getToken(), user.getUserId());
+            HttpUtil.getUserOrder(user.getToken(), user.getUserId(), pageIndex, 0);
         }
         else{
             swipeRefreshLayout.setRefreshing(false);
