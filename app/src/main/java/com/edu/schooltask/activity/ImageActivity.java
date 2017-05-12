@@ -15,8 +15,9 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.edu.schooltask.R;
+import com.edu.schooltask.base.BaseActivity;
 
-public class ImageActivity extends AppCompatActivity {
+public class ImageActivity extends BaseActivity {
     private GestureImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
