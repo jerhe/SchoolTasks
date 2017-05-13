@@ -9,6 +9,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.edu.schooltask.activity.MoneyActivity;
+import com.edu.schooltask.activity.UserActivity;
 import com.edu.schooltask.adapter.FunctionAdapter;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
@@ -37,6 +39,8 @@ import com.edu.schooltask.event.LoginEvent;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.item.FunctionItem;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 
 
 /**
@@ -81,7 +85,7 @@ public class UserFragment extends BaseFragment {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4,1);
         userFunctionRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         userFunctionRecyclerView.setAdapter(userFunctionAdapter);
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
+        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人主页"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "寻物启事"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "钱包"));
@@ -92,12 +96,27 @@ public class UserFragment extends BaseFragment {
         userFunctionAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(mDataCache.getUser() == null){
+                User user = mDataCache.getUser();
+                if(user == null){
                     toastShort("请先登录");
                     openActivity(LoginActivity.class);
                 }
                 else{
                     switch (position){
+                        case 0:
+                            Intent intent = new Intent(getActivity(), UserActivity.class);
+                            intent.putExtra("user",user);
+                            startActivity(intent);
+                            break;
+                        case 1:
+                            DialogPlus dialog = DialogPlus.newDialog(getContext())
+                                    .setContentHolder(new ViewHolder(R.layout.dialog_yesno))
+                                    .setGravity(Gravity.CENTER)
+                                    .setOutAnimation(R.anim.dialog_out)
+                                    .setContentBackgroundResource(R.drawable.shape_dialog)
+                                    .create();
+                            dialog.show();
+                            break;
                         case 3:
                             openActivity(MoneyActivity.class);
                             break;

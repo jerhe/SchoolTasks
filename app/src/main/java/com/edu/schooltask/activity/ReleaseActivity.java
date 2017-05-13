@@ -174,7 +174,7 @@ public class ReleaseActivity extends BaseActivity {
                 NativeUtil.compressBitmap(path, tempPath);
                 paths.set(i,tempPath);
             }
-            HttpUtil.release(user.getToken(), user.getUserId(), school, content, money, time, paths);
+            HttpUtil.releaseOrder(user.getToken(), user.getUserId(), school, content, money, time, paths);
         }
     }
 

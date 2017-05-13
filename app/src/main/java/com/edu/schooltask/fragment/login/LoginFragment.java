@@ -72,6 +72,7 @@ public class LoginFragment extends BaseFragment {
             finish();
         }
         else{
+            pwdText.setText("");
             toastShort(event.getError());
         }
     }
@@ -92,6 +93,7 @@ public class LoginFragment extends BaseFragment {
             toastShort("请输入正确的密码");
             return;
         }
+        KeyBoardUtil.hideKeyBoard(getActivity());
         loginBtn.setText("登录中...");
         HttpUtil.login(id, TextUtil.getMD5(pwd));
     }

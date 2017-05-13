@@ -1,6 +1,7 @@
 package com.edu.schooltask.fragment.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -17,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.activity.ReleaseActivity;
+import com.edu.schooltask.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.adapter.BannerViewPagerAdapter;
 import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
@@ -90,12 +92,7 @@ public class HomeFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                nearTaskPageIndex = 0;
-                twoHandPageIndex = 0;
-                jobPageIndex = 0;
-                nearTaskItems.clear();
-                twoHandItems.clear();
-                jobItems.clear();
+                clearList();
                 getSchoolOrder();
                 //TODO other getXXOrder();
             }
@@ -120,6 +117,23 @@ public class HomeFragment extends BaseFragment {
             }
         },recyclerView);
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                HomeItem item = items.get(position);
+                switch (item.getItemType()){
+                    case 1:
+                        Intent intent = new Intent(getActivity(), WaitAcceptOrderActivity.class);
+                        intent.putExtra("order", item);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                }
+            }
+        });
         initBanner();
         initButton();
         initPointer();
@@ -212,13 +226,13 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void getSchoolOrder(){
+        swipeRefreshLayout.setRefreshing(true);
         User user = mDataCache.getUser();
         if(user != null){
-            swipeRefreshLayout.setRefreshing(true);
             HttpUtil.getSchoolOrder(user.getToken(), user.getSchool(), nearTaskPageIndex);
         }
-        else{
-
+        else{   //用户未登录则获取最新任务
+            HttpUtil.getAllSchoolOrder(nearTaskPageIndex);
         }
     }
 
@@ -245,6 +259,7 @@ public class HomeFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccess(LoginSuccessEvent event){
+        clearList();
         getSchoolOrder();
     }
 
@@ -265,8 +280,8 @@ public class HomeFragment extends BaseFragment {
                     OrderItem orderItem = new OrderItem(orderJSON.getString("orderid"),
                             orderJSON.getString("school"), orderJSON.getString("content"),
                             (float)orderJSON.getDouble("cost"), orderJSON.getString("releasetime"),
-                            orderJSON.getInt("imagenum"), user);
-                    nearTaskItems.add(new HomeItem(HomeItem.NEAR_TASK_ITEM, orderItem));
+                            orderJSON.getInt("imagenum"), orderJSON.getInt("looknum"), user);
+                    nearTaskItems.add(new HomeItem(HomeItem.NEAR_TASK_SHOW_ITEM, orderItem));
                 }
                 adapter.loadMoreComplete();
                 if(orderArray.length() < 5){
@@ -306,5 +321,14 @@ public class HomeFragment extends BaseFragment {
         list.add(imageView2);
         list.add(imageView3);
         return list;
+    }
+
+    private void clearList(){
+        nearTaskPageIndex = 0;
+        twoHandPageIndex = 0;
+        jobPageIndex = 0;
+        nearTaskItems.clear();
+        twoHandItems.clear();
+        jobItems.clear();
     }
 }

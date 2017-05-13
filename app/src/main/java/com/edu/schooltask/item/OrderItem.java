@@ -4,11 +4,13 @@ import com.edu.schooltask.beans.User;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Created by 夜夜通宵 on 2017/5/5.
  */
 
-public class OrderItem {
+public class OrderItem implements Serializable{
 
     public final static int STATE_WAIT_ACCEPT = 0;
     public final static int STATE_WAIT_FINISH = 1;
@@ -33,6 +35,7 @@ public class OrderItem {
     String releaseTime;
     String stateStr;
     int imageNum;
+    int lookNum;
     User releaseUser;
 
     public OrderItem(){
@@ -76,13 +79,15 @@ public class OrderItem {
     }
 
     //用于首页附近任务订单
-    public OrderItem(String id, String school, String content, float cost, String releaseTime, int imageNum, User user){
+    public OrderItem(String id, String school, String content, float cost, String releaseTime,
+                     int imageNum, int lookNum, User user){
         this.id = id;
         this.content = content;
         this.cost = cost;
         this.school = school;
         this.releaseTime = releaseTime;
         this.imageNum = imageNum;
+        this.lookNum = lookNum;
         this.releaseUser = user;
     }
 
@@ -160,6 +165,13 @@ public class OrderItem {
         this.imageNum = imageNum;
     }
 
+    public int getLookNum(){
+        return lookNum;
+    }
+
+    public void setLookNum(int lookNum){
+        this.lookNum = lookNum;
+    }
     public User getReleaseUser(){
         return this.releaseUser;
     }

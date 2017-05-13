@@ -1,6 +1,7 @@
 package com.edu.schooltask.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,6 +18,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 
 import static android.view.View.GONE;
 
@@ -54,8 +59,19 @@ public class MoneyActivity extends BaseActivity {
     public void onGetMoney(GetMoneyEvent event) throws JSONException {
         progressBar.setVisibility(GONE);
         if (event.isOk()){
-            float money = (float)event.getData().getDouble("money");
-            moneyText.setText(money+"");
+            double money = event.getData().getDouble("money");
+            String moneyStr = money + "";
+            int pointIndex = moneyStr.lastIndexOf(".");
+            StringBuilder sb = new StringBuilder();
+            sb.append(moneyStr.substring(0,pointIndex));
+            sb.reverse();
+            for(int i=sb.length()/3; i>0; i--){
+                sb.insert(3 * i, ",");
+            }
+            sb.reverse();
+            if(sb.toString().startsWith(","))sb.deleteCharAt(0);
+            sb.append(moneyStr.substring(pointIndex));
+            moneyText.setText(moneyStr);
         }
         else{
             toastShort(event.getError());

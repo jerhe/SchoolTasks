@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.data.DataCache;
+import com.edu.schooltask.event.AcceptOrderEvent;
 import com.edu.schooltask.event.CheckTokenEvent;
 import com.edu.schooltask.event.GetCodeEvent;
 import com.edu.schooltask.event.GetMoneyEvent;
@@ -47,6 +48,7 @@ public class HttpUtil {
     final static String GET_MONEY_URL ="http://192.168.191.1:8080/SchoolTaskServer/MoneyController/getMoney.do";
     final static String GET_USER_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getUserOrder.do";
     final static String GET_SCHOOL_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getSchoolOrder.do";
+    final static String ACCEPT_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/acceptOrder.do";
 
     public final static String ORDER_IMAGE_URL = "http://192.168.191.1:8080/SchoolTaskServer/static/images/";
 
@@ -90,7 +92,7 @@ public class HttpUtil {
         post(REGISTER_FINISH_URL, requestBody, new BaseCallBack(new RegisterFinishEvent()));
     }
 
-    public static void release(String token, final String userId, final String school,
+    public static void releaseOrder(String token, final String userId, final String school,
                                final String content, final float cost, final int limitTime,
                                final List<String> paths){
         checkToken(token, new HttpCheckToken() {
@@ -115,6 +117,22 @@ public class HttpUtil {
             @Override
             public void onFailure() {
                 EventBus.getDefault().post(new ReleaseEvent(false));
+            }
+        });
+    }
+
+    public static void acceptOrder(String token, final String orderId, final String userId){
+        checkToken(token, new HttpCheckToken() {
+            @Override
+            public void onSuccess() {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("orderid",orderId).add("userid",userId).build();
+                post(ACCEPT_ORDER_URL, requestBody, new BaseCallBack(new AcceptOrderEvent()));
+            }
+
+            @Override
+            public void onFailure() {
+
             }
         });
     }
@@ -167,6 +185,12 @@ public class HttpUtil {
                 EventBus.getDefault().post(new GetSchoolOrderEvent(false));
             }
         });
+    }
+
+    public static void getAllSchoolOrder(int pageIndex){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("school","*").add("pageindex",pageIndex+"").build();
+        post(GET_SCHOOL_ORDER_URL, requestBody, new BaseCallBack(new GetSchoolOrderEvent()));
     }
     //------------------------------------------------------------------------
 

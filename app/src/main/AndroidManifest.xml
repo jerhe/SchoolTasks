@@ -32,9 +32,11 @@
         <activity
             android:name=".activity.MoneyActivity"
             android:label="我的钱包" />
-        <activity android:name=".activity.OrderActivity" />
-        <activity android:name=".activity.ImageActivity"
-            android:theme="@style/ImageStyle"></activity>
+        <activity android:name=".activity.WaitAcceptOrderActivity" android:label="任务详情"/>
+        <activity
+            android:name=".activity.ImageActivity"
+            android:theme="@style/ImageStyle" />
+        <activity android:name=".activity.UserActivity" android:label=""></activity>
     </application>
 
 </manifest>

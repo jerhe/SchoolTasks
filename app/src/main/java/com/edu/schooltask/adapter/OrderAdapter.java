@@ -27,7 +27,8 @@ public class OrderAdapter extends BaseQuickAdapter<OrderItem, BaseViewHolder> {
         GradientDrawable typeGrad = (GradientDrawable)typeText.getBackground();
         if(item.getType() == 0) typeGrad.setColor(Color.parseColor("#1b9dff"));
         else typeGrad.setColor(Color.parseColor("#ffa500"));
-        typeText.setText(item.getType() == 0 ? "发" : "接");
+        String typeStr = item.getType() == 0 ? "发" : "接";
+        typeText.setText(typeStr);
         helper.setText(R.id.ao_content, item.getContent());
         helper.setText(R.id.ao_cost, "¥"+item.getCost());
         helper.setText(R.id.ao_state, item.getStateStr());
