@@ -22,6 +22,8 @@ import com.edu.schooltask.data.DataCache;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.Serializable;
+
 /**
  * Created by 夜夜通宵 on 2017/5/4.
  */

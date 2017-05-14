@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,12 +15,21 @@ import com.bumptech.glide.Glide;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.event.ReleaseEvent;
+import com.edu.schooltask.utils.KeyBoardUtil;
+import com.edu.schooltask.utils.TextUtil;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnCancelListener;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.OnItemClickListener;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
 import com.yuyh.library.imgsel.ImgSelConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.http.HttpUtil;
@@ -33,6 +44,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class ReleaseActivity extends BaseActivity {
+    private String moneyReg = "^(([1-9]\\d{0,9})|0)(\\.\\d{1,2})?$";
     private static final int REQUEST_CODE = 0;
 
     private InputText schoolText;
@@ -44,7 +56,10 @@ public class ReleaseActivity extends BaseActivity {
 
     ProgressDialog progressDialog;
 
+    DialogPlus pwdDialog;
+
     List<String> paths = new ArrayList<>();
+    List<String> tempPaths = new ArrayList<>();
     ImgSelConfig config;
     ImageLoader loader = new ImageLoader() {
         @Override
@@ -53,6 +68,7 @@ public class ReleaseActivity extends BaseActivity {
         }
 
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +118,32 @@ public class ReleaseActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (pwdDialog != null){
+            if(pwdDialog.isShowing()){
+                pwdDialog.dismiss();
+                toastShort("取消支付");
+                EventBus.getDefault().post(new ReleaseEvent(false));
+            }
+            else{
+                finish();
+            }
+        }
+        else{
+            finish();
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRelease(ReleaseEvent event){
         releaseBtn.setText("发布");
-        if(progressDialog.isShowing())progressDialog.dismiss();
-        for(String path : paths){
+        if(progressDialog != null)
+            if(progressDialog.isShowing()) progressDialog.dismiss();
+        for(String path : tempPaths){
             NativeUtil.deleteBitmap(path);
         }
+        tempPaths.clear();
         if(event.isOk()){
             toastShort("发布成功");
             finish();
@@ -117,6 +152,9 @@ public class ReleaseActivity extends BaseActivity {
             toastShort(event.getError());
             if(event.getCode() == 1){
                 //TODO 跳转到充值页面
+            }
+            if(event.getCode() == 3){
+                openActivity(SetPayPwdActivity.class);
             }
         }
     }
@@ -145,9 +183,10 @@ public class ReleaseActivity extends BaseActivity {
             toastShort("请输入时限");
             return;
         }
-        if(".".equals(cost)){
+        Pattern pattern = Pattern.compile(moneyReg);
+        Matcher matcher = pattern.matcher(cost);
+        if(!matcher.matches()){
             toastShort("金额错误，请重新输入");
-            costText.clean();
             return;
         }
         final float money = Float.parseFloat(cost);
@@ -156,25 +195,62 @@ public class ReleaseActivity extends BaseActivity {
             costText.clean();
             return;
         }
+        if(money > 10000){
+            toastShort("最大金额为10000元，请重新输入");
+            return;
+        }
         final int time = Integer.parseInt(limitTime);
         if(time == 0 || time >= 7 * 24){
             toastShort("时限错误,请重新输入");
             limitTimeText.clean();
             return;
         }
-        User user = mDataCache.getUser();
+        final User user = mDataCache.getUser();
         if(user != null){
-            releaseBtn.setText("发布中...");
             //压缩图片
-            progressDialog = ProgressDialog.show(this, "", "发布中...", true, false);
             for(int i=0; i<paths.size(); i++){
                 String path = paths.get(i);
                 int pointIndex = path.lastIndexOf(".");
                 String tempPath = path.substring(0,pointIndex) + "_temp" + path.substring(pointIndex);
                 NativeUtil.compressBitmap(path, tempPath);
-                paths.set(i,tempPath);
+                tempPaths.add(tempPath);
             }
-            HttpUtil.releaseOrder(user.getToken(), user.getUserId(), school, content, money, time, paths);
+            releaseBtn.setText("发布中...");
+            //支付密码
+            pwdDialog = DialogPlus.newDialog(this)
+                    .setContentHolder(new ViewHolder(R.layout.dialog_pwd))
+                    .setGravity(Gravity.CENTER)
+                    .setContentBackgroundResource(R.drawable.shape_dialog)
+                    .setOutAnimation(R.anim.dialog_out)
+                    .setCancelable(false)
+                    .setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(DialogPlus dialog, View view) {
+                            switch (view.getId()){
+                                case R.id.pwd_confirm_btn:
+                                    View dialogView = dialog.getHolderView();
+                                    InputText pwdText = (InputText) dialogView.findViewById(R.id.pwd_pwd);
+                                    String pwd = pwdText.getText();
+                                    if(pwd.length() == 0){
+                                        toastShort("请输入支付密码");
+                                        return;
+                                    }
+                                    if(pwd.length() != 6){
+                                        toastShort("支付密码为6位数字");
+                                        return;
+                                    }
+                                    KeyBoardUtil.hideKeyBoard(ReleaseActivity.this);
+                                    progressDialog = ProgressDialog.show(ReleaseActivity.this, "", "发布中...", true, false);
+                                    HttpUtil.releaseOrder(user.getToken(), user.getUserId(), school, content, money, time, tempPaths, TextUtil.getMD5(pwd));
+                                    dialog.dismiss();
+                                    break;
+                            }
+                        }
+                    })
+                    .create();
+            InputText pwdText = (InputText) pwdDialog.findViewById(R.id.pwd_pwd);
+            pwdText.setInputFilter(5);
+            pwdDialog.show();
         }
     }
 
@@ -183,7 +259,7 @@ public class ReleaseActivity extends BaseActivity {
                 // 是否多选, 默认true
                 .multiSelect(true)
                 // 是否记住上次选中记录, 仅当multiSelect为true的时候配置，默认为true
-                .rememberSelected(true)
+                .rememberSelected(false)
                 // “确定”按钮背景色
                 .btnBgColor(Color.WHITE)
                 // “确定”按钮文字颜色

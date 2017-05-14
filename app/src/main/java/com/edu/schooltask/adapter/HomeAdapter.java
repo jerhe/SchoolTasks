@@ -26,6 +26,7 @@ import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.OrderItem;
 import com.edu.schooltask.utils.DateUtil;
+import com.edu.schooltask.utils.GlideUtil;
 
 import java.util.Calendar;
 import java.util.List;
@@ -72,7 +73,7 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
         final User user = orderItem.getReleaseUser();
         helper.setText(R.id.nt_name, user.getName());
         helper.setText(R.id.nt_school, orderItem.getSchool());
-        helper.setText(R.id.nt_cost, "￥"+ orderItem.getCost());
+        helper.setText(R.id.nt_cost, "¥"+ orderItem.getCost());
         helper.setText(R.id.nt_content, orderItem.getContent());
         helper.setText(R.id.nt_release_time,
                 DateUtil.getLong(DateUtil.stringToDate(orderItem.getReleaseTime())));
@@ -89,19 +90,8 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
         }
         //头像
         final ImageView headView = helper.getView(R.id.nt_head);
-        Glide.with(headView.getContext())
-                .load(R.drawable.head)
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.head)
-                .into(new BitmapImageViewTarget(headView){
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(headView.getResources(),resource);
-                        roundedBitmapDrawable.setCircular(true);
-                        headView.setImageDrawable(roundedBitmapDrawable);
-                    }
-                });
+        GlideUtil.setHead(headView.getContext(), headView);
+
         //图片
         LinearLayout imageLayout = helper.getView(R.id.nt_image_layout);
         final ImageView image1 = helper.getView(R.id.nt_image_1);

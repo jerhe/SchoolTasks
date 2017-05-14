@@ -2,6 +2,7 @@ package com.edu.schooltask.fragment.login;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import com.edu.schooltask.activity.SetPayPwdActivity;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
@@ -79,9 +81,11 @@ public class RegisterInfoFragment extends BaseFragment {
             toastShort("注册成功");
             mDataCache.saveUser(user);
             EventBus.getDefault().post(new LoginSuccessEvent());
+            openActivity(SetPayPwdActivity.class);
             finish();
         }
         else{
+            finishBtn.setText("完成");
             toastShort(event.getError());
         }
     }
@@ -107,9 +111,13 @@ public class RegisterInfoFragment extends BaseFragment {
             toastShort("密码长度至少为6位");
             return;
         }
+        KeyBoardUtil.hideKeyBoard(getActivity());
         finishBtn.setText("正在提交请求...");
         final String id = ((LoginActivity)getActivity()).registerId;
-        KeyBoardUtil.hideKeyBoard(getActivity());
+        if(TextUtils.isEmpty(id)){
+            toastShort("发生错误");
+            return;
+        }
         HttpUtil.registerFinish(id, school, name, TextUtil.getMD5(pwd));
     }
 }

@@ -3,8 +3,11 @@ package com.edu.schooltask.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.method.KeyListener;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -59,7 +62,11 @@ public class InputText extends LinearLayout {
         return inputText.getText().toString();
     }
 
-
+    public void setInputEnable(boolean inputEnable){
+        if(!inputEnable){
+            inputText.setKeyListener(null);
+        }
+    }
 
     public void clean(){
         inputText.setText("");

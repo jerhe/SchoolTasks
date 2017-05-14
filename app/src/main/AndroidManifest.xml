@@ -32,11 +32,19 @@
         <activity
             android:name=".activity.MoneyActivity"
             android:label="我的钱包" />
-        <activity android:name=".activity.WaitAcceptOrderActivity" android:label="任务详情"/>
+        <activity
+            android:name=".activity.WaitAcceptOrderActivity"
+            android:label="任务详情" />
         <activity
             android:name=".activity.ImageActivity"
             android:theme="@style/ImageStyle" />
-        <activity android:name=".activity.UserActivity" android:label=""></activity>
+        <activity
+            android:name=".activity.UserActivity"
+            android:label="" />
+        <activity
+            android:name=".activity.OrderActivity"
+            android:label="订单详情" />
+        <activity android:name=".activity.SetPayPwdActivity" android:label="设置支付密码"></activity>
     </application>
 
 </manifest>

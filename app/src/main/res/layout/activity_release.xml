@@ -21,14 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="金额"
-        app:hint="任务金额(￥)，不少于1元钱">
+        app:hint="任务金额(元)，至少是1元钱">
     </com.edu.schooltask.view.InputText>
     <com.edu.schooltask.view.InputText
         android:id="@+id/release_limit_time"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="时限"
-        app:hint="任务发布后有效的时间(小时)">
+        app:hint="任务发布后可接单的时间(小时)">
     </com.edu.schooltask.view.InputText>
     <com.edu.schooltask.view.Content
         android:id="@+id/release_content"

@@ -99,6 +99,7 @@ public class MainActivity extends BaseActivity {
     public void onCheckToken(CheckTokenEvent event){
         if (!event.isOk()){
             mDataCache.removeUser();
+            //TODO 关闭其余Activity
             openActivity(LoginActivity.class);
             EventBus.getDefault().post(new LogoutEvent());
             toastShort("账号异常，请重新登录");

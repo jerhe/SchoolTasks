@@ -74,6 +74,7 @@ public class MoneyActivity extends BaseActivity {
             moneyText.setText(moneyStr);
         }
         else{
+            moneyText.setText("获取失败");
             toastShort(event.getError());
         }
     }

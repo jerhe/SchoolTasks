@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="请输入支付密码"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/lineColor"/>
+    <com.edu.schooltask.view.InputText
+        android:layout_marginBottom="20dp"
+        android:id="@+id/pwd_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:inputType="password"
+        app:text="支付密码">
+    </com.edu.schooltask.view.InputText>
+    <Button
+        android:id="@+id/pwd_confirm_btn"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_theme_btn"
+        android:text="确定"
+        android:textColor="@color/white"/>
+</LinearLayout>

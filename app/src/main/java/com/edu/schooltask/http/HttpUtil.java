@@ -11,11 +11,13 @@ import com.edu.schooltask.event.AcceptOrderEvent;
 import com.edu.schooltask.event.CheckTokenEvent;
 import com.edu.schooltask.event.GetCodeEvent;
 import com.edu.schooltask.event.GetMoneyEvent;
+import com.edu.schooltask.event.GetOrderInfoEvent;
 import com.edu.schooltask.event.GetSchoolOrderEvent;
 import com.edu.schooltask.event.GetUserOrderEvent;
 import com.edu.schooltask.event.LoginEvent;
 import com.edu.schooltask.event.RegisterFinishEvent;
 import com.edu.schooltask.event.ReleaseEvent;
+import com.edu.schooltask.event.SetPaypwdEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -49,6 +51,8 @@ public class HttpUtil {
     final static String GET_USER_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getUserOrder.do";
     final static String GET_SCHOOL_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getSchoolOrder.do";
     final static String ACCEPT_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/acceptOrder.do";
+    final static String SET_PAYPWD_URL ="http://192.168.191.1:8080/SchoolTaskServer/UserController/setPaypwd.do";
+    final static String GET_ORDER_INFO_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getOrderInfo.do";
 
     public final static String ORDER_IMAGE_URL = "http://192.168.191.1:8080/SchoolTaskServer/static/images/";
 
@@ -93,8 +97,8 @@ public class HttpUtil {
     }
 
     public static void releaseOrder(String token, final String userId, final String school,
-                               final String content, final float cost, final int limitTime,
-                               final List<String> paths){
+                                    final String content, final float cost, final int limitTime,
+                                    final List<String> paths, final String pwd){
         checkToken(token, new HttpCheckToken() {
             @Override
             public void onSuccess() {
@@ -110,6 +114,7 @@ public class HttpUtil {
                 builder.addFormDataPart("content", content);
                 builder.addFormDataPart("cost", cost+"");
                 builder.addFormDataPart("limittime", limitTime+"");
+                builder.addFormDataPart("pwd", pwd);
                 MultipartBody requestBody = builder.build();
                 post(RELEASE_ORDER_URL, requestBody, new BaseCallBack(new ReleaseEvent()));
             }
@@ -117,6 +122,38 @@ public class HttpUtil {
             @Override
             public void onFailure() {
                 EventBus.getDefault().post(new ReleaseEvent(false));
+            }
+        });
+    }
+
+    public static void setPaypwd(String token, final String userId, final String pwd){
+        checkToken(token, new HttpCheckToken() {
+            @Override
+            public void onSuccess() {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("userid",userId).add("pwd",pwd).build();
+                post(SET_PAYPWD_URL, requestBody, new BaseCallBack(new SetPaypwdEvent()));
+            }
+
+            @Override
+            public void onFailure() {
+                EventBus.getDefault().post(new SetPaypwdEvent(false));
+            }
+        });
+    }
+
+    public static void getOrderInfo(String token, final String userId, final String orderId){
+        checkToken(token, new HttpCheckToken() {
+            @Override
+            public void onSuccess() {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("orderid",orderId).add("userid",userId).build();
+                post(GET_ORDER_INFO_URL, requestBody, new BaseCallBack(new GetOrderInfoEvent()));
+            }
+
+            @Override
+            public void onFailure() {
+                EventBus.getDefault().post(new GetOrderInfoEvent(false));
             }
         });
     }
@@ -132,10 +169,12 @@ public class HttpUtil {
 
             @Override
             public void onFailure() {
-
+                EventBus.getDefault().post(new AcceptOrderEvent(false));
             }
         });
     }
+
+
 
     public static void getMoney(String token, final String id){
         checkToken(token, new HttpCheckToken() {
@@ -148,7 +187,7 @@ public class HttpUtil {
 
             @Override
             public void onFailure() {
-
+                EventBus.getDefault().post(new GetMoneyEvent(false));
             }
         });
 

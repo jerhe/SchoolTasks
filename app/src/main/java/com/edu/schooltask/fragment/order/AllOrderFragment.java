@@ -1,5 +1,6 @@
 package com.edu.schooltask.fragment.order;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.edu.schooltask.activity.LoginActivity;
+import com.edu.schooltask.activity.OrderActivity;
 import com.edu.schooltask.adapter.OrderAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
@@ -82,6 +84,7 @@ public class AllOrderFragment extends BaseFragment{
         orderAdapter.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.header_order_empty,null));
         orderAdapter.openLoadAnimation();
         recyclerView.setAdapter(orderAdapter);
+        //列表滚动事件 用于分类菜单的显示
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public boolean isScroll = false;
             int direction = 0;  //滚动方向  用于判断拖曳
@@ -127,22 +130,30 @@ public class AllOrderFragment extends BaseFragment{
             }
         });
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        //加载更多事件
         orderAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 getUserOrder();
             }
         }, recyclerView);
+
+        //订单分类事件
         orderTypeMenu.setOnMenuSelectedListener(new OrderTypeMenu.OnMenuItemSelectedListener() {
             @Override
             public void OnMenuItemSelected(int position) {
                 addToTypeOrderList(position);
             }
         });
+
+        //点击订单事件
         orderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                toastShort(typeOrderList.get(position).getContent());
+                Intent intent = new Intent(getActivity(), OrderActivity.class);
+                intent.putExtra("orderid", typeOrderList.get(position).getId());
+                startActivity(intent);
             }
         });
         orderTypeMenu.setSelectItem(0);

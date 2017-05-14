@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -208,7 +209,6 @@ public class HomeFragment extends BaseFragment {
         homeTab.addTab("最新兼职");
         homeTab.setSelect(0);
         homeTab.setEventBus(true);
-
 
         adapter.addHeaderView(pointerView);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

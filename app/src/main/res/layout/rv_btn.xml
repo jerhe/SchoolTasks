@@ -6,10 +6,10 @@
     android:layout_height="80dp">
     <Button
         android:id="@+id/home_release_btn"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="3dp"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -20,10 +20,10 @@
         android:text="发布任务"/>
     <Button
         android:id="@+id/home_accept_btn"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"

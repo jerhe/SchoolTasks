@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="密码"
-        app:hint="请输入密码，至少6位"
+        app:hint="请输入登录密码，至少6位"
         app:inputType="password">
     </com.edu.schooltask.view.InputText>
     <Button

@@ -21,7 +21,7 @@ public class BaseHttpEvent<T> {
         this.ok = false;
     }
 
-    public BaseHttpEvent(boolean ok){
+    public BaseHttpEvent(boolean ok){   //checkToken 网络连接失败
         this.ok = ok;
         this.code = -1;
         this.error = "连接失败,请检查网络";

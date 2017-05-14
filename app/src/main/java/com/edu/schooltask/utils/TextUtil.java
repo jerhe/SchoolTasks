@@ -2,6 +2,7 @@ package com.edu.schooltask.utils;
 
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.widget.EditText;
 
 import java.security.MessageDigest;

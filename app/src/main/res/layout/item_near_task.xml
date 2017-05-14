@@ -44,7 +44,7 @@
             android:layout_marginTop="3dp"
             android:textSize="12sp"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/nt_name"
+            android:layout_toRightOf="@id/nt_school"
             android:layout_below="@id/nt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:layout_alignTop="@id/nt_name"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:textSize="16sp"
+            android:textStyle="bold"
             android:textColor="@color/red"
             android:text="¥1399"/>
     </RelativeLayout>
@@ -65,7 +65,7 @@
         android:id="@+id/nt_content"
         android:layout_marginTop="10dp"
         android:paddingRight="10dp"
-        android:paddingLeft="20dp"
+        android:paddingLeft="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="2"
