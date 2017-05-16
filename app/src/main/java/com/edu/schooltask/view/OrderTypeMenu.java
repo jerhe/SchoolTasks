@@ -19,6 +19,7 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
     private MenuItem allItem;
     private MenuItem waitAcceptItem;
     private MenuItem waitFinishItem;
+    private MenuItem waitConfirmItem;
     private MenuItem waitAssessItem;
     private MenuItem assessFinishItem;
     private MenuItem unlessItem;
@@ -33,6 +34,7 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
         allItem = (MenuItem) findViewById(R.id.otm_all);
         waitAcceptItem = (MenuItem) findViewById(R.id.otm_wait_accept);
         waitFinishItem = (MenuItem) findViewById(R.id.otm_wait_finish);
+        waitConfirmItem = (MenuItem) findViewById(R.id.otm_wait_confirm);
         waitAssessItem = (MenuItem) findViewById(R.id.otm_wait_assess);
         assessFinishItem = (MenuItem) findViewById(R.id.otm_assess_finish);
         unlessItem = (MenuItem) findViewById(R.id.otm_unless);
@@ -40,6 +42,7 @@ public class OrderTypeMenu extends LinearLayout implements View.OnClickListener{
         items.add(allItem);
         items.add(waitAcceptItem);
         items.add(waitFinishItem);
+        items.add(waitConfirmItem);
         items.add(waitAssessItem);
         items.add(assessFinishItem);
         items.add(unlessItem);

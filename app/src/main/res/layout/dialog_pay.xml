@@ -9,7 +9,31 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:textStyle="bold"
-        android:text="请输入支付密码"/>
+        android:text="交易确认"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/lineColor"/>
+
+    <LinearLayout
+        android:id="@+id/pay_money_layout"
+        android:paddingLeft="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:text="支付金额"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/pay_money"
+            android:text="11元"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"

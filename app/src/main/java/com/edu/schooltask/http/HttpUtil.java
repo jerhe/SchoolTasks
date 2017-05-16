@@ -4,11 +4,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.data.DataCache;
 import com.edu.schooltask.event.AcceptOrderEvent;
+import com.edu.schooltask.event.ChangeOrderStateEvent;
 import com.edu.schooltask.event.CheckTokenEvent;
+import com.edu.schooltask.event.GetAssessOrderEvent;
 import com.edu.schooltask.event.GetCodeEvent;
 import com.edu.schooltask.event.GetMoneyEvent;
 import com.edu.schooltask.event.GetOrderInfoEvent;
@@ -18,6 +19,7 @@ import com.edu.schooltask.event.LoginEvent;
 import com.edu.schooltask.event.RegisterFinishEvent;
 import com.edu.schooltask.event.ReleaseEvent;
 import com.edu.schooltask.event.SetPaypwdEvent;
+import com.edu.schooltask.utils.TextUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import okhttp3.Call;
@@ -43,7 +46,7 @@ import okhttp3.Response;
 public class HttpUtil {
     private static DataCache mDataCache;
     final static String LOGIN_URL = "http://192.168.191.1:8080/SchoolTaskServer/LoginController/login.do";
-    final static String GET_CODE_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/get_code.do";
+    final static String GET_CODE_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/getCode.do";
     final static String REGISTER_FINISH_URL = "http://192.168.191.1:8080/SchoolTaskServer/RegisterController/finish.do";
     final static String RELEASE_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/release.do";
     final static String CHECK_TOKEN_URL ="http://192.168.191.1:8080/SchoolTaskServer/TokenController/checkToken.do";
@@ -53,8 +56,10 @@ public class HttpUtil {
     final static String ACCEPT_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/acceptOrder.do";
     final static String SET_PAYPWD_URL ="http://192.168.191.1:8080/SchoolTaskServer/UserController/setPaypwd.do";
     final static String GET_ORDER_INFO_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getOrderInfo.do";
+    final static String CHANGE_ORDER_STATE_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/changeOrderState.do";
+    final static String GET_ASSESS_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getAssessOrder.do";
 
-    public final static String ORDER_IMAGE_URL = "http://192.168.191.1:8080/SchoolTaskServer/static/images/";
+    public final static String ORDER_IMAGE_URL ="http://192.168.191.1:8080/SchoolTaskServer/static/images/";
 
     public static void setDataCache(DataCache mDataCache){
         HttpUtil.mDataCache = mDataCache;
@@ -73,22 +78,22 @@ public class HttpUtil {
 
     public static void login(String userId, String userPwd){
         RequestBody requestBody = new FormBody.Builder()
-                .add("userid",userId)
-                .add("userpwd",userPwd)
+                .add("user_id",userId)
+                .add("pwd",userPwd)
                 .build();
         post(LOGIN_URL, requestBody, new BaseCallBack(new LoginEvent()));
     }
 
     public static void getCode(String userId){
         RequestBody requestBody = new FormBody.Builder()
-                .add("userid",userId)
+                .add("user_id",userId)
                 .build();
         post(GET_CODE_URL, requestBody, new BaseCallBack(new GetCodeEvent()));
     }
 
     public static void registerFinish(String userId, String school, String name, String pwd){
         RequestBody requestBody = new FormBody.Builder()
-                .add("id",userId)
+                .add("user_id",userId)
                 .add("school",school)
                 .add("name",name)
                 .add("pwd",pwd)
@@ -97,7 +102,7 @@ public class HttpUtil {
     }
 
     public static void releaseOrder(String token, final String userId, final String school,
-                                    final String content, final float cost, final int limitTime,
+                                    final String content, final BigDecimal cost, final int limitTime,
                                     final List<String> paths, final String pwd){
         checkToken(token, new HttpCheckToken() {
             @Override
@@ -109,11 +114,11 @@ public class HttpUtil {
                         builder.addFormDataPart("image"+i, f.getName(), RequestBody.create(MediaType.parse("image/png"), f));
                     }
                 }
-                builder.addFormDataPart("id",userId);
+                builder.addFormDataPart("user_id",userId);
                 builder.addFormDataPart("school", school);
                 builder.addFormDataPart("content", content);
                 builder.addFormDataPart("cost", cost+"");
-                builder.addFormDataPart("limittime", limitTime+"");
+                builder.addFormDataPart("limit_time", limitTime+"");
                 builder.addFormDataPart("pwd", pwd);
                 MultipartBody requestBody = builder.build();
                 post(RELEASE_ORDER_URL, requestBody, new BaseCallBack(new ReleaseEvent()));
@@ -131,7 +136,7 @@ public class HttpUtil {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("userid",userId).add("pwd",pwd).build();
+                        .add("user_id",userId).add("pwd",pwd).build();
                 post(SET_PAYPWD_URL, requestBody, new BaseCallBack(new SetPaypwdEvent()));
             }
 
@@ -147,7 +152,7 @@ public class HttpUtil {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("orderid",orderId).add("userid",userId).build();
+                        .add("order_id",orderId).add("user_id",userId).build();
                 post(GET_ORDER_INFO_URL, requestBody, new BaseCallBack(new GetOrderInfoEvent()));
             }
 
@@ -163,7 +168,7 @@ public class HttpUtil {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("orderid",orderId).add("userid",userId).build();
+                        .add("order_id",orderId).add("user_id",userId).build();
                 post(ACCEPT_ORDER_URL, requestBody, new BaseCallBack(new AcceptOrderEvent()));
             }
 
@@ -181,7 +186,7 @@ public class HttpUtil {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("userid",id).build();
+                        .add("user_id",id).build();
                 post(GET_MONEY_URL, requestBody, new BaseCallBack(new GetMoneyEvent()));
             }
 
@@ -193,19 +198,19 @@ public class HttpUtil {
 
     }
 
-    public static void getUserOrder(String token, final String id, final int pageIndex, final int type){
+    public static void getUserOrder(String token, final String id, final int pageIndex){
         checkToken(token, new HttpCheckToken() {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("userid",id)
-                        .add("pageindex",pageIndex+"").build();
-                post(GET_USER_ORDER_URL, requestBody, new BaseCallBack(new GetUserOrderEvent(type)));
+                        .add("user_id",id)
+                        .add("page_index",pageIndex+"").build();
+                post(GET_USER_ORDER_URL, requestBody, new BaseCallBack(new GetUserOrderEvent()));
             }
 
             @Override
             public void onFailure() {
-                EventBus.getDefault().post(new GetUserOrderEvent(false, type));
+                EventBus.getDefault().post(new GetUserOrderEvent(false));
             }
         });
     }
@@ -215,7 +220,7 @@ public class HttpUtil {
             @Override
             public void onSuccess() {
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("school",school).add("pageindex",pageIndex+"").build();
+                        .add("school",school).add("page_index",pageIndex+"").build();
                 post(GET_SCHOOL_ORDER_URL, requestBody, new BaseCallBack(new GetSchoolOrderEvent()));
             }
 
@@ -226,10 +231,36 @@ public class HttpUtil {
         });
     }
 
+    public static void getAssessOrder(String token, final String id, final int pageIndex){
+        checkToken(token, new HttpCheckToken() {
+            @Override
+            public void onSuccess() {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("user_id",id)
+                        .add("page_index",pageIndex+"").build();
+                post(GET_ASSESS_ORDER_URL, requestBody, new BaseCallBack(new GetAssessOrderEvent()));
+            }
+
+            @Override
+            public void onFailure() {
+                EventBus.getDefault().post(new GetAssessOrderEvent(false));
+            }
+        });
+    }
+
+
     public static void getAllSchoolOrder(int pageIndex){
         RequestBody requestBody = new FormBody.Builder()
-                .add("school","*").add("pageindex",pageIndex+"").build();
+                .add("school","*").add("page_index",pageIndex+"").build();
         post(GET_SCHOOL_ORDER_URL, requestBody, new BaseCallBack(new GetSchoolOrderEvent()));
+    }
+
+    public static void changeOrderState(String token, String orderId, String userId,
+                                        int state){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("token",token).add("order_id",orderId).add("user_id",userId)
+                .add("state",state+"").build();
+        post(CHANGE_ORDER_STATE_URL, requestBody, new BaseCallBack(new ChangeOrderStateEvent()));
     }
     //------------------------------------------------------------------------
 

@@ -14,17 +14,23 @@ public class OrderItem implements Serializable{
 
     public final static int STATE_WAIT_ACCEPT = 0;
     public final static int STATE_WAIT_FINISH = 1;
-    public final static int STATE_WAIT_ASSESS= 2;
-    public final static int STATE_FINISH_ASSESS= 3;
-    public final static int STATE_UNLESS = 4;
-    public final static int STATE_CANCEL = 5;
+    public final static int STATE_WAIT_CONFIRM = 2;
+    public final static int STATE_WAIT_ASSESS= 3;
+    public final static int STATE_FINISH_ASSESS= 4;
+    public final static int STATE_UNLESS = 5;
+    public final static int STATE_CANCEL = 6;
+    public final static int STATE_ABANDON = 7;
+    public final static int STATE_OVERTIME = 8;
 
     public final static String STATE_WAIT_ACCEPT_STR = "待接单";
     public final static String STATE_WAIT_FINISH_STR = "待完成";
+    public final static String STATE_WAIT_CONFIRM_STR = "待确认";
     public final static String STATE_WAIT_ASSESS_STR = "待评价";
     public final static String STATE_FINISH_ASSESS_STR = "已评价";
     public final static String STATE_UNLESS_STR = "已失效";
     public final static String STATE_CANCEL_STR = "已取消";
+    public final static String STATE_ABANDON_STR = "已放弃";
+    public final static String STATE_OVERTIME_STR = "已超时";
 
     String id;
     int type;
@@ -55,6 +61,9 @@ public class OrderItem implements Serializable{
             case STATE_WAIT_FINISH:
                 stateStr = STATE_WAIT_FINISH_STR;
                 break;
+            case STATE_WAIT_CONFIRM:
+                stateStr = STATE_WAIT_CONFIRM_STR;
+                break;
             case STATE_WAIT_ASSESS:
                 stateStr = STATE_WAIT_ASSESS_STR;
                 break;
@@ -67,15 +76,23 @@ public class OrderItem implements Serializable{
             case STATE_UNLESS:
                 stateStr = STATE_UNLESS_STR;
                 break;
+            case STATE_ABANDON:
+                stateStr = STATE_ABANDON_STR;
+                break;
+            case STATE_OVERTIME:
+                stateStr = STATE_OVERTIME_STR;
+                break;
         }
     }
 
 
     //用于待评价订单
-    public OrderItem(String id, String content, String releaseTime){
+    public OrderItem(String id, int type, String content, String releaseTime,int cost){
         this.id = id;
+        this.type = type;
         this.content = content;
         this.releaseTime = releaseTime;
+        this.cost = cost;
     }
 
     //用于首页附近任务订单

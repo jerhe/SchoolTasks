@@ -3,7 +3,7 @@
     android:orientation="horizontal"
     android:background="@color/mainBackgroundColor"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="100dp">
     <Button
         android:id="@+id/home_release_btn"
         android:layout_marginLeft="5dp"
@@ -16,8 +16,31 @@
         android:gravity="center"
         android:background="@drawable/shape_release_task_btn"
         android:textColor="@color/white"
-        android:textSize="23dp"
-        android:text="发布任务"/>
+        android:text="发布"/>
+    <Button
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="3dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@drawable/shape_release_task_btn"
+        android:textColor="@color/white"
+        android:text="二手市场"/>
+    <Button
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="3dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@drawable/shape_release_task_btn"
+        android:textColor="@color/white"
+        android:text="兼职"/>
     <Button
         android:id="@+id/home_accept_btn"
         android:layout_marginLeft="3dp"
@@ -30,6 +53,5 @@
         android:gravity="center"
         android:background="@drawable/shape_accept_task_btn"
         android:textColor="@color/white"
-        android:textSize="23dp"
         android:text="接受任务"/>
 </LinearLayout>

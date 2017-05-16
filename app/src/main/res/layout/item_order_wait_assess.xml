@@ -35,6 +35,13 @@
                 android:background="@drawable/shape_theme_nosolid_btn"
                 android:textColor="@color/colorPrimary"
                 android:text="评价"/>
+            <TextView
+                android:id="@+id/owa_wait_assess"
+                android:text="等待评价"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <View
@@ -54,7 +61,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/orderDivide"/>
+            android:background="@color/divide"/>
     </LinearLayout>
 
 </LinearLayout>

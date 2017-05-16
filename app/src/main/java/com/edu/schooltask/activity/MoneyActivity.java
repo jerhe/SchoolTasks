@@ -59,19 +59,18 @@ public class MoneyActivity extends BaseActivity {
     public void onGetMoney(GetMoneyEvent event) throws JSONException {
         progressBar.setVisibility(GONE);
         if (event.isOk()){
-            double money = event.getData().getDouble("money");
-            String moneyStr = money + "";
-            int pointIndex = moneyStr.lastIndexOf(".");
+            String money = event.getData().getString("money");
+            int pointIndex = money.lastIndexOf(".");
             StringBuilder sb = new StringBuilder();
-            sb.append(moneyStr.substring(0,pointIndex));
+            sb.append(money.substring(0,pointIndex));
             sb.reverse();
             for(int i=sb.length()/3; i>0; i--){
                 sb.insert(3 * i, ",");
             }
             sb.reverse();
             if(sb.toString().startsWith(","))sb.deleteCharAt(0);
-            sb.append(moneyStr.substring(pointIndex));
-            moneyText.setText(moneyStr);
+            sb.append(money.substring(pointIndex));
+            moneyText.setText(sb.toString());
         }
         else{
             moneyText.setText("获取失败");

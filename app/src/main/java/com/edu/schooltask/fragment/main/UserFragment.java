@@ -55,8 +55,8 @@ public class UserFragment extends BaseFragment {
     private LinearLayout backgroundLayout;
 
     private TextView nameText;
-    private TextView levelText;
     private ImageView headImage;
+    private TextView homeBtn;
     public UserFragment(){
         super(R.layout.fragment_user_page);
     }
@@ -79,7 +79,8 @@ public class UserFragment extends BaseFragment {
                     }
                 });
         nameText = (TextView) view.findViewById(R.id.up_user_name);
-        levelText = (TextView) view.findViewById(R.id.up_user_level);
+        homeBtn = (TextView) view.findViewById(R.id.up_user_home);
+
         userFunctionRecyclerView = (RecyclerView)view.findViewById(R.id.up_rv);
         FunctionAdapter userFunctionAdapter = new FunctionAdapter(R.layout.item_user_function, userFunctionItemList);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4,1);
@@ -89,10 +90,6 @@ public class UserFragment extends BaseFragment {
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "寻物启事"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "钱包"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "找兼职"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
         userFunctionAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -104,9 +101,7 @@ public class UserFragment extends BaseFragment {
                 else{
                     switch (position){
                         case 0:
-                            Intent intent = new Intent(getActivity(), UserActivity.class);
-                            intent.putExtra("user",user);
-                            startActivity(intent);
+
                             break;
                         case 1:
                             DialogPlus dialog = DialogPlus.newDialog(getContext())
@@ -132,10 +127,10 @@ public class UserFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         systemFunctionRecyclerView.setLayoutManager(linearLayoutManager);
         systemFunctionRecyclerView.setAdapter(systemFunctionAdapter);
-        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "设置"));
-        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "设置"));
-        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "设置"));
-        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "关于"));
+        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_set, "设置"));
+        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_set, "设置"));
+        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_set, "设置"));
+        systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_set, "关于"));
 
 
         backgroundLayout = (LinearLayout) view.findViewById(R.id.uf_bg);
@@ -170,11 +165,18 @@ public class UserFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccess(LoginSuccessEvent event){
-        User user = mDataCache.getUser();
+        final User user = mDataCache.getUser();
         if(user != null){
             nameText.setText(user.getName());
-            levelText.setVisibility(View.VISIBLE);
-            levelText.setText("Lv." + user.getLevel());
+            homeBtn.setVisibility(View.VISIBLE);
+            homeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), UserActivity.class);
+                    intent.putExtra("user",user);
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -182,6 +184,6 @@ public class UserFragment extends BaseFragment {
     public void onLogout(LogoutEvent event){
         mDataCache.removeUser();
         nameText.setText("登录/注册");
-        levelText.setVisibility(View.GONE);
+        homeBtn.setVisibility(View.GONE);
     }
 }

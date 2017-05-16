@@ -25,6 +25,7 @@ import com.edu.schooltask.utils.TextUtil;
 public class InputText extends LinearLayout {
     private TextView nameText;
     private EditText inputText;
+    private Boolean inputEnable = true;
     private View line;
     public InputText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,7 +41,7 @@ public class InputText extends LinearLayout {
         inputText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if(hasFocus && inputEnable){
                     line.setBackgroundColor(Color.parseColor("#1b9DFF"));
                 }
                 else{
@@ -63,6 +64,7 @@ public class InputText extends LinearLayout {
     }
 
     public void setInputEnable(boolean inputEnable){
+        this.inputEnable = inputEnable;
         if(!inputEnable){
             inputText.setKeyListener(null);
         }

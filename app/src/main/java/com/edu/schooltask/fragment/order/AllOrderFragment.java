@@ -208,41 +208,39 @@ public class AllOrderFragment extends BaseFragment{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetUserOrder(GetUserOrderEvent event){
-        if(event.type == 0){
-            swipeRefreshLayout.setRefreshing(false);
-            if(event.isOk()){
-                tipText.setText("您没有相关的订单");
-                pageIndex ++;
-                try{
-                    JSONArray jsonArray = event.getData().getJSONArray("orders");
-                    List<OrderItem> orders = new ArrayList<>();
-                    for(int i=0; i<jsonArray.length(); i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        OrderItem order = new OrderItem(
-                                jsonObject.getString("orderid"),
-                                jsonObject.getInt("type"),
-                                jsonObject.getString("content"),
-                                (float)jsonObject.getDouble("cost"),
-                                jsonObject.getInt("state"));
-                        orders.add(order);
-                    }
-                    orderAdapter.loadMoreComplete();
-                    if(orders.size() < 5){
-                        orderAdapter.loadMoreEnd();
-                    }
-                    allOrderList.addAll(orders);
-                }catch (JSONException e){
-                    toastShort("数据异常");
-                    e.printStackTrace();
+        swipeRefreshLayout.setRefreshing(false);
+        if(event.isOk()){
+            tipText.setText("您没有相关的订单");
+            pageIndex ++;
+            try{
+                JSONArray jsonArray = event.getData().getJSONArray("orders");
+                List<OrderItem> orders = new ArrayList<>();
+                for(int i=0; i<jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    OrderItem order = new OrderItem(
+                            jsonObject.getString("order_id"),
+                            jsonObject.getInt("type"),
+                            jsonObject.getString("content"),
+                            (float)jsonObject.getDouble("cost"),
+                            jsonObject.getInt("state"));
+                    orders.add(order);
                 }
-                addToTypeOrderList(orderTypeMenu.getPosition());
+                orderAdapter.loadMoreComplete();
+                if(orders.size() < 5){
+                    orderAdapter.loadMoreEnd();
+                }
+                allOrderList.addAll(orders);
+            }catch (JSONException e){
+                toastShort("数据异常");
+                e.printStackTrace();
             }
-            else{
-                orderAdapter.loadMoreFail();
-                tipText.setText("获取订单失败，请重试");
-                checkEmpty();
-                toastShort(event.getError());
-            }
+            addToTypeOrderList(orderTypeMenu.getPosition());
+        }
+        else{
+            orderAdapter.loadMoreFail();
+            tipText.setText("获取订单失败，请重试");
+            checkEmpty();
+            toastShort(event.getError());
         }
     }
 
@@ -268,7 +266,7 @@ public class AllOrderFragment extends BaseFragment{
             if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
             tipText.setVisibility(View.GONE);
             User user = mDataCache.getUser();
-            HttpUtil.getUserOrder(user.getToken(), user.getUserId(), pageIndex, 0);
+            HttpUtil.getUserOrder(user.getToken(), user.getUserId(), pageIndex);
         }
         else{
             swipeRefreshLayout.setRefreshing(false);

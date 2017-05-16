@@ -5,27 +5,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.event.ReleaseEvent;
+import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.TextUtil;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnItemClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
 import com.yuyh.library.imgsel.ImgSelConfig;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -56,7 +57,7 @@ public class ReleaseActivity extends BaseActivity {
 
     ProgressDialog progressDialog;
 
-    DialogPlus pwdDialog;
+    DialogPlus payDialog;
 
     List<String> paths = new ArrayList<>();
     List<String> tempPaths = new ArrayList<>();
@@ -120,11 +121,10 @@ public class ReleaseActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (pwdDialog != null){
-            if(pwdDialog.isShowing()){
-                pwdDialog.dismiss();
-                toastShort("取消支付");
-                EventBus.getDefault().post(new ReleaseEvent(false));
+        if (payDialog != null){
+            if(payDialog.isShowing()){
+                payDialog.dismiss();
+                EventBus.getDefault().post(new ReleaseEvent("取消支付"));
             }
             else{
                 finish();
@@ -189,13 +189,13 @@ public class ReleaseActivity extends BaseActivity {
             toastShort("金额错误，请重新输入");
             return;
         }
-        final float money = Float.parseFloat(cost);
-        if(money < 1){
+        final BigDecimal money = new BigDecimal(cost);
+        if(money.compareTo(new BigDecimal(1)) == -1){
             toastShort("最小金额为1元，请重新输入");
             costText.clean();
             return;
         }
-        if(money > 10000){
+        if(money.compareTo(new BigDecimal(10000)) == 1){
             toastShort("最大金额为10000元，请重新输入");
             return;
         }
@@ -217,40 +217,15 @@ public class ReleaseActivity extends BaseActivity {
             }
             releaseBtn.setText("发布中...");
             //支付密码
-            pwdDialog = DialogPlus.newDialog(this)
-                    .setContentHolder(new ViewHolder(R.layout.dialog_pwd))
-                    .setGravity(Gravity.CENTER)
-                    .setContentBackgroundResource(R.drawable.shape_dialog)
-                    .setOutAnimation(R.anim.dialog_out)
-                    .setCancelable(false)
-                    .setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(DialogPlus dialog, View view) {
-                            switch (view.getId()){
-                                case R.id.pwd_confirm_btn:
-                                    View dialogView = dialog.getHolderView();
-                                    InputText pwdText = (InputText) dialogView.findViewById(R.id.pwd_pwd);
-                                    String pwd = pwdText.getText();
-                                    if(pwd.length() == 0){
-                                        toastShort("请输入支付密码");
-                                        return;
-                                    }
-                                    if(pwd.length() != 6){
-                                        toastShort("支付密码为6位数字");
-                                        return;
-                                    }
-                                    KeyBoardUtil.hideKeyBoard(ReleaseActivity.this);
-                                    progressDialog = ProgressDialog.show(ReleaseActivity.this, "", "发布中...", true, false);
-                                    HttpUtil.releaseOrder(user.getToken(), user.getUserId(), school, content, money, time, tempPaths, TextUtil.getMD5(pwd));
-                                    dialog.dismiss();
-                                    break;
-                            }
-                        }
-                    })
-                    .create();
-            InputText pwdText = (InputText) pwdDialog.findViewById(R.id.pwd_pwd);
-            pwdText.setInputFilter(5);
-            pwdDialog.show();
+            payDialog = DialogUtil.createPayDialog(this, new DialogUtil.OnPayListener() {
+                @Override
+                public void onPay(String pwd) {
+                    KeyBoardUtil.hideKeyBoard(ReleaseActivity.this);
+                    progressDialog = ProgressDialog.show(ReleaseActivity.this, "", "发布中...", true, false);
+                    HttpUtil.releaseOrder(user.getToken(), user.getUserId(), school, content, money, time, tempPaths, TextUtil.getMD5(pwd));
+                }
+            },cost,new ReleaseEvent());
+            payDialog.show();
         }
     }
 

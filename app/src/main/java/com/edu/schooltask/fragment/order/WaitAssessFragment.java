@@ -1,5 +1,6 @@
 package com.edu.schooltask.fragment.order;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,9 +13,11 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
+import com.edu.schooltask.activity.OrderActivity;
 import com.edu.schooltask.adapter.OrderWaitAssessAdapter;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.event.GetAssessOrderEvent;
 import com.edu.schooltask.event.GetUserOrderEvent;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
@@ -62,7 +65,7 @@ public class WaitAssessFragment extends BaseFragment{
         orderWaitAssessAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                getUserOrder();
+                getAssessOrder();
             }
         }, recyclerView);
 
@@ -71,7 +74,16 @@ public class WaitAssessFragment extends BaseFragment{
             public void onRefresh() {
                 orderItemList.clear();
                 pageIndex = 0;
-                getUserOrder();
+                getAssessOrder();
+            }
+        });
+
+        orderWaitAssessAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(getActivity(), OrderActivity.class);
+                intent.putExtra("orderid", orderItemList.get(position).getId());
+                startActivity(intent);
             }
         });
 
@@ -80,7 +92,7 @@ public class WaitAssessFragment extends BaseFragment{
         }
         else{   //本地用户已存在
             tipText.setText("您没有相关的订单");
-            getUserOrder();
+            getAssessOrder();
         }
     }
 
@@ -107,47 +119,47 @@ public class WaitAssessFragment extends BaseFragment{
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetUserOrder(GetUserOrderEvent event){
-        if(event.type == 1){
-            swipeRefreshLayout.setRefreshing(false);
-            if(event.isOk()){
-                pageIndex ++;
-                tipText.setText("您没有相关的订单");
-                try{
-                    JSONArray jsonArray = event.getData().getJSONArray("orders");
-                    List<OrderItem> orders = new ArrayList<>();
-                    for(int i=0; i<jsonArray.length(); i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        OrderItem order = new OrderItem(
-                                jsonObject.getString("orderid"),
-                                jsonObject.getString("content"),
-                                jsonObject.getString("releasetime"));
-                        if(order.getState() == 2) orders.add(order);    //只加入待评价订单
-                    }
-                    orderWaitAssessAdapter.loadMoreComplete();
-                    if(orders.size() < 5){
-                        orderWaitAssessAdapter.loadMoreEnd();
-                    }
-                    orderItemList.addAll(orders);
-                }catch (JSONException e){
-                    toastShort("数据异常");
-                    e.printStackTrace();
+    public void onGetAssessOrder(GetAssessOrderEvent event){
+        swipeRefreshLayout.setRefreshing(false);
+        if(event.isOk()){
+            pageIndex ++;
+            tipText.setText("您没有相关的订单");
+            try{
+                JSONArray jsonArray = event.getData().getJSONArray("orders");
+                List<OrderItem> orders = new ArrayList<>();
+                for(int i=0; i<jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    OrderItem order = new OrderItem(
+                            jsonObject.getString("order_id"),
+                            jsonObject.getInt("type"),
+                            jsonObject.getString("content"),
+                            jsonObject.getString("release_time"),
+                            jsonObject.getInt("cost"));
+                    orders.add(order);
                 }
+                orderWaitAssessAdapter.loadMoreComplete();
+                if(orders.size() < 5){
+                    orderWaitAssessAdapter.loadMoreEnd();
+                }
+                orderItemList.addAll(orders);
+            }catch (JSONException e){
+                toastShort("数据异常");
+                e.printStackTrace();
             }
-            else{
-                tipText.setText("获取订单失败，请重试");
-                orderWaitAssessAdapter.loadMoreFail();
-                toastShort(event.getError());
-            }
-            checkEmpty();
         }
+        else{
+            tipText.setText("获取订单失败，请重试");
+            orderWaitAssessAdapter.loadMoreFail();
+            toastShort(event.getError());
+        }
+        checkEmpty();
 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccess(LoginSuccessEvent event){
         tipText.setText("您还没有相关的订单");
-        getUserOrder();
+        getAssessOrder();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -160,12 +172,12 @@ public class WaitAssessFragment extends BaseFragment{
         pageIndex = 0;
     }
 
-    public void getUserOrder(){
+    public void getAssessOrder(){
         if(mDataCache.getUser() != null){
             if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
             tipText.setVisibility(View.GONE);
             User user = mDataCache.getUser();
-            HttpUtil.getUserOrder(user.getToken(), user.getUserId(), pageIndex, 1);
+            HttpUtil.getAssessOrder(user.getToken(), user.getUserId(), pageIndex);
         }
         else{
             swipeRefreshLayout.setRefreshing(false);

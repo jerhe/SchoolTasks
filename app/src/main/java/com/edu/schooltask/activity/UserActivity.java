@@ -26,10 +26,13 @@ public class UserActivity extends BaseActivity {
     private AppBarLayout topLayout;
     private Toolbar toolbar;
     private TextView titleText;
+    private TextView editButton;
     private ImageView headImage;
     private TextView nameText;
     private ViewPagerTab tab;
     private ViewPager viewPager;
+
+    boolean isMe;
 
     private ViewPagerAdapter adapter;
     private List<Fragment> fragmentList = new ArrayList<>();
@@ -43,6 +46,7 @@ public class UserActivity extends BaseActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         topLayout = (AppBarLayout) findViewById(R.id.user_abl);
         titleText = (TextView) findViewById(R.id.toolbar_name);
+        editButton = (TextView) findViewById(R.id.user_edit_btn);
         headImage = (ImageView) findViewById(R.id.user_head);
         nameText = (TextView) findViewById(R.id.user_name);
         tab = (ViewPagerTab) findViewById(R.id.user_tab);
@@ -52,7 +56,7 @@ public class UserActivity extends BaseActivity {
         viewPager.setAdapter(adapter);
         tab.addTab("XXX");
         tab.addTab("XXX");
-        tab.addTab("个人信息");
+        tab.addTab("个人资料");
         tab.setViewPager(viewPager);
 
         topLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -61,11 +65,33 @@ public class UserActivity extends BaseActivity {
                 float alpha = (float)-verticalOffset / (topLayout.getHeight() - titleText.getHeight());
                 titleText.setAlpha(alpha > 0.5 ? alpha : 0);
                 toolbar.setAlpha(alpha);
+                if (isMe){
+                    editButton.setAlpha(1 - alpha);
+                    if(1 - alpha == 0) editButton.setVisibility(View.INVISIBLE);
+                    else editButton.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
         Intent intent = getIntent();
         user = (User)intent.getSerializableExtra("user");
         titleText.setText(user.getName());
+
+        User me = mDataCache.getUser();
+        if(me.getUserId().equals(user.getUserId())){
+            isMe = true;
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openActivity(UserEditActivity.class);
+                }
+            });
+        }
+        else{
+            isMe = false;
+            editButton.setVisibility(View.GONE);
+        }
     }
 }

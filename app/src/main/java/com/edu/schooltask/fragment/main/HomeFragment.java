@@ -274,13 +274,13 @@ public class HomeFragment extends BaseFragment {
                 JSONArray userArray = jsonObject.getJSONArray("users");
                 for(int i=0; i<orderArray.length(); i++){
                     JSONObject userJSON = userArray.getJSONObject(i);
-                    User user = new User(userJSON.getString("userid"),userJSON.getString("name"),
+                    User user = new User(userJSON.getString("user_id"),userJSON.getString("name"),
                             userJSON.getInt("sex"));
                     JSONObject orderJSON = orderArray.getJSONObject(i);
-                    OrderItem orderItem = new OrderItem(orderJSON.getString("orderid"),
+                    OrderItem orderItem = new OrderItem(orderJSON.getString("order_id"),
                             orderJSON.getString("school"), orderJSON.getString("content"),
-                            (float)orderJSON.getDouble("cost"), orderJSON.getString("releasetime"),
-                            orderJSON.getInt("imagenum"), orderJSON.getInt("looknum"), user);
+                            (float)orderJSON.getDouble("cost"), orderJSON.getString("release_time"),
+                            orderJSON.getInt("image_num"), orderJSON.getInt("look_count"), user);
                     nearTaskItems.add(new HomeItem(HomeItem.NEAR_TASK_SHOW_ITEM, orderItem));
                 }
                 adapter.loadMoreComplete();

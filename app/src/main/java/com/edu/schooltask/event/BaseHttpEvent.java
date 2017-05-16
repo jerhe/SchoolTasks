@@ -21,10 +21,18 @@ public class BaseHttpEvent<T> {
         this.ok = false;
     }
 
-    public BaseHttpEvent(boolean ok){   //checkToken 网络连接失败
+    public BaseHttpEvent(boolean ok){
         this.ok = ok;
-        this.code = -1;
-        this.error = "连接失败,请检查网络";
+        if(!ok){
+            this.code = -1;
+            this.error = "连接失败,请检查网络";
+        }
+    }
+
+    public BaseHttpEvent(String error){
+        ok = false;
+        code = -1;
+        this.error = error;
     }
 
 
@@ -77,6 +85,12 @@ public class BaseHttpEvent<T> {
         }
         this.code = code;
         this.data = data;
+        return this;
+    }
+
+    public BaseHttpEvent setEvent(String error){
+        this.error = error;
+        ok = false;
         return this;
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/divide"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,36 +13,29 @@
         android:orientation="vertical"
         android:layout_height="200dp">
         <ImageView
+            android:layout_marginTop="10dp"
             android:id="@+id/up_user_head"
             android:layout_width="70dp"
             android:layout_height="70dp"/>
-        <RelativeLayout
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="30dp">
-            <TextView
-                android:id="@+id/up_user_name"
-                android:textSize="16sp"
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="登录/注册"/>
-            <TextView
-                android:id="@+id/up_user_level"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/up_user_name"
-                android:layout_marginLeft="10dp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:textSize="10sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_level"
-                android:text="Lv.1"
-                android:visibility="gone"/>
-        </RelativeLayout>
-
+        <TextView
+            android:id="@+id/up_user_name"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="登录/注册"/>
+        <TextView
+            android:id="@+id/up_user_home"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:background="@drawable/shape_white_nosolid_btn"
+            android:text="我的主页"
+            android:textColor="@color/white"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -49,13 +43,12 @@
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lineColor">
+        android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/up_rv2"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:fadingEdge="none"
         android:background="@color/white"
         android:overScrollMode="never"

@@ -12,4 +12,8 @@ public class ReleaseEvent extends BaseHttpEvent{
     public ReleaseEvent(boolean ok){
         super(ok);
     }
+
+    public ReleaseEvent(String error){
+        super(error);
+    }
 }

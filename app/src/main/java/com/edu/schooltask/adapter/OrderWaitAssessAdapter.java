@@ -28,14 +28,23 @@ public class OrderWaitAssessAdapter extends BaseQuickAdapter<OrderItem, BaseView
     protected void convert(final BaseViewHolder helper, OrderItem item) {
         helper.setText(R.id.owa_content, item.getContent());
         helper.setText(R.id.owa_time, "发布时间："+item.getReleaseTime());
-        Button assessBtn = helper.getView(R.id.owa_assess_btn);
-        assessBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO 发送ID获取订单详细用Intent传递
-                Intent intent = new Intent(activity, AssessActivity.class);
-                activity.startActivity(intent);
-            }
-        });
+        if(item.getType() == 0){
+            helper.setVisible(R.id.owa_wait_assess,false);
+            Button assessBtn = helper.getView(R.id.owa_assess_btn);
+            assessBtn.setVisibility(View.VISIBLE);
+            assessBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO 发送ID获取订单详细用Intent传递
+                    Intent intent = new Intent(activity, AssessActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+        }
+        else{
+            helper.setVisible(R.id.owa_assess_btn,false);
+            helper.setVisible(R.id.owa_wait_assess,true);
+        }
+
     }
 }

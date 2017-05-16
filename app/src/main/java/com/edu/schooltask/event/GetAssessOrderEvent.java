@@ -6,13 +6,13 @@ import com.edu.schooltask.beans.User;
  * Created by 夜夜通宵 on 2017/5/10.
  */
 
-public class GetUserOrderEvent extends BaseHttpEvent<User> {
+public class GetAssessOrderEvent extends BaseHttpEvent<User> {
 
-    public GetUserOrderEvent() {
+    public GetAssessOrderEvent() {
         super();
     }
 
-    public GetUserOrderEvent(boolean ok){
+    public GetAssessOrderEvent(boolean ok){
         super(ok);
     }
 }

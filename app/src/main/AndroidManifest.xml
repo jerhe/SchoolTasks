@@ -44,7 +44,10 @@
         <activity
             android:name=".activity.OrderActivity"
             android:label="订单详情" />
-        <activity android:name=".activity.SetPayPwdActivity" android:label="设置支付密码"></activity>
+        <activity
+            android:name=".activity.SetPayPwdActivity"
+            android:label="设置支付密码" />
+        <activity android:name=".activity.UserEditActivity" android:label="修改资料"></activity>
     </application>
 
 </manifest>
