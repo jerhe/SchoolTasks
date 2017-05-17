@@ -62,6 +62,11 @@ public class User extends DataSupport implements Serializable{
 
     public User(){}
 
+    public User(String userId,String name){
+        this.userId = userId;
+        this.name = name;
+    }
+
     public User(String userId, String token, String name, String school, String sign, int sex, String birth) {
         super();
         this.userId = userId;

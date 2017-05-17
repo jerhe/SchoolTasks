@@ -15,4 +15,9 @@
     <declare-styleable name="MenuItem">
         <attr name="itemText" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="InputBoard">
+        <attr name="inputHint" format="string"/>
+        <attr name="btnText" format="string"/>
+    </declare-styleable>
 </resources>

@@ -29,9 +29,9 @@ import java.io.Serializable;
  */
 
 public class BaseActivity extends AppCompatActivity {
-    private Toolbar toolbar;
-    private TextView titleText;
-    private Toast toast;
+    protected Toolbar toolbar;
+    protected TextView titleText;
+    protected Toast toast;
     protected static DataCache mDataCache;
 
     @Override

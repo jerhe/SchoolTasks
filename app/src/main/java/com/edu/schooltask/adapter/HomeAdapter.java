@@ -1,19 +1,13 @@
 package com.edu.schooltask.adapter;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
@@ -28,7 +22,6 @@ import com.edu.schooltask.item.OrderItem;
 import com.edu.schooltask.utils.DateUtil;
 import com.edu.schooltask.utils.GlideUtil;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -47,7 +40,8 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
         addItemType(HomeItem.LOAD_TIP, R.layout.rv_load_tip);
         addItemType(HomeItem.NEAR_TASK_SHOW_ITEM, R.layout.item_near_task);
         addItemType(HomeItem.NEAR_TASK_ITEM, R.layout.item_near_task);
-        addItemType(HomeItem.LOOK_NUM_ITEM, R.layout.item_look_num);
+        addItemType(HomeItem.COUNT_ITEM, R.layout.item_look_count);
+        addItemType(HomeItem.COMMENT, R.layout.item_order_comment_parent);
     }
 
     @Override
@@ -63,7 +57,47 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
                 setNearTaskItem(helper, item, true);
                 break;
             case 3:
-                helper.setText(R.id.ln_look_num, "浏览:"+item.lookNum);
+                helper.setText(R.id.lc_comment_count, "评论("+item.commentCount+")");
+                helper.setText(R.id.lc_look_count, "浏览:"+item.lookCount);
+                break;
+            case 4:
+                ImageView headView = helper.getView(R.id.ui_head);
+                GlideUtil.setHead(headView.getContext(), headView);
+                helper.setText(R.id.ui_school, item.orderComment.getUserSchool());
+                helper.setText(R.id.ui_name,item.orderComment.getUserName());
+                helper.setText(R.id.ui_release_time,
+                        DateUtil.getLong(DateUtil.stringToDate(item.orderComment.getTime())));
+                switch (item.orderComment.getUserSex()){
+                    case -1:
+                        helper.setText(R.id.ui_sex,"");
+                        break;
+                    case 0:
+                        helper.setText(R.id.ui_sex,"男");
+                        helper.setTextColor(R.id.ui_sex, Color.parseColor("#1B9DFF"));
+                        break;
+                    case 1:
+                        helper.setText(R.id.ui_sex,"女");
+                        helper.setTextColor(R.id.ui_sex, Color.parseColor("#FF0000"));
+                        break;
+                }
+                int childCount = item.orderComment.getChildCount();
+                if(item.orderComment.getParentId() != 0){
+                    helper.setText(R.id.ocp_comment, "回复 "+item.orderComment.getToUserName()
+                            +"："+item.orderComment.getComment());
+                    helper.setVisible(R.id.ocp_child_count, false);
+                }
+                else{
+                    helper.setText(R.id.ocp_comment, item.orderComment.getComment());
+                    if(childCount != 0){
+                        helper.setVisible(R.id.ocp_child_count, true);
+                        helper.setText(R.id.ocp_child_count, childCount + "条回复");
+                        helper.addOnClickListener(R.id.ocp_child_count);
+                    }
+                    else{
+                        helper.setVisible(R.id.ocp_child_count, false);
+                    }
+                }
+                helper.addOnClickListener(R.id.ui_layout);
                 break;
         }
     }
@@ -71,25 +105,27 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
     private void setNearTaskItem(BaseViewHolder helper, HomeItem item, boolean addListener){
         final OrderItem orderItem = item.orderItem;
         final User user = orderItem.getReleaseUser();
-        helper.setText(R.id.nt_name, user.getName());
-        helper.setText(R.id.nt_school, orderItem.getSchool());
+        helper.setText(R.id.ui_name, user.getName());
+        helper.setText(R.id.ui_school,
+                addListener ? orderItem.getSchool()+"(任务)" : orderItem.getSchool());
         helper.setText(R.id.nt_cost, "¥"+ orderItem.getCost());
         helper.setText(R.id.nt_content, orderItem.getContent());
-        helper.setText(R.id.nt_release_time,
+        helper.setText(R.id.ui_release_time,
                 DateUtil.getLong(DateUtil.stringToDate(orderItem.getReleaseTime())));
         if(user.getSex() == 0){
-            helper.setText(R.id.nt_sex, "♂");
-            helper.setTextColor(R.id.nt_sex, Color.parseColor("#1B9DFF"));
+            helper.setText(R.id.ui_sex, "♂");
+            helper.setTextColor(R.id.ui_sex, Color.parseColor("#1B9DFF"));
         }
         if(user.getSex() == 1){
-            helper.setText(R.id.nt_sex, "♀");
-            helper.setTextColor(R.id.nt_sex, Color.parseColor("#FF3333"));
+            helper.setText(R.id.ui_sex, "♀");
+            helper.setTextColor(R.id.ui_sex, Color.parseColor("#FF3333"));
         }
         if(user.getSex() == -1){
-            helper.setText(R.id.nt_sex, "");
+            helper.setText(R.id.ui_sex, "");
         }
+        RelativeLayout userView = helper.getView(R.id.ui_layout);
         //头像
-        final ImageView headView = helper.getView(R.id.nt_head);
+        final ImageView headView = helper.getView(R.id.ui_head);
         GlideUtil.setHead(headView.getContext(), headView);
 
         //图片
@@ -119,10 +155,11 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
         };
         //事件
         if(addListener){
+
             image1.setOnClickListener(listener);
             image2.setOnClickListener(listener);
             image3.setOnClickListener(listener);
-            headView.setOnClickListener(new View.OnClickListener() {
+            userView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, UserActivity.class);

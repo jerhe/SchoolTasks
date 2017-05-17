@@ -41,7 +41,7 @@ public class OrderItem implements Serializable{
     String releaseTime;
     String stateStr;
     int imageNum;
-    int lookNum;
+    int lookCount;
     User releaseUser;
 
     public OrderItem(){
@@ -97,14 +97,14 @@ public class OrderItem implements Serializable{
 
     //用于首页附近任务订单
     public OrderItem(String id, String school, String content, float cost, String releaseTime,
-                     int imageNum, int lookNum, User user){
+                     int imageNum, int lookCount, User user){
         this.id = id;
         this.content = content;
         this.cost = cost;
         this.school = school;
         this.releaseTime = releaseTime;
         this.imageNum = imageNum;
-        this.lookNum = lookNum;
+        this.lookCount = lookCount;
         this.releaseUser = user;
     }
 
@@ -182,12 +182,12 @@ public class OrderItem implements Serializable{
         this.imageNum = imageNum;
     }
 
-    public int getLookNum(){
-        return lookNum;
+    public int getLookCount(){
+        return lookCount;
     }
 
-    public void setLookNum(int lookNum){
-        this.lookNum = lookNum;
+    public void setLookCount(int lookCount){
+        this.lookCount = lookCount;
     }
     public User getReleaseUser(){
         return this.releaseUser;

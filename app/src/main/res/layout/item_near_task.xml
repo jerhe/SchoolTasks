@@ -5,62 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/nt_head"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
-        <TextView
-            android:id="@+id/nt_name"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/nt_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="昵称"/>
-        <TextView
-            android:layout_alignTop="@id/nt_name"
-            android:layout_toRightOf="@id/nt_name"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="3dp"
-            android:id="@+id/nt_sex"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/nt_school"
-            android:layout_below="@id/nt_name"
-            android:layout_marginTop="3dp"
-            android:layout_alignLeft="@id/nt_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="学校"/>
-        <TextView
-            android:id="@+id/nt_release_time"
-            android:layout_marginTop="3dp"
-            android:textSize="12sp"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/nt_school"
-            android:layout_below="@id/nt_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="刚刚"/>
+        <include layout="@layout/user_item" />
         <TextView
             android:id="@+id/nt_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/nt_name"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:textStyle="bold"
             android:textColor="@color/red"
             android:text="¥1399"/>
     </RelativeLayout>
+
     <TextView
         android:id="@+id/nt_content"
         android:layout_marginTop="10dp"

@@ -79,15 +79,21 @@ public class UserActivity extends BaseActivity {
         titleText.setText(user.getName());
 
         User me = mDataCache.getUser();
-        if(me.getUserId().equals(user.getUserId())){
-            isMe = true;
-            editButton.setVisibility(View.VISIBLE);
-            editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openActivity(UserEditActivity.class);
-                }
-            });
+        if(me != null){
+            if(me.getUserId().equals(user.getUserId())){
+                isMe = true;
+                editButton.setVisibility(View.VISIBLE);
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(UserEditActivity.class);
+                    }
+                });
+            }
+            else{
+                isMe = false;
+                editButton.setVisibility(View.GONE);
+            }
         }
         else{
             isMe = false;

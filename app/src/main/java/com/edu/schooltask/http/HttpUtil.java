@@ -12,14 +12,17 @@ import com.edu.schooltask.event.CheckTokenEvent;
 import com.edu.schooltask.event.GetAssessOrderEvent;
 import com.edu.schooltask.event.GetCodeEvent;
 import com.edu.schooltask.event.GetMoneyEvent;
+import com.edu.schooltask.event.GetOrderChildCommentEvent;
+import com.edu.schooltask.event.GetOrderCountEvent;
+import com.edu.schooltask.event.GetOrderCommentEvent;
 import com.edu.schooltask.event.GetOrderInfoEvent;
 import com.edu.schooltask.event.GetSchoolOrderEvent;
 import com.edu.schooltask.event.GetUserOrderEvent;
 import com.edu.schooltask.event.LoginEvent;
+import com.edu.schooltask.event.NewOrderCommentEvent;
 import com.edu.schooltask.event.RegisterFinishEvent;
 import com.edu.schooltask.event.ReleaseEvent;
 import com.edu.schooltask.event.SetPaypwdEvent;
-import com.edu.schooltask.utils.TextUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -58,6 +61,11 @@ public class HttpUtil {
     final static String GET_ORDER_INFO_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getOrderInfo.do";
     final static String CHANGE_ORDER_STATE_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/changeOrderState.do";
     final static String GET_ASSESS_ORDER_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getAssessOrder.do";
+    final static String NEW_ORDER_COMMENT_URL ="http://192.168.191.1:8080/SchoolTaskServer/CommentController/newOrderComment.do";
+    final static String GET_ORDER_COMMENT_URL ="http://192.168.191.1:8080/SchoolTaskServer/CommentController/getOrderComment.do";
+    final static String GET_ORDER_COUNT_URL ="http://192.168.191.1:8080/SchoolTaskServer/OrderController/getOrderCount.do";
+    final static String GET_ORDER_CHILD_COMMENT_URL ="http://192.168.191.1:8080/SchoolTaskServer/CommentController/getOrderChildComment.do";
+
 
     public final static String ORDER_IMAGE_URL ="http://192.168.191.1:8080/SchoolTaskServer/static/images/";
 
@@ -255,13 +263,63 @@ public class HttpUtil {
         post(GET_SCHOOL_ORDER_URL, requestBody, new BaseCallBack(new GetSchoolOrderEvent()));
     }
 
-    public static void changeOrderState(String token, String orderId, String userId,
-                                        int state){
-        RequestBody requestBody = new FormBody.Builder()
-                .add("token",token).add("order_id",orderId).add("user_id",userId)
-                .add("state",state+"").build();
-        post(CHANGE_ORDER_STATE_URL, requestBody, new BaseCallBack(new ChangeOrderStateEvent()));
+    public static void changeOrderState(final String token, final String orderId, final String userId,
+                                        final int state){
+        checkToken(token, new HttpCheckToken() {
+            @Override
+            public void onSuccess() {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("token",token).add("order_id",orderId).add("user_id",userId)
+                        .add("state",state+"").build();
+                post(CHANGE_ORDER_STATE_URL, requestBody, new BaseCallBack(new ChangeOrderStateEvent()));
+            }
+
+            @Override
+            public void onFailure() {
+                EventBus.getDefault().post(new ChangeOrderStateEvent(false));
+            }
+        });
     }
+
+    public static void newOrderComment(final String token, final String orderId, final String userId,
+                                        final long parent_id, final String comment){
+        checkToken(token, new HttpCheckToken() {
+            @Override
+            public void onSuccess() {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("token",token).add("order_id",orderId).add("user_id",userId)
+                        .add("parent_id",parent_id+"").add("comment",comment).build();
+                post(NEW_ORDER_COMMENT_URL, requestBody, new BaseCallBack(new NewOrderCommentEvent()));
+            }
+
+            @Override
+            public void onFailure() {
+                EventBus.getDefault().post(new NewOrderCommentEvent(false));
+            }
+        });
+    }
+
+    public static void getOrderComment(String orderId, int pageIndex){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("order_id",orderId).add("page_index",pageIndex+"").build();
+        post(GET_ORDER_COMMENT_URL, requestBody, new BaseCallBack(new GetOrderCommentEvent()));
+
+    }
+
+    public static void getOrderChildComment(String orderId, long commentId){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("order_id",orderId).add("comment_id",commentId + "").build();
+        post(GET_ORDER_CHILD_COMMENT_URL, requestBody, new BaseCallBack(new GetOrderChildCommentEvent()));
+
+    }
+
+    public static void getOrderCount(String orderId){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("order_id",orderId).build();
+        post(GET_ORDER_COUNT_URL, requestBody, new BaseCallBack(new GetOrderCountEvent()));
+
+    }
+
     //------------------------------------------------------------------------
 
     public static void checkToken(String token, final HttpCheckToken httpCheckToken){
