@@ -7,14 +7,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
+import com.edu.schooltask.activity.SetPayPwdActivity;
 import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.event.BaseHttpEvent;
 import com.edu.schooltask.view.InputText;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnBackPressListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import org.greenrobot.eventbus.EventBus;
+
+import server.api.token.BaseTokenEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/15.
@@ -59,7 +61,7 @@ public class DialogUtil {
         return dialog;
     }
 
-    public static DialogPlus createPayDialog(final BaseActivity activity, final OnPayListener listener, String cost, final BaseHttpEvent event){
+    public static DialogPlus createPayDialog(final BaseActivity activity, final OnPayListener listener, String cost, final BaseTokenEvent event){
         final DialogPlus payDialog = DialogPlus.newDialog(activity)
                 .setContentHolder(new ViewHolder(R.layout.dialog_pay))
                 .setGravity(Gravity.CENTER)
@@ -92,7 +94,7 @@ public class DialogUtil {
                     @Override
                     public void onBackPressed(DialogPlus dialogPlus) {
                         dialogPlus.dismiss();
-                        EventBus.getDefault().post(event.setEvent("取消支付"));
+                        EventBus.getDefault().post(event.setError("取消支付"));
                     }
                 })
                 .create();
@@ -106,6 +108,13 @@ public class DialogUtil {
         }
         InputText pwdText = (InputText) payDialog.findViewById(R.id.pwd_pwd);
         pwdText.setInputFilter(5);
+        TextView setPayPwdText = (TextView) payDialog.findViewById(R.id.pay_set_pwd);
+        setPayPwdText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.openActivity(SetPayPwdActivity.class);
+            }
+        });
         return payDialog;
     }
 

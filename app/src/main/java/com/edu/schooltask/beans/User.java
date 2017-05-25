@@ -1,10 +1,7 @@
 package com.edu.schooltask.beans;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 
@@ -12,7 +9,7 @@ import java.io.Serializable;
  * Created by 夜夜通宵 on 2017/5/6.
  */
 
-public class User extends DataSupport implements Serializable{
+public class User implements Serializable{
     private String userId;
     private String token;
     private String name;
@@ -82,6 +79,13 @@ public class User extends DataSupport implements Serializable{
         this.userId = userId;
         this.name = name;
         this.sex = sex;
+    }
+
+    public User(UserBaseInfo userBaseInfo){
+        this.userId = userBaseInfo.getUserId();
+        this.name = userBaseInfo.getName();
+        this.sex = userBaseInfo.getSex();
+        this.school = userBaseInfo.getSchool();
     }
 
     public static User jsonObjectToUser(JSONObject data){

@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,33 +17,32 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
-import com.edu.schooltask.activity.ReleaseActivity;
+import com.edu.schooltask.activity.ReleaseTaskActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.adapter.BannerViewPagerAdapter;
 import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
-import com.edu.schooltask.event.GetSchoolOrderEvent;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.TabSelectedEvent;
-import com.edu.schooltask.http.HttpUtil;
+import com.edu.schooltask.utils.NetUtil;
 import com.edu.schooltask.item.HomeItem;
-import com.edu.schooltask.item.OrderItem;
+import com.edu.schooltask.item.TaskItem;
 import com.edu.schooltask.other.BannerViewPagerPointer;
 import com.edu.schooltask.view.ViewPagerTab;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import server.api.SchoolTask;
+import server.api.task.get.GetSchoolTaskEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
@@ -54,6 +52,7 @@ public class HomeFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
     private HomeAdapter adapter;
     private List<HomeItem> items = new ArrayList<>();
     private List<HomeItem> nearTaskItems = new ArrayList<>();
@@ -94,21 +93,22 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 clearList();
-                getSchoolOrder();
+                getSchoolTask();
                 //TODO other getXXOrder();
             }
         });
         recyclerView = (RecyclerView)view.findViewById(R.id.home_rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new HomeAdapter(items, mDataCache, (BaseActivity)getActivity());
         adapter.bindToRecyclerView(recyclerView);
+        adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                adapter.setEnableLoadMore(true);
                 switch (type){
                     case 0:
-                        getSchoolOrder();
+                        getSchoolTask();
                         break;
                     case 1:
                         break;
@@ -125,7 +125,7 @@ public class HomeFragment extends BaseFragment {
                 switch (item.getItemType()){
                     case 1:
                         Intent intent = new Intent(getActivity(), WaitAcceptOrderActivity.class);
-                        intent.putExtra("order", item);
+                        intent.putExtra("task", item);
                         startActivity(intent);
                         break;
                     case 2:
@@ -135,10 +135,11 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
+
         initBanner();
         initButton();
         initPointer();
-        getSchoolOrder();
+        getSchoolTask();
         twoHandItems.add(new HomeItem(HomeItem.LOAD_TIP, "开发中..."));
         jobItems.add(new HomeItem(HomeItem.LOAD_TIP, "开发中..."));
     }
@@ -176,9 +177,9 @@ public class HomeFragment extends BaseFragment {
         releaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(HttpUtil.isNetworkConnected(getContext())){  //网络已连接
+                if(NetUtil.isNetworkConnected(getContext())){  //网络已连接
                     if(mDataCache.getUser() != null){
-                        openActivity(ReleaseActivity.class);
+                        openActivity(ReleaseTaskActivity.class);
                     }
                     else{
                         toastShort("请先登录");
@@ -194,6 +195,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initPointer(){
+        //RecyclerView中的tab
         pointerView = LayoutInflater.from(getContext()).inflate(R.layout.rv_pt,null);
         homeViewPagerTab = (ViewPagerTab) pointerView.findViewById(R.id.home_tab);
         homeViewPagerTab.addTab("附近任务");
@@ -203,6 +205,7 @@ public class HomeFragment extends BaseFragment {
         homeViewPagerTab.setEventBus(true);
         headView  = adapter.getHeaderLayout();
 
+        //悬浮的tab
         homeTab = (ViewPagerTab) view.findViewById(R.id.home_tab);
         homeTab.addTab("附近任务");
         homeTab.addTab("二手交易");
@@ -214,25 +217,25 @@ public class HomeFragment extends BaseFragment {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
                 if(pointerView.getY() + headView.getY() <= 0){
                     if(!homeTab.isShown()) homeTab.setVisibility(View.VISIBLE);
                 }
                 else{
                     if(homeTab.isShown()) homeTab.setVisibility(View.GONE);
                 }
-                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
 
-    private void getSchoolOrder(){
+    private void getSchoolTask(){
         swipeRefreshLayout.setRefreshing(true);
         User user = mDataCache.getUser();
         if(user != null){
-            HttpUtil.getSchoolOrder(user.getToken(), user.getSchool(), nearTaskPageIndex);
+            SchoolTask.getSchoolTask(user.getSchool(), nearTaskPageIndex);
         }
         else{   //用户未登录则获取最新任务
-            HttpUtil.getAllSchoolOrder(nearTaskPageIndex);
+            SchoolTask.getSchoolTask("*", nearTaskPageIndex);
         }
     }
 
@@ -260,36 +263,25 @@ public class HomeFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccess(LoginSuccessEvent event){
         clearList();
-        getSchoolOrder();
+        getSchoolTask();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetSchoolOrder(GetSchoolOrderEvent event){
+    public void onGetSchoolTask(GetSchoolTaskEvent event){
         if(swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(false);
         if (event.isOk()){
             nearTaskPageIndex ++;
-            JSONObject jsonObject = event.getData();
-            try {
-                JSONArray orderArray = jsonObject.getJSONArray("orders");
-                JSONArray userArray = jsonObject.getJSONArray("users");
-                for(int i=0; i<orderArray.length(); i++){
-                    JSONObject userJSON = userArray.getJSONObject(i);
-                    User user = new User(userJSON.getString("user_id"),userJSON.getString("name"),
-                            userJSON.getInt("sex"));
-                    JSONObject orderJSON = orderArray.getJSONObject(i);
-                    OrderItem orderItem = new OrderItem(orderJSON.getString("order_id"),
-                            orderJSON.getString("school"), orderJSON.getString("content"),
-                            (float)orderJSON.getDouble("cost"), orderJSON.getString("release_time"),
-                            orderJSON.getInt("image_num"), orderJSON.getInt("look_count"), user);
-                    nearTaskItems.add(new HomeItem(HomeItem.NEAR_TASK_SHOW_ITEM, orderItem));
+            List<TaskItem> taskItems = event.getTaskItems();
+            for(TaskItem taskItem : taskItems){
+                HomeItem homeItem = new HomeItem(HomeItem.TASK_ITEM, taskItem);
+                if(!nearTaskItems.contains(homeItem)){
+                    nearTaskItems.add(homeItem);
                 }
-                adapter.loadMoreComplete();
-                if(orderArray.length() < 5){
-                    adapter.loadMoreEnd();
-                }
-            } catch (JSONException e) {
-                adapter.loadMoreFail();
-                e.printStackTrace();
+            }
+            adapter.notifyDataSetChanged();
+            adapter.loadMoreComplete();
+            if(taskItems.size() == 0){
+                adapter.loadMoreEnd();
             }
         }
         else{
@@ -298,6 +290,7 @@ public class HomeFragment extends BaseFragment {
             if(nearTaskItems.size() == 0)
                 nearTaskItems.add(new HomeItem(HomeItem.LOAD_TIP, "加载失败，请重试"));
         }
+        //Tab选项
         if(type == 0){
             items.clear();
             items.addAll(nearTaskItems);

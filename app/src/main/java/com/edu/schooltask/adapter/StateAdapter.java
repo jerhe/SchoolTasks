@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
+import com.edu.schooltask.beans.UserBaseInfo;
 import com.edu.schooltask.item.StateItem;
 
 import java.util.List;
@@ -31,10 +32,11 @@ public class StateAdapter extends BaseQuickAdapter<StateItem, BaseViewHolder> {
             helper.setImageResource(R.id.state_state_flag, R.drawable.ic_icon_state_unfinish);
 
         if(item.isAccept()){
+            UserBaseInfo acceptUser = item.getAcceptUser();
             helper.setVisible(R.id.os_user_layout, true);
-            helper.setText(R.id.os_accept_name, item.getAcceptUserName());
-            helper.setText(R.id.os_accept_sign, item.getAcceptUserSign());
-            switch (item.getAcceptUserSex()){
+            helper.setText(R.id.os_accept_name, acceptUser.getName());
+            helper.setText(R.id.os_accept_school, acceptUser.getSchool());
+            switch (acceptUser.getSex()){
                 case -1:
                     helper.setText(R.id.os_accept_sex, "");
                     break;

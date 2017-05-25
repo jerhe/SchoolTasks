@@ -1,5 +1,7 @@
 package com.edu.schooltask.item;
 
+import com.edu.schooltask.beans.UserBaseInfo;
+
 /**
  * Created by 夜夜通宵 on 2017/5/14.
  */
@@ -9,10 +11,7 @@ public class StateItem {
     String name;
     String text;
     boolean isAccept;
-    String acceptUserId;
-    String acceptUserName;
-    int acceptUserSex;
-    String acceptUserSign;
+    UserBaseInfo acceptUser;
 
     public StateItem(boolean isFinish, String name, String text) {
         this.isFinish = isFinish;
@@ -22,16 +21,12 @@ public class StateItem {
     }
 
     //被接单状态
-    public StateItem(boolean isFinish, String name, String text, String acceptUserId,
-                     String acceptUserName, int acceptUserSex, String acceptUserSign) {
+    public StateItem(boolean isFinish, String name, String text, UserBaseInfo acceptUser) {
         this.isFinish = isFinish;
         this.name = name;
         this.text = text;
         isAccept = true;
-        this.acceptUserId = acceptUserId;
-        this.acceptUserName = acceptUserName;
-        this.acceptUserSex = acceptUserSex;
-        this.acceptUserSign = acceptUserSign;
+        this.acceptUser = acceptUser;
     }
 
     public boolean isFinish() {
@@ -66,35 +61,11 @@ public class StateItem {
         isAccept = accept;
     }
 
-    public String getAcceptUserId() {
-        return acceptUserId;
+    public UserBaseInfo getAcceptUser() {
+        return acceptUser;
     }
 
-    public void setAcceptUserId(String acceptUserId) {
-        this.acceptUserId = acceptUserId;
-    }
-
-    public String getAcceptUserName() {
-        return acceptUserName;
-    }
-
-    public void setAcceptUserName(String acceptUserName) {
-        this.acceptUserName = acceptUserName;
-    }
-
-    public int getAcceptUserSex() {
-        return acceptUserSex;
-    }
-
-    public void setAcceptUserSex(int acceptUserSex) {
-        this.acceptUserSex = acceptUserSex;
-    }
-
-    public String getAcceptUserSign() {
-        return acceptUserSign;
-    }
-
-    public void setAcceptUserSign(String acceptUserSign) {
-        this.acceptUserSign = acceptUserSign;
+    public void setAcceptUser(UserBaseInfo acceptUser) {
+        this.acceptUser = acceptUser;
     }
 }

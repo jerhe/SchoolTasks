@@ -69,6 +69,6 @@ public class InputBoard extends LinearLayout {
     }
 
     public interface OnBtnClickListener{
-        void btnClick(long parentId, String text);
+        void btnClick(long parentId, String comment);
     }
 }

@@ -6,26 +6,22 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
-import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.R;
+import com.edu.schooltask.activity.LoginActivity;
+import com.edu.schooltask.activity.SetPayPwdActivity;
+import com.edu.schooltask.base.BaseFragment;
+import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserBaseInfo;
+import com.edu.schooltask.event.LoginSuccessEvent;
+import com.edu.schooltask.utils.KeyBoardUtil;
+import com.edu.schooltask.view.InputText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 
-import com.edu.schooltask.activity.SetPayPwdActivity;
-import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.base.BaseFragment;
-import com.edu.schooltask.beans.User;
-import com.edu.schooltask.event.LoginSuccessEvent;
-import com.edu.schooltask.event.RegisterFinishEvent;
-import com.edu.schooltask.http.HttpUtil;
-import com.edu.schooltask.utils.KeyBoardUtil;
-import com.edu.schooltask.utils.TextUtil;
-import com.edu.schooltask.view.InputText;
+import server.api.SchoolTask;
+import server.api.register.RegisterEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
@@ -68,20 +64,22 @@ public class RegisterInfoFragment extends BaseFragment {
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerFinish();
+                register();
             }
         });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRegisterFinish(RegisterFinishEvent event){
+    public void onRegister(RegisterEvent event){
         if (event.isOk()){
-            JSONObject userJSON = event.getData();
-            User user = User.jsonObjectToUser(userJSON);
-            toastShort("注册成功");
+            UserBaseInfo registerUser = event.getRegisterUser();
+            String token = event.getToken();
+            User user = new User(registerUser);
+            user.setToken(token);
             mDataCache.saveUser(user);
             EventBus.getDefault().post(new LoginSuccessEvent());
-            openActivity(SetPayPwdActivity.class);
+            toastShort("注册成功");
+            openActivity(SetPayPwdActivity.class);  //注册成功进入设置支付密码界面
             finish();
         }
         else{
@@ -90,7 +88,7 @@ public class RegisterInfoFragment extends BaseFragment {
         }
     }
 
-    private void registerFinish(){
+    private void register(){
         if(!"完成".equals(finishBtn.getText()))return;
         final String school = schoolText.getText();
         final String name = nameText.getText();
@@ -118,6 +116,6 @@ public class RegisterInfoFragment extends BaseFragment {
             toastShort("发生错误");
             return;
         }
-        HttpUtil.registerFinish(id, school, name, TextUtil.getMD5(pwd));
+        SchoolTask.register(id, name, school, pwd);
     }
 }

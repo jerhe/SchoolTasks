@@ -1,27 +1,20 @@
 package com.edu.schooltask.activity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.beans.User;
-import com.edu.schooltask.event.GetMoneyEvent;
 import com.edu.schooltask.event.LogoutEvent;
-import com.edu.schooltask.http.HttpCheckToken;
-import com.edu.schooltask.http.HttpUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.NumberFormat;
+import server.api.money.GetMoneyEvent;
+import server.api.SchoolTask;
 
 import static android.view.View.GONE;
 
@@ -56,10 +49,10 @@ public class MoneyActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetMoney(GetMoneyEvent event) throws JSONException {
+    public void onGetMoney(GetMoneyEvent event) {
         progressBar.setVisibility(GONE);
         if (event.isOk()){
-            String money = event.getData().getString("money");
+            String money = event.getMoney();
             int pointIndex = money.lastIndexOf(".");
             StringBuilder sb = new StringBuilder();
             sb.append(money.substring(0,pointIndex));
@@ -84,9 +77,6 @@ public class MoneyActivity extends BaseActivity {
     }
 
     private void getMoney(){
-        User user = mDataCache.getUser();
-        if(user != null){
-            HttpUtil.getMoney(user.getToken(), user.getUserId());
-        }
+        SchoolTask.getMoney();
     }
 }

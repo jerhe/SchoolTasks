@@ -69,4 +69,10 @@ public class DataCache {
         removeDate("user");
     }
 
+    public void refreshToken(String token){
+        User user = getUser();
+        user.setToken(token);
+        saveUser(user);
+    }
+
 }

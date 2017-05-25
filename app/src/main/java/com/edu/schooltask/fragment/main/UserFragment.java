@@ -25,7 +25,6 @@ import com.edu.schooltask.R;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,6 @@ import com.edu.schooltask.activity.UserActivity;
 import com.edu.schooltask.adapter.FunctionAdapter;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
-import com.edu.schooltask.event.LoginEvent;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.item.FunctionItem;

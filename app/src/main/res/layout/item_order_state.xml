@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="♂"/>
             <TextView
-                android:id="@+id/os_accept_sign"
+                android:id="@+id/os_accept_school"
                 android:layout_marginTop="3dp"
                 android:textSize="12sp"
                 android:textColor="@color/hintColor"

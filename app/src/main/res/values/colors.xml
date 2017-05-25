@@ -6,7 +6,7 @@
     <color name="white">#FFFFFF</color>
     <color name="red">#FF0000</color>
     <color name="fontColor">#757575</color>
-    <color name="hintColor">#AAAAAA</color>
+    <color name="hintColor">#999999</color>
     <color name="trans">#00000000</color>    <!-- 透明色 -->
     <color name="lineColor">#D6D6D6</color> <!-- 分割线颜色 -->
     <color name="mainBackgroundColor">#F8F8F8</color> <!-- 背景颜色 -->

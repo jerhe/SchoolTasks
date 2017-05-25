@@ -1,8 +1,8 @@
 package com.edu.schooltask.activity;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,26 +14,28 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.User;
-import com.edu.schooltask.event.AcceptOrderEvent;
-import com.edu.schooltask.event.GetOrderChildCommentEvent;
-import com.edu.schooltask.event.GetOrderCountEvent;
-import com.edu.schooltask.event.GetOrderCommentEvent;
-import com.edu.schooltask.event.NewOrderCommentEvent;
-import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.item.HomeItem;
-import com.edu.schooltask.item.OrderComment;
+import com.edu.schooltask.item.TaskComment;
+import com.edu.schooltask.item.TaskCountItem;
+import com.edu.schooltask.item.TaskItem;
+import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.view.InputBoard;
+import com.orhanobut.dialogplus.DialogPlus;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import server.api.SchoolTask;
+import server.api.task.accept.AcceptTaskEvent;
+import server.api.task.comment.GetTaskChildCommentEvent;
+import server.api.task.comment.GetTaskCommentEvent;
+import server.api.task.comment.NewTaskCommentEvent;
+import server.api.task.count.GetTaskCountEvent;
 
 public class WaitAcceptOrderActivity extends BaseActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -52,7 +54,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     HomeItem item;
     HomeItem countItem;
 
-    int pageIndex = 0;
+    int page = 0;
 
     long parentId;  //查看回复的刷新依据
 
@@ -78,13 +80,14 @@ public class WaitAcceptOrderActivity extends BaseActivity {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()){
-                    case R.id.ocp_child_count:
+                    case R.id.tc_child_count:
                         swipeRefreshLayout.setVisibility(View.INVISIBLE);
                         childSwipeRefreshLayout.setVisibility(View.VISIBLE);
                         btnLayout.setVisibility(View.INVISIBLE);
                         inputBoard.setVisibility(View.VISIBLE);
-                        parentId = itemList.get(position).orderComment.getCommentId();
+                        parentId = itemList.get(position).getTaskComment().getCommentId();
                         setTitle("查看回复");
+                        inputBoard.setParentId(parentId, itemList.get(position).getTaskComment().getUserName());
                         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -97,8 +100,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                         break;
                     case R.id.ui_layout:
                         Intent intent = new Intent(WaitAcceptOrderActivity.this, UserActivity.class);
-                        OrderComment orderComment = itemList.get(position).orderComment;
-                        intent.putExtra("user", new User(orderComment.getUserId(), orderComment.getUserName()));
+                        TaskItem taskItem = itemList.get(position).getTaskItem();
+                        intent.putExtra("user", new User(taskItem.getUserId(), taskItem.getName()));
                         startActivity(intent);
                         break;
                 }
@@ -107,7 +110,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                getOrderComment();
+                getTaskComment();
             }
         },recyclerView);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -118,8 +121,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                         btnLayout.setVisibility(View.INVISIBLE);
                         inputBoard.setVisibility(View.VISIBLE);
                     }
-                    OrderComment orderComment = itemList.get(position).orderComment;
-                    inputBoard.setParentId(orderComment.getCommentId(),orderComment.getUserName());
+                    TaskComment taskComment = itemList.get(position).getTaskComment();
+                    inputBoard.setParentId(taskComment.getCommentId(), taskComment.getUserName());
                     inputBoard.requestFocus();
                     KeyBoardUtil.inputKeyBoard(inputBoard.getInputText());
                 }
@@ -135,8 +138,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                 switch (view.getId()){
                     case R.id.ui_layout:
                         Intent intent = new Intent(WaitAcceptOrderActivity.this, UserActivity.class);
-                        OrderComment orderComment = childItemList.get(position).orderComment;
-                        intent.putExtra("user", new User(orderComment.getUserId(), orderComment.getUserName()));
+                        TaskComment taskComment = childItemList.get(position).getTaskComment();
+                        intent.putExtra("user", new User(taskComment.getUserId(), taskComment.getUserName()));
                         startActivity(intent);
                         break;
                 }
@@ -149,17 +152,19 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                     btnLayout.setVisibility(View.INVISIBLE);
                     inputBoard.setVisibility(View.VISIBLE);
                 }
-                OrderComment orderComment = childItemList.get(position).orderComment;
-                inputBoard.setParentId(orderComment.getCommentId(),orderComment.getUserName());
+                TaskComment taskComment = childItemList.get(position).getTaskComment();
+                inputBoard.setParentId(taskComment.getCommentId(), taskComment.getUserName());
                 inputBoard.requestFocus();
                 KeyBoardUtil.inputKeyBoard(inputBoard.getInputText());
             }
         });
 
+
+        //初始化任务信息和评论数和浏览数
         final Intent intent = getIntent();
-        item = (HomeItem) intent.getSerializableExtra("order");
-        item.setItemType(HomeItem.NEAR_TASK_ITEM);
-        countItem = new HomeItem(HomeItem.COUNT_ITEM, item.orderItem.getLookCount());
+        item = (HomeItem) intent.getSerializableExtra("task");
+        item.setItemType(HomeItem.TASK_INFO_ITEM);
+        countItem = new HomeItem(HomeItem.COUNT_ITEM, new TaskCountItem());
         itemList.add(item);
         itemList.add(countItem);
 
@@ -169,11 +174,18 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                 if("接单".equals(acceptBtn.getText())){
                     User user = mDataCache.getUser();
                     if(user != null){
-                        if(user.getUserId().equals(item.orderItem.getReleaseUser().getUserId())){
+                        if(user.getUserId().equals(item.getTaskItem().getUserId())){
                             toastShort("不能接自己发布的任务哦");
                         }
-                        else
-                            HttpUtil.acceptOrder(user.getToken(), item.orderItem.getId(), user.getUserId());
+                        else{
+                            DialogUtil.createYesNoDialog(WaitAcceptOrderActivity.this, "提示", "确定接受该任务吗",
+                                    "请确保自身有能力完成该任务，接单后对于订单的疑问可联系发布人", "确定", new DialogUtil.OnClickListener() {
+                                        @Override
+                                        public void onClick() {
+                                            SchoolTask.acceptTask(item.getTaskItem().getOrderId());
+                                        }
+                                    }, "取消").show();
+                        }
                     }
                     else{
                         toastShort("请先登录");
@@ -194,20 +206,12 @@ public class WaitAcceptOrderActivity extends BaseActivity {
 
         inputBoard.setOnBtnClickListener(new InputBoard.OnBtnClickListener() {
             @Override
-            public void btnClick(long parentId, String text) {
-                User user = mDataCache.getUser();
-                if(user != null){
-                    if(text.length() != 0){
-                        HttpUtil.newOrderComment(user.getToken(), item.orderItem.getId(),
-                                user.getUserId(), parentId, text);
-                    }
-                    else{
-                        toastShort("请输入评论");
-                    }
+            public void btnClick(long parentId, String comment) {
+                if(comment.length() != 0){
+                    SchoolTask.newTaskComment(item.getTaskItem().getOrderId(), parentId, comment);
                 }
                 else{
-                    toastShort("请先登录");
-                    openActivity(LoginActivity.class);
+                    toastShort("请输入评论");
                 }
             }
         });
@@ -238,23 +242,18 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if(childRecyclerView.isShown()){
-            if(inputBoard.parentId == 0){
-                swipeRefreshLayout.setVisibility(View.VISIBLE);
-                if (childSwipeRefreshLayout.isRefreshing()) childSwipeRefreshLayout.setRefreshing(false);
-                childSwipeRefreshLayout.setVisibility(View.INVISIBLE);
-                setTitle("任务详情");
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-                return;
-            }
-            else{
-                inputBoard.clearParentId();
-                return;
-            }
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            if (childSwipeRefreshLayout.isRefreshing()) childSwipeRefreshLayout.setRefreshing(false);
+            childSwipeRefreshLayout.setVisibility(View.INVISIBLE);
+            setTitle("任务详情");
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            inputBoard.clearParentId();
+            return;
         }
         if(inputBoard.isShown()){
             inputBoard.setVisibility(View.INVISIBLE);
@@ -267,9 +266,9 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAcceptOrder(AcceptOrderEvent event){
+    public void onAcceptTask(AcceptTaskEvent event){
         if(event.isOk()){
-            toastShort("接单成功");
+            toastShort("接受任务成功，快去完成吧");
             acceptBtn.setText("已接单");
         }
         else{
@@ -278,11 +277,13 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNewOrderComment(NewOrderCommentEvent event){
+    public void onNewTaskComment(NewTaskCommentEvent event){
         if(event.isOk()){
             toastShort("评论成功");
             inputBoard.clear();
-            if(swipeRefreshLayout.isShown()) refresh();
+            if(swipeRefreshLayout.isShown()) {
+                refresh();
+            }
             else {
                 childItemList.clear();
                 getOrderChildComment();
@@ -294,59 +295,40 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetOrderComment(GetOrderCommentEvent event){
-        if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+    public void onGetTaskComment(GetTaskCommentEvent event){
         if(event.isOk()){
-            pageIndex ++;
-            JSONObject data = event.getData();
-            try {
-                JSONArray array = data.getJSONArray("ocs");
-                for(int i=0; i<array.length(); i++){
-                    JSONObject ocJSON = array.getJSONObject(i);
-                    OrderComment orderComment = new OrderComment(ocJSON.getLong("comment_id"),
-                            ocJSON.getString("order_id"), ocJSON.getString("user_id"),
-                            ocJSON.getString("user_name"),
-                            ocJSON.getString("user_school"), ocJSON.getInt("user_sex"),
-                            ocJSON.getLong("parent_id"), ocJSON.getString("comment"),
-                            ocJSON.getInt("child_count"), ocJSON.getString("create_time"));
-                    itemList.add(new HomeItem(HomeItem.COMMENT, orderComment));
-                }
-                adapter.loadMoreComplete();
-                if(array.length() < 5){
-                    adapter.loadMoreEnd();
-                }
-                adapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(page == 0){
+                while(itemList.size()>2) itemList.remove(itemList.size()-1);
             }
+            page ++;
+            if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
+            List<TaskComment> taskComments = event.getTaskComments();
+            for(TaskComment taskComment : taskComments){
+                HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment);
+                itemList.add(homeItem);
+            }
+            adapter.loadMoreComplete();
+            if(taskComments.size() == 0){
+                adapter.loadMoreEnd();
+            }
+            adapter.notifyDataSetChanged();
         }
         else{
-            adapter.loadMoreFail();
             toastShort(event.getError());
         }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetOrderChildComment(GetOrderChildCommentEvent event){
+    public void onGetTaskChildComment(GetTaskChildCommentEvent event){
         if(childSwipeRefreshLayout.isRefreshing()) childSwipeRefreshLayout.setRefreshing(false);
         if(event.isOk()){
-            JSONObject data = event.getData();
-            try {
-                JSONArray array = data.getJSONArray("ocs");
-                for(int i=0; i<array.length(); i++){
-                    JSONObject ocJSON = array.getJSONObject(i);
-                    OrderComment orderComment = new OrderComment(ocJSON.getLong("comment_id"),
-                            ocJSON.getString("order_id"), ocJSON.getString("user_id"),
-                            ocJSON.getString("user_name"), ocJSON.getString("to_user_name"),
-                            ocJSON.getString("user_school"), ocJSON.getInt("user_sex"),
-                            ocJSON.getLong("parent_id"), ocJSON.getString("comment"),
-                            ocJSON.getInt("child_count"), ocJSON.getString("create_time"));
-                    childItemList.add(new HomeItem(HomeItem.COMMENT, orderComment));
-                }
-                childAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            List<TaskComment> taskComments = event.getTaskComments();
+            for(TaskComment taskComment : taskComments){
+                HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment, parentId);
+                childItemList.add(homeItem);
             }
+            childAdapter.notifyDataSetChanged();
         }
         else{
             toastShort(event.getError());
@@ -354,38 +336,30 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetOrderCount(GetOrderCountEvent event){
+    public void onGetTaskCount(GetTaskCountEvent event){
         if(event.isOk()){
-            try {
-                int commentCount = event.getData().getInt("comment_count");
-                int lookCount = event.getData().getInt("look_count");
-                itemList.get(1).commentCount = commentCount;
-                itemList.get(1).lookCount = lookCount;
-                adapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            itemList.set(1,new HomeItem(HomeItem.COUNT_ITEM,
+                    new TaskCountItem(event.getCommentCount(), event.getLookCount())));
+            adapter.notifyDataSetChanged();
         }
     }
 
 
 
-    private void getOrderComment(){
-        HttpUtil.getOrderComment(item.orderItem.getId(), pageIndex);
-        if(pageIndex == 0){
-            HttpUtil.getOrderCount(item.orderItem.getId());
+    private void getTaskComment(){
+        String orderId = item.getTaskItem().getOrderId();
+        SchoolTask.getTaskComment(orderId, page);
+        if(page == 0){
+            SchoolTask.getTaskCount(orderId);
         }
     }
 
     private void getOrderChildComment(){
-        HttpUtil.getOrderChildComment(item.orderItem.getId(), parentId);
+        SchoolTask.getTaskChildComment(item.getTaskItem().getOrderId(), parentId);
     }
 
     private void refresh(){
-        pageIndex = 0;
-        itemList.clear();
-        itemList.add(item);
-        itemList.add(countItem);
-        getOrderComment();
+        page = 0;
+        getTaskComment();
     }
 }

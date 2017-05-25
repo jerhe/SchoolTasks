@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:id="@+id/ui_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:id="@+id/ui_head"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+    <TextView
+        android:id="@+id/ui_name"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/ui_head"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="昵称"/>
+    <TextView
+        android:layout_alignTop="@id/ui_name"
+        android:layout_toRightOf="@id/ui_name"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="3dp"
+        android:id="@+id/ui_sex"
+        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/ui_release_time"
+        android:textSize="10sp"
+        android:textColor="@color/hintColor"
+        android:layout_alignLeft="@id/ui_name"
+        android:layout_below="@id/ui_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刚刚"/>
+    <TextView
+        android:id="@+id/ui_school"
+        android:layout_alignBottom="@id/ui_release_time"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/ui_release_time"
+        android:textColor="@color/hintColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:text="学校"/>
+</RelativeLayout>

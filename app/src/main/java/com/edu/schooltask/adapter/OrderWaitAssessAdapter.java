@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.AssessActivity;
-import com.edu.schooltask.item.OrderItem;
+import com.edu.schooltask.beans.TaskOrder;
 
 import java.util.List;
 
@@ -17,18 +17,18 @@ import java.util.List;
  * Created by 夜夜通宵 on 2017/5/4.
  */
 
-public class OrderWaitAssessAdapter extends BaseQuickAdapter<OrderItem, BaseViewHolder> {
+public class OrderWaitAssessAdapter extends BaseQuickAdapter<TaskOrder, BaseViewHolder> {
     private Activity activity;
-    public OrderWaitAssessAdapter(Activity activity, int layoutResId, List<OrderItem> data) {
+    public OrderWaitAssessAdapter(Activity activity, int layoutResId, List<TaskOrder> data) {
         super(layoutResId, data);
         this.activity = activity;
     }
 
     @Override
-    protected void convert(final BaseViewHolder helper, OrderItem item) {
+    protected void convert(final BaseViewHolder helper, TaskOrder item) {
         helper.setText(R.id.owa_content, item.getContent());
         helper.setText(R.id.owa_time, "发布时间："+item.getReleaseTime());
-        if(item.getType() == 0){
+        /*if(item.getType() == 0){
             helper.setVisible(R.id.owa_wait_assess,false);
             Button assessBtn = helper.getView(R.id.owa_assess_btn);
             assessBtn.setVisibility(View.VISIBLE);
@@ -44,7 +44,7 @@ public class OrderWaitAssessAdapter extends BaseQuickAdapter<OrderItem, BaseView
         else{
             helper.setVisible(R.id.owa_assess_btn,false);
             helper.setVisible(R.id.owa_wait_assess,true);
-        }
+        }*/
 
     }
 }

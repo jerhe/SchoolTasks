@@ -39,7 +39,29 @@ public class OrderFragment extends BaseFragment {
         viewPager = (ViewPager) view.findViewById(R.id.op_vp);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), fragments);
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 1){
+                    if(mDataCache.getUser() != null){
+                        if(((WaitAssessFragment)waitAssessFragment).isFirst){
+                            ((WaitAssessFragment)waitAssessFragment).getWaitAssessOrder();
+                            ((WaitAssessFragment)waitAssessFragment).isFirst = false;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         viewPagerTab = (ViewPagerTab) view.findViewById(R.id.op_vpt);
         viewPagerTab.setViewPager(viewPager);
         viewPagerTab.addTab("所有订单");

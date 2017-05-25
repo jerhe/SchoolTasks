@@ -23,27 +23,37 @@
         android:layout_marginTop="2dp"
         android:layout_marginLeft="3dp"
         android:id="@+id/ui_sex"
-        android:textSize="12sp"
-        android:textStyle="bold"
+        android:textSize="10sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/ui_school"
+        android:id="@+id/ui_release_time"
         android:layout_below="@id/ui_name"
         android:layout_marginTop="3dp"
         android:layout_alignLeft="@id/ui_name"
+        android:textColor="@color/hintColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="10sp"
+        android:text="刚刚"/>
+    <TextView
+        android:id="@+id/ui_school"
+        android:textSize="10sp"
+        android:textColor="@color/hintColor"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/ui_release_time"
+        android:layout_alignBottom="@id/ui_release_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="学校"/>
     <TextView
-        android:id="@+id/ui_release_time"
-        android:layout_marginTop="3dp"
-        android:textSize="12sp"
+        android:id="@+id/ui_des"
+        android:layout_alignBottom="@id/ui_release_time"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/ui_school"
-        android:layout_below="@id/ui_name"
+        android:textColor="@color/hintColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="刚刚"/>
+        android:textSize="10sp"
+        android:text="分类"/>
 </RelativeLayout>

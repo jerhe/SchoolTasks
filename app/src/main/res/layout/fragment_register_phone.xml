@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.edu.schooltask.view.InputText
-        android:id="@+id/rpf_id"
+        android:id="@+id/rp_id"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:text="手机号"
@@ -17,6 +17,7 @@
         android:gravity="center_vertical"
         android:layout_height="50dp">
         <com.edu.schooltask.view.InputText
+            android:id="@+id/rp_code"
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="50dp"

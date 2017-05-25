@@ -1,5 +1,6 @@
 package com.edu.schooltask.base;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -23,16 +24,31 @@ import com.edu.schooltask.data.DataCache;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 夜夜通宵 on 2017/5/4.
  */
 
 public class BaseActivity extends AppCompatActivity {
+    List<Activity> activities = new ArrayList<>();
     protected Toolbar toolbar;
     protected TextView titleText;
     protected Toast toast;
     protected static DataCache mDataCache;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activities.add(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activities.remove(this);
+    }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -79,6 +95,12 @@ public class BaseActivity extends AppCompatActivity {
 
     //-----------------------------------------------------------
 
+    public void remainHome(){
+        for(int i=activities.size()-1; i>1; i--){
+            activities.get(i).finish();
+        }
+    }
+
     public void openActivity(Class cls){
         Intent intent = new Intent(this, cls);
         startActivity(intent);
@@ -108,4 +130,5 @@ public class BaseActivity extends AppCompatActivity {
     public void toastLong(String text){
         toast(text, Toast.LENGTH_LONG);
     }
+
 }
