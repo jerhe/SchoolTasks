@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,16 +27,15 @@ public abstract class BaseFragment extends Fragment {
 
     public BaseFragment(){}
 
-    @SuppressLint("ValidFragment")
     public BaseFragment(int redId){
         this.redId = redId;
+        mDataCache = BaseActivity.getDataCache();
     }
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataCache = new DataCache(getContext());
     }
 
     @Nullable

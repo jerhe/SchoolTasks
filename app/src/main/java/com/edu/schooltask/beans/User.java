@@ -84,8 +84,20 @@ public class User implements Serializable{
     public User(UserBaseInfo userBaseInfo){
         this.userId = userBaseInfo.getUserId();
         this.name = userBaseInfo.getName();
+        this.sign = userBaseInfo.getSign();
         this.sex = userBaseInfo.getSex();
         this.school = userBaseInfo.getSchool();
+        this.birth = userBaseInfo.getBirth();
+    }
+
+    public User setUserInfo(UserBaseInfo userBaseInfo){
+        this.userId = userBaseInfo.getUserId();
+        this.name = userBaseInfo.getName();
+        this.sign = userBaseInfo.getSign();
+        this.sex = userBaseInfo.getSex();
+        this.school = userBaseInfo.getSchool();
+        this.birth = userBaseInfo.getBirth();
+        return this;
     }
 
     public static User jsonObjectToUser(JSONObject data){

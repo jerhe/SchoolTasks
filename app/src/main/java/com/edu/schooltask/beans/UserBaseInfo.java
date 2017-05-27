@@ -4,7 +4,9 @@ public class UserBaseInfo {
 	String userId;
 	String name;
 	String school;
+	String sign;
 	int sex;
+	String birth;
 	
 	
 	public UserBaseInfo() {
@@ -12,12 +14,14 @@ public class UserBaseInfo {
 	}
 
 
-	public UserBaseInfo(String userId, String name, String school, int sex) {
+	public UserBaseInfo(String userId, String name, String sign, String school, int sex, String birth) {
 		super();
 		this.userId = userId;
 		this.name = name;
+		this.sign = sign;
 		this.school = school;
 		this.sex = sex;
+		this.birth = birth;
 	}
 
 
@@ -40,6 +44,13 @@ public class UserBaseInfo {
 		this.name = name;
 	}
 
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
 
 	public String getSchool() {
 		return school;
@@ -59,7 +70,12 @@ public class UserBaseInfo {
 	public void setSex(int sex) {
 		this.sex = sex;
 	}
-	
-	
-	
+
+	public String getBirth() {
+		return birth;
+	}
+
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
 }

@@ -23,6 +23,7 @@ import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.TextUtil;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
@@ -56,7 +57,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     private static final int SELECT_IMAGE_CODE = 0;
 
     private InputText schoolText;
-    private Spinner desText;
+    private MaterialSpinner desText;
     private Content contentText;
     private InputText costText;
     private InputText limitTimeText;
@@ -87,7 +88,7 @@ public class ReleaseTaskActivity extends BaseActivity {
         setContentView(R.layout.activity_release_task);
         EventBus.getDefault().register(this);
         schoolText = (InputText) findViewById(R.id.rt_school);
-        desText = (Spinner) findViewById(R.id.rt_des);
+        desText = (MaterialSpinner) findViewById(R.id.rt_des);
         contentText = (Content) findViewById(R.id.rt_content);
         costText = (InputText) findViewById(R.id.rt_cost);
         limitTimeText = (InputText) findViewById(R.id.rt_limit_time);
@@ -120,6 +121,8 @@ public class ReleaseTaskActivity extends BaseActivity {
         limitTimeText.setInputFilter(5);
 
         schoolText.setText(mDataCache.getUser().getSchool());
+
+        desText.setItems("请选择任务类型","学习","生活","娱乐","运动","商家","其他");
 
         costText.requestFocus();   //设置标题为默认焦点
 
@@ -185,7 +188,7 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     private void release(){
         final String school = schoolText.getText();
-        final String description = desText.getSelectedItem().toString();
+        final String description = desText.getText().toString();
         final String content = contentText.getText();
         final String cost = costText.getText();
         final String limitTime = limitTimeText.getText();

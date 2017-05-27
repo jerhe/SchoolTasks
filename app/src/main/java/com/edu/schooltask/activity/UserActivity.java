@@ -17,17 +17,21 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.ViewPagerAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.utils.GlideUtil;
 import com.edu.schooltask.view.ViewPagerTab;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserActivity extends BaseActivity {
     private AppBarLayout topLayout;
     private Toolbar toolbar;
     private TextView titleText;
     private TextView editButton;
-    private ImageView headImage;
+    private CircleImageView headImage;
+    private ImageView bgImage;
     private TextView nameText;
     private ViewPagerTab tab;
     private ViewPager viewPager;
@@ -47,7 +51,8 @@ public class UserActivity extends BaseActivity {
         topLayout = (AppBarLayout) findViewById(R.id.user_abl);
         titleText = (TextView) findViewById(R.id.toolbar_name);
         editButton = (TextView) findViewById(R.id.user_edit_btn);
-        headImage = (ImageView) findViewById(R.id.user_head);
+        headImage = (CircleImageView) findViewById(R.id.user_head);
+        bgImage = (ImageView) findViewById(R.id.user_bg);
         nameText = (TextView) findViewById(R.id.user_name);
         tab = (ViewPagerTab) findViewById(R.id.user_tab);
         viewPager = (ViewPager) findViewById(R.id.user_vp);
@@ -99,5 +104,9 @@ public class UserActivity extends BaseActivity {
             isMe = false;
             editButton.setVisibility(View.GONE);
         }
+
+        nameText.setText(user.getName());
+        GlideUtil.setHead(UserActivity.this, user.getUserId(), headImage, true);
+        GlideUtil.setBackground(UserActivity.this, user.getUserId(), bgImage, true);
     }
 }

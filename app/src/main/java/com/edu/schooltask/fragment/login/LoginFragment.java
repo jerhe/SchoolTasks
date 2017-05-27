@@ -1,5 +1,6 @@
 package com.edu.schooltask.fragment.login;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,6 +13,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
 import server.api.login.LoginEvent;
+
+import com.edu.schooltask.data.DataCache;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.TextUtil;

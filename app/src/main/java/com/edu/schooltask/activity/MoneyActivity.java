@@ -1,6 +1,8 @@
 package com.edu.schooltask.activity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -78,5 +80,19 @@ public class MoneyActivity extends BaseActivity {
 
     private void getMoney(){
         SchoolTask.getMoney();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.menu_detail){
+            openActivity(DetailActivity.class);
+        }
+        return true;
     }
 }

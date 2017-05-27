@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 读取网络状态权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <application
         android:name=".application.MyApplication"
@@ -28,13 +28,15 @@
             android:label="评价" />
         <activity
             android:name=".activity.ReleaseTaskActivity"
-            android:label="填写任务信息" />
+            android:label="填写任务信息"
+            android:theme="@style/WithImageStyle" />
         <activity
             android:name=".activity.MoneyActivity"
             android:label="我的钱包" />
         <activity
             android:name=".activity.WaitAcceptOrderActivity"
-            android:label="任务详情" />
+            android:label="任务详情"
+            android:theme="@style/WithImageStyle" />
         <activity
             android:name=".activity.ImageActivity"
             android:label=""
@@ -44,11 +46,23 @@
             android:label="" />
         <activity
             android:name=".activity.TaskOrderActivity"
-            android:label="订单详情" />
+            android:label="订单详情"
+            android:theme="@style/WithImageStyle" />
         <activity
             android:name=".activity.SetPayPwdActivity"
             android:label="设置支付密码" />
-        <activity android:name=".activity.UserEditActivity" android:label="修改资料"></activity>
+        <activity
+            android:name=".activity.UserEditActivity"
+            android:label="修改资料" />
+        <activity
+            android:name=".activity.TaskListActivity"
+            android:label="任务列表" />
+        <activity android:name=".activity.DetailActivity" android:label="账单"></activity>
+
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

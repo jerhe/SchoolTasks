@@ -13,8 +13,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alexvasilkov.gestures.commons.circle.CircleGestureImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -37,8 +39,13 @@ import com.edu.schooltask.beans.User;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.item.FunctionItem;
+import com.edu.schooltask.utils.GlideUtil;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import server.api.user.UploadBGEvent;
+import server.api.user.UploadHeadEvent;
 
 
 /**
@@ -50,10 +57,10 @@ public class UserFragment extends BaseFragment {
     private List<FunctionItem> userFunctionItemList = new ArrayList<>();
     private RecyclerView systemFunctionRecyclerView;
     private List<FunctionItem> systemFunctionItemList = new ArrayList<>();
-    private LinearLayout backgroundLayout;
 
     private TextView nameText;
-    private ImageView headImage;
+    private CircleImageView headImage;
+    private ImageView bgImage;
     private TextView homeBtn;
     public UserFragment(){
         super(R.layout.fragment_user_page);
@@ -62,31 +69,19 @@ public class UserFragment extends BaseFragment {
     @Override
     protected void init(){
         //头像
-        headImage = (ImageView) view.findViewById(R.id.up_user_head);
-        Glide.with(getContext())
-                .load(R.drawable.head)
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.head)
-                .into(new BitmapImageViewTarget(headImage){
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(),resource);
-                        roundedBitmapDrawable.setCircular(true);
-                        headImage.setImageDrawable(roundedBitmapDrawable);
-                    }
-                });
-        nameText = (TextView) view.findViewById(R.id.up_user_name);
-        homeBtn = (TextView) view.findViewById(R.id.up_user_home);
+        headImage = (CircleImageView) view.findViewById(R.id.up_head);
+        nameText = (TextView) view.findViewById(R.id.up_name);
+        bgImage = (ImageView) view.findViewById(R.id.up_bg);
+        homeBtn = (TextView) view.findViewById(R.id.up_home);
 
         userFunctionRecyclerView = (RecyclerView)view.findViewById(R.id.up_rv);
         FunctionAdapter userFunctionAdapter = new FunctionAdapter(R.layout.item_user_function, userFunctionItemList);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4,1);
         userFunctionRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         userFunctionRecyclerView.setAdapter(userFunctionAdapter);
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人主页"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "寻物启事"));
-        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "个人账户"));
+        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "XX"));
+        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "XX"));
+        userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "积分"));
         userFunctionItemList.add(new FunctionItem(R.drawable.ic_action_account, "钱包"));
         userFunctionAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -102,13 +97,6 @@ public class UserFragment extends BaseFragment {
 
                             break;
                         case 1:
-                            DialogPlus dialog = DialogPlus.newDialog(getContext())
-                                    .setContentHolder(new ViewHolder(R.layout.dialog_yesno))
-                                    .setGravity(Gravity.CENTER)
-                                    .setOutAnimation(R.anim.dialog_out)
-                                    .setContentBackgroundResource(R.drawable.shape_dialog)
-                                    .create();
-                            dialog.show();
                             break;
                         case 3:
                             openActivity(MoneyActivity.class);
@@ -130,19 +118,13 @@ public class UserFragment extends BaseFragment {
         systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_set, "设置"));
         systemFunctionItemList.add(new FunctionItem(R.drawable.ic_action_set, "关于"));
 
-
-        backgroundLayout = (LinearLayout) view.findViewById(R.id.uf_bg);
-        backgroundLayout.setOnClickListener(new View.OnClickListener() {
+        bgImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mDataCache.getUser() == null){
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(loginIntent);
                 }
-                else{
-                    //TODO 跳转到个人主页
-                }
-
             }
         });
 
@@ -175,6 +157,8 @@ public class UserFragment extends BaseFragment {
                     startActivity(intent);
                 }
             });
+            GlideUtil.setHead(getContext(), user.getUserId(), headImage, false);
+            GlideUtil.setBackground(getContext(), user.getUserId(), bgImage, false);
         }
     }
 
@@ -183,5 +167,21 @@ public class UserFragment extends BaseFragment {
         mDataCache.removeUser();
         nameText.setText("登录/注册");
         homeBtn.setVisibility(View.GONE);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUploadHead(UploadHeadEvent event){
+        if(event.isOk()){
+            User user = mDataCache.getUser();
+            GlideUtil.setHead(getContext(), user.getUserId(), headImage, true);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUploadBG(UploadBGEvent event){
+        if(event.isOk()){
+            User user = mDataCache.getUser();
+            GlideUtil.setBackground(getContext(), user.getUserId(), bgImage, true);
+        }
     }
 }

@@ -1,8 +1,7 @@
 package server.api.task.comment;
 
-import com.edu.schooltask.item.TaskComment;
+import com.edu.schooltask.beans.TaskComment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import server.api.base.BaseEvent;

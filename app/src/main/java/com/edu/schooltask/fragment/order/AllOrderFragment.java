@@ -108,13 +108,13 @@ public class AllOrderFragment extends BaseFragment{
                         if(!orderTypeMenu.isShown()){
                             orderTypeMenu.setVisibility(View.VISIBLE);
                             orderTypeMenu.startAnimation(
-                                    AnimationUtils.loadAnimation(getContext(),R.anim.translate_up_to_down));
+                                    AnimationUtils.loadAnimation(getContext(),R.anim.translate_down));
                         }
                     } else if(dy > 0){
                         if(orderTypeMenu.isShown()){
                             orderTypeMenu.setVisibility(View.INVISIBLE);
                             orderTypeMenu.startAnimation(
-                                    AnimationUtils.loadAnimation(getContext(),R.anim.translate_down_to_up));
+                                    AnimationUtils.loadAnimation(getContext(),R.anim.translate_up));
                         }
                     }
                     if(dy == 0) {

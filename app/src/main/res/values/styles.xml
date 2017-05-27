@@ -15,8 +15,25 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/ImageAnim</item>
     </style>
+
+    <style name="ImageAnim" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+    </style>
+
+    <style name="WithImageAnim" parent="@android:style/Animation.Activity">
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+    </style>
+
+    <style name="WithImageStyle" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/WithImageAnim</item>
+    </style>
+
 
 </resources>

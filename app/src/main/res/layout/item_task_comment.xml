@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tc_comment"
+        android:textIsSelectable="true"
         android:text="评论内容"/>
     <View
         android:layout_marginLeft="50dp"

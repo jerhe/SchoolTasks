@@ -19,7 +19,7 @@ import com.edu.schooltask.data.DataCache;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.item.TaskItem;
-import com.edu.schooltask.item.TaskComment;
+import com.edu.schooltask.beans.TaskComment;
 import com.edu.schooltask.item.TaskCountItem;
 import com.edu.schooltask.utils.DateUtil;
 import com.edu.schooltask.utils.GlideUtil;
@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import server.api.SchoolTask;
 
 /**
@@ -97,8 +98,8 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
                 helper.setText(R.id.ui_sex, "");
         }
         //头像
-        ImageView headView = helper.getView(R.id.ui_head);
-        GlideUtil.setHead(headView.getContext(), headView);
+        CircleImageView headView = helper.getView(R.id.ui_head);
+        GlideUtil.setHead(headView.getContext(), taskItem.getUserId(),headView, false);
         //图片
         String imageUrl = SchoolTask.TASK_IMAGE_URL + taskItem.getOrderId() + "/";
         final List<ImageItem> imageItems = new ArrayList<>();
@@ -147,9 +148,9 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
     }
 
     private void setCommentItem(BaseViewHolder helper, HomeItem item){
-        ImageView headView = helper.getView(R.id.ui_head);
-        GlideUtil.setHead(headView.getContext(), headView);
         TaskComment taskComment = item.getTaskComment();
+        CircleImageView headView = helper.getView(R.id.ui_head);
+        GlideUtil.setHead(headView.getContext(), taskComment.getUserId(),headView, false);
         helper.setText(R.id.ui_school, taskComment.getUserSchool());
         helper.setText(R.id.ui_name,taskComment.getUserName());
         helper.setText(R.id.ui_release_time,

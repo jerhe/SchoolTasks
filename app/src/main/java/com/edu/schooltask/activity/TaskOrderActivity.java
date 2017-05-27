@@ -22,12 +22,12 @@ import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.TaskOrder;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.beans.UserBaseInfo;
-import com.edu.schooltask.utils.NetUtil;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.item.StateItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GlideUtil;
 import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.TextItem;
 import com.orhanobut.dialogplus.DialogPlus;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +38,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import server.api.SchoolTask;
 import server.api.task.order.ChangeTaskOrderStateEvent;
 import server.api.task.order.GetTaskOrderInfoEvent;
@@ -45,13 +46,13 @@ import server.api.task.order.GetTaskOrderInfoEvent;
 public class TaskOrderActivity extends BaseActivity implements View.OnClickListener{
     private ScrollView orderLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private InputText orderIdText;
-    private InputText orderSchoolText;
+    private TextItem orderIdText;
+    private TextItem orderSchoolText;
     private TextView orderContentText;
-    private InputText orderCostText;
+    private TextItem orderCostText;
     private RecyclerView imageRecyclerView;
 
-    private ImageView releaseHeadImage;
+    private CircleImageView releaseHeadImage;
     private TextView releaseNameText;
     private TextView releaseSexText;
     private TextView releaseSchoolText;
@@ -84,13 +85,13 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     private void initView(){
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.order_srl);
         orderLayout = (ScrollView) findViewById(R.id.order_layout);
-        orderIdText = (InputText) findViewById(R.id.order_orderid);
-        orderSchoolText = (InputText) findViewById(R.id.order_school);
+        orderIdText = (TextItem) findViewById(R.id.order_id);
+        orderSchoolText = (TextItem) findViewById(R.id.order_school);
         orderContentText = (TextView) findViewById(R.id.order_content);
-        orderCostText = (InputText) findViewById(R.id.order_cost);
+        orderCostText = (TextItem) findViewById(R.id.order_cost);
         imageRecyclerView = (RecyclerView) findViewById(R.id.order_image_rv);
 
-        releaseHeadImage = (ImageView) findViewById(R.id.order_release_head);
+        releaseHeadImage = (CircleImageView) findViewById(R.id.order_release_head);
         releaseNameText = (TextView) findViewById(R.id.order_release_name);
         releaseSexText = (TextView) findViewById(R.id.order_release_sex);
         releaseSchoolText = (TextView) findViewById(R.id.order_release_school);
@@ -163,7 +164,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             orderCostText.setText(taskOrder.getCost()+"元");
 
             //发布人
-            GlideUtil.setHead(releaseHeadImage.getContext(), releaseHeadImage);
+            GlideUtil.setHead(releaseHeadImage.getContext(), releaseUser.getUserId(),releaseHeadImage, true);
             releaseNameText.setText(releaseUser.getName());
             releaseSchoolText.setText(releaseUser.getSchool());
             switch (releaseUser.getSex()){
@@ -269,9 +270,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                     break;
             }
             adapter.notifyDataSetChanged();
-            orderIdText.setInputEnable(false);
-            orderSchoolText.setInputEnable(false);
-            orderCostText.setInputEnable(false);
             orderLayout.setVisibility(View.VISIBLE);
             orderLayout.startAnimation(AnimationUtils.loadAnimation(TaskOrderActivity.this, R.anim.fade_in));
         }
@@ -302,51 +300,52 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         DialogPlus confirmDialog = null;
         switch (v.getId()){
             case R.id.order_cancel_btn:
-                confirmDialog = DialogUtil.createYesNoDialog(this, "提示",
+                confirmDialog = DialogUtil.createTextDialog(this, "提示",
                         "是否要取消该任务", "取消后订单的金额(不包括时限支出)将退回您的账户", "是",
                         new DialogUtil.OnClickListener() {
                             @Override
-                            public void onClick() {
+                            public void onClick(DialogPlus dialogPlus) {
+
                                 SchoolTask.changeTaskOrderState(orderId, 6);
                             }
                         }, "否");
                 break;
             case R.id.order_overtime_btn:
-                confirmDialog = DialogUtil.createYesNoDialog(this, "提示",
+                confirmDialog = DialogUtil.createTextDialog(this, "提示",
                         "任务已经超时？", "超时后订单的金额(不包括时限支出)将退回您的账户", "超时",
                         new DialogUtil.OnClickListener() {
                             @Override
-                            public void onClick() {
+                            public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 8);
                             }
                         }, "否");
                 break;
             case R.id.order_confirm_btn:
-                confirmDialog = DialogUtil.createYesNoDialog(this, "提示",
+                confirmDialog = DialogUtil.createTextDialog(this, "提示",
                         "确定任务已经完成？", "确定完成后接单人将收到您的付款", "确定",
                         new DialogUtil.OnClickListener() {
                             @Override
-                            public void onClick() {
+                            public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 3);
                             }
                         }, "取消");
                 break;
             case R.id.order_finish_btn:
-                confirmDialog = DialogUtil.createYesNoDialog(this, "提示",
+                confirmDialog = DialogUtil.createTextDialog(this, "提示",
                         "确定任务已经完成？", "完成任务时请尽量保留照片或者其余可以表明您已经完成任务的物件，以避免不必要的纠纷", "确定",
                         new DialogUtil.OnClickListener() {
                             @Override
-                            public void onClick() {
+                            public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 2);
                             }
                         }, "取消");
                 break;
             case R.id.order_abandon_btn:
-                confirmDialog = DialogUtil.createYesNoDialog(this, "提示",
+                confirmDialog = DialogUtil.createTextDialog(this, "提示",
                         "确定要放弃任务吗？", "放弃任务将会导致您的信用值降低，可信用值过低会造成您不能接受任务", "放弃",
                         new DialogUtil.OnClickListener() {
                             @Override
-                            public void onClick() {
+                            public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 7);
                             }
                         }, "取消");

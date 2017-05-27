@@ -15,7 +15,7 @@ import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.item.HomeItem;
-import com.edu.schooltask.item.TaskComment;
+import com.edu.schooltask.beans.TaskComment;
 import com.edu.schooltask.item.TaskCountItem;
 import com.edu.schooltask.item.TaskItem;
 import com.edu.schooltask.utils.DialogUtil;
@@ -100,8 +100,14 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                         break;
                     case R.id.ui_layout:
                         Intent intent = new Intent(WaitAcceptOrderActivity.this, UserActivity.class);
-                        TaskItem taskItem = itemList.get(position).getTaskItem();
-                        intent.putExtra("user", new User(taskItem.getUserId(), taskItem.getName()));
+                        if(position == 0){
+                            TaskItem taskItem = itemList.get(position).getTaskItem();
+                            intent.putExtra("user", new User(taskItem.getUserId(), taskItem.getName()));
+                        }
+                        else{
+                            TaskComment taskComment= itemList.get(position).getTaskComment();
+                            intent.putExtra("user", new User(taskComment.getUserId(), taskComment.getUserName()));
+                        }
                         startActivity(intent);
                         break;
                 }
@@ -178,10 +184,10 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                             toastShort("不能接自己发布的任务哦");
                         }
                         else{
-                            DialogUtil.createYesNoDialog(WaitAcceptOrderActivity.this, "提示", "确定接受该任务吗",
+                            DialogUtil.createTextDialog(WaitAcceptOrderActivity.this, "提示", "确定接受该任务吗",
                                     "请确保自身有能力完成该任务，接单后对于订单的疑问可联系发布人", "确定", new DialogUtil.OnClickListener() {
                                         @Override
-                                        public void onClick() {
+                                        public void onClick(DialogPlus dialogPlus) {
                                             SchoolTask.acceptTask(item.getTaskItem().getOrderId());
                                         }
                                     }, "取消").show();

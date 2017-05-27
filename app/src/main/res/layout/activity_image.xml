@@ -8,6 +8,8 @@
     tools:context="com.edu.schooltask.activity.ImageActivity">
     <android.support.v4.view.ViewPager
         android:id="@+id/image_vp"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v4.view.ViewPager>

@@ -49,6 +49,10 @@ public class Content extends RelativeLayout{
         }
     }
 
+    public void setText(String text){
+        inputText.setText(text);
+    }
+
     public String getText(){
         return inputText.getText().toString();
     }

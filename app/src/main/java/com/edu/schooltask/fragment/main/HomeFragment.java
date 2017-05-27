@@ -13,11 +13,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.activity.ReleaseTaskActivity;
+import com.edu.schooltask.activity.TaskListActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.adapter.BannerViewPagerAdapter;
 import com.edu.schooltask.adapter.HomeAdapter;
@@ -173,13 +175,20 @@ public class HomeFragment extends BaseFragment {
     private void initButton(){
         View buttonView = LayoutInflater.from(getContext()).inflate(R.layout.rv_btn,null);
         Button releaseBtn = (Button) buttonView.findViewById(R.id.home_release_btn);
-        Button acceptBtn = (Button) buttonView.findViewById(R.id.home_accept_btn);
-        releaseBtn.setOnClickListener(new View.OnClickListener() {
+        Button taskListBtn = (Button) buttonView.findViewById(R.id.home_task_list);
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(NetUtil.isNetworkConnected(getContext())){  //网络已连接
                     if(mDataCache.getUser() != null){
-                        openActivity(ReleaseTaskActivity.class);
+                        switch (v.getId()){
+                            case R.id.home_release_btn:
+                                openActivity(ReleaseTaskActivity.class);
+                                break;
+                            case R.id.home_task_list:
+                                openActivity(TaskListActivity.class);
+                                break;
+                        }
                     }
                     else{
                         toastShort("请先登录");
@@ -190,7 +199,9 @@ public class HomeFragment extends BaseFragment {
                     toastShort("请检查网络连接");
                 }
             }
-        });
+        };
+        releaseBtn.setOnClickListener(listener);
+        taskListBtn.setOnClickListener(listener);
         adapter.addHeaderView(buttonView);
     }
 

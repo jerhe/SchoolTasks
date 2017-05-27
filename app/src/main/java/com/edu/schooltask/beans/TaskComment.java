@@ -1,4 +1,4 @@
-package com.edu.schooltask.item;
+package com.edu.schooltask.beans;
 
 /**
  * Created by 夜夜通宵 on 2017/5/16.

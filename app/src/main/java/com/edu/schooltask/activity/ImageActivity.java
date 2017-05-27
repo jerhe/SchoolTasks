@@ -42,6 +42,10 @@ public class ImageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
+        back = (ImageView) findViewById(R.id.image_back);
+        delete = (ImageView) findViewById(R.id.image_delete);
+        viewPager = (ViewPager) findViewById(R.id.image_vp);
+
 
         Intent intent = getIntent();
         boolean editable = intent.getBooleanExtra("editable", false);
@@ -52,14 +56,12 @@ public class ImageActivity extends BaseActivity {
             if(imageItems.get(i).getType()==1){
                 View view = getLayoutInflater().inflate(R.layout.layout_show_image,null);
                 GestureImageView imageView = (GestureImageView) view.findViewById(R.id.si_image);
+                imageView.getController().enableScrollInViewPager(viewPager);
                 Glide.with(this).load(imageItems.get(i).getPath()).into(imageView);
                 imageViews.add(view);
             }
         }
 
-        back = (ImageView) findViewById(R.id.image_back);
-        delete = (ImageView) findViewById(R.id.image_delete);
-        viewPager = (ViewPager) findViewById(R.id.image_vp);
         final PagerAdapter pagerAdapter = new PagerAdapter() {
             @Override
             public int getCount() {

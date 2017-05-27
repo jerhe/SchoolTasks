@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity {
         initViewPager();
         initBottomMenu();
         EventBus.getDefault().register(this);
-        mDataCache = new DataCache(this);
         new SchoolTask(mDataCache);
     }
 

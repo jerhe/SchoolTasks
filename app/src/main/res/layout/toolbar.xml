@@ -6,7 +6,6 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:elevation="3dp"
     android:background="@color/colorPrimary"
     app:navigationIcon="@drawable/ic_action_back">
     <TextView

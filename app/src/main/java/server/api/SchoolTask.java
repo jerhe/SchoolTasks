@@ -11,6 +11,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import server.api.detail.GetDetailEvent;
 import server.api.money.GetMoneyEvent;
 import server.api.base.BaseCallBack;
 import server.api.login.LoginEvent;
@@ -25,12 +26,16 @@ import server.api.task.comment.GetTaskCommentEvent;
 import server.api.task.comment.NewTaskCommentEvent;
 import server.api.task.count.GetTaskCountEvent;
 import server.api.task.get.GetSchoolTaskEvent;
+import server.api.task.get.GetTaskListEvent;
 import server.api.task.order.ChangeTaskOrderStateEvent;
 import server.api.task.order.GetTaskOrderEvent;
 import server.api.task.order.GetTaskOrderInfoEvent;
 import server.api.task.order.GetWaitAssessOrderEvent;
 import server.api.task.release.ReleaseTaskEvent;
 import server.api.token.BaseTokenCallBack;
+import server.api.user.UpdateUserInfoEvent;
+import server.api.user.UploadBGEvent;
+import server.api.user.UploadHeadEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/17.
@@ -56,7 +61,14 @@ public class SchoolTask {
     final static String GET_TASK_COUNT_URL ="http://192.168.191.1:8080/SchoolTaskServer/TaskController/getTaskCount.do";
     final static String GET_TASK_CHILD_COMMENT_URL ="http://192.168.191.1:8080/SchoolTaskServer/TaskCommentController/getTaskChildComment.do";
     final static String CHECK_CODE_URL ="http://192.168.191.1:8080/SchoolTaskServer/RegisterController/checkCode.do";
+    final static String GET_TASK_LIST_URL ="http://192.168.191.1:8080/SchoolTaskServer/TaskController/getTaskList.do";
+    final static String GET_DETAIL_URL ="http://192.168.191.1:8080/SchoolTaskServer/DetailController/getDetail.do";
+    final static String UPLOAD_HEAD_URL ="http://192.168.191.1:8080/SchoolTaskServer/UserController/uploadHead.do";
+    final static String UPLOAD_BG_URL ="http://192.168.191.1:8080/SchoolTaskServer/UserController/uploadBG.do";
+    final static String UPDATE_USER_INFO_URL ="http://192.168.191.1:8080/SchoolTaskServer/UserController/updateUserInfo.do";
     public final static String TASK_IMAGE_URL ="http://192.168.191.1:8080/SchoolTaskServer/static/images/";
+    public final static String HEAD_URL ="http://192.168.191.1:8080/SchoolTaskServer/static/head/";
+    public final static String BG_URL ="http://192.168.191.1:8080/SchoolTaskServer/static/bg/";
 
     public SchoolTask(DataCache dataCache){
         SchoolTask.mDataCache = dataCache;
@@ -207,6 +219,59 @@ public class SchoolTask {
         }
     }
 
+    //获取明细
+    public static void getDetail(int page){
+        User user = getUser();
+        if(user != null){
+            OkHttpUtils.post()
+                    .url(GET_DETAIL_URL)
+                    .addHeader("token",user.getToken())
+                    .addParams("user_id", user.getUserId())
+                    .addParams("page", page + "")
+                    .build()
+                    .execute(new BaseTokenCallBack(new GetDetailEvent()));
+        }
+    }
+
+    //上传头像
+    public static void uploadHead(File head){
+        User user = getUser();
+        if(user != null){
+            OkHttpUtils.post()
+                    .url(UPLOAD_HEAD_URL)
+                    .addHeader("token",user.getToken())
+                    .addFile("head", "head.png",head)
+                    .build()
+                    .execute(new BaseTokenCallBack(new UploadHeadEvent()));
+        }
+    }
+
+    //上传背景
+    public static void uploadBG(File bg){
+        User user = getUser();
+        if(user != null){
+            OkHttpUtils.post()
+                    .url(UPLOAD_BG_URL)
+                    .addHeader("token",user.getToken())
+                    .addFile("bg", "bg.png",bg)
+                    .build()
+                    .execute(new BaseTokenCallBack(new UploadBGEvent()));
+        }
+    }
+
+    //更新用户信息
+    public static void updateUserInfo(String value, int type){
+        User user = getUser();
+        if(user != null){
+            OkHttpUtils.post()
+                    .url(UPDATE_USER_INFO_URL)
+                    .addHeader("token",user.getToken())
+                    .addParams("value", value)
+                    .addParams("type", type + "")
+                    .build()
+                    .execute(new BaseTokenCallBack(new UpdateUserInfoEvent()));
+        }
+    }
 
     //用于判断用户已登录
     private static User getUser(){
@@ -294,5 +359,20 @@ public class SchoolTask {
                 .addParams("comment_id", parentId+"")
                 .build()
                 .execute(new BaseCallBack(new GetTaskChildCommentEvent()));
+    }
+
+    //获取任务列表
+    public static void getTaskList(String school, String description, String searchText,
+                                   BigDecimal minCost, BigDecimal maxCost, int page){
+        OkHttpUtils.post()
+                .url(GET_TASK_LIST_URL)
+                .addParams("school", school)
+                .addParams("description", description)
+                .addParams("search_text", searchText)
+                .addParams("min_cost", minCost + "")
+                .addParams("max_cost", maxCost + "")
+                .addParams("page", page+"")
+                .build()
+                .execute(new BaseCallBack(new GetTaskListEvent()));
     }
 }

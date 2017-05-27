@@ -20,25 +20,25 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:paddingLeft="20dp"
+        android:paddingRight="10dp"
         android:layout_height="50dp">
         <TextView
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:layout_marginRight="20dp"
             android:text="分类"/>
-        <Spinner
+        <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/rt_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/description">
-        </Spinner>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <com.edu.schooltask.view.InputText
         android:id="@+id/rt_cost"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:text="金额"
-        app:hint="任务金额(元)，至少是1元钱">
+        app:text="报酬"
+        app:hint="任务报酬金额(元)，至少是1元钱">
     </com.edu.schooltask.view.InputText>
     <com.edu.schooltask.view.InputText
         android:id="@+id/rt_limit_time"
@@ -57,6 +57,8 @@
     </com.edu.schooltask.view.Content>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rt_irv"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="wrap_content"

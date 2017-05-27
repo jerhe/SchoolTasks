@@ -38,18 +38,18 @@
                     android:background="@color/lineColor"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"/>
-                <com.edu.schooltask.view.InputText
-                    android:id="@+id/order_orderid"
+                <com.edu.schooltask.view.TextItem
+                    android:id="@+id/order_id"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    app:text="订单号">
-                </com.edu.schooltask.view.InputText>
-                <com.edu.schooltask.view.InputText
+                    app:itemName="订单号">
+                </com.edu.schooltask.view.TextItem>
+                <com.edu.schooltask.view.TextItem
                     android:id="@+id/order_school"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    app:text="学校">
-                </com.edu.schooltask.view.InputText>
+                    app:itemName="学校">
+                </com.edu.schooltask.view.TextItem>
                 <LinearLayout
                     android:gravity="center_vertical"
                     android:layout_marginTop="10dp"
@@ -63,7 +63,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:text="发布人"/>
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/order_release_head"
                         android:src="@drawable/head"
                         android:layout_width="40dp"
@@ -126,9 +126,9 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/order_content"
+                            android:textIsSelectable="true"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="我是内容balabala"/>
+                            android:layout_height="wrap_content"/>
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/order_image_rv"
                             android:layout_width="wrap_content"
@@ -136,12 +136,12 @@
                         </android.support.v7.widget.RecyclerView>
                     </LinearLayout>
                 </LinearLayout>
-                <com.edu.schooltask.view.InputText
+                <com.edu.schooltask.view.TextItem
                     android:id="@+id/order_cost"
-                    app:text="金额"
+                    app:itemName="金额"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
-                </com.edu.schooltask.view.InputText>
+                </com.edu.schooltask.view.TextItem>
                 <TextView
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
@@ -174,7 +174,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="0.1dp"
         android:background="@color/lineColor"/>
     <RelativeLayout
         android:orientation="horizontal"

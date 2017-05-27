@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ui_head"
         android:layout_width="40dp"
         android:layout_height="40dp"/>

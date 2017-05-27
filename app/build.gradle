@@ -43,4 +43,7 @@ dependencies {
     compile 'com.alexvasilkov:gesture-views:2.3.0'
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.zhy:okhttputils:2.6.2'
+    compile 'com.jaredrummler:material-spinner:1.1.0'
+    compile 'com.yalantis:ucrop:1.5.0'  //裁剪
+    compile 'de.hdodenhof:circleimageview:2.1.0' //圆形
 }

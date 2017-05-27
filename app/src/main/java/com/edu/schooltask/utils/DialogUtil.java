@@ -3,19 +3,23 @@ package com.edu.schooltask.utils;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.SetPayPwdActivity;
 import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.view.Content;
 import com.edu.schooltask.view.InputText;
 import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnBackPressListener;
+import com.orhanobut.dialogplus.OnItemClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import org.greenrobot.eventbus.EventBus;
-
 import server.api.token.BaseTokenEvent;
 
 /**
@@ -24,23 +28,23 @@ import server.api.token.BaseTokenEvent;
 
 public class DialogUtil {
 
-    public static DialogPlus createYesNoDialog(Context context, String title,
-                                               String content, String hint, String yesText,
-                                               final OnClickListener listener, String noText){
-        final DialogPlus dialog = DialogPlus.newDialog(context)
+    public static DialogPlus createTextDialog(Context context, String title,
+                                              String content, String hint, String yesText,
+                                              final OnClickListener listener, String noText){
+        DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.shape_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
-                .setContentHolder(new ViewHolder(R.layout.dialog_yesno))
+                .setContentHolder(new ViewHolder(R.layout.dialog_text))
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         switch (view.getId()){
-                            case R.id.yes_no_yes:
+                            case R.id.dt_yes:
                                 dialog.dismiss();
-                                listener.onClick();
+                                listener.onClick(dialog);
                                 break;
-                            case R.id.yes_no_no:
+                            case R.id.dt_no:
                                 dialog.dismiss();
                                 break;
                         }
@@ -48,11 +52,11 @@ public class DialogUtil {
                 })
                 .create();
         View dialogView = dialog.getHolderView();
-        TextView titleText = (TextView) dialogView.findViewById(R.id.yes_no_title);
-        TextView contentText = (TextView) dialogView.findViewById(R.id.yes_no_content);
-        TextView hintText = (TextView) dialogView.findViewById(R.id.yes_no_hint);
-        TextView yesBtn = (TextView) dialogView.findViewById(R.id.yes_no_yes);
-        TextView noBtn = (TextView) dialogView.findViewById(R.id.yes_no_no);
+        TextView titleText = (TextView) dialogView.findViewById(R.id.dt_title);
+        TextView contentText = (TextView) dialogView.findViewById(R.id.dt_content);
+        TextView hintText = (TextView) dialogView.findViewById(R.id.dt_hint);
+        TextView yesBtn = (TextView) dialogView.findViewById(R.id.dt_yes);
+        TextView noBtn = (TextView) dialogView.findViewById(R.id.dt_no);
         titleText.setText(title);
         contentText.setText(content);
         hintText.setText(hint);
@@ -123,6 +127,88 @@ public class DialogUtil {
     }
 
     public interface OnClickListener{
-        void onClick();
+        void onClick(DialogPlus dialogPlus);
     }
+
+    public static DialogPlus createListDialog(Context context, BaseAdapter adapter, OnItemClickListener listener){
+        DialogPlus dialog = DialogPlus.newDialog(context)
+                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setGravity(Gravity.CENTER)
+                .setOutAnimation(R.anim.dialog_out)
+                .setContentHolder(new ListHolder())
+                .setAdapter(adapter)
+                .setOnItemClickListener(listener)
+                .create();
+        return dialog;
+    }
+
+    public interface OnInputClickListener{
+        void onInputClick(DialogPlus dialogPlus, String input);
+    }
+
+    public static DialogPlus createInputDialog(Context context, final OnInputClickListener listener,
+                                               String title, String hint){
+        DialogPlus dialog = DialogPlus.newDialog(context)
+                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setGravity(Gravity.CENTER)
+                .setOutAnimation(R.anim.dialog_out)
+                .setContentHolder(new ViewHolder(R.layout.dialog_input))
+                .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        EditText inputText = (EditText) dialog.getHolderView().findViewById(R.id.di_input);
+                        switch (view.getId()){
+                            case R.id.di_yes:
+                                listener.onInputClick(dialog, inputText.getText().toString());
+                                break;
+                            case R.id.di_no:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                })
+                .create();
+        View dialogView = dialog.getHolderView();
+        TextView titleText = (TextView) dialogView.findViewById(R.id.di_title);
+        titleText.setText(title);
+        EditText inputText = (EditText) dialogView.findViewById(R.id.di_input);
+        inputText.setHint(hint);
+        return dialog;
+    }
+
+    public static DialogPlus createInputMultilineDialog(Context context, final OnInputClickListener listener,
+                                               String title, String defaultContent){
+        DialogPlus dialog = DialogPlus.newDialog(context)
+                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setGravity(Gravity.CENTER)
+                .setOutAnimation(R.anim.dialog_out)
+                .setContentHolder(new ViewHolder(R.layout.dialog_input_multiline))
+                .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        Content inputText = (Content) dialog.getHolderView().findViewById(R.id.dim_content);
+                        switch (view.getId()){
+                            case R.id.dim_yes:
+                                listener.onInputClick(dialog, inputText.getText().toString());
+                                break;
+                            case R.id.dim_no:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                })
+                .create();
+        View dialogView = dialog.getHolderView();
+        TextView titleText = (TextView) dialogView.findViewById(R.id.dim_title);
+        titleText.setText(title);
+        Content content = (Content) dialogView.findViewById(R.id.dim_content);
+        content.setText(defaultContent);
+        return dialog;
+    }
+
+    public interface DatePickerListener{
+        void onDatePicker(DialogPlus dialogPlus, String date);
+    }
+
+
 }
