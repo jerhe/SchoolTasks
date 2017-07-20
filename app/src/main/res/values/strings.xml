@@ -1,4 +1,3 @@
 <resources>
     <string name="app_name">SchoolTask</string>
-    <string name="title_activity_login">LoginActivity</string>
 </resources>

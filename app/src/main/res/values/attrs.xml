@@ -15,4 +15,18 @@
     <declare-styleable name="MenuItem">
         <attr name="itemText" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="CommentInputBoard">
+        <attr name="inputHint" format="string"/>
+        <attr name="btnText" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="UserEditItem">
+        <attr name="name" format="string"/>
+        <attr name="type" format="string"/>    <!-- text：文本 image：图像 head：头像-->
+    </declare-styleable>
+
+    <declare-styleable name="TextItem">
+        <attr name="itemName" format="string"/>
+    </declare-styleable>
 </resources>

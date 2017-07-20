@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <TextView
+        android:id="@+id/uei_name"
+        android:paddingLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="昵称"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/uei_head"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp" />
+    <ImageView
+        android:id="@+id/uei_image"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_centerVertical="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+    <TextView
+        android:id="@+id/uei_text"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:gravity="right"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="未设置"
+        android:maxLines="1"/>
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/lineColor"/>
+</RelativeLayout>

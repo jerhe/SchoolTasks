@@ -69,4 +69,17 @@ public class DataCache {
         removeDate("user");
     }
 
+    public void refreshToken(String token){
+        User user = getUser();
+        user.setToken(token);
+        saveUser(user);
+    }
+
+    public void saveSchool(List<String> schools){
+        saveListData("school", schools);
+    }
+
+    public ArrayList<String> getSchool(){
+        return getData("school");
+    }
 }

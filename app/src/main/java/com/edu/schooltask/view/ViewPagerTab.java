@@ -45,7 +45,7 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
         LayoutInflater.from(context).inflate(R.layout.view_viewpager_tab,this);
         layout = (LinearLayout) findViewById(R.id.vt_layout);
         pointLayout = (LinearLayout) findViewById(R.id.vt_point_layout);
-        layout.setBackgroundColor(Color.parseColor(backgroundColor));
+        layout.setBackgroundColor(Color.WHITE);
         textLightColor = Color.parseColor("#1B9DFF");
         pointLightColor = Color.parseColor("#1B9DFF");
     }

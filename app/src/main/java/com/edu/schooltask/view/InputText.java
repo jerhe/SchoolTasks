@@ -3,8 +3,12 @@ package com.edu.schooltask.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +26,7 @@ import com.edu.schooltask.utils.TextUtil;
 public class InputText extends LinearLayout {
     private TextView nameText;
     private EditText inputText;
+    private Boolean inputEnable = true;
     private View line;
     public InputText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,7 +42,7 @@ public class InputText extends LinearLayout {
         inputText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if(hasFocus && inputEnable){
                     line.setBackgroundColor(Color.parseColor("#1b9DFF"));
                 }
                 else{
@@ -59,7 +64,12 @@ public class InputText extends LinearLayout {
         return inputText.getText().toString();
     }
 
-
+    public void setInputEnable(boolean inputEnable){
+        this.inputEnable = inputEnable;
+        if(!inputEnable){
+            inputText.setKeyListener(null);
+        }
+    }
 
     public void clean(){
         inputText.setText("");
@@ -92,6 +102,9 @@ public class InputText extends LinearLayout {
         }
     }
 
+    public EditText getInputText(){
+        return inputText;
+    }
 
     public void setLengthFilter(int length){
         TextUtil.setLengthFilter(inputText, length);

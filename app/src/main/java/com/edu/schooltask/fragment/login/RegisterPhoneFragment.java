@@ -1,6 +1,8 @@
 package com.edu.schooltask.fragment.login;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +14,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.edu.schooltask.base.BaseFragment;
-import com.edu.schooltask.event.GetCodeEvent;
-import com.edu.schooltask.http.HttpUtil;
 import com.edu.schooltask.view.InputText;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import server.api.SchoolTask;
+import server.api.register.CheckCodeEvent;
+import server.api.register.GetCodeEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
@@ -26,6 +31,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class RegisterPhoneFragment extends BaseFragment {
     private Button nextBtn;
     private InputText idText;
+    private InputText codeText;
     private Button getCodeBtn;
     private ViewPager viewPager;
 
@@ -39,21 +45,43 @@ public class RegisterPhoneFragment extends BaseFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void init(){
-        getCodeBtn = (Button) view.findViewById(R.id.rp_get_code);
-        nextBtn = (Button) view.findViewById(R.id.rp_next);
+        getCodeBtn = getView(R.id.rp_get_code);
+        nextBtn = getView(R.id.rp_next);
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 判断验证码正确
-                ((LoginActivity)getActivity()).registerId = idText.getText();
-                viewPager.setCurrentItem(2);
+                String code = codeText.getText();
+                if(code.length() == 0){
+                    toastShort("请输入验证码");
+                    return;
+                }
+                if(code.length() != 6){
+                    toastShort("验证码错误");
+                    return;
+                }
+                nextBtn.setEnabled(false);
+                SchoolTask.checkCode(idText.getText(), codeText.getText());
             }
         });
 
-        idText = (InputText) view.findViewById(R.id.rpf_id);
+        idText = getView(R.id.rp_id);
         idText.setInputFilter(0);    //设置过滤
+        codeText = getView(R.id.rp_code);
+        codeText.setInputFilter(5);
 
         //发送验证码事件
         getCodeBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,20 +100,31 @@ public class RegisterPhoneFragment extends BaseFragment {
             toastShort("验证码已经通过短信发送至您的手机");
         }
         else{
+            getCodeBtn.setEnabled(true);
             toastShort(event.getError());
         }
     }
 
-    /**
-     * getCode 获取验证码
-     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCheckCode(CheckCodeEvent event){
+        if(event.isOk()){   //验证码正确跳转到下一步
+            ((LoginActivity)getActivity()).registerId = idText.getText();
+            viewPager.setCurrentItem(2);
+        }
+        else{
+            nextBtn.setEnabled(true);
+            toastShort(event.getError());
+        }
+    }
+
     public void getCode(){
         String id = idText.getText();
         if(id.length() != 11){
             toastShort("请输入正确的手机号");
             return;
         }
-        HttpUtil.getCode(id);
+        getCodeBtn.setEnabled(false);
+        SchoolTask.getCode(id); //检测账号存在并发送验证码
     }
 
     /**

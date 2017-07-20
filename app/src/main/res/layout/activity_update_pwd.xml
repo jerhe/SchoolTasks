@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_update_login_pwd"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.edu.schooltask.activity.UpdatePwdActivity">
+    <include layout="@layout/toolbar"/>
+    <com.edu.schooltask.view.InputText
+        android:id="@+id/up_old"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:inputType="password"
+        app:hint="请输入当前密码"
+        app:text="原密码">
+    </com.edu.schooltask.view.InputText>
+    <com.edu.schooltask.view.InputText
+        android:id="@+id/up_new"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:inputType="password"
+        app:hint="请输入新密码"
+        app:text="新密码">
+    </com.edu.schooltask.view.InputText>
+    <com.edu.schooltask.view.InputText
+        android:id="@+id/up_new_again"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:inputType="password"
+        app:text="确认密码"
+        app:hint="请再次输入新密码">
+    </com.edu.schooltask.view.InputText>
+    <Button
+        android:id="@+id/up_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:textColor="@color/white"
+        android:text="确定"
+        android:background="@drawable/shape_theme_btn"/>
+</LinearLayout>

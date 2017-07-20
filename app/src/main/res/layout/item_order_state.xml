@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/state_state_flag"
+        android:layout_marginLeft="20dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
+    <LinearLayout
+        android:id="@+id/os_state_layout"
+        android:orientation="horizontal"
+        android:layout_alignTop="@id/state_state_flag"
+        android:layout_alignBottom="@id/state_state_flag"
+        android:layout_toRightOf="@id/state_state_flag"
+        android:paddingLeft="20dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/os_state_name"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发布订单"/>
+        <TextView
+            android:id="@+id/os_state_text"
+            android:layout_weight="4"
+            android:textSize="12sp"
+            android:textIsSelectable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1111年11月11日 12:12:12"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/os_user_layout"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="20dp"
+        android:layout_alignLeft="@id/os_state_layout"
+        android:layout_below="@id/os_state_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/head"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/os_accept_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="昵称"/>
+            <TextView
+                android:layout_alignTop="@id/os_accept_name"
+                android:layout_toRightOf="@id/os_accept_name"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/os_accept_sex"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="♂"/>
+            <TextView
+                android:id="@+id/os_accept_school"
+                android:layout_marginTop="3dp"
+                android:textSize="12sp"
+                android:textColor="@color/hintColor"
+                android:maxLines="1"
+                android:layout_below="@id/os_accept_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="个性签名"/>
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/os_user_talk"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_action_message_theme"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

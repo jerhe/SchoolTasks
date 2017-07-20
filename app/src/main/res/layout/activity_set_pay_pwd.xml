@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.edu.schooltask.activity.SetPayPwdActivity">
+    <include layout="@layout/toolbar"/>
+    <com.edu.schooltask.view.InputText
+        android:id="@+id/spp_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:inputType="password"
+        app:text="支付密码"
+        app:hint="请输入支付密码，格式为6位数字">
+    </com.edu.schooltask.view.InputText>
+    <com.edu.schooltask.view.InputText
+        android:id="@+id/spp_pwd_2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:inputType="password"
+        app:text="再次输入"
+        app:hint="请再次输入支付密码">
+    </com.edu.schooltask.view.InputText>
+    <Button
+        android:id="@+id/spp_confirm_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_theme_btn"
+        android:text="确认"/>
+</LinearLayout>

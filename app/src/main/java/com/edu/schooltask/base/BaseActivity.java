@@ -1,5 +1,6 @@
 package com.edu.schooltask.base;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,21 +18,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edu.schooltask.R;
-
-import com.edu.schooltask.beans.User;
+import com.edu.schooltask.activity.PrivateMessageActivity;
+import com.edu.schooltask.activity.UserActivity;
 import com.edu.schooltask.data.DataCache;
 
-import org.greenrobot.eventbus.EventBus;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 夜夜通宵 on 2017/5/4.
  */
 
 public class BaseActivity extends AppCompatActivity {
-    private Toolbar toolbar;
-    private TextView titleText;
-    private Toast toast;
+    protected static List<Activity> activities = new ArrayList<>();
+    protected Toolbar toolbar;
+    protected TextView titleText;
+    protected Toast toast;
     protected static DataCache mDataCache;
+    protected static PrivateMessageActivity privateMessageActivity;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(mDataCache == null) mDataCache = new DataCache(this);
+        activities.add(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activities.remove(this);
+    }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -75,7 +93,35 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public static DataCache getDataCache(){
+        return mDataCache;
+    }
+
     //-----------------------------------------------------------
+
+    protected <T extends View> T getView(int resId){
+        return (T) findViewById(resId);
+    }
+
+    public static void remainHome(){
+        for(int i=activities.size()-1; i>0; i--){
+            activities.get(i).finish();
+        }
+    }
+
+    public static void destroyUserActivity(){
+        for(int i=activities.size()-1; i>0; i--){
+            Activity activity = activities.get(i);
+            if(activity.getClass().equals(UserActivity.class)) activity.finish();
+        }
+    }
+
+    public static void destroyPrivateMessageActivity(){
+        for(int i=activities.size()-1; i>0; i--){
+            Activity activity = activities.get(i);
+            if(activity.getClass().equals(PrivateMessageActivity.class)) activity.finish();
+        }
+    }
 
     public void openActivity(Class cls){
         Intent intent = new Intent(this, cls);
@@ -106,4 +152,5 @@ public class BaseActivity extends AppCompatActivity {
     public void toastLong(String text){
         toast(text, Toast.LENGTH_LONG);
     }
+
 }
