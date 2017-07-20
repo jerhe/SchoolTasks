@@ -4,10 +4,11 @@ package server.api.base;
  * Created by 夜夜通宵 on 2017/5/18.
  */
 
-public class BaseEvent {
+public class BaseEvent<T> {
     boolean ok;
     int code;
     String error;
+    T data;
 
     public BaseEvent(){}
 
@@ -41,5 +42,13 @@ public class BaseEvent {
     public BaseEvent setError(String error) {
         this.error = error;
         return this;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

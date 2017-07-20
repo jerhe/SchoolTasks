@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -101,6 +102,9 @@ public class InputText extends LinearLayout {
         }
     }
 
+    public EditText getInputText(){
+        return inputText;
+    }
 
     public void setLengthFilter(int length){
         TextUtil.setLengthFilter(inputText, length);

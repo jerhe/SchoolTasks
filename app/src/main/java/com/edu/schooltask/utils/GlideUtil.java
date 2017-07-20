@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.signature.StringSignature;
 import com.edu.schooltask.R;
+import com.edu.schooltask.data.DataCache;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import server.api.SchoolTask;
@@ -20,12 +22,14 @@ import server.api.SchoolTask;
 
 public class GlideUtil {
 
-    public static void setHead(Context context, String userId, CircleImageView imageView,
+    public static void setHead(Context context, String userId, ImageView imageView,
                                boolean skipMemoryCache){
+        DataCache dataCache = new DataCache(context);
+        int head = dataCache.getData("head");
         Glide.with(context)
                 .load(SchoolTask.HEAD_URL + userId + ".png")
-                .asBitmap()
                 .dontAnimate()
+                .signature(new StringSignature(head+""))
                 .diskCacheStrategy(skipMemoryCache ? DiskCacheStrategy.NONE : DiskCacheStrategy.ALL)
                 .skipMemoryCache(skipMemoryCache)
                 .placeholder(R.drawable.head)
@@ -33,32 +37,15 @@ public class GlideUtil {
                 .into(imageView);
     }
 
-    public static void setBackground(Context context, String userId, ImageView imageView,
-                                     boolean skipMemoryCache){
+    public static void setBackground(Context context, String userId, ImageView imageView){
+        DataCache dataCache = new DataCache(context);
+        int bg = dataCache.getData("bg");
         Glide.with(context)
                 .load(SchoolTask.BG_URL + userId + ".png")
-                .asBitmap()
-                .diskCacheStrategy(skipMemoryCache ? DiskCacheStrategy.NONE : DiskCacheStrategy.ALL)
-                .skipMemoryCache(skipMemoryCache)
+                .signature(new StringSignature(bg+""))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.background)
                 .error(R.drawable.background)
                 .into(imageView);
     }
-
-    //TEST
-    /*public static void setHead(Context context, final ImageView imageView){
-        Glide.with(context)
-                .load(R.drawable.head)
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.head)
-                .into(new BitmapImageViewTarget(imageView){
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(imageView.getResources(),resource);
-                        roundedBitmapDrawable.setCircular(true);
-                        imageView.setImageDrawable(roundedBitmapDrawable);
-                    }
-                });
-    }*/
 }

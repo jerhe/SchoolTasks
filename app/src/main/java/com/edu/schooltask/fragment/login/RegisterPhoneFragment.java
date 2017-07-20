@@ -58,8 +58,8 @@ public class RegisterPhoneFragment extends BaseFragment {
 
     @Override
     protected void init(){
-        getCodeBtn = (Button) view.findViewById(R.id.rp_get_code);
-        nextBtn = (Button) view.findViewById(R.id.rp_next);
+        getCodeBtn = getView(R.id.rp_get_code);
+        nextBtn = getView(R.id.rp_next);
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,9 +78,9 @@ public class RegisterPhoneFragment extends BaseFragment {
             }
         });
 
-        idText = (InputText) view.findViewById(R.id.rp_id);
+        idText = getView(R.id.rp_id);
         idText.setInputFilter(0);    //设置过滤
-        codeText = (InputText) view.findViewById(R.id.rp_code);
+        codeText = getView(R.id.rp_code);
         codeText.setInputFilter(5);
 
         //发送验证码事件

@@ -20,7 +20,10 @@ import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.TaskItem;
+import com.edu.schooltask.view.CustomLoadMoreView;
 import com.edu.schooltask.view.TaskFilter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,7 +80,7 @@ public class TaskListActivity extends BaseActivity {
     }
 
     private void init(){
-        searchText = (EditText) findViewById(R.id.tl_search_text);
+        searchText = getView(R.id.tl_search_text);
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -88,8 +91,8 @@ public class TaskListActivity extends BaseActivity {
                 getTaskList();
             }
         });
-        taskFilterBtn = (TextView) findViewById(R.id.tl_tf_btn);
-        taskFilter = (TaskFilter) findViewById(R.id.tl_tf);
+        taskFilterBtn = getView(R.id.tl_tf_btn);
+        taskFilter = getView(R.id.tl_tf);
         shadow = findViewById(R.id.tl_shadow);
         User user = mDataCache.getUser();
         if(user != null){
@@ -113,9 +116,11 @@ public class TaskListActivity extends BaseActivity {
             }
         });
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tl_srl);
-        recyclerView = (RecyclerView) findViewById(R.id.tl_rv);
+        swipeRefreshLayout = getView(R.id.tl_srl);
+        recyclerView = getView(R.id.tl_rv);
         adapter = new HomeAdapter(items, mDataCache, this);
+        adapter.setLoadMoreView(new CustomLoadMoreView());
+        adapter.openLoadAnimation();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.setEnableLoadMore(true);
@@ -154,7 +159,7 @@ public class TaskListActivity extends BaseActivity {
         if(event.isOk()){
             page++;
             if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
-            List<TaskItem> taskItems = event.getTaskItems();
+            List<TaskItem> taskItems =  new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<List<TaskItem>>(){}.getType());
             for(TaskItem taskItem : taskItems){
                 HomeItem homeItem = new HomeItem(HomeItem.TASK_ITEM, taskItem);
                 items.add(homeItem);
@@ -173,15 +178,15 @@ public class TaskListActivity extends BaseActivity {
         if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
         String school = taskFilter.getSchool();
         if("所有学校".equals(school)){
-            school = "*";
+            school = "%";
         }
         String des = taskFilter.getDes();
         if("所有".equals(des)){
-            des = "*";
+            des = "%";
         }
         String searth = searchText.getText().toString();
         if(searth.length() == 0){
-            searth = "*";
+            searth = "%";
         }
         int costIndex = taskFilter.getCost();
         BigDecimal minCost;
@@ -209,7 +214,7 @@ public class TaskListActivity extends BaseActivity {
                 break;
             default:
                 minCost = new BigDecimal(0);
-                maxCost = new BigDecimal(0);
+                maxCost = new BigDecimal(10000);
         }
         if(!(school.equals(this.school) && des.equals(this.des) && searth.equals(this.search)
         && minCost.compareTo(this.minCost) == 0 && maxCost.compareTo(this.maxCost) == 0)) {

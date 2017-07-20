@@ -1,22 +1,38 @@
 package com.edu.schooltask.activity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.alexvasilkov.gestures.views.GestureImageView;
 import com.edu.schooltask.R;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.event.LogoutEvent;
+import com.edu.schooltask.utils.DialogUtil;
+import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.view.InputText;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
+import org.json.JSONObject;
 
-import server.api.money.GetMoneyEvent;
+import java.math.BigDecimal;
+
+import c.b.BP;
+import c.b.PListener;
+import c.b.QListener;
+import server.api.account.GetMoneyEvent;
 import server.api.SchoolTask;
+import server.api.account.RechargeEvent;
 
 import static android.view.View.GONE;
 
@@ -26,35 +42,85 @@ public class MoneyActivity extends BaseActivity {
     private TextView pushMoneyBtn;
     private ProgressBar progressBar;
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
+    String orderId;
+    BigDecimal money;
+    int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money);
-        moneyText = (TextView) findViewById(R.id.money_money);
-        rechargeBtn = (TextView) findViewById(R.id.money_recharge);
-        pushMoneyBtn = (TextView) findViewById(R.id.money_push_money);
-        progressBar = (ProgressBar) findViewById(R.id.money_pro);
+        EventBus.getDefault().register(this);
+        moneyText = getView(R.id.money_money);
+        rechargeBtn = getView(R.id.money_recharge);
+        pushMoneyBtn = getView(R.id.money_push_money);
+        progressBar = getView(R.id.money_pro);
+
+        rechargeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogUtil.createRechargeDialog(MoneyActivity.this, new DialogUtil.RechargeListener() {
+                    @Override
+                    public void onRecharge(final BigDecimal money, final String type) {
+                        BP.pay("微任务", "微任务充值 " + money + " 元", money.doubleValue(), type.equals("支付宝"), new PListener() {
+                            @Override
+                            public void orderId(String s) {
+                                orderId = s;
+                            }
+                            @Override
+                            public void succeed() {
+                                BP.query(orderId, new QListener() {
+                                    @Override
+                                    public void succeed(String s) {
+                                        SchoolTask.recharge(orderId,money,type);
+                                    }
+                                    @Override
+                                    public void fail(int i, String s) {
+                                        toastShort("支付失败：" + i);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void fail(int i, String s) {
+                                switch (i){
+                                    case 6001:
+                                        toastShort("支付取消");
+                                        break;
+                                    case -5:
+                                        toastShort("请先安装支付插件");
+                                        break;
+                                    default:
+                                        toastShort("支付失败：" + i);
+                                }
+                            }
+
+                            @Override
+                            public void unknow() {
+                                toastShort("支付失败");
+                            }
+                        });
+                    }
+                }).show();
+
+
+
+            }
+        });
         getMoney();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetMoney(GetMoneyEvent event) {
         progressBar.setVisibility(GONE);
         if (event.isOk()){
-            String money = event.getMoney();
+            String money = (String)event.getData();
             int pointIndex = money.lastIndexOf(".");
             StringBuilder sb = new StringBuilder();
             sb.append(money.substring(0,pointIndex));
@@ -70,6 +136,16 @@ public class MoneyActivity extends BaseActivity {
         else{
             moneyText.setText("获取失败");
             toastShort(event.getError());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecharge(RechargeEvent event){
+        if(event.isOk()){
+            getMoney();
+        }
+        else{
+            toastShort("获取支付信息失败，如未到账请联系客服");
         }
     }
 
@@ -95,4 +171,6 @@ public class MoneyActivity extends BaseActivity {
         }
         return true;
     }
+
+
 }

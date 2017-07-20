@@ -25,8 +25,7 @@
             android:text="账户余额(元)"
             android:textColor="@color/white"
             android:textSize="16dp"
-            android:gravity="center"
-            android:id="@+id/textView2" />
+            android:gravity="center" />
 
         <RelativeLayout
             android:layout_marginTop="20dp"

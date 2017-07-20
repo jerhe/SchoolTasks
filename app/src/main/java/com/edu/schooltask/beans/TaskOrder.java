@@ -7,18 +7,16 @@ public class TaskOrder {
 	public final static int STATE_WAIT_ACCEPT = 0;
 	public final static int STATE_WAIT_FINISH = 1;
 	public final static int STATE_WAIT_CONFIRM = 2;
-	public final static int STATE_WAIT_ASSESS= 3;
-	public final static int STATE_FINISH_ASSESS= 4;
-	public final static int STATE_UNLESS = 5;
-	public final static int STATE_CANCEL = 6;
-	public final static int STATE_ABANDON = 7;
-	public final static int STATE_OVERTIME = 8;
+	public final static int STATE_FINISH= 3;
+	public final static int STATE_UNLESS = 4;
+	public final static int STATE_CANCEL = 5;
+	public final static int STATE_ABANDON = 6;
+	public final static int STATE_OVERTIME = 7;
 
 	public final static String STATE_WAIT_ACCEPT_STR = "待接单";
 	public final static String STATE_WAIT_FINISH_STR = "待完成";
 	public final static String STATE_WAIT_CONFIRM_STR = "待确认";
-	public final static String STATE_WAIT_ASSESS_STR = "待评价";
-	public final static String STATE_FINISH_ASSESS_STR = "已评价";
+	public final static String STATE_FINISH_STR = "已完成";
 	public final static String STATE_UNLESS_STR = "已失效";
 	public final static String STATE_CANCEL_STR = "已取消";
 	public final static String STATE_ABANDON_STR = "已放弃";
@@ -61,11 +59,8 @@ public class TaskOrder {
 			case STATE_WAIT_CONFIRM:
 				stateStr = STATE_WAIT_CONFIRM_STR;
 				break;
-			case STATE_WAIT_ASSESS:
-				stateStr = STATE_WAIT_ASSESS_STR;
-				break;
-			case STATE_FINISH_ASSESS:
-				stateStr = STATE_FINISH_ASSESS_STR;
+			case STATE_FINISH:
+				stateStr = STATE_FINISH_STR;
 				break;
 			case STATE_CANCEL:
 				stateStr = STATE_CANCEL_STR;

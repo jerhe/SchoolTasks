@@ -1,5 +1,7 @@
 package com.edu.schooltask.item;
 
+import com.edu.schooltask.beans.UserBaseInfo;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -15,9 +17,7 @@ public class TaskItem implements Serializable{
     String content;
     String releaseTime;
     int imageNum;
-    String userId;
-    String name;
-    int sex;
+    UserBaseInfo user;
 
     public TaskItem() {}
 
@@ -77,27 +77,11 @@ public class TaskItem implements Serializable{
         this.imageNum = imageNum;
     }
 
-    public String getUserId() {
-        return userId;
+    public UserBaseInfo getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getSex() {
-        return sex;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
+    public void setUser(UserBaseInfo user) {
+        this.user = user;
     }
 }

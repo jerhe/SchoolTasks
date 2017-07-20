@@ -3,6 +3,7 @@ package com.edu.schooltask.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,49 +12,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.ImageAdapter;
+import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.beans.TaskUploadKey;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.event.DeleteImageEvent;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.TextUtil;
+import com.edu.schooltask.view.Content;
+import com.edu.schooltask.view.InputText;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
 import com.yuyh.library.imgsel.ImgSelConfig;
 
-import java.io.File;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.view.Content;
-import com.edu.schooltask.view.InputText;
-
-import net.bither.util.NativeUtil;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import id.zelory.compressor.Compressor;
 import server.api.SchoolTask;
+import server.api.qiniu.GetTaskUploadKeyEvent;
+import server.api.qiniu.UploadTaskImageEvent;
 import server.api.task.release.ReleaseTaskEvent;
 
 public class ReleaseTaskActivity extends BaseActivity {
-    private String moneyReg = "^(([1-9]\\d{0,9})|0)(\\.\\d{1,2})?$";
     private static final int SELECT_IMAGE_CODE = 0;
 
     private InputText schoolText;
@@ -71,7 +69,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     DialogPlus payDialog;
 
 
-    List<String> tempPaths = new ArrayList<>();
+    List<File> tempFiles = new ArrayList<>();
     ImgSelConfig config;
     ImageLoader loader = new ImageLoader() {
         @Override
@@ -81,18 +79,30 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     };
 
+    String orderId;
+    String school;
+    String description;
+    String content;
+    String cost;
+    BigDecimal money;
+    String limitTime;
+    int time;
+    String payPwd;
+
+    boolean uploadResult = true;
+    int uploadNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_release_task);
         EventBus.getDefault().register(this);
-        schoolText = (InputText) findViewById(R.id.rt_school);
-        desText = (MaterialSpinner) findViewById(R.id.rt_des);
-        contentText = (Content) findViewById(R.id.rt_content);
-        costText = (InputText) findViewById(R.id.rt_cost);
-        limitTimeText = (InputText) findViewById(R.id.rt_limit_time);
-        imageRecyclerView = (RecyclerView) findViewById(R.id.rt_irv);
+        schoolText = getView(R.id.rt_school);
+        desText = getView(R.id.rt_des);
+        contentText = getView(R.id.rt_content);
+        costText = getView(R.id.rt_cost);
+        limitTimeText = getView(R.id.rt_limit_time);
+        imageRecyclerView = getView(R.id.rt_irv);
         imageRecyclerView.setLayoutManager(new GridLayoutManager(this,5));
         adapter = new ImageAdapter(R.layout.item_image, imageItems);
         imageRecyclerView.setAdapter(adapter);
@@ -121,6 +131,7 @@ public class ReleaseTaskActivity extends BaseActivity {
         limitTimeText.setInputFilter(5);
 
         schoolText.setText(mDataCache.getUser().getSchool());
+        TextUtil.setSchoolWatcher(ReleaseTaskActivity.this, schoolText.getInputText(), mDataCache);
 
         desText.setItems("请选择任务类型","学习","生活","娱乐","运动","商家","其他");
 
@@ -165,12 +176,7 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReleaseTask(ReleaseTaskEvent event){
-        if(progressDialog != null)
-            if(progressDialog.isShowing()) progressDialog.dismiss();
-        for(String path : tempPaths){
-            NativeUtil.deleteBitmap(path);
-        }
-        tempPaths.clear();
+        clear();
         if(event.isOk()){
             toastShort("发布成功");
             finish();
@@ -187,11 +193,11 @@ public class ReleaseTaskActivity extends BaseActivity {
     }
 
     private void release(){
-        final String school = schoolText.getText();
-        final String description = desText.getText().toString();
-        final String content = contentText.getText();
-        final String cost = costText.getText();
-        final String limitTime = limitTimeText.getText();
+        school = schoolText.getText();
+        description = desText.getText().toString();
+        content = contentText.getText();
+        cost = costText.getText();
+        limitTime = limitTimeText.getText();
 
         if(school.length() == 0){
             toastShort("请输入学校");
@@ -215,13 +221,11 @@ public class ReleaseTaskActivity extends BaseActivity {
             toastShort("请输入时限");
             return;
         }
-        Pattern pattern = Pattern.compile(moneyReg);
-        Matcher matcher = pattern.matcher(cost);
-        if(!matcher.matches()){
+        if(!TextUtil.moneyCompile(cost)){
             toastShort("金额错误，请重新输入");
             return;
         }
-        final BigDecimal money = new BigDecimal(cost);
+        money = new BigDecimal(cost);
         if(money.compareTo(new BigDecimal(1)) == -1){
             toastShort("最小金额为1元，请重新输入");
             costText.clean();
@@ -231,7 +235,7 @@ public class ReleaseTaskActivity extends BaseActivity {
             toastShort("最大金额为10000元，请重新输入");
             return;
         }
-        final int time = Integer.parseInt(limitTime);
+        time = Integer.parseInt(limitTime);
         if(time == 0 || time >= 7 * 24){
             toastShort("时限错误,请重新输入");
             limitTimeText.clean();
@@ -243,10 +247,11 @@ public class ReleaseTaskActivity extends BaseActivity {
             for(int i=0; i<imageItems.size()-1; i++){
                 ImageItem imageItem = imageItems.get(i);
                 String path = imageItem.getPath();
-                int pointIndex = path.lastIndexOf(".");
-                String tempPath = path.substring(0,pointIndex) + "_temp" + path.substring(pointIndex);
-                NativeUtil.compressBitmap(path, tempPath);
-                tempPaths.add(tempPath);
+                tempFiles.add(new Compressor.Builder(this)
+                        .setMaxWidth(1000)
+                        .setMaxHeight(800)
+                        .setCompressFormat(Bitmap.CompressFormat.PNG)
+                        .setQuality(100).build().compressToFile(new File(path)));
             }
             //支付密码
             payDialog = DialogUtil.createPayDialog(this, new DialogUtil.OnPayListener() {
@@ -254,11 +259,13 @@ public class ReleaseTaskActivity extends BaseActivity {
                 public void onPay(String pwd) {
                     KeyBoardUtil.hideKeyBoard(ReleaseTaskActivity.this);
                     progressDialog = ProgressDialog.show(ReleaseTaskActivity.this, "", "发布中...", true, false);
-                    Map<String,File> images = new LinkedHashMap<>();
-                    for(String path : tempPaths){
-                        images.put(path,new File(path));
+                    payPwd = TextUtil.getMD5(pwd);
+                    if(tempFiles.size() == 0){ //无图片发布
+                        SchoolTask.releaseTask("", school, description, content, money, time, payPwd, 0);
                     }
-                    SchoolTask.releaseTask(school, description, content, money, time, TextUtil.getMD5(pwd), images);
+                    else{   //带图片发布
+                        SchoolTask.getTaskUploadKey();
+                    }
                 }
             },cost,new ReleaseTaskEvent());
             payDialog.show();
@@ -305,6 +312,39 @@ public class ReleaseTaskActivity extends BaseActivity {
         adapter.notifyDataSetChanged();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetUploadKey(GetTaskUploadKeyEvent event){
+        if(event.isOk()){
+            TaskUploadKey taskUploadKey = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskUploadKey>(){}.getType());
+            orderId = taskUploadKey.getOrderId();
+            SchoolTask.uploadTaskImage(taskUploadKey, tempFiles);
+        }
+        else{
+            clear();
+            toastShort("发布失败");
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUploadTaskImageEvent(UploadTaskImageEvent event){
+        uploadNum ++;
+        if(!event.isOk()){
+            uploadResult = false;
+        }
+        if(uploadNum == tempFiles.size()){
+            if(uploadResult){
+                SchoolTask.releaseTask(orderId, school, description, content, money, time, payPwd, tempFiles.size());
+            }
+            else{
+                clear();
+                toastShort("发布失败");
+            }
+        }
+
+
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -317,5 +357,12 @@ public class ReleaseTaskActivity extends BaseActivity {
             imageItems.add(new ImageItem(0));
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void clear(){
+        uploadNum = 0;
+        if(progressDialog != null)
+            if(progressDialog.isShowing()) progressDialog.dismiss();
+        tempFiles.clear();
     }
 }

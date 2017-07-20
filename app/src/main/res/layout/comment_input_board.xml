@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:background="@color/mainBackgroundColor"
+    android:layout_height="60dp">
+    <EditText
+        android:id="@+id/cib_input"
+        android:layout_marginLeft="10dp"
+        android:textSize="14sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_input_white_corner"
+        android:hint="请输入评论"/>
+    <Button
+        android:id="@+id/cib_btn"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/shape_input_white_corner"
+        android:layout_width="60dp"
+        android:layout_height="35dp"
+        android:text="评论"/>
+</LinearLayout>

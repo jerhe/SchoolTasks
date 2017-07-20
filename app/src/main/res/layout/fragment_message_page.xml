@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="50dp"
+        android:elevation="3dp"
+        android:text="消息"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="18sp"/>
+    <com.edu.schooltask.view.ViewPagerTab
+        android:id="@+id/mp_tab"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+    </com.edu.schooltask.view.ViewPagerTab>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mp_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

@@ -18,13 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edu.schooltask.R;
-
-import com.edu.schooltask.beans.User;
+import com.edu.schooltask.activity.PrivateMessageActivity;
+import com.edu.schooltask.activity.UserActivity;
 import com.edu.schooltask.data.DataCache;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +30,12 @@ import java.util.List;
  */
 
 public class BaseActivity extends AppCompatActivity {
-    List<Activity> activities = new ArrayList<>();
+    protected static List<Activity> activities = new ArrayList<>();
     protected Toolbar toolbar;
     protected TextView titleText;
     protected Toast toast;
     protected static DataCache mDataCache;
+    protected static PrivateMessageActivity privateMessageActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,9 +99,27 @@ public class BaseActivity extends AppCompatActivity {
 
     //-----------------------------------------------------------
 
-    public void remainHome(){
-        for(int i=activities.size()-1; i>1; i--){
+    protected <T extends View> T getView(int resId){
+        return (T) findViewById(resId);
+    }
+
+    public static void remainHome(){
+        for(int i=activities.size()-1; i>0; i--){
             activities.get(i).finish();
+        }
+    }
+
+    public static void destroyUserActivity(){
+        for(int i=activities.size()-1; i>0; i--){
+            Activity activity = activities.get(i);
+            if(activity.getClass().equals(UserActivity.class)) activity.finish();
+        }
+    }
+
+    public static void destroyPrivateMessageActivity(){
+        for(int i=activities.size()-1; i>0; i--){
+            Activity activity = activities.get(i);
+            if(activity.getClass().equals(PrivateMessageActivity.class)) activity.finish();
         }
     }
 

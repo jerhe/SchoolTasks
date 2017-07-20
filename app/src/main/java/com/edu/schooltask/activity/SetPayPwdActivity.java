@@ -14,7 +14,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import server.api.SchoolTask;
-import server.api.pwd.SetPaypwdEvent;
+import server.api.account.SetPaypwdEvent;
 
 public class SetPayPwdActivity extends BaseActivity {
     private InputText pwdText;
@@ -25,15 +25,14 @@ public class SetPayPwdActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_pay_pwd);
         EventBus.getDefault().register(this);
-        pwdText = (InputText) findViewById(R.id.spp_pwd);
-        pwdText2 = (InputText) findViewById(R.id.spp_pwd_2);
-        confirmBtn = (Button) findViewById(R.id.spp_confirm_btn);
+        pwdText = getView(R.id.spp_pwd);
+        pwdText2 = getView(R.id.spp_pwd_2);
+        confirmBtn = getView(R.id.spp_confirm_btn);
         pwdText.setInputFilter(5);
         pwdText2.setInputFilter(5);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmBtn.setEnabled(false);
                 setPayPwd();
             }
         });
@@ -47,12 +46,12 @@ public class SetPayPwdActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSetPayPwd(SetPaypwdEvent event){
+        confirmBtn.setEnabled(true);
         if(event.isOk()){
             toastShort("设置成功");
             finish();
         }
         else{
-            confirmBtn.setEnabled(true);
             toastShort(event.getError());
         }
     }
@@ -79,12 +78,12 @@ public class SetPayPwdActivity extends BaseActivity {
             toastShort("两次输入的密码不一致");
             return;
         }
+        confirmBtn.setEnabled(false);
         User user = mDataCache.getUser();
         if(user == null){
             return;
         }
         else{
-            confirmBtn.setText("提交中...");
             SchoolTask.setPayPwd(pwd1);
         }
     }

@@ -24,7 +24,7 @@ public class KeyBoardUtil {
                 InputMethodManager inputManager = (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.showSoftInput(editText, 0);
             }
-        }, 100);    //延时300毫秒
+        }, 100);
     }
 
     /**

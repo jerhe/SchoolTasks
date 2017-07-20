@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 
 public class ImageItem implements Serializable{
-    int type;
+    int type;   //0：+号 1：path
     String path;
 
     public ImageItem(int type){

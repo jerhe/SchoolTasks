@@ -7,15 +7,5 @@ import server.api.base.BaseEvent;
  */
 
 public class GetCodeEvent extends BaseEvent {
-    public GetCodeEvent() {
-        super();
-    }
 
-    public GetCodeEvent(boolean ok) {
-        super(ok);
-    }
-
-    public GetCodeEvent(boolean ok, int code, String error) {
-        super(ok, code, error);
-    }
 }

@@ -35,5 +35,5 @@
         android:layout_margin="20dp"
         android:gravity="center"
         android:layout_height="40dp"
-        android:text="完成"/>
+        android:text="完成注册"/>
 </LinearLayout>

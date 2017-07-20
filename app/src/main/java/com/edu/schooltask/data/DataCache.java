@@ -75,4 +75,11 @@ public class DataCache {
         saveUser(user);
     }
 
+    public void saveSchool(List<String> schools){
+        saveListData("school", schools);
+    }
+
+    public ArrayList<String> getSchool(){
+        return getData("school");
+    }
 }

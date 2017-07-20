@@ -12,6 +12,7 @@ public class StateItem {
     String text;
     boolean isAccept;
     UserBaseInfo acceptUser;
+    boolean isMe;
 
     public StateItem(boolean isFinish, String name, String text) {
         this.isFinish = isFinish;
@@ -21,12 +22,13 @@ public class StateItem {
     }
 
     //被接单状态
-    public StateItem(boolean isFinish, String name, String text, UserBaseInfo acceptUser) {
+    public StateItem(boolean isFinish, String name, String text, UserBaseInfo acceptUser, boolean isMe) {
         this.isFinish = isFinish;
         this.name = name;
         this.text = text;
         isAccept = true;
         this.acceptUser = acceptUser;
+        this.isMe = isMe;
     }
 
     public boolean isFinish() {
@@ -67,5 +69,13 @@ public class StateItem {
 
     public void setAcceptUser(UserBaseInfo acceptUser) {
         this.acceptUser = acceptUser;
+    }
+
+    public boolean isMe() {
+        return isMe;
+    }
+
+    public void setMe(boolean me) {
+        isMe = me;
     }
 }

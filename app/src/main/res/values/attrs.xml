@@ -16,7 +16,7 @@
         <attr name="itemText" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="InputBoard">
+    <declare-styleable name="CommentInputBoard">
         <attr name="inputHint" format="string"/>
         <attr name="btnText" format="string"/>
     </declare-styleable>

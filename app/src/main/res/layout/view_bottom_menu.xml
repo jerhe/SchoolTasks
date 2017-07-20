@@ -42,8 +42,8 @@
             <TextView
                 android:id="@+id/bm_talk_num"
                 android:layout_alignParentRight="true"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="10sp"
                 android:textColor="@color/white"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="10sp"
-            android:text="聊天"/>
+            android:text="消息"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/bm_order"

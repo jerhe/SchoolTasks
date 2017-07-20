@@ -8,31 +8,32 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.activity.ReleaseTaskActivity;
 import com.edu.schooltask.activity.TaskListActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
-import com.edu.schooltask.adapter.BannerViewPagerAdapter;
 import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.User;
 import com.edu.schooltask.event.LoginSuccessEvent;
+import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.event.TabSelectedEvent;
+import com.edu.schooltask.other.GlideImageLoader;
 import com.edu.schooltask.utils.NetUtil;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.TaskItem;
-import com.edu.schooltask.other.BannerViewPagerPointer;
+import com.edu.schooltask.view.CustomLoadMoreView;
 import com.edu.schooltask.view.ViewPagerTab;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,7 +53,7 @@ import server.api.task.get.GetSchoolTaskEvent;
 
 public class HomeFragment extends BaseFragment {
 
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private HomeAdapter adapter;
@@ -72,6 +73,8 @@ public class HomeFragment extends BaseFragment {
     private ViewPagerTab homeViewPagerTab;  //recyclerview
     View pointerView;
 
+    List<String> images = new ArrayList<>();
+
     public HomeFragment() {
         super(R.layout.fragment_home_page);
     }
@@ -90,19 +93,12 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void init(){
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.home_srl);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                clearList();
-                getSchoolTask();
-                //TODO other getXXOrder();
-            }
-        });
-        recyclerView = (RecyclerView)view.findViewById(R.id.home_rv);
+        refreshLayout = getView(R.id.home_srl);
+        recyclerView = getView(R.id.home_rv);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new HomeAdapter(items, mDataCache, (BaseActivity)getActivity());
+        adapter.setLoadMoreView(new CustomLoadMoreView());
         adapter.bindToRecyclerView(recyclerView);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
@@ -138,6 +134,14 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                clearList();
+                getSchoolTask();
+            }
+        });
+
         initBanner();
         initButton();
         initPointer();
@@ -148,27 +152,13 @@ public class HomeFragment extends BaseFragment {
 
     private void initBanner(){
         View bannerView = LayoutInflater.from(getContext()).inflate(R.layout.rv_banner,null);
-        final ViewPager bannerViewPager = (ViewPager) bannerView.findViewById(R.id.home_banner_vp);
-        List<ImageView> bannerViewPagerList = new ArrayList<>();
-        bannerViewPagerList.addAll(getBanner(bannerViewPager.getContext()));
-        BannerViewPagerAdapter bannerViewPagerAdapter = new BannerViewPagerAdapter(bannerViewPagerList);
-        bannerViewPager.setAdapter(bannerViewPagerAdapter);
-        bannerViewPager.setCurrentItem(Integer.MAX_VALUE / 2);
-        final BannerViewPagerPointer bannerViewPagerPointer = new BannerViewPagerPointer(bannerViewPager.getContext(), bannerViewPager,
-                (LinearLayout) bannerView.findViewById(R.id.home_banner_vp_pointer), bannerViewPagerList.size());
-        bannerViewPager.addOnPageChangeListener(bannerViewPagerPointer);
-        new Timer().schedule(new TimerTask() {  //定时滚动图片
-            @Override
-            public void run() {
-                bannerViewPager.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(!bannerViewPagerPointer.isDraging)   //不在拖动状态则下一页
-                            bannerViewPager.setCurrentItem(bannerViewPager.getCurrentItem()+1);
-                    }
-                });
-            }
-        },5000,5000);
+        Banner banner = (Banner) bannerView.findViewById(R.id.banner);
+        banner.setImageLoader(new GlideImageLoader());
+        images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
+        images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
+        images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
+        banner.setImages(images);
+        banner.start();
         adapter.addHeaderView(bannerView);
     }
 
@@ -240,7 +230,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void getSchoolTask(){
-        swipeRefreshLayout.setRefreshing(true);
         User user = mDataCache.getUser();
         if(user != null){
             SchoolTask.getSchoolTask(user.getSchool(), nearTaskPageIndex);
@@ -278,22 +267,28 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogout(LogoutEvent event){
+        clearList();
+        getSchoolTask();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetSchoolTask(GetSchoolTaskEvent event){
-        if(swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(false);
+        if(refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
         if (event.isOk()){
             nearTaskPageIndex ++;
-            List<TaskItem> taskItems = event.getTaskItems();
+            List<TaskItem> taskItems = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<List<TaskItem>>(){}.getType());
             for(TaskItem taskItem : taskItems){
                 HomeItem homeItem = new HomeItem(HomeItem.TASK_ITEM, taskItem);
                 if(!nearTaskItems.contains(homeItem)){
                     nearTaskItems.add(homeItem);
                 }
             }
-            adapter.notifyDataSetChanged();
             adapter.loadMoreComplete();
             if(taskItems.size() == 0){
                 adapter.loadMoreEnd();
             }
+            adapter.notifyDataSetChanged();
         }
         else{
             adapter.loadMoreFail();
@@ -308,23 +303,6 @@ public class HomeFragment extends BaseFragment {
             adapter.notifyDataSetChanged();
         }
 
-    }
-
-    private List<ImageView> getBanner(Context context){
-        List<ImageView> list = new ArrayList<>();
-        ImageView imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.background);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        ImageView imageView2 = new ImageView(context);
-        imageView2.setImageResource(R.drawable.ic_action_home);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        ImageView imageView3 = new ImageView(context);
-        imageView3.setImageResource(R.drawable.ic_action_order);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        list.add(imageView);
-        list.add(imageView2);
-        list.add(imageView3);
-        return list;
     }
 
     private void clearList(){

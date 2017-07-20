@@ -13,14 +13,20 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.beans.TaskCommentList;
+import com.edu.schooltask.beans.TaskCount;
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserBaseInfo;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.beans.TaskComment;
 import com.edu.schooltask.item.TaskCountItem;
 import com.edu.schooltask.item.TaskItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
-import com.edu.schooltask.view.InputBoard;
+import com.edu.schooltask.view.CommentInputBoard;
+import com.edu.schooltask.view.CustomLoadMoreView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,7 +56,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     private Button acceptBtn;
     private Button assessBtn;
     private RelativeLayout btnLayout;
-    private InputBoard inputBoard;
+    private CommentInputBoard commentInputBoard;
     HomeItem item;
     HomeItem countItem;
 
@@ -63,17 +69,19 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_accept_order);
         EventBus.getDefault().register(this);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.wao_srl);
-        recyclerView = (RecyclerView) findViewById(R.id.wao_rv);
-        childSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.wao_child_srl);
-        childRecyclerView = (RecyclerView) findViewById(R.id.wao_child_rv);
-        acceptBtn = (Button) findViewById(R.id.wao_accept_btn);
-        assessBtn = (Button) findViewById(R.id.wao_assess_btn);
-        inputBoard = (InputBoard) findViewById(R.id.wao_ib);
-        btnLayout = (RelativeLayout) findViewById(R.id.wao_btn_layout);
+        swipeRefreshLayout = getView(R.id.wao_srl);
+        recyclerView = getView(R.id.wao_rv);
+        childSwipeRefreshLayout = getView(R.id.wao_child_srl);
+        childRecyclerView = getView(R.id.wao_child_rv);
+        acceptBtn = getView(R.id.wao_accept_btn);
+        assessBtn = getView(R.id.wao_assess_btn);
+        commentInputBoard = getView(R.id.wao_ib);
+        btnLayout = getView(R.id.wao_btn_layout);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HomeAdapter(itemList, mDataCache, this);
+        adapter.setLoadMoreView(new CustomLoadMoreView());
+        adapter.openLoadAnimation();
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -84,10 +92,11 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                         swipeRefreshLayout.setVisibility(View.INVISIBLE);
                         childSwipeRefreshLayout.setVisibility(View.VISIBLE);
                         btnLayout.setVisibility(View.INVISIBLE);
-                        inputBoard.setVisibility(View.VISIBLE);
-                        parentId = itemList.get(position).getTaskComment().getCommentId();
+                        commentInputBoard.setVisibility(View.VISIBLE);
+                        parentId = itemList.get(position).getTaskComment().getId();
                         setTitle("查看回复");
-                        inputBoard.setParentId(parentId, itemList.get(position).getTaskComment().getUserName());
+                        commentInputBoard.setParentId(parentId,
+                                itemList.get(position).getTaskComment().getCommentUser().getName());
                         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -102,11 +111,12 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                         Intent intent = new Intent(WaitAcceptOrderActivity.this, UserActivity.class);
                         if(position == 0){
                             TaskItem taskItem = itemList.get(position).getTaskItem();
-                            intent.putExtra("user", new User(taskItem.getUserId(), taskItem.getName()));
+                            intent.putExtra("user", taskItem.getUser());
                         }
                         else{
                             TaskComment taskComment= itemList.get(position).getTaskComment();
-                            intent.putExtra("user", new User(taskComment.getUserId(), taskComment.getUserName()));
+                            UserBaseInfo commentUser = taskComment.getCommentUser();
+                            intent.putExtra("user", commentUser);
                         }
                         startActivity(intent);
                         break;
@@ -123,20 +133,21 @@ public class WaitAcceptOrderActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if(position>1){
-                    if(!inputBoard.isShown()){
+                    if(!commentInputBoard.isShown()){
                         btnLayout.setVisibility(View.INVISIBLE);
-                        inputBoard.setVisibility(View.VISIBLE);
+                        commentInputBoard.setVisibility(View.VISIBLE);
                     }
                     TaskComment taskComment = itemList.get(position).getTaskComment();
-                    inputBoard.setParentId(taskComment.getCommentId(), taskComment.getUserName());
-                    inputBoard.requestFocus();
-                    KeyBoardUtil.inputKeyBoard(inputBoard.getInputText());
+                    commentInputBoard.setParentId(taskComment.getId(), taskComment.getCommentUser().getName());
+                    commentInputBoard.requestFocus();
+                    KeyBoardUtil.inputKeyBoard(commentInputBoard.getInputText());
                 }
             }
         });
 
         childRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         childAdapter = new HomeAdapter(childItemList, mDataCache, this);
+        childAdapter.openLoadAnimation();
         childRecyclerView.setAdapter(childAdapter);
         childAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -145,7 +156,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                     case R.id.ui_layout:
                         Intent intent = new Intent(WaitAcceptOrderActivity.this, UserActivity.class);
                         TaskComment taskComment = childItemList.get(position).getTaskComment();
-                        intent.putExtra("user", new User(taskComment.getUserId(), taskComment.getUserName()));
+                        UserBaseInfo commentUser = taskComment.getCommentUser();
+                        intent.putExtra("user", commentUser);
                         startActivity(intent);
                         break;
                 }
@@ -154,14 +166,15 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         childAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(!inputBoard.isShown()){
+                if(!commentInputBoard.isShown()){
                     btnLayout.setVisibility(View.INVISIBLE);
-                    inputBoard.setVisibility(View.VISIBLE);
+                    commentInputBoard.setVisibility(View.VISIBLE);
                 }
                 TaskComment taskComment = childItemList.get(position).getTaskComment();
-                inputBoard.setParentId(taskComment.getCommentId(), taskComment.getUserName());
-                inputBoard.requestFocus();
-                KeyBoardUtil.inputKeyBoard(inputBoard.getInputText());
+                commentInputBoard.setParentId(
+                        taskComment.getId(), taskComment.getCommentUser().getName());
+                commentInputBoard.requestFocus();
+                KeyBoardUtil.inputKeyBoard(commentInputBoard.getInputText());
             }
         });
 
@@ -180,7 +193,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                 if("接单".equals(acceptBtn.getText())){
                     User user = mDataCache.getUser();
                     if(user != null){
-                        if(user.getUserId().equals(item.getTaskItem().getUserId())){
+                        if(user.getUserId().equals(item.getTaskItem().getUser().getUserId())){
                             toastShort("不能接自己发布的任务哦");
                         }
                         else{
@@ -205,16 +218,16 @@ public class WaitAcceptOrderActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 btnLayout.setVisibility(View.INVISIBLE);
-                inputBoard.setVisibility(View.VISIBLE);
-                KeyBoardUtil.inputKeyBoard(inputBoard.getInputText());
+                commentInputBoard.setVisibility(View.VISIBLE);
+                KeyBoardUtil.inputKeyBoard(commentInputBoard.getInputText());
             }
         });
 
-        inputBoard.setOnBtnClickListener(new InputBoard.OnBtnClickListener() {
+        commentInputBoard.setOnBtnClickListener(new CommentInputBoard.OnBtnClickListener() {
             @Override
             public void btnClick(long parentId, String comment) {
                 if(comment.length() != 0){
-                    SchoolTask.newTaskComment(item.getTaskItem().getOrderId(), parentId, comment);
+                    SchoolTask.comment(item.getTaskItem().getOrderId(), parentId, comment);
                 }
                 else{
                     toastShort("请输入评论");
@@ -225,6 +238,12 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+                    @Override
+                    public void onLoadMoreRequested() {
+                        getTaskComment();
+                    }
+                },recyclerView);
                 refresh();
             }
         });
@@ -258,12 +277,12 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                     finish();
                 }
             });
-            inputBoard.clearParentId();
+            commentInputBoard.clearParentId();
             return;
         }
-        if(inputBoard.isShown()){
-            inputBoard.setVisibility(View.INVISIBLE);
-            inputBoard.clearParentId();
+        if(commentInputBoard.isShown()){
+            commentInputBoard.setVisibility(View.INVISIBLE);
+            commentInputBoard.clearParentId();
             btnLayout.setVisibility(View.VISIBLE);
         }
         else{
@@ -286,7 +305,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     public void onNewTaskComment(NewTaskCommentEvent event){
         if(event.isOk()){
             toastShort("评论成功");
-            inputBoard.clear();
+            commentInputBoard.clear();
             if(swipeRefreshLayout.isShown()) {
                 refresh();
             }
@@ -302,22 +321,25 @@ public class WaitAcceptOrderActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetTaskComment(GetTaskCommentEvent event){
+        if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
         if(event.isOk()){
-            if(page == 0){
-                while(itemList.size()>2) itemList.remove(itemList.size()-1);
+            TaskCommentList taskCommentList = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskCommentList>(){}.getType());
+            if(taskCommentList.getOrderId().equals(item.getTaskItem().getOrderId())){
+                if(page == 0){
+                    while(itemList.size()>2) itemList.remove(itemList.size()-1);
+                }
+                page ++;
+                List<TaskComment> taskComments = taskCommentList.getTaskComments();
+                for(TaskComment taskComment : taskComments){
+                    HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment);
+                    itemList.add(homeItem);
+                }
+                adapter.loadMoreComplete();
+                if(taskComments.size() == 0){
+                    adapter.loadMoreEnd();
+                }
+                adapter.notifyDataSetChanged();
             }
-            page ++;
-            if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
-            List<TaskComment> taskComments = event.getTaskComments();
-            for(TaskComment taskComment : taskComments){
-                HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment);
-                itemList.add(homeItem);
-            }
-            adapter.loadMoreComplete();
-            if(taskComments.size() == 0){
-                adapter.loadMoreEnd();
-            }
-            adapter.notifyDataSetChanged();
         }
         else{
             toastShort(event.getError());
@@ -329,7 +351,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     public void onGetTaskChildComment(GetTaskChildCommentEvent event){
         if(childSwipeRefreshLayout.isRefreshing()) childSwipeRefreshLayout.setRefreshing(false);
         if(event.isOk()){
-            List<TaskComment> taskComments = event.getTaskComments();
+            TaskCommentList taskCommentList = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskCommentList>(){}.getType());
+            List<TaskComment> taskComments = taskCommentList.getTaskComments();
             for(TaskComment taskComment : taskComments){
                 HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment, parentId);
                 childItemList.add(homeItem);
@@ -344,8 +367,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetTaskCount(GetTaskCountEvent event){
         if(event.isOk()){
-            itemList.set(1,new HomeItem(HomeItem.COUNT_ITEM,
-                    new TaskCountItem(event.getCommentCount(), event.getLookCount())));
+            TaskCount taskCount = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskCount>(){}.getType());
+            itemList.set(1,new HomeItem(HomeItem.COUNT_ITEM, new TaskCountItem(taskCount.getCommentCount(), taskCount.getLookCount())));
             adapter.notifyDataSetChanged();
         }
     }

@@ -11,24 +11,5 @@ import server.api.base.BaseEvent;
  */
 
 public class GetTaskCommentEvent extends BaseEvent {
-    List<TaskComment> taskComments;
 
-    public GetTaskCommentEvent() {
-    }
-
-    public GetTaskCommentEvent(boolean ok) {
-        super(ok);
-    }
-
-    public GetTaskCommentEvent(boolean ok, int code, String error) {
-        super(ok, code, error);
-    }
-
-    public List<TaskComment> getTaskComments() {
-        return taskComments;
-    }
-
-    public void setTaskComments(List<TaskComment> taskComments) {
-        this.taskComments = taskComments;
-    }
 }

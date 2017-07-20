@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".application.MyApplication"
@@ -15,7 +16,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,9 +26,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.LoginActivity" />
-        <activity
-            android:name=".activity.AssessActivity"
-            android:label="评价" />
         <activity
             android:name=".activity.ReleaseTaskActivity"
             android:label="填写任务信息"
@@ -57,12 +57,37 @@
         <activity
             android:name=".activity.TaskListActivity"
             android:label="任务列表" />
-        <activity android:name=".activity.DetailActivity" android:label="账单"></activity>
-
-
+        <activity
+            android:name=".activity.DetailActivity"
+            android:label="账单" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
+
+        <service
+            android:name=".service.PollService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.PrivateMessageActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/WithImageStyle" />
+        <activity
+            android:name=".activity.PersonalCenterActivity"
+            android:label="个人中心" />
+        <activity
+            android:name=".activity.SettingActivity"
+            android:label="设置" />
+        <activity
+            android:name=".activity.HelpActivity"
+            android:label="帮助" />
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="关于" />
+        <activity android:name=".activity.UpdatePwdActivity" />
+        <activity android:name=".activity.MessageAndPrivacyActivity" android:label="消息隐私" />
+        <activity android:name="cn.bmob.pay.v3.act.PayAct" />
     </application>
 
 </manifest>

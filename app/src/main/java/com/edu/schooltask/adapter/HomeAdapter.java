@@ -6,7 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,6 +15,7 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.activity.ImageActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.beans.UserBaseInfo;
 import com.edu.schooltask.data.DataCache;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.ImageItem;
@@ -76,16 +77,17 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
 
     private void setTaskItem(BaseViewHolder helper, final HomeItem item, boolean isInfo){
         TaskItem taskItem = item.getTaskItem();
-        helper.setText(R.id.ui_name, taskItem.getName());
+        UserBaseInfo user = taskItem.getUser();
+        helper.setText(R.id.ui_name, user.getName());
         helper.setText(R.id.ui_school,
                 isInfo ? taskItem.getSchool() + "(任务)" : taskItem.getSchool());
         helper.setText(R.id.ui_des, taskItem.getDescription());
         helper.setText(R.id.task_cost, "¥"+ taskItem.getCost());
         helper.setText(R.id.task_content, taskItem.getContent());
         helper.setText(R.id.ui_release_time,
-                DateUtil.getLong(DateUtil.stringToDate(taskItem.getReleaseTime())));
+                DateUtil.getLong(DateUtil.stringToCalendar(taskItem.getReleaseTime())));
         //性别
-        switch (taskItem.getSex()){
+        switch (user.getSex()){
             case 0:
                 helper.setText(R.id.ui_sex, "♂");
                 helper.setTextColor(R.id.ui_sex, Color.parseColor("#1B9DFF"));
@@ -99,7 +101,7 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
         }
         //头像
         CircleImageView headView = helper.getView(R.id.ui_head);
-        GlideUtil.setHead(headView.getContext(), taskItem.getUserId(),headView, false);
+        GlideUtil.setHead(headView.getContext(), user.getUserId(),headView, false);
         //图片
         String imageUrl = SchoolTask.TASK_IMAGE_URL + taskItem.getOrderId() + "/";
         final List<ImageItem> imageItems = new ArrayList<>();
@@ -150,12 +152,13 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
     private void setCommentItem(BaseViewHolder helper, HomeItem item){
         TaskComment taskComment = item.getTaskComment();
         CircleImageView headView = helper.getView(R.id.ui_head);
-        GlideUtil.setHead(headView.getContext(), taskComment.getUserId(),headView, false);
-        helper.setText(R.id.ui_school, taskComment.getUserSchool());
-        helper.setText(R.id.ui_name,taskComment.getUserName());
+        UserBaseInfo commentUser = taskComment.getCommentUser();
+        GlideUtil.setHead(headView.getContext(), commentUser.getUserId(),headView, false);
+        helper.setText(R.id.ui_school, commentUser.getSchool());
+        helper.setText(R.id.ui_name,commentUser.getName());
         helper.setText(R.id.ui_release_time,
-                DateUtil.getLong(DateUtil.stringToDate(taskComment.getCommentTime())));
-        switch (taskComment.getUserSex()){
+                DateUtil.getLong(DateUtil.stringToCalendar(taskComment.getCommentTime())));
+        switch (commentUser.getSex()){
             case -1:
                 helper.setText(R.id.ui_sex,"");
                 break;
@@ -170,8 +173,9 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
         }
         int childCount = taskComment.getChildCount();
         if(taskComment.getParentId() != 0){
+            UserBaseInfo parentUser = taskComment.getParentUser();
             if(taskComment.getParentId() != item.parentId){
-                helper.setText(R.id.tc_comment, "回复 "+taskComment.getToUserName()
+                helper.setText(R.id.tc_comment, "回复 "+parentUser.getName()
                         +"："+taskComment.getComment());
             }
             else{

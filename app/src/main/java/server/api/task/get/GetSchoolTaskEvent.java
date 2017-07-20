@@ -12,25 +12,5 @@ import server.api.base.BaseEvent;
  */
 
 public class GetSchoolTaskEvent extends BaseEvent {
-    List<TaskItem> taskItems = new ArrayList<>();
 
-    public GetSchoolTaskEvent() {
-        super();
-    }
-
-    public GetSchoolTaskEvent(boolean ok) {
-        super(ok);
-    }
-
-    public GetSchoolTaskEvent(boolean ok, int code, String error) {
-        super(ok, code, error);
-    }
-
-    public List<TaskItem> getTaskItems() {
-        return taskItems;
-    }
-
-    public void setTaskItems(List<TaskItem> taskItems) {
-        this.taskItems = taskItems;
-    }
 }

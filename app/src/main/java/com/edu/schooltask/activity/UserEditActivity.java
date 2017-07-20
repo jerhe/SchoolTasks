@@ -13,16 +13,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.edu.schooltask.R;
 import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.beans.UploadKey;
 import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserBaseInfo;
 import com.edu.schooltask.utils.DialogUtil;
+import com.edu.schooltask.utils.GlideCacheUtil;
 import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.utils.TextUtil;
 import com.edu.schooltask.view.UserEditItem;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.yalantis.ucrop.UCrop;
@@ -36,11 +42,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 import server.api.SchoolTask;
+import server.api.qiniu.GetBGUploadKeyEvent;
+import server.api.qiniu.GetHeadUploadKeyEvent;
 import server.api.user.UpdateUserInfoEvent;
-import server.api.user.UploadBGEvent;
-import server.api.user.UploadHeadEvent;
+import server.api.qiniu.UploadBGEvent;
+import server.api.qiniu.UploadHeadEvent;
 
 public class UserEditActivity extends BaseActivity implements View.OnClickListener{
     UserEditItem headItem;
@@ -109,6 +118,8 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     final static int PICTURE = 1;
     final static int CUT = 2;
     int pictureMode = 0;
+    File headImage;
+    File bgImage;
 
     DialogPlus nameDialog;
     DialogPlus schoolDialog;
@@ -151,13 +162,13 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_edit);
         EventBus.getDefault().register(this);
-        headItem = (UserEditItem) findViewById(R.id.ue_head);
-        bgItem = (UserEditItem) findViewById(R.id.ue_bg);
-        nameItem = (UserEditItem) findViewById(R.id.ue_name);
-        signItem = (UserEditItem) findViewById(R.id.ue_sign);
-        schoolItem = (UserEditItem) findViewById(R.id.ue_school);
-        sexItem = (UserEditItem) findViewById(R.id.ue_sex);
-        birthItem = (UserEditItem) findViewById(R.id.ue_birth);
+        headItem = getView(R.id.ue_head);
+        bgItem = getView(R.id.ue_bg);
+        nameItem = getView(R.id.ue_name);
+        signItem = getView(R.id.ue_sign);
+        schoolItem = getView(R.id.ue_school);
+        sexItem = getView(R.id.ue_sex);
+        birthItem = getView(R.id.ue_birth);
 
         headItem.setOnClickListener(this);
         bgItem.setOnClickListener(this);
@@ -202,10 +213,14 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
             case UCrop.REQUEST_CROP:
                 if(data!=null){
                     imageUri = UCrop.getOutput(data);
-                    if(pictureMode == 1)
-                        SchoolTask.uploadHead(new File(imageUri.getPath()));
-                    else
-                        SchoolTask.uploadBG(new File(imageUri.getPath()));
+                    if(pictureMode == 1){
+                        headImage = new File(imageUri.getPath());
+                        SchoolTask.getHeadUploadKey();
+                    }
+                    else{
+                        bgImage = new File(imageUri.getPath());
+                        SchoolTask.getBGUploadKey();
+                    }
                 }
                 break;
         }
@@ -255,21 +270,25 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void setHead(User user){
-        GlideUtil.setHead(UserEditActivity.this, user.getUserId(), headItem.getHeadView(), true);
+        Glide.clear(headItem.getHeadView());
+        GlideUtil.setHead(UserEditActivity.this, user.getUserId(), headItem.getHeadView(), false);
     }
 
     private void setBg(User user){
-        GlideUtil.setBackground(UserEditActivity.this, user.getUserId(), bgItem.getImageView(), true);
+        Glide.clear(bgItem.getImageView());
+        GlideUtil.setBackground(UserEditActivity.this, user.getUserId(), bgItem.getImageView());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUploadBG(UploadBGEvent event){
         if (event.isOk()){
             toastShort("上传背景成功");
+            mDataCache.saveData("bg",new Random().nextInt(999));
+            GlideCacheUtil.getInstance().clearImageAllCache(this);
             setBg(mDataCache.getUser());
         }
         else{
-            toastShort(event.getError());
+            toastShort("上传背景失败");
         }
     }
 
@@ -277,10 +296,12 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     public void onUploadHead(UploadHeadEvent event){
         if (event.isOk()){
             toastShort("上传头像成功");
+            mDataCache.saveData("head",new Random().nextInt(999));
+            GlideCacheUtil.getInstance().clearImageAllCache(this);
             setHead(mDataCache.getUser());
         }
         else{
-            toastShort(event.getError());
+            toastShort("上传头像失败");
         }
     }
 
@@ -291,7 +312,8 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
                 if(nameDialog.isShowing()){
                     nameDialog.dismiss();
                 }
-            User user = mDataCache.getUser().setUserInfo(event.getUser());
+            UserBaseInfo updateUserInfo = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<UserBaseInfo>(){}.getType());
+            User user = mDataCache.getUser().setUserInfo(updateUserInfo);
             mDataCache.saveUser(user);
             setInfo(user);
         }
@@ -300,8 +322,31 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetHeadUploadKey(GetHeadUploadKeyEvent event){
+        if(event.isOk()){
+            UploadKey uploadKey = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<UploadKey>(){}.getType());
+            SchoolTask.uploadHead(headImage, uploadKey);
+        }
+        else{
+            toastShort(event.getError());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetBGUploadKey(GetBGUploadKeyEvent event){
+        if(event.isOk()){
+            UploadKey uploadKey = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<UploadKey>(){}.getType());
+            SchoolTask.uploadBG(bgImage, uploadKey);
+        }
+        else{
+            toastShort(event.getError());
+        }
+    }
+
     @Override
     public void onClick(View v) {
+        final User user = mDataCache.getUser();
         switch (v.getId()){
             case R.id.ue_head:
                 pictureMode = 1;
@@ -315,6 +360,11 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
                 nameDialog = DialogUtil.createInputDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
                     @Override
                     public void onInputClick(DialogPlus dialogPlus, String input) {
+                        if(input.length() == 0) {
+                            toastShort("请输入昵称");
+                            return;
+                        }
+                        if(user.getName().equals(input))return;
                         SchoolTask.updateUserInfo(input, 0);
                     }
                 }, "修改昵称" ,mDataCache.getUser().getName());
@@ -325,6 +375,7 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onInputClick(DialogPlus dialogPlus, String input) {
                         dialogPlus.dismiss();
+                        if(user.getSign().equals(input))return;
                         SchoolTask.updateUserInfo(input, 1);
                     }
                 }, "修改简介", mDataCache.getUser().getSign()).show();
@@ -333,10 +384,18 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
                 schoolDialog = DialogUtil.createInputDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
                     @Override
                     public void onInputClick(DialogPlus dialogPlus, String input) {
-                        SchoolTask.updateUserInfo(input, 2);
+                        if(input.length() == 0) {
+                            toastShort("请输入学校");
+                            return;
+                        }
                         dialogPlus.dismiss();
+                        if(user.getSchool().equals(input))return;
+                        SchoolTask.updateUserInfo(input, 2);
                     }
                 }, "修改学校" ,mDataCache.getUser().getSchool());
+                View view = schoolDialog.getHolderView();
+                EditText editText = (EditText) view.findViewById(R.id.di_input);
+                TextUtil.setSchoolWatcher(UserEditActivity.this, editText, mDataCache);
                 schoolDialog.show();
                 break;
             case R.id.ue_sex:

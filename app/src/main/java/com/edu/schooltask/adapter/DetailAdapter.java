@@ -3,7 +3,7 @@ package com.edu.schooltask.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
-import com.edu.schooltask.base.Detail;
+import com.edu.schooltask.beans.Detail;
 import com.edu.schooltask.view.TextItem;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class DetailAdapter extends BaseQuickAdapter<Detail, BaseViewHolder> {
         TextItem explanationText = helper.getView(R.id.detail_explanation);
         TextItem typeText = helper.getView(R.id.detail_type);
 
-        idText.setText(item.getDetailId());
+        idText.setText(item.getId());
         timeText.setText(item.getCreateTime());
         explanationText.setText(item.getExplanation());
         typeText.setText(item.getMoney().toString() + "元");

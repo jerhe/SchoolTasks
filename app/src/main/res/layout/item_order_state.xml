@@ -44,7 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/os_accept_head"
             android:src="@drawable/head"
             android:layout_width="40dp"
             android:layout_height="40dp" />
@@ -81,11 +80,11 @@
                 android:text="个性签名"/>
         </RelativeLayout>
         <ImageView
-            android:id="@+id/os_accept_talk"
+            android:id="@+id/os_user_talk"
             android:layout_marginRight="20dp"
-            android:src="@drawable/ic_action_talk_theme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:src="@drawable/ic_action_message_theme"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
     </LinearLayout>
 
 

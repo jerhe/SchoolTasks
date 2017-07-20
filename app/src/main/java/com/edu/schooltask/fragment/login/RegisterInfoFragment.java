@@ -2,9 +2,12 @@ package com.edu.schooltask.fragment.login;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupWindow;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
@@ -14,7 +17,10 @@ import com.edu.schooltask.beans.User;
 import com.edu.schooltask.beans.UserBaseInfo;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.utils.KeyBoardUtil;
+import com.edu.schooltask.utils.TextUtil;
 import com.edu.schooltask.view.InputText;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,15 +57,17 @@ public class RegisterInfoFragment extends BaseFragment {
 
     @Override
     protected void init(){
-        schoolText = (InputText) view.findViewById(R.id.ri_school);
-        nameText = (InputText) view.findViewById(R.id.ri_name);
-        pwdText = (InputText) view.findViewById(R.id.ri_pwd);
-        finishBtn = (Button) view.findViewById(R.id.ri_finish);
+        schoolText = getView(R.id.ri_school);
+        nameText = getView(R.id.ri_name);
+        pwdText = getView(R.id.ri_pwd);
+        finishBtn = getView(R.id.ri_finish);
 
         //设置过滤
         schoolText.setInputFilter(1);
         nameText.setInputFilter(2);
         pwdText.setInputFilter(3);
+
+        TextUtil.setSchoolWatcher(getContext(), schoolText.getInputText(), mDataCache);
 
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,24 +80,20 @@ public class RegisterInfoFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRegister(RegisterEvent event){
         if (event.isOk()){
-            UserBaseInfo registerUser = event.getRegisterUser();
-            String token = event.getToken();
-            User user = new User(registerUser);
-            user.setToken(token);
-            mDataCache.saveUser(user);
+            User registerUser = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<User>(){}.getType());
+            mDataCache.saveUser(registerUser);
             EventBus.getDefault().post(new LoginSuccessEvent());
             toastShort("注册成功");
             openActivity(SetPayPwdActivity.class);  //注册成功进入设置支付密码界面
             finish();
         }
         else{
-            finishBtn.setText("完成");
+            finishBtn.setEnabled(true);
             toastShort(event.getError());
         }
     }
 
     private void register(){
-        if(!"完成".equals(finishBtn.getText()))return;
         final String school = schoolText.getText();
         final String name = nameText.getText();
         String pwd = pwdText.getText();
@@ -109,8 +113,8 @@ public class RegisterInfoFragment extends BaseFragment {
             toastShort("密码长度至少为6位");
             return;
         }
+        finishBtn.setEnabled(false);
         KeyBoardUtil.hideKeyBoard(getActivity());
-        finishBtn.setText("正在提交请求...");
         final String id = ((LoginActivity)getActivity()).registerId;
         if(TextUtils.isEmpty(id)){
             toastShort("发生错误");

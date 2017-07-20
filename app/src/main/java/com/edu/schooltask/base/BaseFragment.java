@@ -62,6 +62,10 @@ public abstract class BaseFragment extends Fragment {
 
     //-----------------------------------------------------------
 
+    protected <T extends View> T getView(int resId){
+        return (T) view.findViewById(resId);
+    }
+
     public void openActivity(Class cls){
         Intent intent = new Intent(getActivity(), cls);
         startActivity(intent);

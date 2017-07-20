@@ -7,15 +7,5 @@ import server.api.base.BaseEvent;
  */
 
 public class CheckCodeEvent extends BaseEvent {
-    public CheckCodeEvent() {
-        super();
-    }
 
-    public CheckCodeEvent(boolean ok) {
-        super(ok);
-    }
-
-    public CheckCodeEvent(boolean ok, int code, String error) {
-        super(ok, code, error);
-    }
 }

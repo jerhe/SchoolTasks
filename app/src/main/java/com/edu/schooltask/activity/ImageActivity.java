@@ -42,9 +42,9 @@ public class ImageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-        back = (ImageView) findViewById(R.id.image_back);
-        delete = (ImageView) findViewById(R.id.image_delete);
-        viewPager = (ViewPager) findViewById(R.id.image_vp);
+        back = getView(R.id.image_back);
+        delete = getView(R.id.image_delete);
+        viewPager = getView(R.id.image_vp);
 
 
         Intent intent = getIntent();

@@ -25,13 +25,20 @@ public class StateAdapter extends BaseQuickAdapter<StateItem, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, StateItem item) {
-
         if(item.isFinish())
             helper.setImageResource(R.id.state_state_flag, R.drawable.ic_icon_state_finish);
         else
             helper.setImageResource(R.id.state_state_flag, R.drawable.ic_icon_state_unfinish);
 
         if(item.isAccept()){
+            if(item.isMe()){
+                helper.setVisible(R.id.os_user_talk, false);
+            }
+            else{
+                helper.setVisible(R.id.os_user_talk, true);
+                helper.addOnClickListener(R.id.os_user_talk);
+            }
+            helper.addOnClickListener(R.id.os_user_layout);
             UserBaseInfo acceptUser = item.getAcceptUser();
             helper.setVisible(R.id.os_user_layout, true);
             helper.setText(R.id.os_accept_name, acceptUser.getName());

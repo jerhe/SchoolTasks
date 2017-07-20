@@ -5,83 +5,21 @@ package com.edu.schooltask.beans;
  */
 
 public class TaskComment {
-    long commentId;
-    String orderId;
-    String userId;
-    String userName;
-    String toUserName;
-    String userSchool;
-    int userSex;
-    long parentId;
-    String comment;
-    int childCount;
-    String commentTime;
+    long id;	//评论ID
+    String orderId;	//订单ID
+    long parentId;	//父评论ID
+    UserBaseInfo commentUser;		//评论人信息
+    UserBaseInfo parentUser;		//父评论人信息
+    String comment;	//评论内容
+    String commentTime;	//评论时间
+    int childCount;	//子评论数
 
-    public TaskComment(long commentId, String orderId, String userId, String userName, String userSchool, int userSex, long parentId, String comment, int childCount, String commentTime) {
-        this.commentId = commentId;
-        this.orderId = orderId;
-        this.userId = userId;
-        this.userName = userName;
-        this.userSchool = userSchool;
-        this.userSex = userSex;
-        this.parentId = parentId;
-        this.comment = comment;
-        this.childCount = childCount;
-        this.commentTime = commentTime;
+    public long getId() {
+        return id;
     }
 
-    public TaskComment(long commentId, String orderId, String userId, String userName, String toUserName, String userSchool, int userSex, long parentId, String comment, int childCount, String commentTime) {
-        this.commentId = commentId;
-        this.orderId = orderId;
-        this.userId = userId;
-        this.userName = userName;
-        this.toUserName = toUserName;
-        this.userSchool = userSchool;
-        this.userSex = userSex;
-        this.parentId = parentId;
-        this.comment = comment;
-        this.childCount = childCount;
-        this.commentTime = commentTime;
-    }
-
-    public String getToUserName() {
-        return toUserName;
-    }
-
-    public void setToUserName(String toUserName) {
-        this.toUserName = toUserName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserSchool() {
-        return userSchool;
-    }
-
-    public void setUserSchool(String userSchool) {
-        this.userSchool = userSchool;
-    }
-
-    public int getUserSex() {
-        return userSex;
-    }
-
-    public void setUserSex(int userSex) {
-        this.userSex = userSex;
-    }
-
-    public long getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(long commentId) {
-        this.commentId = commentId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getOrderId() {
@@ -92,20 +30,28 @@ public class TaskComment {
         this.orderId = orderId;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public long getParentId() {
         return parentId;
     }
 
     public void setParentId(long parentId) {
         this.parentId = parentId;
+    }
+
+    public UserBaseInfo getCommentUser() {
+        return commentUser;
+    }
+
+    public void setCommentUser(UserBaseInfo commentUser) {
+        this.commentUser = commentUser;
+    }
+
+    public UserBaseInfo getParentUser() {
+        return parentUser;
+    }
+
+    public void setParentUser(UserBaseInfo parentUser) {
+        this.parentUser = parentUser;
     }
 
     public String getComment() {
@@ -116,19 +62,19 @@ public class TaskComment {
         this.comment = comment;
     }
 
-    public int getChildCount() {
-        return childCount;
-    }
-
-    public void setChildCount(int childCount) {
-        this.childCount = childCount;
-    }
-
     public String getCommentTime() {
         return commentTime;
     }
 
     public void setCommentTime(String commentTime) {
         this.commentTime = commentTime;
+    }
+
+    public int getChildCount() {
+        return childCount;
+    }
+
+    public void setChildCount(int childCount) {
+        this.childCount = childCount;
     }
 }
