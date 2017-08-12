@@ -6,6 +6,8 @@ import android.util.Log;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 
+import org.litepal.LitePalApplication;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +21,7 @@ import server.api.SchoolTask;
  * Created by 夜夜通宵 on 2017/5/17.
  */
 
-public class MyApplication extends Application {
+public class MyApplication extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();

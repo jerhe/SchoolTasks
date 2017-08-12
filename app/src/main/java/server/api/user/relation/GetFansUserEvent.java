@@ -1,9 +1,5 @@
 package server.api.user.relation;
 
-import com.edu.schooltask.beans.UserBaseInfo;
-
-import java.util.List;
-
 import server.api.base.BaseTokenEvent;
 
 /**

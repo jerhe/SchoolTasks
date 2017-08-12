@@ -1,4 +1,4 @@
-package server.api.account;
+package server.api.user.account;
 
 import server.api.base.BaseTokenEvent;
 
@@ -6,6 +6,6 @@ import server.api.base.BaseTokenEvent;
  * Created by 夜夜通宵 on 2017/5/23.
  */
 
-public class SetPaypwdEvent extends BaseTokenEvent {
+public class SetPayPwdEvent extends BaseTokenEvent {
 
 }

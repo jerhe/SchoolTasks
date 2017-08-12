@@ -14,12 +14,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.edu.schooltask.base.BaseFragment;
+import com.edu.schooltask.event.RegisterNextEvent;
+import com.edu.schooltask.filter.NumberFilter;
+import com.edu.schooltask.filter.PhoneFilter;
+import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.view.InputText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import server.api.SchoolTask;
 import server.api.register.CheckCodeEvent;
 import server.api.register.GetCodeEvent;
@@ -28,15 +36,43 @@ import server.api.register.GetCodeEvent;
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
-public class RegisterPhoneFragment extends BaseFragment {
-    private Button nextBtn;
-    private InputText idText;
-    private InputText codeText;
-    private Button getCodeBtn;
+public class RegisterPhoneFragment extends BaseFragment{
+    @BindView(R.id.rp_next) Button nextBtn;
+    @BindView(R.id.rp_id) InputText idText;
+    @BindView(R.id.rp_code) InputText codeText;
+    @BindView(R.id.rp_get_code) Button getCodeBtn;
+
+    @OnClick(R.id.rp_get_code)
+    public void getCode(){
+        String id = idText.getText();
+        if(!StringUtil.equalLength(id, 11)){
+            toastShort("请输入正确的手机号");
+            return;
+        }
+        getCodeBtn.setEnabled(false);
+        SchoolTask.getCode(id);
+    }
+    @OnClick(R.id.rp_next)
+    public void next(){
+        String id = idText.getText();
+        String code = codeText.getText();
+        int emptyIndex = StringUtil.isEmpty(id,code);
+        if(emptyIndex != -1){
+            String[] strings = {"手机号", "验证码"};
+            toastShort("请输入" + strings[emptyIndex]);
+            return;
+        }
+        if(!StringUtil.equalLength(code, 6)){
+            toastShort("验证码为6位数字");
+            return;
+        }
+        nextBtn.setEnabled(false);
+        SchoolTask.checkCode(id, code); //判断验证码
+    }
+
     private ViewPager viewPager;
 
-    public RegisterPhoneFragment(){
-    }
+    public RegisterPhoneFragment(){}
 
     @SuppressLint("ValidFragment")
     public RegisterPhoneFragment(ViewPager viewPager) {
@@ -58,45 +94,16 @@ public class RegisterPhoneFragment extends BaseFragment {
 
     @Override
     protected void init(){
-        getCodeBtn = getView(R.id.rp_get_code);
-        nextBtn = getView(R.id.rp_next);
-
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String code = codeText.getText();
-                if(code.length() == 0){
-                    toastShort("请输入验证码");
-                    return;
-                }
-                if(code.length() != 6){
-                    toastShort("验证码错误");
-                    return;
-                }
-                nextBtn.setEnabled(false);
-                SchoolTask.checkCode(idText.getText(), codeText.getText());
-            }
-        });
-
-        idText = getView(R.id.rp_id);
-        idText.setInputFilter(0);    //设置过滤
-        codeText = getView(R.id.rp_code);
-        codeText.setInputFilter(5);
-
-        //发送验证码事件
-        getCodeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCode();
-            }
-        });
-
+        ButterKnife.bind(this, view);
+        idText.setInputFilter(new PhoneFilter());    //设置过滤
+        codeText.setInputFilter(new NumberFilter());
     }
 
+    //获取验证码事件
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetCode(GetCodeEvent event){
         if(event.isOk()){
-            startCoundDown();
+            startCountDown();   //开始倒计时
             toastShort("验证码已经通过短信发送至您的手机");
         }
         else{
@@ -105,26 +112,17 @@ public class RegisterPhoneFragment extends BaseFragment {
         }
     }
 
+    //判断验证码事件
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCheckCode(CheckCodeEvent event){
         if(event.isOk()){   //验证码正确跳转到下一步
-            ((LoginActivity)getActivity()).registerId = idText.getText();
+            EventBus.getDefault().post(new RegisterNextEvent((String)event.getData()));
             viewPager.setCurrentItem(2);
         }
         else{
             nextBtn.setEnabled(true);
             toastShort(event.getError());
         }
-    }
-
-    public void getCode(){
-        String id = idText.getText();
-        if(id.length() != 11){
-            toastShort("请输入正确的手机号");
-            return;
-        }
-        getCodeBtn.setEnabled(false);
-        SchoolTask.getCode(id); //检测账号存在并发送验证码
     }
 
     /**
@@ -140,7 +138,7 @@ public class RegisterPhoneFragment extends BaseFragment {
         });
     }
 
-    public void startCoundDown(){
+    public void startCountDown(){
         //发送成功 按钮无效，进入倒计时
         getCodeBtn.setEnabled(false);
         final Timer timer = new Timer();

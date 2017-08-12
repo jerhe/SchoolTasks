@@ -24,17 +24,17 @@ import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.TaskComment;
 import com.edu.schooltask.beans.TaskCommentList;
 import com.edu.schooltask.beans.TaskOrder;
-import com.edu.schooltask.beans.User;
-import com.edu.schooltask.beans.UserBaseInfo;
+import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.UserInfoBase;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.item.StateItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.CustomLoadMoreView;
 import com.edu.schooltask.view.TextItem;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,6 +45,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import server.api.SchoolTask;
 import server.api.task.comment.GetTaskChildCommentEvent;
@@ -55,98 +58,71 @@ import server.api.task.order.GetTaskOrderInfoEvent;
 
 //intent param: order_id
 public class TaskOrderActivity extends BaseActivity implements View.OnClickListener{
-    private ScrollView orderLayout;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextItem orderIdText;
-    private TextItem orderSchoolText;
-    private TextView orderContentText;
-    private TextItem orderCostText;
-    private RecyclerView imageRecyclerView;
+    @BindView(R.id.order_layout) ScrollView orderLayout;
+    @BindView(R.id.order_srl) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.order_id) TextItem orderIdText;
+    @BindView(R.id.order_school) TextItem orderSchoolText;
+    @BindView(R.id.order_content) TextView orderContentText;
+    @BindView(R.id.order_cost) TextItem orderCostText;
+    @BindView(R.id.order_image_rv) RecyclerView imageRecyclerView;
+    @BindView(R.id.order_release_user_layout) LinearLayout releaseUserLayout;
+    @BindView(R.id.order_release_head) CircleImageView releaseHeadImage;
+    @BindView(R.id.order_release_name) TextView releaseNameText;
+    @BindView(R.id.order_release_sex) TextView releaseSexText;
+    @BindView(R.id.order_release_school) TextView releaseSchoolText;
+    @BindView(R.id.order_release_talk) ImageView releaseTalkImage;
+    @BindView(R.id.order_confirm_btn) Button confirmBtn;
+    @BindView(R.id.order_finish_btn) Button finishBtn;
+    @BindView(R.id.order_overtime_btn) Button overtimeBtn;
+    @BindView(R.id.order_cancel_btn) Button cancelBtn;
+    @BindView(R.id.order_abandon_btn) Button abandonBtn;
+    @BindView(R.id.order_state_rv) RecyclerView stateRecyclerView;
+    @BindView(R.id.order_comment_rv) RecyclerView commentRecyclerView;
+    @BindView(R.id.to_comment_child_rv) RecyclerView childCommentRecyclerView;
 
-    private LinearLayout releaseUserLayout;
-    private CircleImageView releaseHeadImage;
-    private TextView releaseNameText;
-    private TextView releaseSexText;
-    private TextView releaseSchoolText;
-    private ImageView releaseTalkImage;
+    @OnClick(R.id.order_release_user_layout)
+    public void releaseUser(){
+        Intent userIntent = new Intent(TaskOrderActivity.this, UserActivity.class);
+        userIntent.putExtra("user", releaseUser);
+        startActivity(userIntent);
+    }
+    @OnClick(R.id.order_release_talk)
+    public void releaseTalk(){
+        if(!me.getUserId().equals(releaseUser.getUserId())){
+            Intent talkIntent = new Intent(TaskOrderActivity.this, PrivateMessageActivity.class);
+            talkIntent.putExtra("user", releaseUser);
+            startActivity(talkIntent);
+        }
+    }
 
-    private Button confirmBtn;
-    private Button finishBtn;
-    private Button overtimeBtn;
-    private Button cancelBtn;
-    private Button abandonBtn;
-
-    private RecyclerView stateRecyclerView;
     private StateAdapter stateAdapter;
     private List<StateItem> stateList = new ArrayList<>();
 
-    private RecyclerView commentRecyclerView;
     private HomeAdapter commentAdapter;
     private List<HomeItem> comments = new ArrayList<>();
     int commentPage = 0;
 
-    private RecyclerView childCommentRecyclerView;
     private HomeAdapter childCommentAdapter;
     private List<HomeItem> childComments = new ArrayList<>();
     long parentId;
 
     private String orderId;
 
-    User me;
-    UserBaseInfo releaseUser;
+    UserInfo me;
+    UserInfoBase releaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_order);
+        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initView();
         getTaskOrderInfo();
     }
 
     private void initView(){
-        swipeRefreshLayout = getView(R.id.order_srl);
-        orderLayout = getView(R.id.order_layout);
-        orderIdText = getView(R.id.order_id);
-        orderSchoolText = getView(R.id.order_school);
-        orderContentText = getView(R.id.order_content);
-        orderCostText = getView(R.id.order_cost);
-        imageRecyclerView = getView(R.id.order_image_rv);
-
-        releaseUserLayout = getView(R.id.order_release_user_layout);
-        releaseHeadImage = getView(R.id.order_release_head);
-        releaseNameText = getView(R.id.order_release_name);
-        releaseSexText = getView(R.id.order_release_sex);
-        releaseSchoolText = getView(R.id.order_release_school);
-        releaseTalkImage = getView(R.id.order_release_talk);
-        stateRecyclerView = getView(R.id.order_state_rv);
-        confirmBtn = getView(R.id.order_confirm_btn);
-        finishBtn = getView(R.id.order_finish_btn);
-        overtimeBtn = getView(R.id.order_overtime_btn);
-        cancelBtn = getView(R.id.order_cancel_btn);
-        abandonBtn = getView(R.id.order_abandon_btn);
-
-        me = mDataCache.getUser();
-        releaseUserLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent userIntent = new Intent(TaskOrderActivity.this, UserActivity.class);
-                userIntent.putExtra("user", releaseUser);
-                startActivity(userIntent);
-            }
-        });
-        releaseTalkImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!me.getUserId().equals(releaseUser.getUserId())){
-                    Intent talkIntent = new Intent(TaskOrderActivity.this, PrivateMessageActivity.class);
-                    talkIntent.putExtra("user", releaseUser);
-                    startActivity(talkIntent);
-                }
-
-            }
-        });
-
+        me = UserUtil.getLoginUser();
         stateRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         stateRecyclerView.setNestedScrollingEnabled(false);
         stateAdapter = new StateAdapter(R.layout.item_order_state, stateList);
@@ -155,17 +131,17 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         stateAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                UserBaseInfo userBaseInfo = stateList.get(position).getAcceptUser();
+                UserInfoBase userInfoBase = stateList.get(position).getAcceptUser();
                 switch (view.getId()){
                     case R.id.os_user_layout:
                         Intent userIntent = new Intent(TaskOrderActivity.this, UserActivity.class);
-                        userIntent.putExtra("user", userBaseInfo);
+                        userIntent.putExtra("user", userInfoBase);
                         startActivity(userIntent);
                         break;
                     case R.id.os_user_talk:
-                        if(!me.getUserId().equals(userBaseInfo.getUserId())){
+                        if(!me.getUserId().equals(userInfoBase.getUserId())){
                             Intent talkIntent = new Intent(TaskOrderActivity.this, PrivateMessageActivity.class);
-                            talkIntent.putExtra("user", userBaseInfo);
+                            talkIntent.putExtra("user", userInfoBase);
                             startActivity(talkIntent);
                         }
                         break;
@@ -173,7 +149,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        commentRecyclerView = getView(R.id.order_comment_rv);
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentRecyclerView.setNestedScrollingEnabled(false);
         commentAdapter = new HomeAdapter(comments, mDataCache, this);
@@ -207,7 +182,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                     case R.id.ui_layout:
                         Intent intent = new Intent(TaskOrderActivity.this, UserActivity.class);
                         TaskComment taskComment= comments.get(position).getTaskComment();
-                        UserBaseInfo commentUser = taskComment.getCommentUser();
+                        UserInfoBase commentUser = taskComment.getCommentUser();
                         intent.putExtra("user", commentUser);
                         startActivity(intent);
                         break;
@@ -215,7 +190,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        childCommentRecyclerView = getView(R.id.to_comment_child_rv);
         childCommentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         childCommentAdapter = new HomeAdapter(childComments, mDataCache, this);
         childCommentRecyclerView.setAdapter(childCommentAdapter);
@@ -227,7 +201,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                     case R.id.ui_layout:
                         Intent intent = new Intent(TaskOrderActivity.this, UserActivity.class);
                         TaskComment taskComment = childComments.get(position).getTaskComment();
-                        UserBaseInfo commentUser = taskComment.getCommentUser();
+                        UserInfoBase commentUser = taskComment.getCommentUser();
                         intent.putExtra("user", commentUser);
                         startActivity(intent);
                         break;
@@ -300,10 +274,9 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             confirmBtn.setVisibility(View.GONE);
             finishBtn.setVisibility(View.GONE);
             overtimeBtn.setVisibility(View.GONE);
-            TaskOrder taskOrder = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskOrder>(){}.getType());
+            TaskOrder taskOrder = GsonUtil.toTaskOrder(event.getData());
             releaseUser = taskOrder.getReleaseUser();
-            User user = mDataCache.getUser();
-            boolean isReleaseUser = user.getUserId().equals(releaseUser.getUserId());
+            boolean isReleaseUser = UserUtil.getLoginUser().getUserId().equals(releaseUser.getUserId());
             orderIdText.setText(orderId);
             orderSchoolText.setText(taskOrder.getSchool());
             orderContentText.setText(taskOrder.getContent());
@@ -354,7 +327,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             imageRecyclerView.setAdapter(imageAdapter);
             //状态
             int state = taskOrder.getState();
-            UserBaseInfo acceptUser = taskOrder.getAcceptUser();
+            UserInfoBase acceptUser = taskOrder.getAcceptUser();
             boolean isMe = false;
             if(acceptUser != null) isMe = acceptUser.getUserId().equals(me.getUserId());
             stateList.add(new StateItem(true, "发布订单", taskOrder.getReleaseTime()));
@@ -443,7 +416,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetTaskComment(GetTaskCommentEvent event){
         if(event.isOk()){
-            TaskCommentList taskCommentList = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskCommentList>(){}.getType());
+            TaskCommentList taskCommentList = GsonUtil.toTaskCommentList(event.getData());
             if(orderId.equals(taskCommentList.getOrderId())){
                 commentPage++;
                 List<TaskComment> taskComments = taskCommentList.getTaskComments();
@@ -465,7 +438,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetTaskChildComment(GetTaskChildCommentEvent event){
         if(event.isOk()){
-            TaskCommentList taskCommentList = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskCommentList>(){}.getType());
+            TaskCommentList taskCommentList = GsonUtil.toTaskCommentList(event.getData());
             if(taskCommentList.getOrderId().equals(orderId)) {
                 List<TaskComment> taskComments = taskCommentList.getTaskComments();
                 for (TaskComment taskComment : taskComments) {

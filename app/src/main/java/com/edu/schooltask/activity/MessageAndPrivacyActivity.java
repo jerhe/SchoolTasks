@@ -23,11 +23,14 @@ import com.orhanobut.dialogplus.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import server.api.SchoolTask;
 
 public class MessageAndPrivacyActivity extends BaseActivity {
+    @BindView(R.id.map_rv) RecyclerView recyclerView;
+
     List<String> messageArray = new ArrayList<>();
-    RecyclerView recyclerView;
     List<IconMenuItem> items = new ArrayList<>();
     IconMenuAdapter adapter;
 
@@ -68,7 +71,7 @@ public class MessageAndPrivacyActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_and_privacy);
-        recyclerView = getView(R.id.map_rv);
+        ButterKnife.bind(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new IconMenuAdapter(items);
         adapter.openLoadAnimation();

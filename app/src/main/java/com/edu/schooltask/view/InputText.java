@@ -3,12 +3,9 @@ package com.edu.schooltask.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
-import android.text.TextWatcher;
-import android.text.method.KeyListener;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,8 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
-
-import com.edu.schooltask.utils.TextUtil;
 
 /**
  * Created by 夜夜通宵 on 2017/5/4.
@@ -71,42 +66,18 @@ public class InputText extends LinearLayout {
         }
     }
 
-    public void clean(){
+    //清空
+    public void clear(){
         inputText.setText("");
         inputText.requestFocus();
     }
-    /**
-     * 设置过滤
-     * @param type 类型 0:手机 1...
-     */
-    public void setInputFilter(int type){
-        switch (type){
-            case 0:
-                TextUtil.setPhoneFilter(inputText);
-                break;
-            case 1:
-                TextUtil.setSchoolFilter(inputText);
-                break;
-            case 2:
-                TextUtil.setNameFilter(inputText);
-                break;
-            case 3:
-                TextUtil.setPwdFilter(inputText);
-                break;
-            case 4:
-                TextUtil.setMoneyFilter(inputText);
-                break;
-            case 5:
-                TextUtil.setNumFilter(inputText);
-                break;
-        }
+
+    //过滤器
+    public void setInputFilter(InputFilter filter){
+        inputText.setFilters(new InputFilter[]{filter});
     }
 
     public EditText getInputText(){
         return inputText;
-    }
-
-    public void setLengthFilter(int length){
-        TextUtil.setLengthFilter(inputText, length);
     }
 }

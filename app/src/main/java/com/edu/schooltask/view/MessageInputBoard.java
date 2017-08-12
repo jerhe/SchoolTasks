@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +24,11 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.EmojiAdapter;
+import com.edu.schooltask.adapter.TextListAdapter;
+import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +58,7 @@ public class MessageInputBoard extends LinearLayout implements View.OnClickListe
 
     public MessageInputBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.message_input_board,this);
+        LayoutInflater.from(context).inflate(R.layout.view_message_input_board,this);
         inputText = (EditText) findViewById(R.id.mib_input);
         imageBtn = (ImageView) findViewById(R.id.mib_image);
         sendBtn = (TextView) findViewById(R.id.mib_send);
@@ -158,11 +163,30 @@ public class MessageInputBoard extends LinearLayout implements View.OnClickListe
             }
         });
 
+        //点击图片选择图片来源
+        List<String> imageSelectList = new ArrayList<>();
+        imageSelectList.add("拍照");
+        imageSelectList.add("从相册中选择");
+        final BaseAdapter imageSelectAdapter = new TextListAdapter(imageSelectList);
         imageBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(selectImageListener != null){
-                    selectImageListener.onSelectImage();
+                    DialogUtil.createListDialog(getContext(), imageSelectAdapter,
+                            new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                                    dialog.dismiss();
+                                    switch (position){
+                                        case 0: //拍照
+                                            selectImageListener.camera();
+                                            break;
+                                        case 1: //图库
+                                            selectImageListener.selectPicture();
+                                            break;
+                                    }
+                                }}
+                    ).show();
                 }
             }
         });
@@ -193,12 +217,11 @@ public class MessageInputBoard extends LinearLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()){
             case R.id.mib_emoji:
                 if(viewPager.isShown()) {
                     hideEmoji();
-                    KeyBoardUtil.inputKeyBoard(inputText);
+                    KeyBoardUtil.showKeyBoard(inputText);
                 }
                 else {
                     activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
@@ -239,6 +262,7 @@ public class MessageInputBoard extends LinearLayout implements View.OnClickListe
     }
 
     public interface SelectImageListener{
-        void onSelectImage();
+        void camera();
+        void selectPicture();
     }
 }

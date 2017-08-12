@@ -2,6 +2,8 @@ package com.edu.schooltask.utils;
 
 import android.content.Context;
 
+import com.edu.schooltask.other.ACache;
+
 /**
  * Created by 夜夜通宵 on 2017/5/9.
  */

@@ -1,4 +1,4 @@
-package com.edu.schooltask.utils;
+package com.edu.schooltask.other;
 
 import android.content.Context;
 import android.graphics.Bitmap;

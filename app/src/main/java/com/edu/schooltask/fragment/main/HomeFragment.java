@@ -1,17 +1,16 @@
 package com.edu.schooltask.fragment.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
@@ -21,18 +20,18 @@ import com.edu.schooltask.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
-import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.event.TabSelectedEvent;
 import com.edu.schooltask.other.GlideImageLoader;
+import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.NetUtil;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.TaskItem;
+import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.CustomLoadMoreView;
 import com.edu.schooltask.view.ViewPagerTab;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,9 +40,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import server.api.SchoolTask;
 import server.api.task.get.GetSchoolTaskEvent;
 
@@ -52,9 +51,10 @@ import server.api.task.get.GetSchoolTaskEvent;
  */
 
 public class HomeFragment extends BaseFragment {
+    @BindView(R.id.home_srl) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.home_rv) RecyclerView recyclerView;
+    @BindView(R.id.home_tab) ViewPagerTab homeTab;
 
-    private SwipeRefreshLayout refreshLayout;
-    private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private HomeAdapter adapter;
     private List<HomeItem> items = new ArrayList<>();
@@ -69,8 +69,7 @@ public class HomeFragment extends BaseFragment {
 
 
     View headView;
-    private ViewPagerTab homeTab;   //this
-    private ViewPagerTab homeViewPagerTab;  //recyclerview
+    private ViewPagerTab homeViewPagerTab;
     View pointerView;
 
     List<String> images = new ArrayList<>();
@@ -93,8 +92,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void init(){
-        refreshLayout = getView(R.id.home_srl);
-        recyclerView = getView(R.id.home_rv);
+        ButterKnife.bind(this, view);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new HomeAdapter(items, mDataCache, (BaseActivity)getActivity());
@@ -164,15 +162,15 @@ public class HomeFragment extends BaseFragment {
 
     private void initButton(){
         View buttonView = LayoutInflater.from(getContext()).inflate(R.layout.rv_btn,null);
-        Button releaseBtn = (Button) buttonView.findViewById(R.id.home_release_btn);
-        Button taskListBtn = (Button) buttonView.findViewById(R.id.home_task_list);
+        ImageView releaseBtn = (ImageView) buttonView.findViewById(R.id.home_task_release);
+        ImageView taskListBtn = (ImageView) buttonView.findViewById(R.id.home_task_list);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(NetUtil.isNetworkConnected(getContext())){  //网络已连接
-                    if(mDataCache.getUser() != null){
+                    if(UserUtil.hasLogin()){
                         switch (v.getId()){
-                            case R.id.home_release_btn:
+                            case R.id.home_task_release:
                                 openActivity(ReleaseTaskActivity.class);
                                 break;
                             case R.id.home_task_list:
@@ -202,17 +200,16 @@ public class HomeFragment extends BaseFragment {
         homeViewPagerTab.addTab("附近任务");
         homeViewPagerTab.addTab("二手交易");
         homeViewPagerTab.addTab("最新兼职");
-        homeViewPagerTab.setSelect(0);
         homeViewPagerTab.setEventBus(true);
+        homeViewPagerTab.select(0);
         headView  = adapter.getHeaderLayout();
 
         //悬浮的tab
-        homeTab = (ViewPagerTab) view.findViewById(R.id.home_tab);
         homeTab.addTab("附近任务");
         homeTab.addTab("二手交易");
         homeTab.addTab("最新兼职");
-        homeTab.setSelect(0);
         homeTab.setEventBus(true);
+        homeTab.select(0);
 
         adapter.addHeaderView(pointerView);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -230,7 +227,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void getSchoolTask(){
-        User user = mDataCache.getUser();
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null){
             SchoolTask.getSchoolTask(user.getSchool(), nearTaskPageIndex);
         }
@@ -242,8 +239,8 @@ public class HomeFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTabSelected(TabSelectedEvent event){
         recyclerView.smoothScrollBy(0, (int)(pointerView.getY() + headView.getY()));
-        homeTab.setSelect(event.position);
-        homeViewPagerTab.setSelect(event.position);
+        homeTab.select(event.position);
+        homeViewPagerTab.select(event.position);
         items.clear();
         type = event.position;
         switch (type){
@@ -277,7 +274,7 @@ public class HomeFragment extends BaseFragment {
         if(refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
         if (event.isOk()){
             nearTaskPageIndex ++;
-            List<TaskItem> taskItems = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<List<TaskItem>>(){}.getType());
+            List<TaskItem> taskItems = GsonUtil.toTaskItemList(event.getData());
             for(TaskItem taskItem : taskItems){
                 HomeItem homeItem = new HomeItem(HomeItem.TASK_ITEM, taskItem);
                 if(!nearTaskItems.contains(homeItem)){

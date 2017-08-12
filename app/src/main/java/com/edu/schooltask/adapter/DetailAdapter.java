@@ -13,6 +13,8 @@ import java.util.List;
  */
 
 public class DetailAdapter extends BaseQuickAdapter<Detail, BaseViewHolder> {
+    final String[] rechargeType = new String[]{"充值", "转出", "收入", "支出"};
+
     public DetailAdapter(int layoutResId, List<Detail> data) {
         super(layoutResId, data);
     }
@@ -27,20 +29,8 @@ public class DetailAdapter extends BaseQuickAdapter<Detail, BaseViewHolder> {
         idText.setText(item.getId());
         timeText.setText(item.getCreateTime());
         explanationText.setText(item.getExplanation());
+
+        typeText.setName(rechargeType[item.getType()]);
         typeText.setText(item.getMoney().toString() + "元");
-        switch (item.getType()){
-            case 0:
-                typeText.setName("充值");
-                break;
-            case 1:
-                typeText.setName("转出");
-                break;
-            case 2:
-                typeText.setName("收入");
-                break;
-            case 3:
-                typeText.setName("支出");
-                break;
-        }
     }
 }

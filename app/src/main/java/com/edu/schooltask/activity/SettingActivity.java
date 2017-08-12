@@ -20,8 +20,12 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SettingActivity extends BaseActivity {
-    RecyclerView recyclerView;
+    @BindView(R.id.setting_rv) RecyclerView recyclerView;
+
     IconMenuAdapter adapter;
     List<IconMenuItem> items = new ArrayList<>();
 
@@ -29,7 +33,8 @@ public class SettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        recyclerView = getView(R.id.setting_rv);
+        ButterKnife.bind(this);
+
         adapter = new IconMenuAdapter(items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);

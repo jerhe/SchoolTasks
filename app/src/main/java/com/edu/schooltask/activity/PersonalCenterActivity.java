@@ -13,6 +13,7 @@ import com.edu.schooltask.adapter.IconMenuAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.PersonalCenterInfo;
 import com.edu.schooltask.item.IconMenuItem;
+import com.edu.schooltask.utils.GsonUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,12 +24,14 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import server.api.SchoolTask;
 import server.api.user.GetPersonalCenterInfoEvent;
 
 public class PersonalCenterActivity extends BaseActivity {
+    @BindView(R.id.pc_rv) RecyclerView recyclerView;
 
-    RecyclerView recyclerView;
     List<IconMenuItem> items = new ArrayList<>();
     IconMenuAdapter adapter;
 
@@ -38,8 +41,8 @@ public class PersonalCenterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_center);
+        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        recyclerView = getView(R.id.pc_rv);
         adapter = new IconMenuAdapter(items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -84,15 +87,15 @@ public class PersonalCenterActivity extends BaseActivity {
         items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "支付密码",
                 hasPayPwd ? "":"未设置"));
         items.add(new IconMenuItem());
-        items.add(new IconMenuItem(IconMenuItem.VALUE,   "信用积分", credit+""));
-        items.add(new IconMenuItem(IconMenuItem.VALUE,  "注册时间", registerTime));
+        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, "信用积分", credit+""));
+        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, "注册时间", registerTime));
         adapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetPersonalCenterInfo(GetPersonalCenterInfoEvent event){
         if(event.isOk()){
-            PersonalCenterInfo personalCenterInfo = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<PersonalCenterInfo>(){}.getType());
+            PersonalCenterInfo personalCenterInfo = GsonUtil.toPersonalCenterInfo(event.getData());
             hasPayPwd = personalCenterInfo.isHasPayPwd();
             setData(personalCenterInfo.getCredit(), personalCenterInfo.getRegisterTime());
             recyclerView.setVisibility(View.VISIBLE);

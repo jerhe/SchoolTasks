@@ -5,15 +5,15 @@ package com.edu.schooltask.beans;
  */
 
 public class UserHomePageInfo {
-    UserBaseInfo userBaseInfo;
+    UserInfoBase userInfoBase;
     int relationType;
 
-    public UserBaseInfo getUserBaseInfo() {
-        return userBaseInfo;
+    public UserInfoBase getUserInfoBase() {
+        return userInfoBase;
     }
 
-    public void setUserBaseInfo(UserBaseInfo userBaseInfo) {
-        this.userBaseInfo = userBaseInfo;
+    public void setUserInfoBase(UserInfoBase userInfoBase) {
+        this.userInfoBase = userInfoBase;
     }
 
     public int getRelationType() {

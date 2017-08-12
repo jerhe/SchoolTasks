@@ -7,6 +7,5 @@ package com.edu.schooltask.event;
 
 public class LogoutEvent{
     public LogoutEvent() {
-        super();
     }
 }

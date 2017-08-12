@@ -19,16 +19,20 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.ImageAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.TaskUploadKey;
-import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.event.DeleteImageEvent;
+import com.edu.schooltask.filter.MoneyFilter;
+import com.edu.schooltask.filter.NumberFilter;
+import com.edu.schooltask.filter.SchoolFilter;
 import com.edu.schooltask.item.ImageItem;
+import com.edu.schooltask.other.SchoolAutoComplement;
 import com.edu.schooltask.utils.DialogUtil;
+import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
-import com.edu.schooltask.utils.TextUtil;
+import com.edu.schooltask.utils.StringUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.Content;
 import com.edu.schooltask.view.InputText;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.yuyh.library.imgsel.ImageLoader;
@@ -45,6 +49,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import id.zelory.compressor.Compressor;
 import server.api.SchoolTask;
 import server.api.qiniu.GetTaskUploadKeyEvent;
@@ -54,13 +60,13 @@ import server.api.task.release.ReleaseTaskEvent;
 public class ReleaseTaskActivity extends BaseActivity {
     private static final int SELECT_IMAGE_CODE = 0;
 
-    private InputText schoolText;
-    private MaterialSpinner desText;
-    private Content contentText;
-    private InputText costText;
-    private InputText limitTimeText;
+    @BindView(R.id.rt_school) InputText schoolText;
+    @BindView(R.id.rt_des) MaterialSpinner desText;
+    @BindView(R.id.rt_cost) InputText costText;
+    @BindView(R.id.rt_content) Content contentText;
+    @BindView(R.id.rt_limit_time) InputText limitTimeText;
+    @BindView(R.id.rt_irv) RecyclerView imageRecyclerView;
 
-    private RecyclerView imageRecyclerView;
     ImageAdapter adapter;
     List<ImageItem> imageItems = new ArrayList<>();
 
@@ -96,13 +102,8 @@ public class ReleaseTaskActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_release_task);
+        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        schoolText = getView(R.id.rt_school);
-        desText = getView(R.id.rt_des);
-        contentText = getView(R.id.rt_content);
-        costText = getView(R.id.rt_cost);
-        limitTimeText = getView(R.id.rt_limit_time);
-        imageRecyclerView = getView(R.id.rt_irv);
         imageRecyclerView.setLayoutManager(new GridLayoutManager(this,5));
         adapter = new ImageAdapter(R.layout.item_image, imageItems);
         imageRecyclerView.setAdapter(adapter);
@@ -126,18 +127,18 @@ public class ReleaseTaskActivity extends BaseActivity {
             }
         });
 
-        schoolText.setInputFilter(1);
-        costText.setInputFilter(4);
-        limitTimeText.setInputFilter(5);
+        //输入过滤器
+        schoolText.setInputFilter(new SchoolFilter());
+        costText.setInputFilter(new MoneyFilter());
+        limitTimeText.setInputFilter(new NumberFilter());
 
-        schoolText.setText(mDataCache.getUser().getSchool());
-        TextUtil.setSchoolWatcher(ReleaseTaskActivity.this, schoolText.getInputText(), mDataCache);
+        schoolText.setText(UserUtil.getLoginUser().getSchool());
+        schoolText.getInputText().addTextChangedListener(
+                new SchoolAutoComplement(schoolText.getInputText(), mDataCache.getSchool()));
 
         desText.setItems("请选择任务类型","学习","生活","娱乐","运动","商家","其他");
 
         costText.requestFocus();   //设置标题为默认焦点
-
-
     }
 
     @Override
@@ -221,14 +222,14 @@ public class ReleaseTaskActivity extends BaseActivity {
             toastShort("请输入时限");
             return;
         }
-        if(!TextUtil.moneyCompile(cost)){
+        if(!StringUtil.isMoney(cost)){
             toastShort("金额错误，请重新输入");
             return;
         }
         money = new BigDecimal(cost);
         if(money.compareTo(new BigDecimal(1)) == -1){
             toastShort("最小金额为1元，请重新输入");
-            costText.clean();
+            costText.clear();
             return;
         }
         if(money.compareTo(new BigDecimal(10000)) == 1){
@@ -238,11 +239,10 @@ public class ReleaseTaskActivity extends BaseActivity {
         time = Integer.parseInt(limitTime);
         if(time == 0 || time >= 7 * 24){
             toastShort("时限错误,请重新输入");
-            limitTimeText.clean();
+            limitTimeText.clear();
             return;
         }
-        final User user = mDataCache.getUser();
-        if(user != null){
+        if(UserUtil.hasLogin()){
             //压缩图片
             for(int i=0; i<imageItems.size()-1; i++){
                 ImageItem imageItem = imageItems.get(i);
@@ -259,7 +259,7 @@ public class ReleaseTaskActivity extends BaseActivity {
                 public void onPay(String pwd) {
                     KeyBoardUtil.hideKeyBoard(ReleaseTaskActivity.this);
                     progressDialog = ProgressDialog.show(ReleaseTaskActivity.this, "", "发布中...", true, false);
-                    payPwd = TextUtil.getMD5(pwd);
+                    payPwd = StringUtil.getMD5(pwd);
                     if(tempFiles.size() == 0){ //无图片发布
                         SchoolTask.releaseTask("", school, description, content, money, time, payPwd, 0);
                     }
@@ -315,7 +315,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetUploadKey(GetTaskUploadKeyEvent event){
         if(event.isOk()){
-            TaskUploadKey taskUploadKey = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<TaskUploadKey>(){}.getType());
+            TaskUploadKey taskUploadKey = GsonUtil.toTaskUploadKey(event.getData());
             orderId = taskUploadKey.getOrderId();
             SchoolTask.uploadTaskImage(taskUploadKey, tempFiles);
         }

@@ -8,8 +8,8 @@ public class TaskComment {
     long id;	//评论ID
     String orderId;	//订单ID
     long parentId;	//父评论ID
-    UserBaseInfo commentUser;		//评论人信息
-    UserBaseInfo parentUser;		//父评论人信息
+    UserInfoBase commentUser;		//评论人信息
+    UserInfoBase parentUser;		//父评论人信息
     String comment;	//评论内容
     String commentTime;	//评论时间
     int childCount;	//子评论数
@@ -38,19 +38,19 @@ public class TaskComment {
         this.parentId = parentId;
     }
 
-    public UserBaseInfo getCommentUser() {
+    public UserInfoBase getCommentUser() {
         return commentUser;
     }
 
-    public void setCommentUser(UserBaseInfo commentUser) {
+    public void setCommentUser(UserInfoBase commentUser) {
         this.commentUser = commentUser;
     }
 
-    public UserBaseInfo getParentUser() {
+    public UserInfoBase getParentUser() {
         return parentUser;
     }
 
-    public void setParentUser(UserBaseInfo parentUser) {
+    public void setParentUser(UserInfoBase parentUser) {
         this.parentUser = parentUser;
     }
 

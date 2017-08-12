@@ -6,7 +6,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,7 +14,7 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.activity.ImageActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.beans.UserBaseInfo;
+import com.edu.schooltask.beans.UserInfoBase;
 import com.edu.schooltask.data.DataCache;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.ImageItem;
@@ -67,7 +66,7 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
             case 3:
                 TaskCountItem taskCountItem = item.getTaskCountItem();
                 helper.setText(R.id.tc_comment_count, "评论("+taskCountItem.getCommentCount()+")");
-                helper.setText(R.id.tc_look_count, "浏览:"+taskCountItem.getLookCount());
+                helper.setText(R.id.tc_look_count, "浏览："+taskCountItem.getLookCount());
                 break;
             case 4:
                 setCommentItem(helper, item);
@@ -77,7 +76,7 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
 
     private void setTaskItem(BaseViewHolder helper, final HomeItem item, boolean isInfo){
         TaskItem taskItem = item.getTaskItem();
-        UserBaseInfo user = taskItem.getUser();
+        UserInfoBase user = taskItem.getUser();
         helper.setText(R.id.ui_name, user.getName());
         helper.setText(R.id.ui_school,
                 isInfo ? taskItem.getSchool() + "(任务)" : taskItem.getSchool());
@@ -152,7 +151,7 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
     private void setCommentItem(BaseViewHolder helper, HomeItem item){
         TaskComment taskComment = item.getTaskComment();
         CircleImageView headView = helper.getView(R.id.ui_head);
-        UserBaseInfo commentUser = taskComment.getCommentUser();
+        UserInfoBase commentUser = taskComment.getCommentUser();
         GlideUtil.setHead(headView.getContext(), commentUser.getUserId(),headView, false);
         helper.setText(R.id.ui_school, commentUser.getSchool());
         helper.setText(R.id.ui_name,commentUser.getName());
@@ -173,7 +172,7 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<HomeItem, BaseViewHol
         }
         int childCount = taskComment.getChildCount();
         if(taskComment.getParentId() != 0){
-            UserBaseInfo parentUser = taskComment.getParentUser();
+            UserInfoBase parentUser = taskComment.getParentUser();
             if(taskComment.getParentId() != item.parentId){
                 helper.setText(R.id.tc_comment, "回复 "+parentUser.getName()
                         +"："+taskComment.getComment());

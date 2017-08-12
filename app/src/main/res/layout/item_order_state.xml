@@ -82,9 +82,9 @@
         <ImageView
             android:id="@+id/os_user_talk"
             android:layout_marginRight="20dp"
-            android:src="@drawable/ic_action_message_theme"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:src="@drawable/ic_action_message"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
     </LinearLayout>
 
 

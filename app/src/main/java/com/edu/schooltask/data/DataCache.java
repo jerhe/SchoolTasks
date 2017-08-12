@@ -2,13 +2,18 @@ package com.edu.schooltask.data;
 
 import android.content.Context;
 
-import com.edu.schooltask.beans.User;
-import com.edu.schooltask.utils.ACache;
+import com.edu.schooltask.beans.MessageItem;
+import com.edu.schooltask.beans.Poll;
+import com.edu.schooltask.beans.PrivateMessage;
+import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.UserInfoBase;
+import com.edu.schooltask.other.ACache;
 import com.edu.schooltask.utils.FileUtil;
 
 import java.io.File;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.LruCache;
 
 
@@ -56,23 +61,84 @@ public class DataCache {
         mDiskCache.remove(key);
     }
 
-
-    public void saveUser(User user) {
-        saveData("user", user);
+    //保存粉丝
+    public void saveFans(String userId, List<UserInfoBase> fans){
+        saveListData("fans" + userId, fans);
     }
 
-    public User getUser() {
-        return getData("user");
+    //读取粉丝
+    public List<UserInfoBase> getFans(String userId){
+        List<UserInfoBase> fans = getData("fans" + userId);
+        if(fans == null) fans = new ArrayList<>();
+        return fans;
     }
 
-    public void removeUser() {
-        removeDate("user");
+    //保存关注
+    public void saveFollowers(String userId, List<UserInfoBase> fans){
+        saveListData("followers" + userId, fans);
     }
 
-    public void refreshToken(String token){
-        User user = getUser();
-        user.setToken(token);
-        saveUser(user);
+    //读取关注
+    public List<UserInfoBase> getFollowers(String userId){
+        List<UserInfoBase> followers = getData("followers" + userId);
+        if(followers == null) followers = new ArrayList<>();
+        return followers;
+    }
+
+    //获取所有私信
+    public List<PrivateMessage> getPrivateMessage(String userId){
+        List<PrivateMessage> list = getData(userId + "privateMessage");
+        if(list == null) return new ArrayList<>();
+        return list;
+    }
+
+    //获取与某用户的私信消息
+    public List<PrivateMessage> getPrivateMessage(String userId, String toUserId){
+        List<PrivateMessage> privateMessages = getPrivateMessage(userId);
+        List<PrivateMessage> list = new ArrayList<>();
+        for(PrivateMessage privateMessage : privateMessages){
+            Poll poll = privateMessage.getPoll();
+            if(poll.getFromId().equals(toUserId) || poll.getToId().equals(toUserId)) list.add(privateMessage);
+        }
+        return list;
+    }
+
+    //存储私信消息
+    public void savePrivateMessage(String userId, PrivateMessage privateMessage){
+        List<PrivateMessage> privateMessages = getPrivateMessage(userId);
+        privateMessages.add(privateMessage);
+        saveListData(userId + "privateMessage", privateMessages);
+    }
+
+    //获取所有未读消息
+    public List<PrivateMessage> getNotReadMessage(String userId){
+        List<PrivateMessage> privateMessages = getPrivateMessage(userId);
+        List<PrivateMessage> notReadMessage = new ArrayList<>();
+        for (PrivateMessage privateMessage : privateMessages){
+            if(!privateMessage.isHasRead()) notReadMessage.add(privateMessage);
+        }
+        return notReadMessage;
+    }
+
+    //设置与某用户的私信已读
+    public void setHasRead(String userId, String toUserId){
+        List<PrivateMessage> privateMessages = getPrivateMessage(userId);
+        for(PrivateMessage privateMessage : privateMessages){
+            if(privateMessage.getPoll().getFromId().equals(toUserId)) privateMessage.setHasRead(true);
+        }
+        saveListData(userId + "privateMessage", privateMessages);
+    }
+
+    //获取消息列表
+    public List<MessageItem> getMessageItem(String userId){
+        List<MessageItem> list = getData(userId + "messageItem");
+        if(list == null) return new ArrayList<>();
+        return list;
+    }
+
+    //存储消息列表
+    public void saveMessageItem(String userId, List<MessageItem> list){
+        saveListData(userId + "messageItem", list);
     }
 
     public void saveSchool(List<String> schools){

@@ -8,6 +8,7 @@
         android:id="@+id/bm_home"
         android:layout_weight="1"
         android:layout_width="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:orientation="vertical"
         android:gravity="center"
         android:layout_height="match_parent">
@@ -27,6 +28,7 @@
         android:id="@+id/bm_talk"
         android:layout_weight="1"
         android:layout_width="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:orientation="vertical"
         android:gravity="center"
         android:layout_height="match_parent">
@@ -62,6 +64,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:orientation="vertical"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:layout_height="match_parent">
         <ImageView
@@ -81,6 +84,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:orientation="vertical"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:layout_height="match_parent">
         <ImageView

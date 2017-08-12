@@ -30,7 +30,36 @@ public class OrderAdapter extends BaseQuickAdapter<TaskOrder, BaseViewHolder> {
         String typeStr = item.type == 0 ? "发" : "接";
         typeText.setText(typeStr);
         helper.setText(R.id.to_content, item.getContent());
-        helper.setText(R.id.to_cost, "¥"+item.getCost());
-        helper.setText(R.id.to_state, item.getStateStr());
+        helper.setText(R.id.to_cost, "¥" + item.getCost());
+        String stateStr;
+        switch (item.getState()){
+            case 0:
+                stateStr = "待接单";
+                break;
+            case 1:
+                stateStr = "待完成";
+                break;
+            case 2:
+                stateStr = "待确认";
+                break;
+            case 3:
+                stateStr = "已完成";
+                break;
+            case 4:
+                stateStr = "已失效";
+                break;
+            case 5:
+                stateStr = "已取消";
+                break;
+            case 6:
+                stateStr = "已放弃";
+                break;
+            case 7:
+                stateStr = "已超时";
+                break;
+            default:
+                stateStr = "";
+        }
+        helper.setText(R.id.to_state, stateStr);
     }
 }

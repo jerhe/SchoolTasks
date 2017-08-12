@@ -20,15 +20,15 @@ import com.bumptech.glide.Glide;
 import com.edu.schooltask.R;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.UploadKey;
-import com.edu.schooltask.beans.User;
-import com.edu.schooltask.beans.UserBaseInfo;
+import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.UserInfoBase;
+import com.edu.schooltask.other.SchoolAutoComplement;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GlideCacheUtil;
 import com.edu.schooltask.utils.GlideUtil;
-import com.edu.schooltask.utils.TextUtil;
+import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.UserEditItem;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.yalantis.ucrop.UCrop;
@@ -44,6 +44,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import server.api.SchoolTask;
 import server.api.qiniu.GetBGUploadKeyEvent;
 import server.api.qiniu.GetHeadUploadKeyEvent;
@@ -51,14 +54,94 @@ import server.api.user.UpdateUserInfoEvent;
 import server.api.qiniu.UploadBGEvent;
 import server.api.qiniu.UploadHeadEvent;
 
-public class UserEditActivity extends BaseActivity implements View.OnClickListener{
-    UserEditItem headItem;
-    UserEditItem bgItem;
-    UserEditItem nameItem;
-    UserEditItem signItem;
-    UserEditItem schoolItem;
-    UserEditItem sexItem;
-    UserEditItem birthItem;
+public class UserEditActivity extends BaseActivity{
+    @BindView(R.id.ue_head) UserEditItem headItem;
+    @BindView(R.id.ue_bg) UserEditItem bgItem;
+    @BindView(R.id.ue_name) UserEditItem nameItem;
+    @BindView(R.id.ue_sign) UserEditItem signItem;
+    @BindView(R.id.ue_school) UserEditItem schoolItem;
+    @BindView(R.id.ue_sex) UserEditItem sexItem;
+    @BindView(R.id.ue_birth) UserEditItem birthItem;
+
+    @OnClick(R.id.ue_head)
+    public void head(){
+        pictureMode = 1;
+        DialogUtil.createListDialog(UserEditActivity.this, imageSelectAdapter, itemClickListener).show();
+    }
+    @OnClick(R.id.ue_bg)
+    public void bg(){
+        pictureMode = 2;
+        DialogUtil.createListDialog(UserEditActivity.this, imageSelectAdapter, itemClickListener).show();
+    }
+    @OnClick(R.id.ue_name)
+    public void name(){
+        nameDialog = DialogUtil.createInputDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
+            @Override
+            public void onInputClick(DialogPlus dialogPlus, String input) {
+                if(input.length() == 0) {
+                    toastShort("请输入昵称");
+                    return;
+                }
+                if(UserUtil.getLoginUser().getName().equals(input))return;
+                SchoolTask.updateUserInfo(input, 0);
+            }
+        }, "修改昵称" ,UserUtil.getLoginUser().getName());
+        nameDialog.show();
+    }
+    @OnClick(R.id.ue_sign)
+    public void sign(){
+        DialogUtil.createInputMultilineDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
+            @Override
+            public void onInputClick(DialogPlus dialogPlus, String input) {
+                dialogPlus.dismiss();
+                if(UserUtil.getLoginUser().getSign().equals(input))return;
+                SchoolTask.updateUserInfo(input, 1);
+            }
+        }, "修改简介", UserUtil.getLoginUser().getSign()).show();
+    }
+    @OnClick(R.id.ue_school)
+    public void school(){
+        schoolDialog = DialogUtil.createInputDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
+            @Override
+            public void onInputClick(DialogPlus dialogPlus, String input) {
+                if(input.length() == 0) {
+                    toastShort("请输入学校");
+                    return;
+                }
+                dialogPlus.dismiss();
+                if(UserUtil.getLoginUser().getSchool().equals(input))return;
+                SchoolTask.updateUserInfo(input, 2);
+            }
+        }, "修改学校" ,UserUtil.getLoginUser().getSchool());
+        View view = schoolDialog.getHolderView();
+        EditText editText = (EditText) view.findViewById(R.id.di_input);
+        editText.addTextChangedListener(
+                new SchoolAutoComplement(editText, mDataCache.getSchool()));
+        schoolDialog.show();
+    }
+    @OnClick(R.id.ue_sex)
+    public void sex(){
+        DialogUtil.createListDialog(UserEditActivity.this, sexSelectAdapter, new OnItemClickListener() {
+            @Override
+            public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                SchoolTask.updateUserInfo(sexSelectList.get(position), 3);
+                dialog.dismiss();
+            }
+        }).show();
+    }
+    @OnClick(R.id.ue_birth)
+    public void birth(){
+        final Calendar c = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(UserEditActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                c.set(year, monthOfYear, dayOfMonth);
+                String birth = year + "年" + (monthOfYear + 1) + "月" + dayOfMonth + "日";
+                SchoolTask.updateUserInfo(birth, 4);
+            }
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
+    }
 
     List<String> imageSelectList = new ArrayList<>();
     BaseAdapter imageSelectAdapter = new BaseAdapter() {
@@ -161,22 +244,8 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_edit);
+        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        headItem = getView(R.id.ue_head);
-        bgItem = getView(R.id.ue_bg);
-        nameItem = getView(R.id.ue_name);
-        signItem = getView(R.id.ue_sign);
-        schoolItem = getView(R.id.ue_school);
-        sexItem = getView(R.id.ue_sex);
-        birthItem = getView(R.id.ue_birth);
-
-        headItem.setOnClickListener(this);
-        bgItem.setOnClickListener(this);
-        nameItem.setOnClickListener(this);
-        signItem.setOnClickListener(this);
-        schoolItem.setOnClickListener(this);
-        sexItem.setOnClickListener(this);
-        birthItem.setOnClickListener(this);
 
         imageSelectList.add("拍照");
         imageSelectList.add("从相册中选择");
@@ -184,7 +253,7 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
         sexSelectList.add("男");
         sexSelectList.add("女");
 
-        User user = mDataCache.getUser();
+        UserInfo user = UserUtil.getLoginUser();
         setInfo(user);
         setHead(user);
         setBg(user);
@@ -250,7 +319,7 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
         uCrop.start(UserEditActivity.this);
     }
 
-    public void setInfo(User user){
+    public void setInfo(UserInfo user){
         nameItem.setTextText(user.getName());
         String sign = user.getSign();
         if(sign != null) {
@@ -269,12 +338,12 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
         birthItem.setTextText(user.getBirth());
     }
 
-    private void setHead(User user){
+    private void setHead(UserInfo user){
         Glide.clear(headItem.getHeadView());
         GlideUtil.setHead(UserEditActivity.this, user.getUserId(), headItem.getHeadView(), false);
     }
 
-    private void setBg(User user){
+    private void setBg(UserInfo user){
         Glide.clear(bgItem.getImageView());
         GlideUtil.setBackground(UserEditActivity.this, user.getUserId(), bgItem.getImageView());
     }
@@ -285,7 +354,7 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
             toastShort("上传背景成功");
             mDataCache.saveData("bg",new Random().nextInt(999));
             GlideCacheUtil.getInstance().clearImageAllCache(this);
-            setBg(mDataCache.getUser());
+            setBg(UserUtil.getLoginUser());
         }
         else{
             toastShort("上传背景失败");
@@ -298,7 +367,7 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
             toastShort("上传头像成功");
             mDataCache.saveData("head",new Random().nextInt(999));
             GlideCacheUtil.getInstance().clearImageAllCache(this);
-            setHead(mDataCache.getUser());
+            setHead(UserUtil.getLoginUser());
         }
         else{
             toastShort("上传头像失败");
@@ -312,9 +381,9 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
                 if(nameDialog.isShowing()){
                     nameDialog.dismiss();
                 }
-            UserBaseInfo updateUserInfo = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<UserBaseInfo>(){}.getType());
-            User user = mDataCache.getUser().setUserInfo(updateUserInfo);
-            mDataCache.saveUser(user);
+            UserInfoBase updateUserInfo = GsonUtil.toUserInfoBase(event.getData());
+            UserInfo user = UserUtil.getLoginUser().setUserInfo(updateUserInfo);
+            UserUtil.saveLoginUser(user);
             setInfo(user);
         }
         else{
@@ -325,7 +394,7 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetHeadUploadKey(GetHeadUploadKeyEvent event){
         if(event.isOk()){
-            UploadKey uploadKey = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<UploadKey>(){}.getType());
+            UploadKey uploadKey = GsonUtil.toUploadKey(event.getData());
             SchoolTask.uploadHead(headImage, uploadKey);
         }
         else{
@@ -336,89 +405,11 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetBGUploadKey(GetBGUploadKeyEvent event){
         if(event.isOk()){
-            UploadKey uploadKey = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<UploadKey>(){}.getType());
+            UploadKey uploadKey = GsonUtil.toUploadKey(event.getData());
             SchoolTask.uploadBG(bgImage, uploadKey);
         }
         else{
             toastShort(event.getError());
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        final User user = mDataCache.getUser();
-        switch (v.getId()){
-            case R.id.ue_head:
-                pictureMode = 1;
-                DialogUtil.createListDialog(UserEditActivity.this, imageSelectAdapter, itemClickListener).show();
-                break;
-            case R.id.ue_bg:
-                pictureMode = 2;
-                DialogUtil.createListDialog(UserEditActivity.this, imageSelectAdapter, itemClickListener).show();
-                break;
-            case R.id.ue_name:
-                nameDialog = DialogUtil.createInputDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
-                    @Override
-                    public void onInputClick(DialogPlus dialogPlus, String input) {
-                        if(input.length() == 0) {
-                            toastShort("请输入昵称");
-                            return;
-                        }
-                        if(user.getName().equals(input))return;
-                        SchoolTask.updateUserInfo(input, 0);
-                    }
-                }, "修改昵称" ,mDataCache.getUser().getName());
-                nameDialog.show();
-                break;
-            case R.id.ue_sign:
-                DialogUtil.createInputMultilineDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
-                    @Override
-                    public void onInputClick(DialogPlus dialogPlus, String input) {
-                        dialogPlus.dismiss();
-                        if(user.getSign().equals(input))return;
-                        SchoolTask.updateUserInfo(input, 1);
-                    }
-                }, "修改简介", mDataCache.getUser().getSign()).show();
-                break;
-            case R.id.ue_school:
-                schoolDialog = DialogUtil.createInputDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
-                    @Override
-                    public void onInputClick(DialogPlus dialogPlus, String input) {
-                        if(input.length() == 0) {
-                            toastShort("请输入学校");
-                            return;
-                        }
-                        dialogPlus.dismiss();
-                        if(user.getSchool().equals(input))return;
-                        SchoolTask.updateUserInfo(input, 2);
-                    }
-                }, "修改学校" ,mDataCache.getUser().getSchool());
-                View view = schoolDialog.getHolderView();
-                EditText editText = (EditText) view.findViewById(R.id.di_input);
-                TextUtil.setSchoolWatcher(UserEditActivity.this, editText, mDataCache);
-                schoolDialog.show();
-                break;
-            case R.id.ue_sex:
-                DialogUtil.createListDialog(UserEditActivity.this, sexSelectAdapter, new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
-                        SchoolTask.updateUserInfo(sexSelectList.get(position), 3);
-                        dialog.dismiss();
-                    }
-                }).show();
-                break;
-            case R.id.ue_birth:
-                final Calendar c = Calendar.getInstance();
-                DatePickerDialog dialog = new DatePickerDialog(UserEditActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        c.set(year, monthOfYear, dayOfMonth);
-                        String birth = year + "年" + (monthOfYear + 1) + "月" + dayOfMonth + "日";
-                        SchoolTask.updateUserInfo(birth, 4);
-                    }
-                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                dialog.show();
-                break;
         }
     }
 }
