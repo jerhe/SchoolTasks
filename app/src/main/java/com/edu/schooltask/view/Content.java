@@ -3,6 +3,7 @@ package com.edu.schooltask.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -11,8 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
-
-import com.edu.schooltask.utils.TextUtil;
 
 /**
  * Created by 夜夜通宵 on 2017/5/7.
@@ -31,7 +30,7 @@ public class Content extends RelativeLayout{
         inputText = (EditText) findViewById(R.id.content_input);
         numText = (TextView) findViewById(R.id.content_num);
 
-        TextUtil.setLengthFilter(inputText, maxLength);   //限制输入长度
+        inputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
         inputText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

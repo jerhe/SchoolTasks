@@ -9,6 +9,7 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.DetailAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.Detail;
+import com.edu.schooltask.utils.GsonUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -19,12 +20,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import server.api.SchoolTask;
-import server.api.account.GetDetailEvent;
+import server.api.user.account.GetDetailEvent;
 
 public class DetailActivity extends BaseActivity {
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
+    @BindView(R.id.detail_srl) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.detail_rv) RecyclerView recyclerView;
+
     private DetailAdapter adapter;
     private List<Detail> details = new ArrayList<>();
 
@@ -33,9 +37,8 @@ public class DetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        swipeRefreshLayout = getView(R.id.detail_srl);
-        recyclerView = getView(R.id.detail_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DetailAdapter(R.layout.item_detail, details);
         adapter.setEnableLoadMore(true);
@@ -62,7 +65,7 @@ public class DetailActivity extends BaseActivity {
         if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
         if(event.isOk()){
             page ++;
-            List<Detail> detailList = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<List<Detail>>() {}.getType());
+            List<Detail> detailList = GsonUtil.toDetailList(event.getData());
             details.addAll(detailList);
             adapter.loadMoreComplete();
             if(detailList.size() == 0) adapter.loadMoreEnd();

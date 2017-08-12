@@ -25,7 +25,7 @@ public class DateUtil {
     }
 
     public static String calendarToString(Calendar c, String f){
-        SimpleDateFormat format = new SimpleDateFormat(f); //不显示秒
+        SimpleDateFormat format = new SimpleDateFormat(f);
         Date date = c.getTime();
         return format.format(date);
     }
@@ -84,5 +84,9 @@ public class DateUtil {
         else{
             return calendarToString(c1, "yyyy年M月d日 HH:mm");
         }
+    }
+
+    public static String getNow(){
+        return calendarToString(Calendar.getInstance(), "yyyy-MM-dd HH:mm:ss");
     }
 }

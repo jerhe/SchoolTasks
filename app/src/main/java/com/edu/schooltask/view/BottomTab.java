@@ -1,6 +1,7 @@
 package com.edu.schooltask.view;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,30 +10,38 @@ import android.widget.TextView;
 
 import com.edu.schooltask.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by 夜夜通宵 on 2017/5/4.
  */
 
-public class BottomMenu extends LinearLayout implements View.OnClickListener{
-    public final static int PAGE_HOME = 0;
-    public final static int PAGE_TALK = 1;
-    public final static int PAGE_ORDER = 2;
-    public final static int PAGE_USER = 3;
-    private OnMenuSelectedListener onMenuSelectedListener;
+public class BottomTab extends LinearLayout implements View.OnClickListener{
+    public final static int PAGE_HOME = 0;  //首页
+    public final static int PAGE_TALK = 1;  //消息
+    public final static int PAGE_ORDER = 2; //订单
+    public final static int PAGE_USER = 3;  //用户
 
-    private LinearLayout homeLayout;
+    private OnMenuSelectedListener onMenuSelectedListener;  //菜单选择监听器
+
+    private LinearLayout homeLayout;    //按钮
     private LinearLayout talkLayout;
     private LinearLayout orderLayout;
     private LinearLayout userLayout;
 
-    private ImageView homeIcon;
+    private ImageView homeIcon; //图标
     private ImageView talkIcon;
     private ImageView orderIcon;
     private ImageView userIcon;
 
-    private TextView messageNum;
+    int oldPosition = 0;
 
-    public BottomMenu(Context context, AttributeSet attrs) {
+    private TextView messageNum;    //消息圆点
+
+    private ViewPager viewPager;
+
+    public BottomTab(Context context, AttributeSet attrs) {
         super(context, attrs);
         LinearLayout.inflate(context,R.layout.view_bottom_menu,this);
         homeLayout = (LinearLayout) findViewById(R.id.bm_home);
@@ -111,6 +120,7 @@ public class BottomMenu extends LinearLayout implements View.OnClickListener{
      *
      */
     public void setPagePosition(int position){
+        oldPosition = position;
         switch (position){
             case 0:
                 setIcon(R.id.bm_home);
@@ -142,5 +152,19 @@ public class BottomMenu extends LinearLayout implements View.OnClickListener{
         messageNum.setText(num + "");
         if(num == 0) messageNum.setVisibility(INVISIBLE);
         else messageNum.setVisibility(VISIBLE);
+    }
+
+    public void setViewPager(ViewPager viewPager){
+        this.viewPager = viewPager;
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            @Override
+            public void onPageSelected(int position) {
+                setPagePosition(position);
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
     }
 }

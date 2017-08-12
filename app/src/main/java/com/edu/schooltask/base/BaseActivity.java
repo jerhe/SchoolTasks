@@ -35,13 +35,26 @@ public class BaseActivity extends AppCompatActivity {
     protected TextView titleText;
     protected Toast toast;
     protected static DataCache mDataCache;
-    protected static PrivateMessageActivity privateMessageActivity;
+
+    public static int foregroundCount = 0;  //前台Activity计数
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(mDataCache == null) mDataCache = new DataCache(this);
         activities.add(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        foregroundCount ++;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        foregroundCount --;
     }
 
     @Override
@@ -95,6 +108,11 @@ public class BaseActivity extends AppCompatActivity {
 
     public static DataCache getDataCache(){
         return mDataCache;
+    }
+
+    //判断应用是否在前台
+    public static boolean isForeground(){
+        return foregroundCount > 0;
     }
 
     //-----------------------------------------------------------

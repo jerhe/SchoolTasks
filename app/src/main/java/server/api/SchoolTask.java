@@ -2,10 +2,11 @@ package server.api;
 
 import com.edu.schooltask.beans.TaskUploadKey;
 import com.edu.schooltask.beans.UploadKey;
-import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.beans.UserConfig;
 import com.edu.schooltask.data.DataCache;
-import com.edu.schooltask.utils.TextUtil;
+import com.edu.schooltask.utils.StringUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.qiniu.android.common.Zone;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
@@ -22,11 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import server.api.account.GetDetailEvent;
-import server.api.account.GetMoneyEvent;
-import server.api.account.RechargeEvent;
-import server.api.account.SetPaypwdEvent;
-import server.api.account.UpdatePaypwdEvent;
+import server.api.user.account.GetDetailEvent;
+import server.api.user.account.GetMoneyEvent;
+import server.api.user.account.RechargeEvent;
+import server.api.user.account.SetPayPwdEvent;
+import server.api.user.account.UpdatePaypwdEvent;
 import server.api.base.BaseCallBack;
 import server.api.base.BaseTokenCallBack;
 import server.api.login.LoginEvent;
@@ -131,7 +132,7 @@ public class SchoolTask {
 
     //relation
     private final static String UPDATE_RELATION_URL =
-            "http://192.168.191.1:8080/SchoolTask/relation/updateRelationType.do";
+            "http://192.168.191.1:8080/SchoolTask/relation/updateRelation";
 
     private final static String GET_FOLLOWERS_URL =
             "http://192.168.191.1:8080/SchoolTask/relation/getFollowers";
@@ -173,15 +174,13 @@ public class SchoolTask {
 
     //------------------------------------------------------------------------------------
 
-    static DataCache mDataCache;
     static Configuration config;
     static UploadManager uploadManager;
 
     static PostQueue postQueue;
 
-    public SchoolTask(DataCache dataCache){
-        SchoolTask.mDataCache = dataCache;
-        postQueue = new PostQueue(dataCache);
+    public static void init(){
+        postQueue = new PostQueue();
         config = new Configuration.Builder()
                 .zone(Zone.zone2)
                 .build();
@@ -192,7 +191,7 @@ public class SchoolTask {
 
     //查询余额
     public static void getMoney(){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             RequestBody requestBody = new RequestBody(GET_MONEY_URL, null,
                     new BaseTokenCallBack(new GetMoneyEvent()));
@@ -202,7 +201,7 @@ public class SchoolTask {
 
     //获取七牛上传凭证
     public static void getTaskUploadKey(){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             RequestBody requestBody = new RequestBody(GET_TASK_UPLOAD_KEY_URL, null,
                     new BaseTokenCallBack(new GetTaskUploadKeyEvent()));
@@ -229,7 +228,7 @@ public class SchoolTask {
     //发布任务
     public static void releaseTask(String orderId, String school, String description, String content, BigDecimal cost,
                                    int limitTime, String payPwd, int imageNum){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("order_id", orderId);
@@ -248,7 +247,7 @@ public class SchoolTask {
 
     //发表任务评论
     public static void comment(String orderId, long parentId, String comment){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("order_id", orderId);
@@ -262,7 +261,7 @@ public class SchoolTask {
 
     //获取用户订单
     public static void getUserOrder(int page){
-        User user = getUser();
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("page", page+"");
@@ -274,7 +273,7 @@ public class SchoolTask {
 
     //获取订单信息
     public static void getOrderInfo(String orderId){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("order_id", orderId);
@@ -286,19 +285,19 @@ public class SchoolTask {
 
     //设置支付密码
     public static void setPayPwd(String payPwd){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
-            params.put("pay_pwd", TextUtil.getMD5(payPwd));
+            params.put("pay_pwd", StringUtil.getMD5(payPwd));
             RequestBody requestBody = new RequestBody(SET_PAY_PWD_URL, params,
-                    new BaseTokenCallBack(new SetPaypwdEvent()));
+                    new BaseTokenCallBack(new SetPayPwdEvent()));
             postQueue.newPost(requestBody);
         }
     }
 
     //接受任务
     public static void acceptTask(String orderId){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("order_id", orderId);
@@ -310,7 +309,7 @@ public class SchoolTask {
 
     //改变任务状态
     public static void changeTaskOrderState(String orderId, int state){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("order_id", orderId);
@@ -323,7 +322,7 @@ public class SchoolTask {
 
     //获取明细
     public static void getDetail(int page){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("page", page+"");
@@ -335,7 +334,7 @@ public class SchoolTask {
 
     //获取七牛上传凭证
     public static void getHeadUploadKey(){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             RequestBody requestBody = new RequestBody(GET_HEAD_UPLOAD_KEY_URL, null,
                     new BaseTokenCallBack(new GetHeadUploadKeyEvent()));
@@ -345,7 +344,7 @@ public class SchoolTask {
 
     //上传头像
     public static void uploadHead(File head, UploadKey uploadKey){
-        final User user = getUser();
+        final UserInfo user = getUser();
         uploadManager.put(head, "head/" + user.getUserId() +".png", uploadKey.getKey(), new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
@@ -361,7 +360,7 @@ public class SchoolTask {
 
     //获取七牛上传凭证
     public static void getBGUploadKey(){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             RequestBody requestBody = new RequestBody(GET_BG_UPLOAD_KEY_URL, null,
                     new BaseTokenCallBack(new GetBGUploadKeyEvent()));
@@ -371,7 +370,7 @@ public class SchoolTask {
 
     //上传背景
     public static void uploadBG(File bg, UploadKey uploadKey){
-        final User user = getUser();
+        final UserInfo user = getUser();
         uploadManager.put(bg, "bg/" + user.getUserId() +".png", uploadKey.getKey(), new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
@@ -387,7 +386,7 @@ public class SchoolTask {
 
     //更新用户信息
     public static void updateUserInfo(String value, int type){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("value", value);
@@ -400,7 +399,7 @@ public class SchoolTask {
 
     //修改密码
     public static void updatePwd(String oldPwd, String newPwd){
-        User user = mDataCache.getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("old_pwd", oldPwd);
@@ -413,7 +412,7 @@ public class SchoolTask {
 
     //获取用户个人中心信息
     public static void getPersonalCenterInfo(){
-        User user = mDataCache.getUser();
+        UserInfo user = getUser();
         if(user != null){
             RequestBody requestBody = new RequestBody(GET_PERSONAL_CENTER_INFO_URL, null,
                     new BaseTokenCallBack(new GetPersonalCenterInfoEvent()));
@@ -423,7 +422,7 @@ public class SchoolTask {
 
     //修改支付密码
     public static void updatePayPwd(String oldPayPwd, String newPayPwd){
-        User user = mDataCache.getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("old_pay_pwd", oldPayPwd);
@@ -436,7 +435,7 @@ public class SchoolTask {
 
     //修改用户关系
     public static void updateRelation(String fromId, String toId, int type){
-        User user = mDataCache.getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("from_id", fromId);
@@ -450,7 +449,7 @@ public class SchoolTask {
 
     //获取用户关注
     public static void getFollowers(int page){
-        User user = mDataCache.getUser();
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("page", page+"");
@@ -462,7 +461,7 @@ public class SchoolTask {
 
     //获取用户粉丝
     public static void getFans(int page){
-        User user = mDataCache.getUser();
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("page", page+"");
@@ -475,7 +474,7 @@ public class SchoolTask {
 
     //更新用户配置
     public static void updateUserConfig(UserConfig userConfig){
-        User user = mDataCache.getUser();
+        UserInfo user = getUser();
         if(user != null){
             OkHttpUtils.post()
                     .url(UPDATE_USER_CONFIG_URL)
@@ -491,7 +490,7 @@ public class SchoolTask {
 
     //获取用户配置
     public static void getUserConfig(){
-        User user = mDataCache.getUser();
+        UserInfo user = getUser();
         if(user != null){
             RequestBody requestBody = new RequestBody(GET_USER_CONFIG_URL, null,
                     new BaseTokenCallBack(new GetUserConfigEvent()));
@@ -501,7 +500,7 @@ public class SchoolTask {
 
     //发送私信
     public static void sendPrivateMessage(String toId, String message, String image, int width, int height){
-        User user = mDataCache.getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("to_id", toId);
@@ -517,7 +516,7 @@ public class SchoolTask {
 
     //获取七牛上传凭证
     public static void getMessageImageUploadKey(){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             RequestBody requestBody = new RequestBody(GET_MESSAGE_UPLOAD_KEY_URL, null,
                     new BaseTokenCallBack(new GetMessageUploadKeyEvent()));
@@ -527,8 +526,8 @@ public class SchoolTask {
 
     //上传图片
     public static void uploadMessageImage(File image, final int imageWidth, final int imageHeight, UploadKey uploadKey){
-        final User user = getUser();
-        String imageName = TextUtil.getRandStr(6);
+        final UserInfo user = getUser();
+        String imageName = StringUtil.getRandStr(6);
         final String imagePath = "message/" + user.getUserId() + imageName +".jpg";
         uploadManager.put(image, imagePath, uploadKey.getKey(), new UpCompletionHandler() {
             @Override
@@ -542,7 +541,7 @@ public class SchoolTask {
 
     //充值
     public static void recharge(String orderId, BigDecimal money, String type){
-        User user = getUser();
+        UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("order_id", orderId);
@@ -556,8 +555,8 @@ public class SchoolTask {
     }
 
     //用于判断用户已登录
-    private static User getUser(){
-        User user = mDataCache.getUser();
+    private static UserInfo getUser(){
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null) return user;
         else {
             EventBus.getDefault().post(new UnloginEvent());
@@ -601,7 +600,7 @@ public class SchoolTask {
                 .addParams("id", userId)
                 .addParams("name", name)
                 .addParams("school", school)
-                .addParams("pwd", TextUtil.getMD5(pwd))
+                .addParams("pwd", StringUtil.getMD5(pwd))
                 .build().execute(new BaseCallBack(new RegisterEvent()));
     }
 
@@ -679,7 +678,7 @@ public class SchoolTask {
 
     //获取消息
     public static void poll(){
-        User user = mDataCache.getUser();
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null){
             OkHttpUtils.post()
                     .url(GET_POLL_URL)

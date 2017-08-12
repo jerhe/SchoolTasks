@@ -14,14 +14,17 @@ import com.edu.schooltask.view.ViewPagerTab;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
 public class MessageFragment extends BaseFragment {
 
-    ViewPagerTab viewPagerTab;
-    ViewPager viewPager;
+    @BindView(R.id.mp_tab) ViewPagerTab viewPagerTab;
+    @BindView(R.id.mp_vp) ViewPager viewPager;
     ViewPagerAdapter adapter;
 
     List<Fragment> fragmentList = new ArrayList<>();
@@ -32,9 +35,7 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        viewPagerTab = getView(R.id.mp_tab);
-        viewPager = getView(R.id.mp_vp);
-
+        ButterKnife.bind(this, view);
         Fragment messageFragment = new com.edu.schooltask.fragment.message.MessageFragment();
         Fragment followFragment = new FollowFragment();
         Fragment fansFragment = new FansFragment();
@@ -48,7 +49,7 @@ public class MessageFragment extends BaseFragment {
         viewPagerTab.addTab("消息列表");
         viewPagerTab.addTab("关注");
         viewPagerTab.addTab("粉丝");
-        viewPagerTab.setSelect(0);
+        viewPagerTab.select(0);
     }
 
 

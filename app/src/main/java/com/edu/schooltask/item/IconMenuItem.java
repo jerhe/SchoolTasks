@@ -22,6 +22,34 @@ public class IconMenuItem implements MultiItemEntity{
     private String value;
     private boolean checked;
 
+    //空项，作为分割条
+    public IconMenuItem(){
+        this.itemType = EMPTY;
+    }
+
+    //标题
+    public IconMenuItem(String name){
+        this.itemType = TITLE;
+        this.name = name;
+    }
+
+    //水平|竖直|Switch|Value
+    public IconMenuItem(int itemType,int resId, String name){
+        this.itemType = itemType;
+        this.resId = resId;
+        this.name = name;
+    }
+
+    //水平|Switch|Value
+    public IconMenuItem(int itemType,int resId, String name, String hint){
+        this.itemType = itemType;
+        this.resId = resId;
+        this.name = name;
+        this.hint = hint;
+    }
+
+
+
     public String getName() {
         return name;
     }
@@ -60,34 +88,6 @@ public class IconMenuItem implements MultiItemEntity{
 
     public void setChecked(boolean checked) {
         this.checked = checked;
-    }
-
-    public IconMenuItem(){
-        itemType = EMPTY;
-    }
-
-    public IconMenuItem(int itemType,int resId, String name){
-        this.itemType = itemType;
-        this.resId = resId;
-        this.name = name;
-    }
-
-    public IconMenuItem(String title){
-        this.itemType = TITLE;
-        this.name = title;
-    }
-
-    public IconMenuItem(int itemType, String name, String hint){
-        this.itemType = itemType;
-        this.name = name;
-        this.hint = hint;
-    }
-
-    public IconMenuItem(int itemType,int resId, String name, String hint){
-        this.itemType = itemType;
-        this.name = name;
-        this.hint = hint;
-        this.resId = resId;
     }
 
     @Override

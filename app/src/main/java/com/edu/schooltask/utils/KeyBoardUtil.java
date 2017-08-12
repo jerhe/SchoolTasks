@@ -13,11 +13,9 @@ import java.util.TimerTask;
  */
 
 public class KeyBoardUtil {
-    /**
-     * 弹出软键盘
-     * @param editText
-     */
-    public static void inputKeyBoard(final EditText editText){
+
+    //弹出输入法
+    public static void showKeyBoard(final EditText editText){
         Timer timer = new Timer();
         timer.schedule(new TimerTask(){
             public void run(){
@@ -27,10 +25,7 @@ public class KeyBoardUtil {
         }, 100);
     }
 
-    /**
-     * 隐藏软键盘
-     * @param activity
-     */
+    //隐藏输入法
     public static void hideKeyBoard(Activity activity){
         InputMethodManager imm =  (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if(imm != null) {imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(),0);}

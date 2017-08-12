@@ -13,6 +13,8 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.SetPayPwdActivity;
 import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.filter.MoneyFilter;
+import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.view.Content;
 import com.edu.schooltask.view.InputText;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -118,7 +120,7 @@ public class DialogUtil {
             moneyText.setText(cost + "元");
         }
         InputText pwdText = (InputText) payDialog.findViewById(R.id.pwd_pwd);
-        pwdText.setInputFilter(5);
+        pwdText.setInputFilter(new NumberFilter());
         TextView setPayPwdText = (TextView) payDialog.findViewById(R.id.pay_set_pwd);
         setPayPwdText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +252,7 @@ public class DialogUtil {
                 .create();
         View dialogView = dialog.getHolderView();
         final InputText inputText = (InputText) dialogView.findViewById(R.id.recharge_money);
-        inputText.setInputFilter(4);
+        inputText.setInputFilter(new MoneyFilter());
         final MaterialSpinner typeSpinner = (MaterialSpinner) dialogView.findViewById(R.id.recharge_type);
         typeSpinner.setItems("支付宝", "微信");
         Button button = (Button) dialogView.findViewById(R.id.recharge_btn);
@@ -262,7 +264,7 @@ public class DialogUtil {
                     activity.toastShort("请输入充值金额");
                     return;
                 }
-                if(!TextUtil.moneyCompile(money)){
+                if(!StringUtil.isMoney(money)){
                     activity.toastShort("充值金额错误,请重新输入");
                     return;
                 }

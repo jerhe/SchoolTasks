@@ -35,5 +35,4 @@
         <item name="android:windowAnimationStyle">@style/WithImageAnim</item>
     </style>
 
-
 </resources>

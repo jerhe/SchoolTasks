@@ -1,29 +1,25 @@
 package com.edu.schooltask.activity;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.item.HomeItem;
 import com.edu.schooltask.item.TaskItem;
+import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.CustomLoadMoreView;
 import com.edu.schooltask.view.TaskFilter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,18 +29,42 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import server.api.SchoolTask;
 import server.api.task.get.GetTaskListEvent;
 
 public class TaskListActivity extends BaseActivity {
-    private EditText searchText;
+    @BindView(R.id.tl_srl) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tl_rv) RecyclerView recyclerView;
+    @BindView(R.id.tl_search_text) EditText searchText;
+    @BindView(R.id.tl_tf) TaskFilter taskFilter;
+    //@BindView(R.id.tl_tf_btn) TextView taskFilterBtn;
+    @BindView(R.id.tl_shadow) View shadow;
 
-    private TextView taskFilterBtn;
-    private TaskFilter taskFilter;
-    private View shadow;
+    @OnClick(R.id.tl_tf_btn)
+    public void textFilter(){
+        if(taskFilter.isShown()){
+            setTaskFilterVisible(false);
+        }
+        else{
+            setTaskFilterVisible(true);
+        }
+    }
+    @OnClick(R.id.tl_shadow)
+    public void shadow(){
+        if(shadow.isShown()){
+            setTaskFilterVisible(false);
+        }
+    }
+    @OnTextChanged(R.id.tl_search_text)
+    public void searchTextChanged(){
+        getTaskList();
+    }
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
+
     private HomeAdapter adapter;
     private List<HomeItem> items = new ArrayList<>();
 
@@ -59,6 +79,7 @@ public class TaskListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
+        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         init();
     }
@@ -80,44 +101,15 @@ public class TaskListActivity extends BaseActivity {
     }
 
     private void init(){
-        searchText = getView(R.id.tl_search_text);
-        searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                getTaskList();
-            }
-        });
-        taskFilterBtn = getView(R.id.tl_tf_btn);
-        taskFilter = getView(R.id.tl_tf);
-        shadow = findViewById(R.id.tl_shadow);
-        User user = mDataCache.getUser();
-        if(user != null){
-            taskFilter.setSchool(new String[]{"所有学校",user.getSchool()});
-        }
-        else{
-            taskFilter.setSchool(new String[]{"所有学校"});
-        }
+        UserInfo user = UserUtil.getLoginUser();
+        taskFilter.setSchool(new String[]{"所有学校", user == null ? null : user.getSchool()});
         taskFilter.setFilterChangeListener(new TaskFilter.FilterChangeListener() {
             @Override
             public void onFilterChange() {
                 getTaskList();
             }
         });
-        shadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(shadow.isShown()){
-                    setTaskFilterVisible(false);
-                }
-            }
-        });
 
-        swipeRefreshLayout = getView(R.id.tl_srl);
-        recyclerView = getView(R.id.tl_rv);
         adapter = new HomeAdapter(items, mDataCache, this);
         adapter.setLoadMoreView(new CustomLoadMoreView());
         adapter.openLoadAnimation();
@@ -140,17 +132,6 @@ public class TaskListActivity extends BaseActivity {
                 getTaskList();
             }
         });
-        taskFilterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(taskFilter.isShown()){
-                    setTaskFilterVisible(false);
-                }
-                else{
-                    setTaskFilterVisible(true);
-                }
-            }
-        });
         getTaskList();
     }
 
@@ -159,7 +140,7 @@ public class TaskListActivity extends BaseActivity {
         if(event.isOk()){
             page++;
             if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
-            List<TaskItem> taskItems =  new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<List<TaskItem>>(){}.getType());
+            List<TaskItem> taskItems = GsonUtil.toTaskItemList(event.getData());
             for(TaskItem taskItem : taskItems){
                 HomeItem homeItem = new HomeItem(HomeItem.TASK_ITEM, taskItem);
                 items.add(homeItem);

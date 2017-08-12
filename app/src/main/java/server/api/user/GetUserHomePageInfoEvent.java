@@ -1,7 +1,5 @@
 package server.api.user;
 
-import com.edu.schooltask.beans.UserBaseInfo;
-
 import server.api.base.BaseEvent;
 
 /**

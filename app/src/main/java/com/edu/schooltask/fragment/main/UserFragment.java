@@ -29,15 +29,19 @@ import com.edu.schooltask.activity.SettingActivity;
 import com.edu.schooltask.activity.UserActivity;
 import com.edu.schooltask.adapter.IconMenuAdapter;
 import com.edu.schooltask.base.BaseFragment;
-import com.edu.schooltask.beans.User;
-import com.edu.schooltask.beans.UserBaseInfo;
+import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.UserInfoBase;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.item.IconMenuItem;
 import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import server.api.user.UpdateUserInfoEvent;
 
@@ -46,31 +50,26 @@ import server.api.user.UpdateUserInfoEvent;
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
-public class UserFragment extends BaseFragment {
-    private RecyclerView userFunctionRecyclerView;
+public class UserFragment extends BaseFragment{
+    @BindView(R.id.up_rv) RecyclerView userFunctionRecyclerView;
+    @BindView(R.id.up_name) TextView nameText;
+    @BindView(R.id.up_head) CircleImageView headImage;
+    @BindView(R.id.up_bg) ImageView bgImage;
+    @BindView(R.id.up_home) TextView homeBtn;
+    @BindView(R.id.up_rv2) RecyclerView systemFunctionRecyclerView;
+
     private List<IconMenuItem> userIconMenuItemList = new ArrayList<>();
-    private RecyclerView systemFunctionRecyclerView;
     private List<IconMenuItem> systemIconMenuItemList = new ArrayList<>();
 
-    private TextView nameText;
-    private CircleImageView headImage;
-    private ImageView bgImage;
-    private TextView homeBtn;
     public UserFragment(){
         super(R.layout.fragment_user_page);
     }
 
     @Override
-    protected void init(){
-        //头像
-        headImage = getView(R.id.up_head);
-        nameText = getView(R.id.up_name);
-        bgImage = getView(R.id.up_bg);
-        homeBtn = getView(R.id.up_home);
-
-        userFunctionRecyclerView = getView(R.id.up_rv);
+    protected void init() {
+        ButterKnife.bind(this, view);
         IconMenuAdapter userIconMenuAdapter = new IconMenuAdapter(userIconMenuItemList);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4,1);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, 1);
         userFunctionRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         userFunctionRecyclerView.setAdapter(userIconMenuAdapter);
         userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_action_account, "XX"));
@@ -80,13 +79,8 @@ public class UserFragment extends BaseFragment {
         userIconMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                User user = mDataCache.getUser();
-                if(user == null){
-                    toastShort("请先登录");
-                    openActivity(LoginActivity.class);
-                }
-                else{
-                    switch (position){
+                if (UserUtil.hasLogin()) {
+                    switch (position) {
                         case 0:
                             break;
                         case 1:
@@ -97,11 +91,13 @@ public class UserFragment extends BaseFragment {
                         default:
                     }
                 }
+                else {
+                    toastShort("请先登录");
+                    openActivity(LoginActivity.class);
+                }
             }
         });
 
-
-        systemFunctionRecyclerView = getView(R.id.up_rv2);
         IconMenuAdapter systemIconMenuAdapter = new IconMenuAdapter(systemIconMenuItemList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         systemFunctionRecyclerView.setLayoutManager(linearLayoutManager);
@@ -113,7 +109,7 @@ public class UserFragment extends BaseFragment {
         systemIconMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         openActivity(SettingActivity.class);
                         break;
@@ -133,7 +129,7 @@ public class UserFragment extends BaseFragment {
         bgImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mDataCache.getUser() == null){
+                if (!UserUtil.hasLogin()) {
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(loginIntent);
                 }
@@ -143,20 +139,20 @@ public class UserFragment extends BaseFragment {
         onLoginSuccess(null);
     }
 
-    private void setUserInfo(final User user){
+    private void setUserInfo(final UserInfo user){
         nameText.setText(user.getName());
         homeBtn.setVisibility(View.VISIBLE);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), UserActivity.class);
-                intent.putExtra("user",new UserBaseInfo(user));
+                intent.putExtra("user",new UserInfoBase(user));
                 startActivity(intent);
             }
         });
     }
 
-    private void setUserImage(User user){
+    private void setUserImage(UserInfo user){
         GlideUtil.setHead(getContext(), user.getUserId(), headImage, false);
         GlideUtil.setBackground(getContext(), user.getUserId(), bgImage);
     }
@@ -175,7 +171,7 @@ public class UserFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccess(LoginSuccessEvent event){
-        final User user = mDataCache.getUser();
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null){
             setUserInfo(user);
             setUserImage(user);
@@ -184,7 +180,7 @@ public class UserFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event){
-        mDataCache.removeUser();
+        UserUtil.deleteLoginUser();
         nameText.setText("登录/注册");
         homeBtn.setVisibility(View.GONE);
         Glide.with(this).load(R.drawable.head).into(headImage);
@@ -194,15 +190,15 @@ public class UserFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateUserInfo(UpdateUserInfoEvent event){
         if(event.isOk()){
-            UserBaseInfo user = new Gson().fromJson(new Gson().toJson(event.getData()), new TypeToken<UserBaseInfo>(){}.getType());
-            setUserInfo(new User(user));
+            UserInfoBase user = GsonUtil.toUserInfo(event.getData());
+            setUserInfo(new UserInfo(user));
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        User user = mDataCache.getUser();
+        UserInfo user = UserUtil.getLoginUser();
         if(user != null){
             Glide.clear(bgImage);
             GlideUtil.setBackground(getContext(), user.getUserId(), bgImage);

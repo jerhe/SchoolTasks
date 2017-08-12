@@ -1,35 +1,37 @@
 package com.edu.schooltask.beans;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.Serializable;
 
-public class UserBaseInfo implements Serializable{
+public class UserInfoBase extends DataSupport implements Serializable{
 	String userId;
 	String name;
 	String school;
 	String sign;
 	int sex;
 	String birth;
-	int follow;
+	int followers;
 	int fans;
 	
 	
-	public UserBaseInfo() {
+	public UserInfoBase() {
 		
 	}
 
-	public UserBaseInfo(UserBaseInfo user){
+	public UserInfoBase(UserInfoBase user){
 		this.userId = user.getUserId();
 		this.name = user.getName();
 		this.sign = user.getSign();
 		this.school = user.getSchool();
 		this.sex = user.getSex();
 		this.birth = user.getBirth();
-		this.follow = user.getFollow();
+		this.followers = user.getFollowers();
 		this.fans = user.getFans();
 	}
 
-	public UserBaseInfo(String userId, String name, String sign, String school, int sex, String birth,
-						int follow, int fans) {
+	public UserInfoBase(String userId, String name, String sign, String school, int sex, String birth,
+						int followers, int fans) {
 		super();
 		this.userId = userId;
 		this.name = name;
@@ -37,7 +39,7 @@ public class UserBaseInfo implements Serializable{
 		this.school = school;
 		this.sex = sex;
 		this.birth = birth;
-		this.follow = follow;
+		this.followers = followers;
 		this.fans = fans;
 	}
 
@@ -96,12 +98,12 @@ public class UserBaseInfo implements Serializable{
 		this.birth = birth;
 	}
 
-	public int getFollow() {
-		return follow;
+	public int getFollowers() {
+		return followers;
 	}
 
-	public void setFollow(int follow) {
-		this.follow = follow;
+	public void setFollowers(int followers) {
+		this.followers = followers;
 	}
 
 	public int getFans() {
@@ -114,6 +116,6 @@ public class UserBaseInfo implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		return ((UserBaseInfo)obj).getUserId().equals(userId);
+		return ((UserInfoBase)obj).getUserId().equals(userId);
 	}
 }

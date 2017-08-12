@@ -5,7 +5,7 @@ import android.graphics.Color;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
-import com.edu.schooltask.beans.UserBaseInfo;
+import com.edu.schooltask.beans.UserInfoBase;
 import com.edu.schooltask.item.StateItem;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class StateAdapter extends BaseQuickAdapter<StateItem, BaseViewHolder> {
                 helper.addOnClickListener(R.id.os_user_talk);
             }
             helper.addOnClickListener(R.id.os_user_layout);
-            UserBaseInfo acceptUser = item.getAcceptUser();
+            UserInfoBase acceptUser = item.getAcceptUser();
             helper.setVisible(R.id.os_user_layout, true);
             helper.setText(R.id.os_accept_name, acceptUser.getName());
             helper.setText(R.id.os_accept_school, acceptUser.getSchool());

@@ -2,8 +2,9 @@ package server.api;
 
 import android.util.Log;
 
-import com.edu.schooltask.beans.User;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.data.DataCache;
+import com.edu.schooltask.utils.UserUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 
@@ -17,15 +18,12 @@ import server.api.base.BaseTokenCallBack;
  * Created by 夜夜通宵 on 2017/6/3.
  */
 
+//Post队列：包含Token的请求需要加入这个队列以保证Token不错乱
 public class PostQueue {
-    List<RequestBody> requestBodies = new ArrayList<>();
-    boolean posting;
+    List<RequestBody> requestBodies = new ArrayList<>();    //RequestBody集合
+    boolean posting;    //判断是否正在请求
 
-    DataCache mDataCache;
-
-    public PostQueue(DataCache dataCache){
-        mDataCache = dataCache;
-    }
+    public PostQueue(){}
 
     public void newPost(RequestBody requestBody){
         requestBodies.add(requestBody);
@@ -37,7 +35,6 @@ public class PostQueue {
         if(requestBodies.size() > 0){
             RequestBody requestBody = requestBodies.get(0);
             BaseTokenCallBack callBack = requestBody.getCallBack();
-            Log.e("Queue","post" + " @class:" + callBack.getEventClass());
             callBack.setResponseListener(new BaseTokenCallBack.ResponseListener() {
                 @Override
                 public void onResponse() {
@@ -50,8 +47,7 @@ public class PostQueue {
 
             PostFormBuilder builder = OkHttpUtils.post();
             builder.url(requestBody.getUrl());
-            User user = mDataCache.getUser();
-            builder.addHeader("token", user.getToken());
+            builder.addHeader("token", UserUtil.getLoginUser().getToken());
             Map<String, String> params = requestBody.getParams();
             if(params != null) builder.params(params);
             builder.build().execute(callBack);

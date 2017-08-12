@@ -1,6 +1,6 @@
 package com.edu.schooltask.other;
 
-import com.edu.schooltask.item.MessageItem;
+import com.edu.schooltask.beans.MessageItem;
 import com.edu.schooltask.utils.DateUtil;
 
 import java.util.Calendar;

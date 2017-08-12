@@ -8,17 +8,18 @@ import java.io.Serializable;
 
 public class Poll implements Serializable {
     long pollId;
-    UserBaseInfo fromUser;
-    UserBaseInfo toUser;
+    String fromId;
+    String toId;
     int type;
     String orderId;
-    String msg;
+    String content;
     String image;
-    boolean hasRead;
-    String time;
-
     int width;
     int height;
+    String createTime;
+
+    UserInfoBase fromUser;
+    UserInfoBase toUser;
 
     public Poll(){}
 
@@ -30,52 +31,20 @@ public class Poll implements Serializable {
         this.pollId = pollId;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getFromId() {
+        return fromId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setFromId(String fromId) {
+        this.fromId = fromId;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getToId() {
+        return toId;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public boolean isHasRead() {
-        return hasRead;
-    }
-
-    public void setHasRead(boolean hasRead) {
-        this.hasRead = hasRead;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public UserBaseInfo getToUser() {
-        return toUser;
-    }
-
-    public void setToUser(UserBaseInfo toUser) {
-        this.toUser = toUser;
-    }
-
-    public UserBaseInfo getFromUser() {
-        return fromUser;
-    }
-
-    public void setFromUser(UserBaseInfo fromUser) {
-        this.fromUser = fromUser;
+    public void setToId(String toId) {
+        this.toId = toId;
     }
 
     public int getType() {
@@ -84,6 +53,22 @@ public class Poll implements Serializable {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getImage() {
@@ -108,5 +93,29 @@ public class Poll implements Serializable {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public UserInfoBase getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(UserInfoBase fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public UserInfoBase getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(UserInfoBase toUser) {
+        this.toUser = toUser;
     }
 }

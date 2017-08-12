@@ -1,6 +1,7 @@
 package com.edu.schooltask.event;
 
 import com.edu.schooltask.beans.Poll;
+import com.edu.schooltask.beans.PrivateMessage;
 
 import java.util.List;
 
@@ -10,17 +11,6 @@ import java.util.List;
 
 public class ShowMessageEvent {
 
-    Poll poll;
+    public ShowMessageEvent(){}
 
-    public ShowMessageEvent(Poll poll){
-        this.poll = poll;
-    }
-
-    public Poll getPoll() {
-        return poll;
-    }
-
-    public void setPoll(Poll poll) {
-        this.poll = poll;
-    }
 }
