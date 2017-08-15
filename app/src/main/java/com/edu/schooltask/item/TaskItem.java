@@ -1,5 +1,6 @@
 package com.edu.schooltask.item;
 
+import com.edu.schooltask.beans.TaskOrder;
 import com.edu.schooltask.beans.UserInfoBase;
 
 import java.io.Serializable;
@@ -20,6 +21,17 @@ public class TaskItem implements Serializable{
     UserInfoBase user;
 
     public TaskItem() {}
+
+    public TaskItem(TaskOrder taskOrder){
+        this.orderId = taskOrder.getOrderId();
+        this.cost = taskOrder.getCost();
+        this.school = taskOrder.getSchool();
+        this.description = taskOrder.getDescription();
+        this.content = taskOrder.getContent();
+        this.releaseTime = taskOrder.getReleaseTime();
+        this.imageNum = taskOrder.getImageNum();
+        this.user = taskOrder.getReleaseUser();
+    }
 
     public String getOrderId() {
         return orderId;

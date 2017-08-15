@@ -119,7 +119,7 @@ public class CommentRecyclerView extends RecyclerView {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                inputBoard.setHint(comments.get(position).getCommentUser().getName());
+                if(inputBoard != null)inputBoard.setHint(comments.get(position).getCommentUser().getName());
                 setParentId(comments.get(position).getId());
                 if(commentClickListener != null) commentClickListener.onCommentClick();
             }
@@ -132,14 +132,16 @@ public class CommentRecyclerView extends RecyclerView {
                 setToUserId(taskComment.getUserId());
                 childView.refresh();
                 showChild();
-                inputBoard.setHint(taskComment.getCommentUser().getName());
+                if(inputBoard != null) inputBoard.setHint(taskComment.getCommentUser().getName());
             }
         });
         childView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                inputBoard.setHint(childView.getData().get(position).getCommentUser().getName());
-                inputBoard.show();
+                if(inputBoard != null){
+                    inputBoard.setHint(childView.getData().get(position).getCommentUser().getName());
+                    inputBoard.show();
+                }
             }
         });
     }
@@ -156,7 +158,7 @@ public class CommentRecyclerView extends RecyclerView {
 
     public void hideChild(){
         if(oppositeView != null) oppositeView.setVisibility(VISIBLE);
-        inputBoard.clearHint();
+        if(inputBoard != null) inputBoard.clearHint();
         parentId = 0;
         toUserId = "";
         commentReplyView.setVisibility(GONE);

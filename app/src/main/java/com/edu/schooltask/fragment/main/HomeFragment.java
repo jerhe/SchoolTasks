@@ -1,17 +1,13 @@
 package com.edu.schooltask.fragment.main;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.baoyz.widget.PullRefreshLayout;
@@ -21,19 +17,15 @@ import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.activity.ReleaseTaskActivity;
 import com.edu.schooltask.activity.TaskListActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
-import com.edu.schooltask.adapter.HomeAdapter;
 import com.edu.schooltask.adapter.TaskItemAdapter;
-import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
-import com.edu.schooltask.event.TabSelectedEvent;
+import com.edu.schooltask.item.TaskItem;
 import com.edu.schooltask.other.GlideImageLoader;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.NetUtil;
-import com.edu.schooltask.item.HomeItem;
-import com.edu.schooltask.item.TaskItem;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.CustomLoadMoreView;
 import com.edu.schooltask.view.ViewPagerTab;
@@ -56,6 +48,7 @@ import server.api.task.get.GetSchoolTaskEvent;
  */
 
 public class HomeFragment extends BaseFragment {
+    @BindView(R.id.home_appbar) AppBarLayout appBarLayout;
     @BindView(R.id.home_banner) Banner banner;
     @BindView(R.id.home_task_release) ImageView taskReleaseBtn;
     @BindView(R.id.home_task_search) ImageView taskSearchBtn;
@@ -92,6 +85,14 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void init(){
         ButterKnife.bind(this, view);
+        //防止下拉刷新与列表滑动冲突
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if(verticalOffset == 0) refreshLayout.setEnabled(true);
+                else refreshLayout.setEnabled(false);
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new TaskItemAdapter(taskItems);
         adapter.setLoadMoreView(new CustomLoadMoreView());

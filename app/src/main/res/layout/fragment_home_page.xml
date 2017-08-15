@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.baoyz.widget.PullRefreshLayout
+    android:id="@+id/home_prl"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    app:refreshColor="@color/colorPrimary"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.design.widget.CoordinatorLayout
 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <android.support.design.widget.AppBarLayout
             android:id="@+id/home_appbar"
             android:layout_width="match_parent"
@@ -28,24 +33,20 @@
                 app:layout_scrollFlags="snap">
             </com.edu.schooltask.view.ViewPagerTab>
         </android.support.design.widget.AppBarLayout>
-        <com.baoyz.widget.PullRefreshLayout
-            android:id="@+id/home_prl"
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:refreshColor="@color/colorPrimary"
+            android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <android.support.v4.widget.NestedScrollView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/home_rv"
+                android:nestedScrollingEnabled="false"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:background="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/home_rv"
-                    android:nestedScrollingEnabled="false"
-                    android:fadingEdge="none"
-                    android:overScrollMode="never"
-                    android:background="@color/white"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </android.support.v7.widget.RecyclerView>
-            </android.support.v4.widget.NestedScrollView>
-        </com.baoyz.widget.PullRefreshLayout>
-</android.support.design.widget.CoordinatorLayout>
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+</com.baoyz.widget.PullRefreshLayout>

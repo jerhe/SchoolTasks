@@ -32,7 +32,6 @@
         android:paddingLeft="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="2"
         android:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"/>
     <com.edu.schooltask.view.ImageRecyclerView
         android:id="@+id/task_irv"

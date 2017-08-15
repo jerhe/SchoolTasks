@@ -22,6 +22,8 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
             <com.edu.schooltask.view.CommentRecyclerView
                 android:id="@+id/wao_crv"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </com.edu.schooltask.view.CommentRecyclerView>
@@ -29,6 +31,8 @@
         <com.edu.schooltask.view.CommentReplyView
             android:id="@+id/wao_comment_reply_view"
             android:visibility="gone"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.edu.schooltask.view.CommentReplyView>

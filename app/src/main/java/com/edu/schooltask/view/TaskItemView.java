@@ -50,7 +50,7 @@ public class TaskItemView extends LinearLayout{
     //设置所有信息: isInfo:是否是任务信息页(WaitAcceptOrderActivity)
     public void setAll(final TaskItem taskItem, boolean isInfo){
         userItemReleaseView.setAll(taskItem.getUser(), taskItem.getReleaseTime(),   //用户发布信息
-                taskItem.getSchool(), taskItem.getDescription(), !isInfo);
+                taskItem.getSchool(), taskItem.getDescription(), true);
         costText.setText("¥" + taskItem.getCost()); //金额
         contentText.setText(taskItem.getContent()); //内容
         //图片
