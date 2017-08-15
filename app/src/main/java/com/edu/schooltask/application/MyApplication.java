@@ -3,6 +3,7 @@ package com.edu.schooltask.application;
 import android.app.Application;
 import android.util.Log;
 
+import com.edu.schooltask.utils.DensityUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 

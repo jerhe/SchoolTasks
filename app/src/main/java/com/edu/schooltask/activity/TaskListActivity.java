@@ -8,10 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.HomeAdapter;
+import com.edu.schooltask.adapter.TaskItemAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.item.HomeItem;
@@ -37,11 +40,11 @@ import server.api.SchoolTask;
 import server.api.task.get.GetTaskListEvent;
 
 public class TaskListActivity extends BaseActivity {
-    @BindView(R.id.tl_srl) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tl_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.tl_rv) RecyclerView recyclerView;
     @BindView(R.id.tl_search_text) EditText searchText;
     @BindView(R.id.tl_tf) TaskFilter taskFilter;
-    //@BindView(R.id.tl_tf_btn) TextView taskFilterBtn;
+    @BindView(R.id.tl_tf_btn) TextView taskFilterBtn;
     @BindView(R.id.tl_shadow) View shadow;
 
     @OnClick(R.id.tl_tf_btn)
@@ -65,8 +68,8 @@ public class TaskListActivity extends BaseActivity {
     }
 
 
-    private HomeAdapter adapter;
-    private List<HomeItem> items = new ArrayList<>();
+    private TaskItemAdapter adapter;
+    private List<TaskItem> taskItems = new ArrayList<>();
 
     int page = 0;
     String school;
@@ -110,7 +113,7 @@ public class TaskListActivity extends BaseActivity {
             }
         });
 
-        adapter = new HomeAdapter(items, mDataCache, this);
+        adapter = new TaskItemAdapter(taskItems);
         adapter.setLoadMoreView(new CustomLoadMoreView());
         adapter.openLoadAnimation();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -120,15 +123,16 @@ public class TaskListActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(TaskListActivity.this, WaitAcceptOrderActivity.class);
-                intent.putExtra("task", items.get(position));
+                intent.putExtra("taskItem", taskItems.get(position));
                 startActivity(intent);
             }
         });
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 page = 0;
-                items.clear();
+                taskItems.clear();
                 getTaskList();
             }
         });
@@ -138,13 +142,10 @@ public class TaskListActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetTaskList(GetTaskListEvent event){
         if(event.isOk()){
+            refreshLayout.setRefreshing(false);
             page++;
-            if(swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             List<TaskItem> taskItems = GsonUtil.toTaskItemList(event.getData());
-            for(TaskItem taskItem : taskItems){
-                HomeItem homeItem = new HomeItem(HomeItem.TASK_ITEM, taskItem);
-                items.add(homeItem);
-            }
+            this.taskItems.addAll(taskItems);
             adapter.loadMoreComplete();
             if(taskItems.size() == 0) adapter.loadMoreEnd();
             adapter.notifyDataSetChanged();
@@ -156,7 +157,7 @@ public class TaskListActivity extends BaseActivity {
     }
 
     private void getTaskList(){
-        if(!swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(true);
+        refreshLayout.setRefreshing(true);
         String school = taskFilter.getSchool();
         if("所有学校".equals(school)){
             school = "%";
@@ -199,7 +200,7 @@ public class TaskListActivity extends BaseActivity {
         }
         if(!(school.equals(this.school) && des.equals(this.des) && searth.equals(this.search)
         && minCost.compareTo(this.minCost) == 0 && maxCost.compareTo(this.maxCost) == 0)) {
-            items.clear();
+            taskItems.clear();
             page = 0;
             this.school = school;
             this.des = des;

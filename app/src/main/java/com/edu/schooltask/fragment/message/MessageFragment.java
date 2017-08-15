@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
@@ -41,7 +42,7 @@ import server.api.SchoolTask;
  */
 
 public class MessageFragment extends BaseFragment {
-    @BindView(R.id.message_srl) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.message_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.message_rv) RecyclerView recyclerView;
 
     MessageAdapter adapter;
@@ -66,11 +67,11 @@ public class MessageFragment extends BaseFragment {
     @Override
     protected void init() {
         ButterKnife.bind(this, view);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if(!UserUtil.hasLogin()){
-                    swipeRefreshLayout.setRefreshing(false);
+                    refreshLayout.setRefreshing(false);
                     toastShort("请先登录");
                     openActivity(LoginActivity.class);
                     return;
@@ -94,6 +95,8 @@ public class MessageFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        adapter.bindToRecyclerView(recyclerView);
+        adapter.setEmptyView(R.layout.empt_message);
     }
 
     private void refreshMessageItemList(){
@@ -156,7 +159,7 @@ public class MessageFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPoll(AfterPollEvent event){
-        swipeRefreshLayout.setRefreshing(false);
+        refreshLayout.setRefreshing(false);
         refreshMessageItemList();
     }
 

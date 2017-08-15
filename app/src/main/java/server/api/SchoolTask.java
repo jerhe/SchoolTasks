@@ -246,12 +246,13 @@ public class SchoolTask {
     }
 
     //发表任务评论
-    public static void comment(String orderId, long parentId, String comment){
+    public static void comment(String orderId, long parentId, String toUserId, String comment){
         UserInfo user = getUser();
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("order_id", orderId);
             params.put("parent_id", parentId+"");
+            params.put("to_user_id", toUserId);
             params.put("comment", comment);
             RequestBody requestBody = new RequestBody(COMMENT_URL, params,
                     new BaseTokenCallBack(new NewTaskCommentEvent()));
@@ -634,11 +635,12 @@ public class SchoolTask {
     }
 
     //获取任务评论的回复
-    public static void getTaskChildComment(String orderId, long parentId){
+    public static void getTaskChildComment(String orderId, long parentId, int page){
         OkHttpUtils.post()
                 .url(GET_CHILD_COMMENT_URL)
                 .addParams("order_id", orderId)
                 .addParams("parent_id", parentId+"")
+                .addParams("page", page + "")
                 .build()
                 .execute(new BaseCallBack(new GetTaskChildCommentEvent()));
     }

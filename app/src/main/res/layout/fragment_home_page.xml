@@ -1,27 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/home_top"
-    android:orientation="vertical"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/home_srl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/home_rv"
-            android:fadingEdge="none"
-            android:overScrollMode="never"
-            android:background="@color/white"
+    android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/home_appbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-    <com.edu.schooltask.view.ViewPagerTab
-        android:id="@+id/home_tab"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:visibility="invisible">
-    </com.edu.schooltask.view.ViewPagerTab>
-</RelativeLayout>
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+                <com.youth.banner.Banner
+                    android:id="@+id/home_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+                </com.youth.banner.Banner>
+                <include layout="@layout/rv_btn"/>
+            </LinearLayout>
+            <com.edu.schooltask.view.ViewPagerTab
+                android:id="@+id/home_tab"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                app:layout_scrollFlags="snap">
+            </com.edu.schooltask.view.ViewPagerTab>
+        </android.support.design.widget.AppBarLayout>
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/home_prl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:refreshColor="@color/colorPrimary"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_rv"
+                    android:nestedScrollingEnabled="false"
+                    android:fadingEdge="none"
+                    android:overScrollMode="never"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </android.support.v4.widget.NestedScrollView>
+        </com.baoyz.widget.PullRefreshLayout>
+</android.support.design.widget.CoordinatorLayout>

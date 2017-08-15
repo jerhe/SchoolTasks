@@ -22,8 +22,8 @@ import server.api.SchoolTask;
 
 public class GlideUtil {
 
-    public static void setHead(Context context, String userId, ImageView imageView,
-                               boolean skipMemoryCache){
+    //从云端获取并设置头像
+    public static void setHead(Context context, String userId, ImageView imageView, boolean skipMemoryCache){
         DataCache dataCache = new DataCache(context);
         int head = dataCache.getData("head");
         Glide.with(context)

@@ -8,7 +8,11 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <include layout="@layout/user_item" />
+        <com.edu.schooltask.view.UserItemReleaseView
+            android:id="@+id/task_uirv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.edu.schooltask.view.UserItemReleaseView>
         <TextView
             android:id="@+id/task_cost"
             android:layout_width="wrap_content"
@@ -30,18 +34,17 @@
         android:layout_height="wrap_content"
         android:maxLines="2"
         android:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/task_rv"
+    <com.edu.schooltask.view.ImageRecyclerView
+        android:id="@+id/task_irv"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="10dp"
+        android:nestedScrollingEnabled="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+    </com.edu.schooltask.view.ImageRecyclerView>
     <View
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/lineColor"/>
+        android:layout_height="10dp"
+        android:background="@color/divide"/>
 </LinearLayout>

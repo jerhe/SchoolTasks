@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.edu.schooltask.R;
+import com.edu.schooltask.utils.KeyBoardUtil;
 
 /**
  * Created by 夜夜通宵 on 2017/5/16.
@@ -19,10 +20,12 @@ public class CommentInputBoard extends LinearLayout {
     EditText inputText;
     Button btn;
     OnBtnClickListener listener;
-    public long parentId;
+
+    View oppositeView;
+
     public CommentInputBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.comment_input_board,this);
+        LayoutInflater.from(context).inflate(R.layout.view_comment_input_board,this);
         inputText = (EditText) findViewById(R.id.cib_input);
         btn = (Button) findViewById(R.id.cib_btn);
         TypedArray typedArray = context.obtainStyledAttributes(R.styleable.CommentInputBoard);
@@ -37,18 +40,16 @@ public class CommentInputBoard extends LinearLayout {
         btn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listener!=null) listener.btnClick(parentId, inputText.getText().toString());
+                if(listener!=null) listener.btnClick(inputText.getText().toString());
             }
         });
     }
 
-    public void setParentId(long parentId, String userName){
-        this.parentId = parentId;
+    public void setHint(String userName){
         inputText.setHint("回复："+userName);
     }
 
-    public void clearParentId(){
-        this.parentId = 0;
+    public void clearHint(){
         inputText.setHint("请输入评论");
     }
 
@@ -64,11 +65,39 @@ public class CommentInputBoard extends LinearLayout {
         this.listener = listener;
     }
 
+    public void setOppositeView(View view){
+        this.oppositeView = view;
+    }
+
+    public void show(){
+        if(oppositeView != null) oppositeView.setVisibility(INVISIBLE);
+        this.setVisibility(VISIBLE);
+        inputText.requestFocus();
+        KeyBoardUtil.showKeyBoard(inputText);
+    }
+
+    public void show(View oppositeView){
+        oppositeView.setVisibility(INVISIBLE);
+        show();
+    }
+
+    public void hide(){
+        if(oppositeView != null) oppositeView.setVisibility(VISIBLE);
+        this.setVisibility(View.INVISIBLE);
+    }
+
+    public void hide(View oppositeView){
+        oppositeView.setVisibility(VISIBLE);
+        hide();
+    }
+
     public EditText getInputText(){
         return inputText;
     }
 
     public interface OnBtnClickListener{
-        void btnClick(long parentId, String comment);
+        void btnClick(String comment);
     }
+
+
 }

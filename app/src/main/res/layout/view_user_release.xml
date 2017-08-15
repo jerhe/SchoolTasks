@@ -2,58 +2,59 @@
 <RelativeLayout
     android:paddingTop="10dp"
     android:paddingLeft="10dp"
-    android:id="@+id/ui_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ui_head"
+        android:id="@+id/ur_head"
         android:layout_width="40dp"
         android:layout_height="40dp"/>
     <TextView
-        android:id="@+id/ui_name"
+        android:id="@+id/ur_name"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/ui_head"
+        android:layout_toRightOf="@id/ur_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="昵称"/>
     <TextView
-        android:layout_alignTop="@id/ui_name"
-        android:layout_toRightOf="@id/ui_name"
+        android:id="@+id/ur_sex"
+        android:layout_alignTop="@id/ur_name"
+        android:layout_toRightOf="@id/ur_name"
         android:layout_marginTop="2dp"
         android:layout_marginLeft="3dp"
-        android:id="@+id/ui_sex"
         android:textSize="10sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/ui_release_time"
-        android:layout_below="@id/ui_name"
+        android:id="@+id/ur_release_time"
+        android:layout_below="@id/ur_name"
         android:layout_marginTop="3dp"
-        android:layout_alignLeft="@id/ui_name"
+        android:layout_alignLeft="@id/ur_name"
         android:textColor="@color/hintColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"
         android:text="刚刚"/>
     <TextView
-        android:id="@+id/ui_school"
+        android:id="@+id/ur_school"
         android:textSize="10sp"
         android:textColor="@color/hintColor"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/ui_release_time"
-        android:layout_alignBottom="@id/ui_release_time"
+        android:layout_toRightOf="@id/ur_release_time"
+        android:layout_alignBottom="@id/ur_release_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_label"
         android:text="学校"/>
     <TextView
-        android:id="@+id/ui_des"
-        android:layout_alignBottom="@id/ui_release_time"
+        android:id="@+id/ur_des"
+        android:layout_alignBottom="@id/ur_release_time"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/ui_school"
+        android:layout_toRightOf="@id/ur_school"
         android:textColor="@color/hintColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_label"
         android:textSize="10sp"
         android:text="分类"/>
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
+import com.edu.schooltask.activity.ReleaseTaskActivity;
 import com.edu.schooltask.activity.TaskOrderActivity;
 import com.edu.schooltask.adapter.OrderAdapter;
 import com.edu.schooltask.base.BaseFragment;
@@ -61,8 +63,6 @@ public class OrderFragment extends BaseFragment {
     protected void init(){
         ButterKnife.bind(this, view);
         orderAdapter = new OrderAdapter(R.layout.item_task_order, orderList);
-        orderAdapter.openLoadAnimation();
-        orderAdapter.setLoadMoreView(new CustomLoadMoreView());
         tipRecyclerView.init(orderAdapter);
         tipRecyclerView.setRefreshListener(new TipRecyclerView.RefreshListener() {
             @Override
@@ -71,8 +71,6 @@ public class OrderFragment extends BaseFragment {
             }
         });
         tipRecyclerView.setLoadMore(true);
-        tipRecyclerView.setEmptyTip("您还没有订单");
-        tipRecyclerView.setRefreshOffset(50);
 
         //点击订单事件
         orderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -83,6 +81,7 @@ public class OrderFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        orderAdapter.setEmptyView(R.layout.empty_order);
     }
 
     @Override

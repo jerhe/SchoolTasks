@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
@@ -26,8 +27,7 @@ import java.util.List;
 
 public class TipRecyclerView extends RelativeLayout {
     private TextView loginTip;
-    private TextView emptyTip;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private PullRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
 
     private BaseQuickAdapter adapter;
@@ -40,8 +40,7 @@ public class TipRecyclerView extends RelativeLayout {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_tip_recyclerview, this);
         loginTip = (TextView) findViewById(R.id.tr_login_tip);
-        emptyTip = (TextView) findViewById(R.id.tr_empty_tip);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tr_srl);
+        refreshLayout = (PullRefreshLayout) findViewById(R.id.tr_prl);
         recyclerView = (RecyclerView) findViewById(R.id.tr_rv);
 
         loginTip.setOnClickListener(new OnClickListener() {
@@ -58,15 +57,18 @@ public class TipRecyclerView extends RelativeLayout {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         this.adapter = adapter;
         recyclerView.setAdapter(adapter);
+        //设置适配器
+        adapter.openLoadAnimation();
+        adapter.setLoadMoreView(new CustomLoadMoreView());
         //判断用户登录
         if(UserUtil.hasLogin()){
-            showEmptyTip();
+           showRecyclerView();
         }
         else{
             showLoginTip();
         }
         //刷新事件
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 isRefreshing = true;
@@ -102,43 +104,26 @@ public class TipRecyclerView extends RelativeLayout {
 
     public void showLoginTip(){
         loginTip.setVisibility(VISIBLE);
-        emptyTip.setVisibility(GONE);
-        swipeRefreshLayout.setVisibility(GONE);
-    }
-
-    public void showEmptyTip(){
-        loginTip.setVisibility(GONE);
-        emptyTip.setVisibility(VISIBLE);
-        swipeRefreshLayout.setVisibility(VISIBLE);
+        refreshLayout.setVisibility(GONE);
     }
 
     public void showRecyclerView(){
         loginTip.setVisibility(GONE);
-        emptyTip.setVisibility(GONE);
-        swipeRefreshLayout.setVisibility(VISIBLE);
+        refreshLayout.setVisibility(VISIBLE);
     }
 
     public void notifyDataChanged(){
-        if(adapter.getData().size() == 0){
-            showEmptyTip();
-        }
-        else{
-            showRecyclerView();
-        }
+        showRecyclerView();
         adapter.notifyDataSetChanged();
     }
 
     public void setRefreshing(boolean refreshing){
-        swipeRefreshLayout.setRefreshing(refreshing);
+        refreshLayout.setRefreshing(refreshing);
     }
 
     public void setRefreshListener(RefreshListener listener){
         this.refreshListener = listener;
         if(loginTip.getVisibility() != VISIBLE) listener.onRefresh(page);   //执行刷新
-    }
-
-    public void setEmptyTip(String tip){
-        emptyTip.setText(tip);
     }
 
     //加载成功
@@ -155,13 +140,6 @@ public class TipRecyclerView extends RelativeLayout {
         adapter.loadMoreFail();
     }
 
-    //改变刷新圆圈高度
-    public void setRefreshOffset(int offset){
-        swipeRefreshLayout.setProgressViewOffset(true, 0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, offset,
-                getResources().getDisplayMetrics()));
-    }
-
     public void logout(){
         clear();
         setRefreshing(false);
@@ -170,7 +148,6 @@ public class TipRecyclerView extends RelativeLayout {
     }
 
     public void login(){
-        showEmptyTip();
         refreshListener.onRefresh(page);
     }
 

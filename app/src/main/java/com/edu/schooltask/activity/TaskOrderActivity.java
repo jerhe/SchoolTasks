@@ -100,11 +100,12 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
 
     private HomeAdapter commentAdapter;
     private List<HomeItem> comments = new ArrayList<>();
-    int commentPage = 0;
+    int page = 0;
 
     private HomeAdapter childCommentAdapter;
     private List<HomeItem> childComments = new ArrayList<>();
     long parentId;
+    int childPage = 0;
 
     private String orderId;
 
@@ -158,7 +159,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         commentAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                SchoolTask.getTaskComment(orderId, commentPage);
+                SchoolTask.getTaskComment(orderId, page);
             }
         }, commentRecyclerView);
         commentAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -173,11 +174,12 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                                 onBackPressed();
                             }
                         });
+                        setTitle("查看回复");
                         childComments.clear();
                         childCommentAdapter.notifyDataSetChanged();
-                        setTitle("查看回复");
                         childCommentRecyclerView.setVisibility(View.VISIBLE);
-                        SchoolTask.getTaskChildComment(orderId, parentId);
+                        childPage = 0;
+                        SchoolTask.getTaskChildComment(orderId, parentId, childPage);
                         break;
                     case R.id.ui_layout:
                         Intent intent = new Intent(TaskOrderActivity.this, UserActivity.class);
@@ -193,7 +195,15 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         childCommentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         childCommentAdapter = new HomeAdapter(childComments, mDataCache, this);
         childCommentRecyclerView.setAdapter(childCommentAdapter);
+        childCommentAdapter.setEnableLoadMore(true);
+        childCommentAdapter.setLoadMoreView(new CustomLoadMoreView());
         childCommentAdapter.openLoadAnimation();
+        childCommentAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                SchoolTask.getTaskChildComment(orderId, parentId, childPage);
+            }
+        }, childCommentRecyclerView);
         childCommentAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -212,7 +222,8 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                commentPage = 0;
+                page = 0;
+                childPage = 0;
                 comments.clear();
                 commentAdapter.notifyDataSetChanged();
                 getTaskOrderInfo();
@@ -268,7 +279,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         }
         if(event.isOk()){
             commentAdapter.setEnableLoadMore(true);
-            SchoolTask.getTaskComment(orderId, commentPage);
+            SchoolTask.getTaskComment(orderId, page);
             abandonBtn.setVisibility(View.GONE);
             cancelBtn.setVisibility(View.GONE);
             confirmBtn.setVisibility(View.GONE);
@@ -418,7 +429,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         if(event.isOk()){
             TaskCommentList taskCommentList = GsonUtil.toTaskCommentList(event.getData());
             if(orderId.equals(taskCommentList.getOrderId())){
-                commentPage++;
+                page++;
                 List<TaskComment> taskComments = taskCommentList.getTaskComments();
                 for(TaskComment taskComment : taskComments){
                     HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment);
@@ -439,14 +450,18 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     public void onGetTaskChildComment(GetTaskChildCommentEvent event){
         if(event.isOk()){
             TaskCommentList taskCommentList = GsonUtil.toTaskCommentList(event.getData());
-            if(taskCommentList.getOrderId().equals(orderId)) {
-                List<TaskComment> taskComments = taskCommentList.getTaskComments();
-                for (TaskComment taskComment : taskComments) {
-                    HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment, parentId);
-                    childComments.add(homeItem);
-                }
-                childCommentAdapter.notifyDataSetChanged();
+            if(childPage == 0) childComments.clear();
+            childPage ++;
+            List<TaskComment> taskComments = taskCommentList.getTaskComments();
+            for(TaskComment taskComment : taskComments){
+                HomeItem homeItem = new HomeItem(HomeItem.COMMENT, taskComment, parentId);
+                childComments.add(homeItem);
             }
+            childCommentAdapter.loadMoreComplete();
+            if(taskComments.size() == 0){
+                childCommentAdapter.loadMoreEnd();
+            }
+            childCommentAdapter.notifyDataSetChanged();
         }
         else{
             toastShort(event.getError());

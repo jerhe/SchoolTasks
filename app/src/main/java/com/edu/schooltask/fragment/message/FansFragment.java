@@ -67,9 +67,6 @@ public class FansFragment extends BaseFragment {
     protected void init() {
         ButterKnife.bind(this, view);
         adapter = new UserAdapter(R.layout.item_user, fansUsers);
-        adapter.openLoadAnimation();
-        adapter.setLoadMoreView(new CustomLoadMoreView());
-        adapter.setEnableLoadMore(true);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -79,7 +76,6 @@ public class FansFragment extends BaseFragment {
             }
         });
         tipRecyclerView.init(adapter);
-        tipRecyclerView.setEmptyTip("没有人关注你哦");
         tipRecyclerView.setRefreshListener(new TipRecyclerView.RefreshListener() {
             @Override
             public void onRefresh(int page) {

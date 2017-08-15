@@ -18,4 +18,7 @@
     <color name="jobColor">#778899</color>
     <color name="black">#000000</color>
     <color name="divide">#F3F3F3</color>
+    <color name="textNameColor">#EEEEEE</color>
+    <color name="imageBorderColor">#CCCCCC</color>
+    <color name="labelBackgroundColor">#eeeeee</color>
 </resources>

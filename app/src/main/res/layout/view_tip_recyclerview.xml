@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,22 +10,16 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="请先登录"/>
-    <TextView
-        android:id="@+id/tr_empty_tip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="没有数据"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"/>
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/tr_srl"
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/tr_prl"
         android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:refreshColor="@color/colorPrimary">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/tr_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.baoyz.widget.PullRefreshLayout>
 </RelativeLayout>

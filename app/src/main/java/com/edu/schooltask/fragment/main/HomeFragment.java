@@ -1,16 +1,20 @@
 package com.edu.schooltask.fragment.main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
@@ -18,6 +22,7 @@ import com.edu.schooltask.activity.ReleaseTaskActivity;
 import com.edu.schooltask.activity.TaskListActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.adapter.HomeAdapter;
+import com.edu.schooltask.adapter.TaskItemAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.beans.UserInfo;
@@ -51,26 +56,20 @@ import server.api.task.get.GetSchoolTaskEvent;
  */
 
 public class HomeFragment extends BaseFragment {
-    @BindView(R.id.home_srl) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.home_banner) Banner banner;
+    @BindView(R.id.home_task_release) ImageView taskReleaseBtn;
+    @BindView(R.id.home_task_search) ImageView taskSearchBtn;
+    @BindView(R.id.home_secondhand) ImageView secondhandBtn;
+    @BindView(R.id.home_job) ImageView jobBtn;
+    @BindView(R.id.home_tab) ViewPagerTab tab;
+    @BindView(R.id.home_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.home_rv) RecyclerView recyclerView;
-    @BindView(R.id.home_tab) ViewPagerTab homeTab;
 
-    private LinearLayoutManager linearLayoutManager;
-    private HomeAdapter adapter;
-    private List<HomeItem> items = new ArrayList<>();
-    private List<HomeItem> nearTaskItems = new ArrayList<>();
-    private List<HomeItem> twoHandItems = new ArrayList<>();
-    private List<HomeItem> jobItems = new ArrayList<>();
+    private TaskItemAdapter adapter;
+    private List<TaskItem> taskItems = new ArrayList<>();
 
     private int type = 0;   //0.附近任务 1.二手交易 2.最新兼职
-    private int nearTaskPageIndex = 0;
-    private int twoHandPageIndex = 0;
-    private int jobPageIndex = 0;
-
-
-    View headView;
-    private ViewPagerTab homeViewPagerTab;
-    View pointerView;
+    private int page = 0;
 
     List<String> images = new ArrayList<>();
 
@@ -93,9 +92,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void init(){
         ButterKnife.bind(this, view);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new HomeAdapter(items, mDataCache, (BaseActivity)getActivity());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new TaskItemAdapter(taskItems);
         adapter.setLoadMoreView(new CustomLoadMoreView());
         adapter.bindToRecyclerView(recyclerView);
         adapter.setEnableLoadMore(true);
@@ -117,22 +115,14 @@ public class HomeFragment extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                HomeItem item = items.get(position);
-                switch (item.getItemType()){
-                    case 1:
-                        Intent intent = new Intent(getActivity(), WaitAcceptOrderActivity.class);
-                        intent.putExtra("task", item);
-                        startActivity(intent);
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                }
+                TaskItem item = taskItems.get(position);
+                Intent intent = new Intent(getActivity(), WaitAcceptOrderActivity.class);
+                intent.putExtra("taskItem", item);
+                startActivity(intent);
             }
         });
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 clearList();
@@ -142,28 +132,20 @@ public class HomeFragment extends BaseFragment {
 
         initBanner();
         initButton();
-        initPointer();
+        initTab();
         getSchoolTask();
-        twoHandItems.add(new HomeItem(HomeItem.LOAD_TIP, "开发中..."));
-        jobItems.add(new HomeItem(HomeItem.LOAD_TIP, "开发中..."));
     }
 
     private void initBanner(){
-        View bannerView = LayoutInflater.from(getContext()).inflate(R.layout.rv_banner,null);
-        Banner banner = (Banner) bannerView.findViewById(R.id.banner);
         banner.setImageLoader(new GlideImageLoader());
         images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
         images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
         images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
         banner.setImages(images);
         banner.start();
-        adapter.addHeaderView(bannerView);
     }
 
     private void initButton(){
-        View buttonView = LayoutInflater.from(getContext()).inflate(R.layout.rv_btn,null);
-        ImageView releaseBtn = (ImageView) buttonView.findViewById(R.id.home_task_release);
-        ImageView taskListBtn = (ImageView) buttonView.findViewById(R.id.home_task_list);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,7 +155,7 @@ public class HomeFragment extends BaseFragment {
                             case R.id.home_task_release:
                                 openActivity(ReleaseTaskActivity.class);
                                 break;
-                            case R.id.home_task_list:
+                            case R.id.home_task_search:
                                 openActivity(TaskListActivity.class);
                                 break;
                         }
@@ -188,73 +170,25 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         };
-        releaseBtn.setOnClickListener(listener);
-        taskListBtn.setOnClickListener(listener);
-        adapter.addHeaderView(buttonView);
+        taskReleaseBtn.setOnClickListener(listener);
+        taskSearchBtn.setOnClickListener(listener);
     }
 
-    private void initPointer(){
-        //RecyclerView中的tab
-        pointerView = LayoutInflater.from(getContext()).inflate(R.layout.rv_pt,null);
-        homeViewPagerTab = (ViewPagerTab) pointerView.findViewById(R.id.home_tab);
-        homeViewPagerTab.addTab("附近任务");
-        homeViewPagerTab.addTab("二手交易");
-        homeViewPagerTab.addTab("最新兼职");
-        homeViewPagerTab.setEventBus(true);
-        homeViewPagerTab.select(0);
-        headView  = adapter.getHeaderLayout();
-
-        //悬浮的tab
-        homeTab.addTab("附近任务");
-        homeTab.addTab("二手交易");
-        homeTab.addTab("最新兼职");
-        homeTab.setEventBus(true);
-        homeTab.select(0);
-
-        adapter.addHeaderView(pointerView);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if(pointerView.getY() + headView.getY() <= 0){
-                    if(!homeTab.isShown()) homeTab.setVisibility(View.VISIBLE);
-                }
-                else{
-                    if(homeTab.isShown()) homeTab.setVisibility(View.GONE);
-                }
-            }
-        });
+    private void initTab(){
+        tab.addTab("附近任务");
+        tab.addTab("最新二手");
+        tab.addTab("最新兼职");
+        tab.select(0);
     }
 
     private void getSchoolTask(){
         UserInfo user = UserUtil.getLoginUser();
         if(user != null){
-            SchoolTask.getSchoolTask(user.getSchool(), nearTaskPageIndex);
+            SchoolTask.getSchoolTask(user.getSchool(), page);
         }
         else{   //用户未登录则获取最新任务
-            SchoolTask.getSchoolTask("*", nearTaskPageIndex);
+            SchoolTask.getSchoolTask("*", page);
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTabSelected(TabSelectedEvent event){
-        recyclerView.smoothScrollBy(0, (int)(pointerView.getY() + headView.getY()));
-        homeTab.select(event.position);
-        homeViewPagerTab.select(event.position);
-        items.clear();
-        type = event.position;
-        switch (type){
-            case 0:
-                items.addAll(nearTaskItems);
-                break;
-            case 1:
-                items.addAll(twoHandItems);
-                break;
-            case 2:
-                items.addAll(jobItems);
-                break;
-        }
-        adapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -271,16 +205,11 @@ public class HomeFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetSchoolTask(GetSchoolTaskEvent event){
-        if(refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
+        refreshLayout.setRefreshing(false);
         if (event.isOk()){
-            nearTaskPageIndex ++;
+            page ++;
             List<TaskItem> taskItems = GsonUtil.toTaskItemList(event.getData());
-            for(TaskItem taskItem : taskItems){
-                HomeItem homeItem = new HomeItem(HomeItem.TASK_ITEM, taskItem);
-                if(!nearTaskItems.contains(homeItem)){
-                    nearTaskItems.add(homeItem);
-                }
-            }
+            this.taskItems.addAll(taskItems);
             adapter.loadMoreComplete();
             if(taskItems.size() == 0){
                 adapter.loadMoreEnd();
@@ -290,24 +219,11 @@ public class HomeFragment extends BaseFragment {
         else{
             adapter.loadMoreFail();
             toastShort(event.getError());
-            if(nearTaskItems.size() == 0)
-                nearTaskItems.add(new HomeItem(HomeItem.LOAD_TIP, "加载失败，请重试"));
         }
-        //Tab选项
-        if(type == 0){
-            items.clear();
-            items.addAll(nearTaskItems);
-            adapter.notifyDataSetChanged();
-        }
-
     }
 
     private void clearList(){
-        nearTaskPageIndex = 0;
-        twoHandPageIndex = 0;
-        jobPageIndex = 0;
-        nearTaskItems.clear();
-        twoHandItems.clear();
-        jobItems.clear();
+        page = 0;
+        taskItems.clear();
     }
 }

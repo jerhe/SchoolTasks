@@ -7,6 +7,10 @@
         <attr name="inputType" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="SelectText">
+        <attr name="ST_text" format="string"/>
+    </declare-styleable>
+
     <declare-styleable name="Content">
         <attr name="maxLength" format="integer"/>
         <attr name="contentHint" format="string"/>
@@ -28,5 +32,9 @@
 
     <declare-styleable name="TextItem">
         <attr name="itemName" format="string"/>
+    </declare-styleable>
+    
+    <declare-styleable name="ImageRecyclerView">
+        <attr name="imageColumns" format="integer"/>
     </declare-styleable>
 </resources>

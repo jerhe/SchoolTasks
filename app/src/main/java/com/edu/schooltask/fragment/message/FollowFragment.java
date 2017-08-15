@@ -61,9 +61,6 @@ public class FollowFragment extends BaseFragment {
     protected void init() {
         ButterKnife.bind(this, view);
         adapter = new UserAdapter(R.layout.item_user, followerUsers);
-        adapter.openLoadAnimation();
-        adapter.setLoadMoreView(new CustomLoadMoreView());
-        adapter.setEnableLoadMore(true);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -73,7 +70,6 @@ public class FollowFragment extends BaseFragment {
             }
         });
         tipRecyclerView.init(adapter);
-        tipRecyclerView.setEmptyTip("你还没有关注其他人");
         tipRecyclerView.setRefreshListener(new TipRecyclerView.RefreshListener() {
             @Override
             public void onRefresh(int page) {

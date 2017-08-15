@@ -34,8 +34,6 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
 
     private ViewPager viewPager;
 
-    private boolean useEventBus;
-
     private List<String> texts = new ArrayList<>();
     public List<TextView> textViews = new ArrayList<>();
     public List<View> pointViews = new ArrayList<>();
@@ -151,12 +149,6 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
     public void onClick(View v) {
         int position = textViews.indexOf(v);
         select(position);
-        if(useEventBus){    //Post标签切换事件
-            EventBus.getDefault().post(new TabSelectedEvent(position));
-        }
     }
 
-    public void setEventBus(boolean isUse){
-        useEventBus = isUse;
-    }
 }

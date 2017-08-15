@@ -5,70 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     tools:context="com.edu.schooltask.activity.ReleaseTaskActivity">
     <include layout="@layout/toolbar"/>
     <com.edu.schooltask.view.InputText
         android:id="@+id/rt_school"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:text="学校"
         app:hint="请输入学校">
     </com.edu.schooltask.view.InputText>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:paddingLeft="20dp"
-        android:paddingRight="10dp"
-        android:layout_height="50dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginRight="20dp"
-            android:text="分类"/>
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/rt_des"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
     <com.edu.schooltask.view.InputText
         android:id="@+id/rt_cost"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:text="报酬"
         app:hint="任务报酬金额(元)，至少是1元钱">
     </com.edu.schooltask.view.InputText>
     <com.edu.schooltask.view.InputText
         android:id="@+id/rt_limit_time"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:text="时限"
         app:hint="任务发布后可接单的时间(小时)">
     </com.edu.schooltask.view.InputText>
+    <com.edu.schooltask.view.SelectText
+        android:id="@+id/rt_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ST_text="分类">
+    </com.edu.schooltask.view.SelectText>
     <com.edu.schooltask.view.Content
         android:id="@+id/rt_content"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:maxLength="200"
         app:contentHint="任务内容，请尽量描述任务详细要求">
     </com.edu.schooltask.view.Content>
-    <android.support.v7.widget.RecyclerView
+    <com.edu.schooltask.view.ImageRecyclerView
         android:id="@+id/rt_irv"
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:textSize="12sp"
-        android:textColor="@color/colorPrimary"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="发布任务说明"/>
+        app:imageColumns="5">
+    </com.edu.schooltask.view.ImageRecyclerView>
 </LinearLayout>
