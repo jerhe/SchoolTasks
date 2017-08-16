@@ -31,8 +31,13 @@ public class IconMenuAdapter extends BaseMultiItemQuickAdapter<IconMenuItem, Bas
         int type = item.getItemType();
         if(type == IconMenuItem.EMPTY) return;
         //图标
-        if(item.getResId() == 0) helper.setVisible(R.id.im_image, false);
-        else helper.setImageResource(R.id.im_image, item.getResId());
+        if(item.getResId() == 0) {
+            if(type != IconMenuItem.TITLE) helper.setVisible(R.id.im_image, false);
+        }
+        else {
+            helper.setImageResource(R.id.im_image, item.getResId());
+        }
+
         //文本
         helper.setText(R.id.im_name, item.getName());
         //提示

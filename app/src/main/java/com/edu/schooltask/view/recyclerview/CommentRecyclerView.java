@@ -1,4 +1,4 @@
-package com.edu.schooltask.view;
+package com.edu.schooltask.view.recyclerview;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +20,9 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.CommentAdapter;
 import com.edu.schooltask.beans.TaskComment;
 import com.edu.schooltask.utils.DensityUtil;
+import com.edu.schooltask.view.CommentInputBoard;
+import com.edu.schooltask.view.CommentReplyView;
+import com.edu.schooltask.view.CustomLoadMoreView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +31,7 @@ import java.util.List;
  * Created by 夜夜通宵 on 2017/8/14.
  */
 
-public class CommentRecyclerView extends RecyclerView {
-
-    //顶层评论
-    CommentAdapter adapter;
-    List<TaskComment> comments = new ArrayList<>();
-    GetCommentListener listener;
-    CommentClickListener commentClickListener;
-    int page = 0;
+public class CommentRecyclerView extends BasePageRecyclerView<TaskComment> {
 
     //子评论
     CommentReplyView commentReplyView;
@@ -47,87 +43,44 @@ public class CommentRecyclerView extends RecyclerView {
 
     public CommentRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setBackgroundColor(Color.WHITE);
-        this.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new CommentAdapter(R.layout.item_task_comment, comments);
-        adapter.openLoadAnimation();
-        this.setAdapter(adapter);
     }
 
-    public void addData(List<TaskComment> taskComments){
-        if(page == 0) comments.clear();
-        adapter.addData(taskComments);
-        page ++;
-        adapter.loadMoreComplete();
-        if(taskComments.size() == 0) adapter.loadMoreEnd();
-        adapter.notifyDataSetChanged();
+    @Override
+    protected BaseQuickAdapter initAdapter(List<TaskComment> list) {
+        return new CommentAdapter(R.layout.item_task_comment, list);
     }
 
-    public List<TaskComment> getData(){
-        return comments;
+    @Override
+    public void refresh() {
+        super.refresh();
+        if(commentReplyView != null)
+            if(commentReplyView.isShown())
+                commentReplyView.refresh();
     }
-
-    public void clear() {
-        page = 0;
-        comments.clear();
-        adapter.notifyDataSetChanged();
-    }
-
-    //获取评论
-    public void getComment(){
-        if(listener != null) listener.getComment(page);
-    }
-
-    //刷新评论
-    public void refresh(){
-        clear();
-        getComment();
-    }
-
-    public void addHeader(View view){
-        adapter.addHeaderView(view);
-    }
-
-    public void setGetCommentListener(GetCommentListener listener){
-        this.listener = listener;
-        adapter.setEnableLoadMore(true);
-        adapter.setLoadMoreView(new CustomLoadMoreView());
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                getComment();
-            }
-        }, this);
-        listener.getComment(page);
-    }
-
-    public interface GetCommentListener {
-        void getComment(int page);
-    }
-
 
     //////////////////////////////子评论/////////////////////////////////////
 
     //初始化子评论
-    public void initChild(final CommentReplyView childView, final GetCommentListener listener,
-                          final CommentInputBoard inputBoard, CommentClickListener l){
+    public void initChild(final CommentReplyView childView, OnGetPageDataListener listener,
+                          final CommentInputBoard inputBoard){
         this.inputBoard = inputBoard;
-        setCommentClickListener(l);
         commentReplyView = childView;
-        commentReplyView.setGetCommentListener(listener);
+        commentReplyView.setGetDataPageListener(listener);
 
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(inputBoard != null)inputBoard.setHint(comments.get(position).getCommentUser().getName());
-                setParentId(comments.get(position).getId());
-                if(commentClickListener != null) commentClickListener.onCommentClick();
+                if(inputBoard != null) {
+                    inputBoard.setHint(list.get(position).getCommentUser().getName());
+                    inputBoard.show();
+                }
+                setParentId(list.get(position).getId());
             }
         });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                TaskComment taskComment = comments.get(position);
+                TaskComment taskComment = list.get(position);
                 setParentId(taskComment.getId());
                 setToUserId(taskComment.getUserId());
                 childView.refresh();
@@ -135,20 +88,15 @@ public class CommentRecyclerView extends RecyclerView {
                 if(inputBoard != null) inputBoard.setHint(taskComment.getCommentUser().getName());
             }
         });
-        childView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        commentReplyView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if(inputBoard != null){
-                    inputBoard.setHint(childView.getData().get(position).getCommentUser().getName());
+                    inputBoard.setHint(commentReplyView.getComments().get(position).getCommentUser().getName());
                     inputBoard.show();
                 }
             }
         });
-    }
-
-
-    public void setOnItemClickListener(BaseQuickAdapter.OnItemClickListener listener) {
-        adapter.setOnItemClickListener(listener);
     }
 
     public void showChild(){
@@ -185,12 +133,4 @@ public class CommentRecyclerView extends RecyclerView {
         this.toUserId = toUserId;
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    public void setCommentClickListener(CommentClickListener l){
-        this.commentClickListener = l;
-    }
-
-    public interface CommentClickListener{
-        void onCommentClick();
-    }
 }

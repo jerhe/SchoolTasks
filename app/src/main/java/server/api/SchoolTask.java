@@ -505,7 +505,7 @@ public class SchoolTask {
         if(user != null){
             Map<String, String> params = new HashMap<>();
             params.put("to_id", toId);
-            params.put("message", message);
+            params.put("bg_private_message", message);
             params.put("image", image);
             params.put("width", width+"");
             params.put("height", height+"");
@@ -529,7 +529,7 @@ public class SchoolTask {
     public static void uploadMessageImage(File image, final int imageWidth, final int imageHeight, UploadKey uploadKey){
         final UserInfo user = getUser();
         String imageName = StringUtil.getRandStr(6);
-        final String imagePath = "message/" + user.getUserId() + imageName +".jpg";
+        final String imagePath = "bg_private_message/" + user.getUserId() + imageName +".jpg";
         uploadManager.put(image, imagePath, uploadKey.getKey(), new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {

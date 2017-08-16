@@ -28,8 +28,8 @@ public class MyApplication extends LitePalApplication {
         super.onCreate();
         BP.init("b8423903660c0d5aa0f0bcee7af3fb09");
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)    //连接超时时间
-                .readTimeout(15, TimeUnit.SECONDS)       //读取超时时间
+                .connectTimeout(10, TimeUnit.SECONDS)    //连接超时时间
+                .readTimeout(10, TimeUnit.SECONDS)       //读取超时时间
                 .retryOnConnectionFailure(true)         //是否重试
                 .build();
         OkHttpUtils.initClient(client); //设置为默认client

@@ -20,13 +20,13 @@
             android:layout_height="match_parent"
             app:refreshColor="@color/colorPrimary"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <com.edu.schooltask.view.CommentRecyclerView
+            <com.edu.schooltask.view.recyclerview.CommentRecyclerView
                 android:id="@+id/wao_crv"
                 android:fadingEdge="none"
                 android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </com.edu.schooltask.view.CommentRecyclerView>
+            </com.edu.schooltask.view.recyclerview.CommentRecyclerView>
         </com.baoyz.widget.PullRefreshLayout>
         <com.edu.schooltask.view.CommentReplyView
             android:id="@+id/wao_comment_reply_view"
@@ -39,40 +39,40 @@
     </RelativeLayout>
 
 
-
-    <RelativeLayout
-        android:background="@color/white"
+    <View
         android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/lineColor"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/divide"
         android:layout_height="60dp">
         <com.edu.schooltask.view.CommentInputBoard
-            android:id="@+id/wao_ib"
+            android:id="@+id/wao_cib"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"
-            app:inputHint="请输入评论"
-            app:btnText="评论">
+            android:visibility="invisible">
         </com.edu.schooltask.view.CommentInputBoard>
         <RelativeLayout
             android:id="@+id/wao_btn_layout"
             android:gravity="center_vertical"
-            android:background="@color/mainBackgroundColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <Button
                 android:id="@+id/wao_comment_btn"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:text="评论"
-                android:background="@drawable/shape_input_white_corner"
-                android:layout_width="60dp"
+                android:background="@drawable/btn_white"
+                android:layout_width="wrap_content"
                 android:layout_height="35dp" />
             <Button
                 android:id="@+id/wao_accept_btn"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="10dp"
                 android:text="接单"
                 android:textColor="@color/white"
-                android:background="@drawable/shape_theme_btn"
+                android:background="@drawable/btn_theme"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp" />
         </RelativeLayout>

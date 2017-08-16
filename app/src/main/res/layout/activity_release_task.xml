@@ -44,7 +44,7 @@
         app:maxLength="200"
         app:contentHint="任务内容，请尽量描述任务详细要求">
     </com.edu.schooltask.view.Content>
-    <com.edu.schooltask.view.ImageRecyclerView
+    <com.edu.schooltask.view.recyclerview.ImageRecyclerView
         android:id="@+id/rt_irv"
         android:fadingEdge="none"
         android:overScrollMode="never"
@@ -53,5 +53,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:imageColumns="5">
-    </com.edu.schooltask.view.ImageRecyclerView>
+    </com.edu.schooltask.view.recyclerview.ImageRecyclerView>
 </LinearLayout>

@@ -25,7 +25,7 @@
                             android:layout_height="60dp"
                             android:src="@drawable/ic_action_release"
                             android:scaleType="center"
-                            android:background="@drawable/shape_release_task_btn"/>
+                            android:background="@drawable/shape_ring_release"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                             android:layout_height="60dp"
                             android:src="@drawable/ic_action_accept"
                             android:scaleType="center"
-                            android:background="@drawable/shape_accept_task_btn"/>
+                            android:background="@drawable/shape_ring_accept"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                             android:layout_height="60dp"
                             android:src="@drawable/ic_action_secondhand"
                             android:scaleType="center"
-                            android:background="@drawable/shape_secondhand_btn"/>
+                            android:background="@drawable/shape_ring_secondhand"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                             android:layout_height="60dp"
                             android:src="@drawable/ic_action_job"
                             android:scaleType="center"
-                            android:background="@drawable/shape_job_btn"/>
+                            android:background="@drawable/shape_ring_job"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

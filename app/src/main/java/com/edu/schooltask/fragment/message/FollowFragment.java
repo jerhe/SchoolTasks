@@ -16,8 +16,7 @@ import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.view.CustomLoadMoreView;
-import com.edu.schooltask.view.TipRecyclerView;
+import com.edu.schooltask.view.recyclerview.TipRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,7 +59,7 @@ public class FollowFragment extends BaseFragment {
     @Override
     protected void init() {
         ButterKnife.bind(this, view);
-        adapter = new UserAdapter(R.layout.item_user, followerUsers);
+        adapter = new UserAdapter(followerUsers);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

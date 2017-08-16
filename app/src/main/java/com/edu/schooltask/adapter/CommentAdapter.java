@@ -47,7 +47,6 @@ public class CommentAdapter extends BaseQuickAdapter<TaskComment, BaseViewHolder
                 helper.setTextColor(R.id.ui_sex, Color.parseColor("#FF0000"));
                 break;
         }
-        int childCount = taskComment.getChildCount();
         if(taskComment.getParentId() != 0){ //子评论
             UserInfoBase toUser = taskComment.getToUser();
             if(toUser != null){
@@ -61,9 +60,9 @@ public class CommentAdapter extends BaseQuickAdapter<TaskComment, BaseViewHolder
         }
         else{   //顶层评论
             helper.setText(R.id.tc_comment, taskComment.getComment());
-            if(childCount != 0){
+            if(taskComment.getReplyCount() != 0){
                 helper.setVisible(R.id.tc_child_count, true);
-                helper.setText(R.id.tc_child_count, childCount + "条回复");
+                helper.setText(R.id.tc_child_count, taskComment.getReplyCount() + "条回复");
                 helper.addOnClickListener(R.id.tc_child_count);
             }
             else{

@@ -6,37 +6,29 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
-import com.edu.schooltask.adapter.ImageAdapter;
 import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.TaskUploadKey;
-import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.event.DeleteImageEvent;
 import com.edu.schooltask.filter.MoneyFilter;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.SchoolFilter;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.other.SchoolAutoComplement;
-import com.edu.schooltask.utils.AnimationUtil;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.Content;
-import com.edu.schooltask.view.ImageRecyclerView;
+import com.edu.schooltask.view.recyclerview.ImageRecyclerView;
 import com.edu.schooltask.view.InputText;
 import com.edu.schooltask.view.SelectText;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
@@ -104,7 +96,7 @@ public class ReleaseTaskActivity extends BaseActivity {
         setContentView(R.layout.activity_release_task);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        imageRecyclerView.addImage(new ImageItem(0));
+        imageRecyclerView.add(new ImageItem(0));
         imageRecyclerView.setImageClickListener(new ImageRecyclerView.ImageClickListener() {
             @Override
             public void onImageClick(int position, ImageItem imageItem) {
@@ -116,7 +108,7 @@ public class ReleaseTaskActivity extends BaseActivity {
                         Intent intent = new Intent(ReleaseTaskActivity.this, ImageActivity.class);
                         intent.putExtra("editable", true);
                         intent.putExtra("index", position);
-                        intent.putExtra("images", (Serializable) imageRecyclerView.getImages());
+                        intent.putExtra("images", (Serializable) imageRecyclerView.get());
                         startActivity(intent);
                         break;
                 }
@@ -132,7 +124,7 @@ public class ReleaseTaskActivity extends BaseActivity {
         schoolText.getInputText().addTextChangedListener(
                 new SchoolAutoComplement(schoolText.getInputText(), mDataCache.getSchool()));
 
-        desText.setItems("请选择任务类型","学习","生活","娱乐","运动","商家","其他");
+        desText.setItems("请选择任务类型","跑腿","学习","生活","娱乐","其他");
 
         costText.requestFocus();   //设置标题为默认焦点
     }
@@ -240,7 +232,7 @@ public class ReleaseTaskActivity extends BaseActivity {
         }
         if(UserUtil.hasLogin()){
             //压缩图片
-            List<ImageItem> imageItems = imageRecyclerView.getImages();
+            List<ImageItem> imageItems = imageRecyclerView.get();
             for(int i=0; i<imageItems.size()-1; i++){
                 ImageItem imageItem = imageItems.get(i);
                 String path = imageItem.getPath();
@@ -270,7 +262,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     }
 
     public void multiSelect() {
-        int imageCount = 9 - imageRecyclerView.getImages().size() + 1;
+        int imageCount = 9 - imageRecyclerView.get().size() + 1;
         if(imageCount == 0){
             toastShort("最多添加9张图片");
             return;
@@ -305,7 +297,7 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeleteImage(DeleteImageEvent event){
-        imageRecyclerView.removeImage(event.getIndex());
+        imageRecyclerView.remove(event.getIndex());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -346,13 +338,13 @@ public class ReleaseTaskActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_IMAGE_CODE && resultCode == RESULT_OK && data != null) {
             List<String> paths = data.getStringArrayListExtra(ImgSelActivity.INTENT_RESULT);
-            imageRecyclerView.removeLastImage();
+            imageRecyclerView.removeLast();
             List<ImageItem> imageItems = new ArrayList<>();
             for(String path : paths){
                 imageItems.add(new ImageItem(1,path));
             }
-            imageRecyclerView.addImages(imageItems);
-            imageRecyclerView.addImage(new ImageItem(0));
+            imageRecyclerView.add(imageItems);
+            imageRecyclerView.add(new ImageItem(0));
         }
     }
 

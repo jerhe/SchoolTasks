@@ -1,4 +1,4 @@
-package com.edu.schooltask.view;
+package com.edu.schooltask.view.recyclerview;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.data.DataCache;
 import com.edu.schooltask.utils.UserUtil;
+import com.edu.schooltask.view.CustomLoadMoreView;
 
 import java.util.List;
 

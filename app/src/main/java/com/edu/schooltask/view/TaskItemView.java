@@ -3,23 +3,18 @@ package com.edu.schooltask.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.activity.ImageActivity;
 import com.edu.schooltask.activity.WaitAcceptOrderActivity;
-import com.edu.schooltask.beans.UserInfoBase;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.item.TaskItem;
-import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.view.recyclerview.ImageRecyclerView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,7 +55,7 @@ public class TaskItemView extends LinearLayout{
             imageItems.add(new ImageItem(1,imageUrl + i + ".png"));
         }
         imageRecyclerView.clear();
-        imageRecyclerView.addImages(imageItems);
+        imageRecyclerView.add(imageItems);
         //点击跳转事件
         if (isInfo){
             //浏览图片
@@ -70,7 +65,7 @@ public class TaskItemView extends LinearLayout{
                     Intent intent = new Intent(getContext(), ImageActivity.class);
                     intent.putExtra("editable", false);
                     intent.putExtra("index", position);
-                    intent.putExtra("images", (Serializable) imageRecyclerView.getImages());
+                    intent.putExtra("images", (Serializable) imageRecyclerView.get());
                     getContext().startActivity(intent);
                 }
             });

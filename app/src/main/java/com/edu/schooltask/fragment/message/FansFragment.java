@@ -3,14 +3,10 @@ package com.edu.schooltask.fragment.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
-import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.activity.PrivateMessageActivity;
 import com.edu.schooltask.adapter.UserAdapter;
 import com.edu.schooltask.base.BaseFragment;
@@ -20,10 +16,7 @@ import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.view.CustomLoadMoreView;
-import com.edu.schooltask.view.TipRecyclerView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.edu.schooltask.view.recyclerview.TipRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -66,7 +59,7 @@ public class FansFragment extends BaseFragment {
     @Override
     protected void init() {
         ButterKnife.bind(this, view);
-        adapter = new UserAdapter(R.layout.item_user, fansUsers);
+        adapter = new UserAdapter(fansUsers);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

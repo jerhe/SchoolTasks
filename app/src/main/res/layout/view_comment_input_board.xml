@@ -14,13 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_weight="1"
-        android:background="@drawable/shape_input_white_corner"
+        android:background="@drawable/bg_input_text"
         android:hint="请输入评论"/>
     <Button
         android:id="@+id/cib_btn"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:background="@drawable/shape_input_white_corner"
+        android:background="@drawable/btn_white"
         android:layout_width="60dp"
         android:layout_height="35dp"
         android:text="评论"/>

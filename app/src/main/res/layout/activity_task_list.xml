@@ -72,6 +72,6 @@
             android:textColor="@color/white"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/shape_white_nosolid_btn"/>
+            android:background="@drawable/btn_hollow_white"/>
     </RelativeLayout>
 </RelativeLayout>

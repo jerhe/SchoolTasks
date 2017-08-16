@@ -5,16 +5,16 @@ package com.edu.schooltask.beans;
  */
 
 public class TaskComment {
-    long id;	//评论ID
-    String orderId;	//订单ID
-    long parentId;	//父评论ID
-    String userId;  //评论人id
-    String toUserId;    //评论回复人id
-    UserInfoBase commentUser;		//评论人信息
-    UserInfoBase toUser;		//父评论人信息
-    String comment;	//评论内容
-    String commentTime;	//评论时间
-    int childCount;	//子评论数
+    private long id;	//评论ID
+    private String orderId;	//订单ID
+    private long parentId;	//父评论ID
+    private String userId;  //评论人id
+    private String toUserId;    //评论回复人id
+    private UserInfoBase commentUser;		//评论人信息
+    private UserInfoBase toUser;		//父评论人信息
+    private String comment;	//评论内容
+    private int replyCount; //回复数
+    private String commentTime;	//评论时间
 
     public long getId() {
         return id;
@@ -72,12 +72,12 @@ public class TaskComment {
         this.commentTime = commentTime;
     }
 
-    public int getChildCount() {
-        return childCount;
+    public int getReplyCount() {
+        return replyCount;
     }
 
-    public void setChildCount(int childCount) {
-        this.childCount = childCount;
+    public void setReplyCount(int replyCount) {
+        this.replyCount = replyCount;
     }
 
     public String getUserId() {

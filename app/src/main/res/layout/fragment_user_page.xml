@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:background="@drawable/shape_white_nosolid_btn"
+            android:background="@drawable/btn_hollow_white"
             android:text="我的主页"
             android:textColor="@color/white"
             android:visibility="invisible"/>

@@ -31,14 +31,14 @@
             android:layout_height="30dp"
             android:gravity="center"
             android:layout_marginRight="20dp"
-            android:background="@drawable/white_btn"
+            android:background="@drawable/btn_white"
             android:text="获取验证码"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/rp_next"
         android:layout_width="match_parent"
-        android:background="@drawable/shape_theme_btn"
+        android:background="@drawable/btn_theme"
         android:textColor="@color/white"
         android:layout_margin="20dp"
         android:gravity="center"

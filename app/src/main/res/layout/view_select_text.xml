@@ -10,7 +10,7 @@
         android:id="@+id/st_name"
         android:layout_width="80dp"
         android:gravity="center"
-        android:background="@drawable/bg_input_text"
+        android:background="@drawable/bg_input_text_view"
         android:layout_height="35dp"
         android:layout_gravity="center"
         android:text="文本"/>

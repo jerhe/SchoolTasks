@@ -14,6 +14,7 @@ import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.ViewPagerAdapter;

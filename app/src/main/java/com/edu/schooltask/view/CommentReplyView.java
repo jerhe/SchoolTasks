@@ -13,6 +13,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.TaskComment;
+import com.edu.schooltask.view.recyclerview.CommentRecyclerView;
 
 import java.util.List;
 
@@ -63,8 +64,8 @@ public class CommentReplyView extends LinearLayout {
 
     //以下皆为调用commentRecyclerView接口
 
-    public void setGetCommentListener(CommentRecyclerView.GetCommentListener l){
-        commentRecyclerView.setGetCommentListener(l);
+    public void setGetDataPageListener(CommentRecyclerView.OnGetPageDataListener l){
+        commentRecyclerView.setOnGetPageDataListener(l);
     }
 
     public void setOnItemClickListener(BaseQuickAdapter.OnItemClickListener l){
@@ -75,12 +76,12 @@ public class CommentReplyView extends LinearLayout {
         commentRecyclerView.refresh();
     }
 
-    public void addData(List<TaskComment> comments){
-        commentRecyclerView.addData(comments);
+    public void addComments(List<TaskComment> comments){
+        commentRecyclerView.add(comments);
     }
 
-    public List<TaskComment> getData(){
-        return commentRecyclerView.getData();
+    public List<TaskComment> getComments(){
+        return commentRecyclerView.get();
     }
 
 

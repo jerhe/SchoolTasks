@@ -37,7 +37,7 @@
     <Button
         android:id="@+id/login_login_btn"
         android:layout_width="match_parent"
-        android:background="@drawable/shape_theme_btn"
+        android:background="@drawable/btn_theme"
         android:textColor="@color/white"
         android:layout_margin="20dp"
         android:gravity="center"

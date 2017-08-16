@@ -4,27 +4,27 @@ import java.math.BigDecimal;
 
 
 public class TaskOrder {
-
-	String orderId;
-	String school;
-	String description;
-	String releaseId;
-	String limitTime;
-	String content;
-	String acceptId;
-	BigDecimal cost;
-	int state;
-	String releaseTime;
-	String acceptTime;
-	String finishTime;
-	String assessTime;
-	String overTime;
-	String abandonTime;
-	String cancelTime;
-	int lookCount;
-	int score;
-	String assess;
-	int imageNum;
+	private String orderId;
+	private String school;
+	private String description;
+	private String releaseId;
+	private String limitTime;
+	private String content;
+	private String acceptId;
+	private BigDecimal cost;
+	private int state;
+	private String releaseTime;
+	private String acceptTime;
+	private String finishTime;
+	private String assessTime;
+	private String overTime;
+	private String abandonTime;
+	private String cancelTime;
+	private int commentCount;
+	private int lookCount;
+	private int score;
+	private String assess;
+	private int imageNum;
 
 	UserInfoBase releaseUser;
 	UserInfoBase acceptUser;
@@ -159,6 +159,14 @@ public class TaskOrder {
 
 	public void setCancelTime(String cancelTime) {
 		this.cancelTime = cancelTime;
+	}
+
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
 	}
 
 	public int getLookCount() {

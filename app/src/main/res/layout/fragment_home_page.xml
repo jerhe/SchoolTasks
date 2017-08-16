@@ -18,7 +18,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+                app:layout_scrollFlags="scroll">
                 <com.youth.banner.Banner
                     android:id="@+id/home_banner"
                     android:layout_width="match_parent"

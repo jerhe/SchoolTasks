@@ -6,7 +6,7 @@ import com.edu.schooltask.beans.UserInfoBase;
  * Created by 夜夜通宵 on 2017/5/14.
  */
 
-public class StateItem {
+public class OrderStateItem {
     boolean isFinish;
     String name;
     String text;
@@ -14,7 +14,7 @@ public class StateItem {
     UserInfoBase acceptUser;
     boolean isMe;
 
-    public StateItem(boolean isFinish, String name, String text) {
+    public OrderStateItem(boolean isFinish, String name, String text) {
         this.isFinish = isFinish;
         this.name = name;
         this.text = text;
@@ -22,7 +22,7 @@ public class StateItem {
     }
 
     //被接单状态
-    public StateItem(boolean isFinish, String name, String text, UserInfoBase acceptUser, boolean isMe) {
+    public OrderStateItem(boolean isFinish, String name, String text, UserInfoBase acceptUser, boolean isMe) {
         this.isFinish = isFinish;
         this.name = name;
         this.text = text;

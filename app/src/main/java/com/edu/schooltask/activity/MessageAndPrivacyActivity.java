@@ -3,9 +3,11 @@ package com.edu.schooltask.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -17,8 +19,13 @@ import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.beans.UserConfig;
 import com.edu.schooltask.item.IconMenuItem;
 import com.edu.schooltask.utils.DialogUtil;
+import com.edu.schooltask.utils.GsonUtil;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import server.api.SchoolTask;
+import server.api.user.config.GetUserConfigEvent;
 
 public class MessageAndPrivacyActivity extends BaseActivity {
     @BindView(R.id.map_rv) RecyclerView recyclerView;
@@ -72,6 +80,7 @@ public class MessageAndPrivacyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_and_privacy);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new IconMenuAdapter(items);
         adapter.openLoadAnimation();
@@ -108,8 +117,16 @@ public class MessageAndPrivacyActivity extends BaseActivity {
 
         messageArray.add("所有人");
         messageArray.add("关注的人");
+        SchoolTask.getUserConfig();
+    }
 
-        UserConfig userConfig = mDataCache.getData("userConfig");
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    private void init(UserConfig userConfig){
         message = userConfig.getMessage();
         messageItem = new IconMenuItem(IconMenuItem.VALUE, 0, "接收私信");
         messageItem.setValue(messageArray.get(message));
@@ -130,6 +147,9 @@ public class MessageAndPrivacyActivity extends BaseActivity {
         items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, 0, "清空聊天记录"));
         items.add(new IconMenuItem());
         items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, 0, "黑名单"));
+        adapter.notifyDataSetChanged();
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.startAnimation(AnimationUtils.loadAnimation(MessageAndPrivacyActivity.this, R.anim.fade_in));
     }
 
     private void updateConfig(){
@@ -137,5 +157,18 @@ public class MessageAndPrivacyActivity extends BaseActivity {
                 privateMessageItem.isChecked());
         mDataCache.saveData("userConfig", userConfig);
         SchoolTask.updateUserConfig(userConfig);
+    }
+
+    //事件：获取用户配置信息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetUserConfig(GetUserConfigEvent event){
+        UserConfig userConfig;
+        if(event.isOk()){   //获取用户配置信息成功
+            userConfig = GsonUtil.toUserConfig(event.getData());
+            init(userConfig);
+        }
+        else{
+            toastShort(event.getError());
+        }
     }
 }

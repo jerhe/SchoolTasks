@@ -2,7 +2,6 @@ package com.edu.schooltask.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
@@ -18,7 +17,8 @@ import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.CommentInputBoard;
-import com.edu.schooltask.view.CommentRecyclerView;
+import com.edu.schooltask.view.recyclerview.BasePageRecyclerView;
+import com.edu.schooltask.view.recyclerview.CommentRecyclerView;
 import com.edu.schooltask.view.CommentReplyView;
 import com.edu.schooltask.view.TaskCountView;
 import com.edu.schooltask.view.TaskItemView;
@@ -47,7 +47,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     @BindView(R.id.wao_accept_btn) Button acceptBtn;
     @BindView(R.id.wao_comment_btn) Button commentBtn;
     @BindView(R.id.wao_btn_layout) RelativeLayout btnLayout;
-    @BindView(R.id.wao_ib) CommentInputBoard inputBoard;
+    @BindView(R.id.wao_cib) CommentInputBoard inputBoard;
 
     @OnClick(R.id.wao_accept_btn)
     public void accept(){
@@ -94,6 +94,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         Intent intent = getIntent();
         taskItem = (TaskItem) intent.getSerializableExtra("taskItem");
 
+        //初始化评论框
+        inputBoard.setOppositeView(btnLayout);
         inputBoard.setOnBtnClickListener(new CommentInputBoard.OnBtnClickListener() {
             @Override
             public void btnClick(String comment) {
@@ -106,8 +108,6 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                 }
             }
         });
-        inputBoard.setOppositeView(btnLayout);
-
 
         refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
@@ -120,25 +120,21 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     }
 
     private void initRecyclerView(){
-        commentRecyclerView.setGetCommentListener(new CommentRecyclerView.GetCommentListener() {
+        commentRecyclerView.setOnGetPageDataListener(new BasePageRecyclerView.OnGetPageDataListener() {
             @Override
-            public void getComment(int page) {
+            public void onGetPageData(int page) {
                 if(page == 0) SchoolTask.getTaskCount(taskItem.getOrderId());
                 SchoolTask.getTaskComment(taskItem.getOrderId(), page);
             }
         });
-        commentRecyclerView.initChild(commentReplyView, new CommentRecyclerView.GetCommentListener() {
+        commentRecyclerView.initChild(commentReplyView, new BasePageRecyclerView.OnGetPageDataListener() {
             @Override
-            public void getComment(int page) {
+            public void onGetPageData(int page) {
                 SchoolTask.getTaskChildComment(taskItem.getOrderId(), commentRecyclerView.getParentId(), page);
             }
-        }, inputBoard, new CommentRecyclerView.CommentClickListener() {
-            @Override
-            public void onCommentClick() {
-                inputBoard.show();
-            }
-        });
+        }, inputBoard);
         commentRecyclerView.setOppositeView(toolbar);
+        commentRecyclerView.refresh();
 
         //添加头部
         TaskItemView taskItemView = new TaskItemView(this, null);
@@ -188,8 +184,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         if(event.isOk()){
             toastShort("评论成功");
             inputBoard.clear();
-            if(commentReplyView.isShown()) commentReplyView.refresh();
-            else commentRecyclerView.refresh();
+            commentRecyclerView.refresh();
         }
         else{
             toastShort(event.getError());
@@ -203,7 +198,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
             TaskCommentList taskCommentList = GsonUtil.toTaskCommentList(event.getData());
             if(taskCommentList.getOrderId().equals(taskItem.getOrderId())){
                 List<TaskComment> taskComments = taskCommentList.getTaskComments();
-                commentRecyclerView.addData(taskComments);
+                commentRecyclerView.add(taskComments);
             }
         }
         else{
@@ -218,7 +213,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         if(event.isOk()){
             TaskCommentList taskCommentList = GsonUtil.toTaskCommentList(event.getData());
             List<TaskComment> taskComments = taskCommentList.getTaskComments();
-            commentReplyView.addData(taskComments);
+            commentReplyView.addComments(taskComments);
         }
         else{
             toastShort(event.getError());

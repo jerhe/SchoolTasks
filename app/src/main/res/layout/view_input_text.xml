@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/it_bg"
         android:orientation="horizontal"
-        android:background="@drawable/bg_input_text"
+        android:background="@drawable/bg_input_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:textColor="@color/fontColor"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_input_text_text"/>
+            android:background="@drawable/bg_input_text_view_text"/>
     </LinearLayout>
 
 </LinearLayout>

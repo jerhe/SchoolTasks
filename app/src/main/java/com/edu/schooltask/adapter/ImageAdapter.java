@@ -18,8 +18,8 @@ import java.util.List;
 
 public class ImageAdapter extends BaseQuickAdapter<ImageItem, BaseViewHolder> {
 
-    public ImageAdapter(int layoutResId, List<ImageItem> data) {
-        super(layoutResId, data);
+    public ImageAdapter(List<ImageItem> data) {
+        super(R.layout.item_image, data);
     }
 
     @Override

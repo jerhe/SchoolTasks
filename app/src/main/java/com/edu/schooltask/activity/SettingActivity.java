@@ -41,6 +41,7 @@ public class SettingActivity extends BaseActivity {
         adapter.openLoadAnimation();
 
         String cacheSize = GlideCacheUtil.getInstance().getCacheSize(this);
+        cacheSize = cacheSize.replace("Byte", "B");
 
         items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "个人中心"));
         items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "消息隐私"));
@@ -63,10 +64,8 @@ public class SettingActivity extends BaseActivity {
                     case 3:
                         GlideCacheUtil glideCacheUtil = GlideCacheUtil.getInstance();
                         glideCacheUtil.clearImageAllCache(SettingActivity.this);
-                        String cacheSize = glideCacheUtil.getCacheSize(SettingActivity.this);
-                        item.setHint(cacheSize);
+                        item.setHint("已清除");
                         adapter.notifyDataSetChanged();
-                        toastShort("清除完成");
                         break;
                     case 5:
                         DialogUtil.createTextDialog(SettingActivity.this, "提示", "确定要退出登录吗？", "",

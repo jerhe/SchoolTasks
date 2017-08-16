@@ -40,7 +40,7 @@ public class DialogUtil {
                                               String content, String hint, String yesText,
                                               final OnClickListener listener, String noText){
         DialogPlus dialog = DialogPlus.newDialog(context)
-                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_text))
@@ -78,7 +78,7 @@ public class DialogUtil {
         final DialogPlus payDialog = DialogPlus.newDialog(activity)
                 .setContentHolder(new ViewHolder(R.layout.dialog_pay))
                 .setGravity(Gravity.CENTER)
-                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setOutAnimation(R.anim.dialog_out)
                 .setCancelable(false)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
@@ -141,7 +141,7 @@ public class DialogUtil {
 
     public static DialogPlus createListDialog(Context context, BaseAdapter adapter, OnItemClickListener listener){
         DialogPlus dialog = DialogPlus.newDialog(context)
-                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ListHolder())
@@ -158,7 +158,7 @@ public class DialogUtil {
     public static DialogPlus createInputDialog(Context context, final OnInputClickListener listener,
                                                String title, String hint){
         DialogPlus dialog = DialogPlus.newDialog(context)
-                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_input))
@@ -188,7 +188,7 @@ public class DialogUtil {
     public static DialogPlus createInputMultilineDialog(Context context, final OnInputClickListener listener,
                                                String title, String defaultContent){
         DialogPlus dialog = DialogPlus.newDialog(context)
-                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_input_multiline))
@@ -222,7 +222,7 @@ public class DialogUtil {
 
     public static DialogPlus createHeadImageDialog(Context context, String userId){
         DialogPlus dialog = DialogPlus.newDialog(context)
-                .setContentBackgroundResource(R.drawable.trans)
+                .setContentBackgroundResource(R.drawable.bg_trans)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_image))
@@ -245,7 +245,7 @@ public class DialogUtil {
 
     public static DialogPlus createRechargeDialog(final BaseActivity activity, final RechargeListener listener){
         final DialogPlus dialog = DialogPlus.newDialog(activity)
-                .setContentBackgroundResource(R.drawable.shape_dialog)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_recharge))

@@ -1,8 +1,6 @@
 package com.edu.schooltask.adapter;
 
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -18,7 +16,7 @@ import java.util.List;
 
 public class TaskItemAdapter extends BaseQuickAdapter<TaskItem, BaseViewHolder> {
     public TaskItemAdapter(@Nullable List<TaskItem> data) {
-        super(R.layout.item_task_view, data);
+        super(R.layout.item_task_item_view, data);
     }
 
     @Override

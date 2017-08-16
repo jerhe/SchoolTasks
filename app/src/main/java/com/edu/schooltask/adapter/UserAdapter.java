@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.UserInfoBase;
 import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.view.UserItemView;
 
 import java.util.List;
 
@@ -15,15 +16,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserAdapter extends BaseQuickAdapter<UserInfoBase, BaseViewHolder> {
-    public UserAdapter(int layoutResId, List<UserInfoBase> data) {
-        super(layoutResId, data);
+    public UserAdapter(List<UserInfoBase> data) {
+        super(R.layout.item_user_item_view, data);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, UserInfoBase item) {
-        CircleImageView headView = helper.getView(R.id.user_head);
-        GlideUtil.setHead(headView.getContext(), item.getUserId(), headView, false);
-        helper.setText(R.id.user_name, item.getName());
-        helper.setText(R.id.user_sign, item.getSign());
+        UserItemView userItemView = helper.getView(R.id.uiv_uiv);
+        userItemView.setAll(item);
     }
 }
