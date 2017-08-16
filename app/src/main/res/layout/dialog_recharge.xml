@@ -4,12 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.view.InputText
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/recharge_money"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:text="充值金额">
-    </com.edu.schooltask.view.InputText>
+        app:IT_text="充值金额">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

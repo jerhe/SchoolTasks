@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.Button;
 
-import com.edu.schooltask.activity.LoginActivity;
 import com.edu.schooltask.R;
 
 import java.util.Timer;
@@ -17,9 +15,8 @@ import com.edu.schooltask.base.BaseFragment;
 import com.edu.schooltask.event.RegisterNextEvent;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.PhoneFilter;
-import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.StringUtil;
-import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.Inputtextview.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,8 +35,10 @@ import server.api.register.GetCodeEvent;
 
 public class RegisterPhoneFragment extends BaseFragment{
     @BindView(R.id.rp_next) Button nextBtn;
-    @BindView(R.id.rp_id) InputText idText;
-    @BindView(R.id.rp_code) InputText codeText;
+    @BindView(R.id.rp_id)
+    InputTextView idText;
+    @BindView(R.id.rp_code)
+    InputTextView codeText;
     @BindView(R.id.rp_get_code) Button getCodeBtn;
 
     @OnClick(R.id.rp_get_code)

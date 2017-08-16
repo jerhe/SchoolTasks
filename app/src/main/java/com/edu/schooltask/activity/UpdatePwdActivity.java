@@ -2,8 +2,6 @@ package com.edu.schooltask.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.base.BaseActivity;
@@ -11,7 +9,7 @@ import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.PasswordFilter;
 import com.edu.schooltask.utils.StringUtil;
-import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.Inputtextview.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,9 +23,12 @@ import server.api.user.account.UpdatePaypwdEvent;
 import server.api.user.UpdateLoginPwdEvent;
 
 public class UpdatePwdActivity extends BaseActivity {
-    @BindView(R.id.up_old) InputText oldText;
-    @BindView(R.id.up_new) InputText newText;
-    @BindView(R.id.up_new_again) InputText newAgainText;
+    @BindView(R.id.up_old)
+    InputTextView oldText;
+    @BindView(R.id.up_new)
+    InputTextView newText;
+    @BindView(R.id.up_new_again)
+    InputTextView newAgainText;
     //@BindView(R.id.up_btn) Button button;
 
     @OnClick(R.id.up_btn)

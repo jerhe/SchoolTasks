@@ -1,7 +1,5 @@
 package com.edu.schooltask.utils;
 
-import com.edu.schooltask.view.InputText;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;

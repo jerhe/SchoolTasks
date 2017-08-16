@@ -3,7 +3,6 @@ package com.edu.schooltask.fragment.login;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 
 import com.edu.schooltask.R;
@@ -20,7 +19,7 @@ import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.Inputtextview.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,9 +36,12 @@ import server.api.register.RegisterEvent;
  */
 
 public class RegisterInfoFragment extends BaseFragment {
-    @BindView(R.id.ri_school) InputText schoolText;
-    @BindView(R.id.ri_name) InputText nameText;
-    @BindView(R.id.ri_pwd) InputText pwdText;
+    @BindView(R.id.ri_school)
+    InputTextView schoolText;
+    @BindView(R.id.ri_name)
+    InputTextView nameText;
+    @BindView(R.id.ri_pwd)
+    InputTextView pwdText;
     @BindView(R.id.ri_finish) Button finishBtn;
 
     @OnClick(R.id.ri_finish)

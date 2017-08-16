@@ -1,6 +1,5 @@
 package com.edu.schooltask.fragment.login;
 
-import android.view.View;
 import android.widget.Button;
 
 import com.edu.schooltask.R;
@@ -13,7 +12,7 @@ import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.Inputtextview.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,8 +30,10 @@ import server.api.login.LoginEvent;
 
 public class LoginFragment extends BaseFragment {
 
-    @BindView(R.id.login_id) InputText idText;
-    @BindView(R.id.login_pwd) InputText pwdText;
+    @BindView(R.id.login_id)
+    InputTextView idText;
+    @BindView(R.id.login_pwd)
+    InputTextView pwdText;
     @BindView(R.id.login_login_btn) Button loginBtn;
 
     @OnClick(R.id.login_login_btn)

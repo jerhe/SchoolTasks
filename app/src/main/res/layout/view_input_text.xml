@@ -9,26 +9,34 @@
     <LinearLayout
         android:id="@+id/it_bg"
         android:orientation="horizontal"
-        android:background="@drawable/bg_input_text_view"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
+        <com.edu.schooltask.view.Inputtextview.InputTextNameView
             android:id="@+id/it_name"
             android:layout_width="70dp"
             android:gravity="center"
-            android:layout_margin="5dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="文本"/>
-        <EditText
+        <com.edu.schooltask.view.Inputtextview.InputTextTextView
             android:id="@+id/it_input"
             android:paddingLeft="10dp"
             android:textSize="14sp"
-            android:layout_margin="0.5dp"
             android:layout_width="match_parent"
             android:textColor="@color/fontColor"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_input_text_view_text"/>
+            android:background="@null"/>
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/it_tip"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:text="\?"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:background="@drawable/bg_release_tip"/>
 </LinearLayout>

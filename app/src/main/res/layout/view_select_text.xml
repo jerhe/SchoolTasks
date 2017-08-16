@@ -6,12 +6,11 @@
     android:layout_marginRight="10dp"
     android:orientation="horizontal"
     android:layout_height="40dp">
-    <TextView
+    <com.edu.schooltask.view.Inputtextview.InputTextNameView
         android:id="@+id/st_name"
-        android:layout_width="80dp"
+        android:layout_width="70dp"
         android:gravity="center"
-        android:background="@drawable/bg_input_text_view"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:text="文本"/>
     <com.jaredrummler.materialspinner.MaterialSpinner

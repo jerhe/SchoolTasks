@@ -7,30 +7,30 @@
     android:layout_height="match_parent"
     tools:context="com.edu.schooltask.activity.UpdatePwdActivity">
     <include layout="@layout/toolbar"/>
-    <com.edu.schooltask.view.InputText
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/up_old"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:inputType="password"
-        app:hint="请输入当前密码"
-        app:text="原密码">
-    </com.edu.schooltask.view.InputText>
-    <com.edu.schooltask.view.InputText
+        app:IT_inputType="password"
+        app:IT_hint="请输入当前密码"
+        app:IT_text="原密码">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/up_new"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:inputType="password"
-        app:hint="请输入新密码"
-        app:text="新密码">
-    </com.edu.schooltask.view.InputText>
-    <com.edu.schooltask.view.InputText
+        app:IT_inputType="password"
+        app:IT_hint="请输入新密码"
+        app:IT_text="新密码">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/up_new_again"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:inputType="password"
-        app:text="确认密码"
-        app:hint="请再次输入新密码">
-    </com.edu.schooltask.view.InputText>
+        app:IT_inputType="password"
+        app:IT_text="确认密码"
+        app:IT_hint="请再次输入新密码">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
     <Button
         android:id="@+id/up_btn"
         android:layout_width="match_parent"

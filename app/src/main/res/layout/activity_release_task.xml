@@ -7,27 +7,32 @@
     android:orientation="vertical"
     tools:context="com.edu.schooltask.activity.ReleaseTaskActivity">
     <include layout="@layout/toolbar"/>
-    <com.edu.schooltask.view.InputText
+
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/rt_school"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:text="学校"
-        app:hint="请输入学校">
-    </com.edu.schooltask.view.InputText>
-    <com.edu.schooltask.view.InputText
+        app:IT_hint="请输入学校"
+        app:IT_text="学校"
+        app:IT_tip="任务所在学校">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
+
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/rt_cost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:text="报酬"
-        app:hint="任务报酬金额(元)，至少是1元钱">
-    </com.edu.schooltask.view.InputText>
-    <com.edu.schooltask.view.InputText
+        app:IT_text="报酬"
+        app:IT_hint="元"
+        app:IT_tip="任务完成后接受者可获得的报酬，最低是1元">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/rt_limit_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:text="时限"
-        app:hint="任务发布后可接单的时间(小时)">
-    </com.edu.schooltask.view.InputText>
+        app:IT_text="时限"
+        app:IT_hint="小时"
+        app:IT_tip="任务发布有效的时间，超过时间还未被接受的任务将自动取消。每1小时需支付0.1元">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
     <com.edu.schooltask.view.SelectText
         android:id="@+id/rt_des"
         android:layout_width="match_parent"

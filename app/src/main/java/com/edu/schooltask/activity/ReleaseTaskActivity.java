@@ -27,7 +27,7 @@ import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.view.Content;
 import com.edu.schooltask.view.recyclerview.ImageRecyclerView;
-import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.Inputtextview.InputTextView;
 import com.edu.schooltask.view.SelectText;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.yuyh.library.imgsel.ImageLoader;
@@ -55,11 +55,14 @@ import server.api.task.release.ReleaseTaskEvent;
 public class ReleaseTaskActivity extends BaseActivity {
     private static final int SELECT_IMAGE_CODE = 0;
 
-    @BindView(R.id.rt_school) InputText schoolText;
+    @BindView(R.id.rt_school)
+    InputTextView schoolText;
     @BindView(R.id.rt_des) SelectText desText;
-    @BindView(R.id.rt_cost) InputText costText;
+    @BindView(R.id.rt_cost)
+    InputTextView costText;
     @BindView(R.id.rt_content) Content contentText;
-    @BindView(R.id.rt_limit_time) InputText limitTimeText;
+    @BindView(R.id.rt_limit_time)
+    InputTextView limitTimeText;
     @BindView(R.id.rt_irv) ImageRecyclerView imageRecyclerView;
 
     ProgressDialog progressDialog;

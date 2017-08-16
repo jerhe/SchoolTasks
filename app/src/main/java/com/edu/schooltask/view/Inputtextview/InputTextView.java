@@ -1,16 +1,10 @@
-package com.edu.schooltask.view;
+package com.edu.schooltask.view.Inputtextview;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
-import android.support.v4.graphics.ColorUtils;
+import android.graphics.Paint;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -27,29 +21,33 @@ import com.edu.schooltask.utils.AnimationUtil;
  * Created by 夜夜通宵 on 2017/5/4.
  */
 
-public class InputText extends LinearLayout {
-    public final static int BACKGROUND_COLOR = Color.parseColor("#F1F1F1");
-    final static int BACKGROUND_LIGHT_COLOR = Color.parseColor("#1B9DFF");
-    final static int FONT_COLOR = Color.parseColor("#888888");
-
-    private TextView nameText;
-    private EditText inputText;
+public class InputTextView extends LinearLayout {
+    private InputTextNameView nameText;
+    private InputTextTextView inputText;
+    private TextView tipText;
     private Boolean inputEnable = true;
 
-    GradientDrawable background;
+    int backgroundColor;
+    int backGroundLightColor;
+    int fontColor;
+    int lineColor;
 
-    public InputText(Context context, AttributeSet attrs) {
+    public InputTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_input_text,this);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.InputText);
-        String text = typedArray.getString(R.styleable.InputText_text);
-        String hint = typedArray.getString(R.styleable.InputText_hint);
-        String inputType = typedArray.getString(R.styleable.InputText_inputType);
-        LinearLayout bgLayout = (LinearLayout) findViewById(R.id.it_bg);
-        nameText = (TextView) findViewById(R.id.it_name);
-        inputText = (EditText)findViewById(R.id.it_input);
-        background = (GradientDrawable)bgLayout.getBackground();
-        background.setColor(BACKGROUND_COLOR);
+        backgroundColor = context.getResources().getColor(R.color.textNameColor);
+        backGroundLightColor = context.getResources().getColor(R.color.colorPrimary);
+        fontColor = context.getResources().getColor(R.color.fontColor);
+        lineColor = context.getResources().getColor(R.color.lineColor);
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.InputTextView);
+        String text = typedArray.getString(R.styleable.InputTextView_IT_text);
+        String hint = typedArray.getString(R.styleable.InputTextView_IT_hint);
+        String inputType = typedArray.getString(R.styleable.InputTextView_IT_inputType);
+        String tip = typedArray.getString(R.styleable.InputTextView_IT_tip);
+        nameText = (InputTextNameView) findViewById(R.id.it_name);
+        inputText = (InputTextTextView)findViewById(R.id.it_input);
+        tipText = (TextView) findViewById(R.id.it_tip);
         nameText.setText(text);
         nameText.setOnClickListener(new OnClickListener() {
             @Override
@@ -61,18 +59,26 @@ public class InputText extends LinearLayout {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus && inputEnable){
-                    AnimationUtil.colorAnimation(background, "color", 100, BACKGROUND_COLOR, BACKGROUND_LIGHT_COLOR);
+                    AnimationUtil.colorAnimation(nameText, "background", 100, backgroundColor, backGroundLightColor);
+                    AnimationUtil.colorAnimation(inputText, "background", 100, lineColor, backGroundLightColor);
                     nameText.setTextColor(Color.WHITE);
                 }
                 else{
-                    AnimationUtil.colorAnimation(background, "color", 0, BACKGROUND_LIGHT_COLOR, BACKGROUND_COLOR);
-                    nameText.setTextColor(FONT_COLOR);
+                    AnimationUtil.colorAnimation(nameText, "background", 0, backGroundLightColor, backgroundColor);
+                    AnimationUtil.colorAnimation(inputText, "background", 0, backGroundLightColor, lineColor);
+                    nameText.setTextColor(fontColor);
                 }
             }
         });
         if(hint != null) inputText.setHint(hint);
         if("password".equals(inputType)){
             inputText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
+        }
+        if(tip == null){
+            tipText.setVisibility(GONE);
+        }
+        else{
+            tipText.setVisibility(VISIBLE);
         }
     }
 

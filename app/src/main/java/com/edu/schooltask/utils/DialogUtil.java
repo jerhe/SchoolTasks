@@ -16,7 +16,7 @@ import com.edu.schooltask.base.BaseActivity;
 import com.edu.schooltask.filter.MoneyFilter;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.view.Content;
-import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.Inputtextview.InputTextView;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
@@ -87,7 +87,7 @@ public class DialogUtil {
                         switch (view.getId()){
                             case R.id.pwd_confirm_btn:
                                 View dialogView = dialog.getHolderView();
-                                InputText pwdText = (InputText) dialogView.findViewById(R.id.pwd_pwd);
+                                InputTextView pwdText = (InputTextView) dialogView.findViewById(R.id.pwd_pwd);
                                 String pwd = pwdText.getText();
                                 if(pwd.length() == 0){
                                     activity.toastShort("请输入支付密码");
@@ -119,7 +119,7 @@ public class DialogUtil {
             TextView moneyText = (TextView) payDialog.findViewById(R.id.pay_money);
             moneyText.setText(cost + "元");
         }
-        InputText pwdText = (InputText) payDialog.findViewById(R.id.pwd_pwd);
+        InputTextView pwdText = (InputTextView) payDialog.findViewById(R.id.pwd_pwd);
         pwdText.setInputFilter(new NumberFilter());
         TextView setPayPwdText = (TextView) payDialog.findViewById(R.id.pay_set_pwd);
         setPayPwdText.setOnClickListener(new View.OnClickListener() {
@@ -251,15 +251,15 @@ public class DialogUtil {
                 .setContentHolder(new ViewHolder(R.layout.dialog_recharge))
                 .create();
         View dialogView = dialog.getHolderView();
-        final InputText inputText = (InputText) dialogView.findViewById(R.id.recharge_money);
-        inputText.setInputFilter(new MoneyFilter());
+        final InputTextView inputTextView = (InputTextView) dialogView.findViewById(R.id.recharge_money);
+        inputTextView.setInputFilter(new MoneyFilter());
         final MaterialSpinner typeSpinner = (MaterialSpinner) dialogView.findViewById(R.id.recharge_type);
         typeSpinner.setItems("支付宝", "微信");
         Button button = (Button) dialogView.findViewById(R.id.recharge_btn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String money = inputText.getText();
+                String money = inputTextView.getText();
                 if(money.length() == 0){
                     activity.toastShort("请输入充值金额");
                     return;

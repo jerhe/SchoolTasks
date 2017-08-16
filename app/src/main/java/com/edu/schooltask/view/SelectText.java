@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.utils.AnimationUtil;
+import com.edu.schooltask.view.Inputtextview.InputTextNameView;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 /**
@@ -22,7 +23,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
  */
 
 public class SelectText extends LinearLayout {
-    TextView nameText;
+    InputTextNameView nameText;
     MaterialSpinner spinner;
 
     public SelectText(Context context, @Nullable AttributeSet attrs) {
@@ -30,7 +31,7 @@ public class SelectText extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.view_select_text,this);
         TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.SelectText);
         String text = typedArray.getString(R.styleable.SelectText_ST_text);
-        nameText = (TextView) findViewById(R.id.st_name);
+        nameText = (InputTextNameView) findViewById(R.id.st_name);
         spinner = (MaterialSpinner) findViewById(R.id.st_spinner);
         nameText.setText(text);
     }

@@ -4,10 +4,8 @@ import android.os.Bundle;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.base.BaseActivity;
-import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.filter.NumberFilter;
-import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.view.InputText;
+import com.edu.schooltask.view.Inputtextview.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,8 +18,10 @@ import server.api.SchoolTask;
 import server.api.user.account.SetPayPwdEvent;
 
 public class SetPayPwdActivity extends BaseActivity {
-    @BindView(R.id.spp_pwd) InputText pwdText;
-    @BindView(R.id.spp_pwd_2) InputText pwdText2;
+    @BindView(R.id.spp_pwd)
+    InputTextView pwdText;
+    @BindView(R.id.spp_pwd_2)
+    InputTextView pwdText2;
 
     @OnClick(R.id.spp_confirm_btn)
     public void setPayPwd(){

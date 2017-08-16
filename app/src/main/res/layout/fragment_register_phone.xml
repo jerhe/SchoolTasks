@@ -4,25 +4,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.view.InputText
+    <com.edu.schooltask.view.Inputtextview.InputTextView
         android:id="@+id/rp_id"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:text="手机号"
-        app:hint="请输入手机号,将作为登录的用户名">
-    </com.edu.schooltask.view.InputText>
+        app:IT_text="手机号"
+        app:IT_hint="请输入手机号,将作为登录的用户名">
+    </com.edu.schooltask.view.Inputtextview.InputTextView>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_height="50dp">
-        <com.edu.schooltask.view.InputText
+        <com.edu.schooltask.view.Inputtextview.InputTextView
             android:id="@+id/rp_code"
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="50dp"
-            app:text="验证码">
-        </com.edu.schooltask.view.InputText>
+            app:IT_text="验证码">
+        </com.edu.schooltask.view.Inputtextview.InputTextView>
         <Button
             android:id="@+id/rp_get_code"
             android:layout_width="0dp"
