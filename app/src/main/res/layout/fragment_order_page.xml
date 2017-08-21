@@ -1,21 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
+    <android.support.v4.widget.Space
+        android:id="@+id/op_space"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_height="50dp"
-        android:text="订单"
-        android:elevation="3dp"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="18sp" />
-    <com.edu.schooltask.view.recyclerview.TipRecyclerView
-        android:id="@+id/op_tr"
+        android:layout_height="50dp" />
+    <RelativeLayout
+        android:layout_below="@id/op_space"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.edu.schooltask.view.recyclerview.TipRecyclerView>
-</LinearLayout>
+        <com.edu.schooltask.ui.view.recyclerview.TipRecyclerView
+            android:id="@+id/op_tr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.edu.schooltask.ui.view.recyclerview.TipRecyclerView>
+        <View
+            android:id="@+id/op_shadow"
+            android:background="@color/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+    <com.edu.schooltask.ui.view.TaskFilterView
+        android:id="@+id/op_tfv"
+        android:elevation="3dp"
+        android:background="@color/backgroundColor"
+        android:layout_below="@id/op_space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+    </com.edu.schooltask.ui.view.TaskFilterView>
+    <RelativeLayout
+        android:id="@+id/op_toolbar"
+        android:background="@color/white"
+        android:elevation="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/backgroundColor"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:text="我的订单"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/op_filter_btn"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_hollow_black"
+            android:text="筛选"/>
+    </RelativeLayout>
+</RelativeLayout>

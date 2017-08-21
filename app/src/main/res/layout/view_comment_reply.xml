@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:refreshColor="@color/colorPrimary">
-        <com.edu.schooltask.view.recyclerview.CommentRecyclerView
+        <com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView
             android:id="@+id/cp_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.edu.schooltask.view.recyclerview.CommentRecyclerView>
+        </com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView>
     </com.baoyz.widget.PullRefreshLayout>
 
 </LinearLayout>

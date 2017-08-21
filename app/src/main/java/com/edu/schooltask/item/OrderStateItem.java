@@ -1,6 +1,6 @@
 package com.edu.schooltask.item;
 
-import com.edu.schooltask.beans.UserInfoBase;
+import com.edu.schooltask.beans.UserInfo;
 
 /**
  * Created by 夜夜通宵 on 2017/5/14.
@@ -11,8 +11,7 @@ public class OrderStateItem {
     String name;
     String text;
     boolean isAccept;
-    UserInfoBase acceptUser;
-    boolean isMe;
+    UserInfo acceptUser;
 
     public OrderStateItem(boolean isFinish, String name, String text) {
         this.isFinish = isFinish;
@@ -22,13 +21,12 @@ public class OrderStateItem {
     }
 
     //被接单状态
-    public OrderStateItem(boolean isFinish, String name, String text, UserInfoBase acceptUser, boolean isMe) {
+    public OrderStateItem(boolean isFinish, String name, String text, UserInfo acceptUser) {
         this.isFinish = isFinish;
         this.name = name;
         this.text = text;
         isAccept = true;
         this.acceptUser = acceptUser;
-        this.isMe = isMe;
     }
 
     public boolean isFinish() {
@@ -63,19 +61,11 @@ public class OrderStateItem {
         isAccept = accept;
     }
 
-    public UserInfoBase getAcceptUser() {
+    public UserInfo getAcceptUser() {
         return acceptUser;
     }
 
-    public void setAcceptUser(UserInfoBase acceptUser) {
+    public void setAcceptUser(UserInfo acceptUser) {
         this.acceptUser = acceptUser;
-    }
-
-    public boolean isMe() {
-        return isMe;
-    }
-
-    public void setMe(boolean me) {
-        isMe = me;
     }
 }

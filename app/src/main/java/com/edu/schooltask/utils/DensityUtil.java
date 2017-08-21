@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
-import com.edu.schooltask.view.Content;
-
 /**
  * Created by 夜夜通宵 on 2017/5/28.
  */

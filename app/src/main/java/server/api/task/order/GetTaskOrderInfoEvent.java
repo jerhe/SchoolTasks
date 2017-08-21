@@ -1,7 +1,5 @@
 package server.api.task.order;
 
-import com.edu.schooltask.beans.TaskOrder;
-
 import server.api.base.BaseTokenEvent;
 
 /**

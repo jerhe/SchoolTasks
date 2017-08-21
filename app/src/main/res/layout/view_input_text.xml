@@ -5,21 +5,21 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:orientation="horizontal"
-    android:layout_height="35dp">
+    android:layout_height="40dp">
     <LinearLayout
         android:id="@+id/it_bg"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.edu.schooltask.view.Inputtextview.InputTextNameView
+        <com.edu.schooltask.ui.view.Inputtextview.InputTextNameView
             android:id="@+id/it_name"
             android:layout_width="70dp"
             android:gravity="center"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="文本"/>
-        <com.edu.schooltask.view.Inputtextview.InputTextTextView
+        <com.edu.schooltask.ui.view.Inputtextview.InputTextTextView
             android:id="@+id/it_input"
             android:paddingLeft="10dp"
             android:textSize="14sp"
@@ -28,15 +28,14 @@
             android:layout_height="match_parent"
             android:background="@null"/>
     </LinearLayout>
-    <TextView
+    <ImageView
         android:id="@+id/it_tip"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
-        android:text="\?"
+        android:src="@drawable/ic_action_tip"
         android:gravity="center"
         android:textColor="@color/white"
-        android:visibility="gone"
-        android:background="@drawable/bg_release_tip"/>
+        android:visibility="gone"/>
 </LinearLayout>

@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.edu.schooltask.activity.MainActivity">
+    tools:context=".ui.activity.MainActivity">
+    <com.edu.schooltask.ui.view.BottomTab
+        android:id="@+id/main_bm"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </com.edu.schooltask.ui.view.BottomTab>
     <android.support.v4.view.ViewPager
         android:id="@+id/main_vp"
+        android:layout_above="@id/main_bm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        android:fadingEdge="none"
-        android:layout_weight="1">
+        android:fadingEdge="none">
     </android.support.v4.view.ViewPager>
-    <View android:background="@color/lineColor"
-        android:layout_height="0.1dp"
-        android:layout_width="match_parent"/>
-    <com.edu.schooltask.view.BottomTab
-        android:id="@+id/main_bm"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-    </com.edu.schooltask.view.BottomTab>
-
-</LinearLayout>
+        android:layout_height="3dp"
+        android:background="@drawable/bg_bottom_shadow"
+        android:layout_above="@id/main_bm"/>
+</RelativeLayout>

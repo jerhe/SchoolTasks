@@ -9,7 +9,7 @@
         android:text="温馨提示：在您使用转出功能时请务必核对转出账户"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:background="@color/mainBackgroundColor"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:textSize="12sp"/>
     <LinearLayout
@@ -49,27 +49,23 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/money_recharge"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingLeft="20dp"
-        android:background="?attr/selectableItemBackground"
+        android:background="@color/white"
         android:gravity="center_vertical"
-        android:text="充值"
-        android:id="@+id/money_recharge" />
+        android:paddingLeft="20dp"
+        android:text="充值" />
 
-    <View android:background="@color/lineColor"
-        android:layout_height="0.1dp"
-        android:layout_width="match_parent"/>
+    <include layout="@layout/line"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingLeft="20dp"
-        android:background="?attr/selectableItemBackground"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:text="转出"/>
-    <View android:background="@color/lineColor"
-        android:layout_height="0.1dp"
-        android:layout_width="match_parent"/>
+    <include layout="@layout/line"/>
 
 </LinearLayout>
 

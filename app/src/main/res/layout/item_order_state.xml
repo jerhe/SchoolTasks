@@ -21,28 +21,24 @@
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/os_state_name"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="发布订单"/>
         <TextView
             android:id="@+id/os_state_text"
-            android:layout_weight="4"
+            android:layout_marginLeft="20dp"
             android:textSize="12sp"
             android:textIsSelectable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1111年11月11日 12:12:12"/>
+        <com.edu.schooltask.ui.view.useritem.UserItemSmallView
+            android:id="@+id/os_uisv"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+        </com.edu.schooltask.ui.view.useritem.UserItemSmallView>
     </LinearLayout>
-    <com.edu.schooltask.view.UserItemView
-        android:id="@+id/os_uiv"
-        android:layout_below="@id/os_state_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-    </com.edu.schooltask.view.UserItemView>
-
-
-
 
 </RelativeLayout>

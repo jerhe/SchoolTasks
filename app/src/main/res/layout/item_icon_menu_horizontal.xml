@@ -30,8 +30,5 @@
             android:layout_height="wrap_content"
             android:textColor="@color/hintColor"/>
     </LinearLayout>
-    <View
-        android:background="@color/lineColor"
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"/>
+    <include layout="@layout/line"/>
 </LinearLayout>

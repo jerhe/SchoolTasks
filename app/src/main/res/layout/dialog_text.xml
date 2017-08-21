@@ -4,47 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-        android:id="@+id/dt_title"
+        android:id="@+id/dialog_title"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center"
         android:textSize="16sp"
         android:text="我是标题"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/lineColor"/>
+    <include layout="@layout/line"/>
     <TextView
         android:id="@+id/dt_content"
         android:paddingTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:gravity="center"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="我是内容"/>
     <TextView
-        android:paddingTop="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:id="@+id/dt_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginBottom="20dp"
         android:textSize="12sp"
         android:text="提示"
         android:textColor="@color/hintColor"/>
-    <View
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/lineColor"/>
+    <include layout="@layout/line"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="40dp">
         <TextView
-            android:id="@+id/dt_no"
+            android:id="@+id/dt_cancel"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
@@ -56,7 +50,7 @@
             android:layout_height="match_parent"
             android:background="@color/lineColor"/>
         <TextView
-            android:id="@+id/dt_yes"
+            android:id="@+id/dt_ok"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"

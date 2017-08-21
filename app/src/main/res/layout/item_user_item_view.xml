@@ -3,9 +3,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.edu.schooltask.view.UserItemView
+    <com.edu.schooltask.ui.view.useritem.UserItemView
         android:id="@+id/uiv_uiv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.edu.schooltask.view.UserItemView>
+    </com.edu.schooltask.ui.view.useritem.UserItemView>
 </LinearLayout>

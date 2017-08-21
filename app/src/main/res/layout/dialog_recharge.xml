@@ -4,36 +4,43 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.view.Inputtextview.InputTextView
-        android:id="@+id/recharge_money"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:IT_text="充值金额">
-    </com.edu.schooltask.view.Inputtextview.InputTextView>
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="充值"/>
+    <include layout="@layout/line"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:paddingLeft="20dp"
-        android:paddingRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_height="40dp">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginRight="20dp"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="充值方式"/>
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/recharge_type"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp" />
     </LinearLayout>
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+        android:id="@+id/recharge_money"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:IT_text="充值金额">
+    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
     <Button
         android:id="@+id/recharge_btn"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_margin="20dp"
         android:layout_height="40dp"
         android:background="@drawable/btn_theme"
         android:text="充值"

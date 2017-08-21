@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.edu.schooltask.ui.view.useritem.UserItemReleaseView
+            android:id="@+id/task_uirv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.edu.schooltask.ui.view.useritem.UserItemReleaseView>
+        <TextView
+            android:id="@+id/task_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/task_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:paddingRight="10dp"
+        android:paddingLeft="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView
+        android:id="@+id/task_irv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
+        android:nestedScrollingEnabled="false">
+    </com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView>
+
+    <include layout="@layout/divide"/>
+</LinearLayout>

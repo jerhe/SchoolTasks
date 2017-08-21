@@ -10,47 +10,44 @@
         android:gravity="center"
         android:textStyle="bold"
         android:text="交易确认"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/lineColor"/>
+    <include layout="@layout/line"/>
 
     <LinearLayout
         android:id="@+id/pay_money_layout"
-        android:paddingLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="35dp">
         <TextView
             android:text="支付金额"
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"/>
+            android:gravity="center"/>
         <TextView
             android:id="@+id/pay_money"
+            android:layout_marginLeft="10dp"
             android:text="11元"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_height="0.5dp"
-        android:background="@color/lineColor"/>
-    <com.edu.schooltask.view.Inputtextview.InputTextView
-        android:layout_marginBottom="10dp"
         android:id="@+id/pwd_pwd"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:IT_inputType="password"
         app:IT_text="支付密码">
-    </com.edu.schooltask.view.Inputtextview.InputTextView>
+    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
     <TextView
         android:id="@+id/pay_set_pwd"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="right"
         android:layout_width="wrap_content"

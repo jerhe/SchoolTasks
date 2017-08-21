@@ -5,24 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.edu.schooltask.activity.SetPayPwdActivity">
+    tools:context=".ui.activity.SetPayPwdActivity">
     <include layout="@layout/toolbar"/>
-    <com.edu.schooltask.view.Inputtextview.InputTextView
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
         android:id="@+id/spp_pwd"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:IT_inputType="password"
         app:IT_text="支付密码"
         app:IT_hint="请输入支付密码，格式为6位数字">
-    </com.edu.schooltask.view.Inputtextview.InputTextView>
-    <com.edu.schooltask.view.Inputtextview.InputTextView
+    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
         android:id="@+id/spp_pwd_2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:IT_inputType="password"
         app:IT_text="再次输入"
         app:IT_hint="请再次输入支付密码">
-    </com.edu.schooltask.view.Inputtextview.InputTextView>
+    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
     <Button
         android:id="@+id/spp_confirm_btn"
         android:layout_width="match_parent"

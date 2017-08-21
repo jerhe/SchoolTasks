@@ -18,8 +18,8 @@ public class Poll implements Serializable {
     int height;
     String createTime;
 
-    UserInfoBase fromUser;
-    UserInfoBase toUser;
+    UserInfo fromUser;
+    UserInfo toUser;
 
     public Poll(){}
 
@@ -103,19 +103,19 @@ public class Poll implements Serializable {
         this.createTime = createTime;
     }
 
-    public UserInfoBase getFromUser() {
+    public UserInfo getFromUser() {
         return fromUser;
     }
 
-    public void setFromUser(UserInfoBase fromUser) {
+    public void setFromUser(UserInfo fromUser) {
         this.fromUser = fromUser;
     }
 
-    public UserInfoBase getToUser() {
+    public UserInfo getToUser() {
         return toUser;
     }
 
-    public void setToUser(UserInfoBase toUser) {
+    public void setToUser(UserInfo toUser) {
         this.toUser = toUser;
     }
 }

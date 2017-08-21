@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cui_head"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+    <TextView
+        android:id="@+id/cui_name"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/cui_head"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="昵称"/>
+    <TextView
+        android:id="@+id/cui_sex"
+        android:layout_alignTop="@id/cui_name"
+        android:layout_toRightOf="@id/cui_name"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="3dp"
+        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/cui_release_time"
+        android:textSize="10sp"
+        android:textColor="@color/hintColor"
+        android:layout_alignLeft="@id/cui_name"
+        android:layout_below="@id/cui_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刚刚"/>
+    <TextView
+        android:id="@+id/cui_school"
+        android:layout_alignBottom="@id/cui_release_time"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/cui_release_time"
+        android:textColor="@color/hintColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:text="学校"/>
+</RelativeLayout>

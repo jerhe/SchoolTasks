@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.edu.schooltask.activity.PersonalCenterActivity">
+    tools:context=".ui.activity.PersonalCenterActivity">
     <include layout="@layout/toolbar"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pc_rv"

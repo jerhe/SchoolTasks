@@ -30,4 +30,6 @@ public class KeyBoardUtil {
         InputMethodManager imm =  (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if(imm != null) {imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(),0);}
     }
+
+
 }

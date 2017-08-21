@@ -1,5 +1,7 @@
 package com.edu.schooltask.utils;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,8 +20,9 @@ public class DateUtil {
             date = dateFormat.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
+            Log.e("error", e.toString());
         }
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar;
     }
@@ -88,5 +91,15 @@ public class DateUtil {
 
     public static String getNow(){
         return calendarToString(Calendar.getInstance(), "yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String getLimitTime(String limitTime){
+        Calendar now = Calendar.getInstance();
+        Calendar limit = stringToCalendar(limitTime);
+        if(now.after(limit)) return "任务即将过期";
+        long time = limit.getTimeInMillis() - now.getTimeInMillis();
+        long hour  = time / (1000 * 60 * 60);
+        long minute = time / (1000 * 60) - hour * 60;
+        return hour + "小时" + minute + "分钟";
     }
 }

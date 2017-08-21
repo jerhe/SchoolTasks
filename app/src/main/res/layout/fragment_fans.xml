@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.view.recyclerview.TipRecyclerView
+    <com.edu.schooltask.ui.view.recyclerview.TipRecyclerView
         android:id="@+id/fans_tr"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.edu.schooltask.view.recyclerview.TipRecyclerView>
+    </com.edu.schooltask.ui.view.recyclerview.TipRecyclerView>
 </LinearLayout>

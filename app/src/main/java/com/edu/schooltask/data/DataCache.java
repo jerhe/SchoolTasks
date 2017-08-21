@@ -6,14 +6,12 @@ import com.edu.schooltask.beans.MessageItem;
 import com.edu.schooltask.beans.Poll;
 import com.edu.schooltask.beans.PrivateMessage;
 import com.edu.schooltask.beans.UserInfo;
-import com.edu.schooltask.beans.UserInfoBase;
 import com.edu.schooltask.other.ACache;
 import com.edu.schooltask.utils.FileUtil;
 
 import java.io.File;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.util.LruCache;
 
 
@@ -56,31 +54,36 @@ public class DataCache {
         return result;
     }
 
+    public Integer getInt(String key, int defaultValue){
+        if(getData(key) == null) return defaultValue;
+        else return getData(key);
+    }
+
     public void removeDate(String key) {
         mLruCache.remove(key);
         mDiskCache.remove(key);
     }
 
     //保存粉丝
-    public void saveFans(String userId, List<UserInfoBase> fans){
+    public void saveFans(String userId, List<UserInfo> fans){
         saveListData("fans" + userId, fans);
     }
 
     //读取粉丝
-    public List<UserInfoBase> getFans(String userId){
-        List<UserInfoBase> fans = getData("fans" + userId);
+    public List<UserInfo> getFans(String userId){
+        List<UserInfo> fans = getData("fans" + userId);
         if(fans == null) fans = new ArrayList<>();
         return fans;
     }
 
     //保存关注
-    public void saveFollowers(String userId, List<UserInfoBase> fans){
+    public void saveFollowers(String userId, List<UserInfo> fans){
         saveListData("followers" + userId, fans);
     }
 
     //读取关注
-    public List<UserInfoBase> getFollowers(String userId){
-        List<UserInfoBase> followers = getData("followers" + userId);
+    public List<UserInfo> getFollowers(String userId){
+        List<UserInfo> followers = getData("followers" + userId);
         if(followers == null) followers = new ArrayList<>();
         return followers;
     }

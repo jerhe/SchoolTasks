@@ -4,28 +4,28 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.view.Inputtextview.InputTextView
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
         android:id="@+id/ri_school"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:IT_text="学校"
         app:IT_hint="请输入学校">
-    </com.edu.schooltask.view.Inputtextview.InputTextView>
-    <com.edu.schooltask.view.Inputtextview.InputTextView
+    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
         android:id="@+id/ri_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:IT_text="昵称"
         app:IT_hint="请输入昵称，最大8个字">
-    </com.edu.schooltask.view.Inputtextview.InputTextView>
-    <com.edu.schooltask.view.Inputtextview.InputTextView
+    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
         android:id="@+id/ri_pwd"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:IT_text="密码"
         app:IT_hint="请输入登录密码，至少6位"
         app:IT_inputType="password">
-    </com.edu.schooltask.view.Inputtextview.InputTextView>
+    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
     <Button
         android:id="@+id/ri_finish"
         xmlns:android="http://schemas.android.com/apk/res/android"

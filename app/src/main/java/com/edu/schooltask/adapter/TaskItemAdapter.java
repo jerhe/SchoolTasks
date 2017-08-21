@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
-import com.edu.schooltask.item.TaskItem;
-import com.edu.schooltask.view.TaskItemView;
+import com.edu.schooltask.beans.task.TaskItem;
+import com.edu.schooltask.ui.view.TaskItemView;
 
 import java.util.List;
 

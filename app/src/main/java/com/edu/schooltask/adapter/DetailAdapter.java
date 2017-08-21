@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.Detail;
-import com.edu.schooltask.view.TextItem;
+import com.edu.schooltask.ui.view.TextItem;
 
 import java.util.List;
 

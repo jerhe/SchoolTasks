@@ -23,17 +23,16 @@ import server.api.SchoolTask;
 public class GlideUtil {
 
     //从云端获取并设置头像
-    public static void setHead(Context context, String userId, ImageView imageView, boolean skipMemoryCache){
+    public static void setHead(Context context, String userId, ImageView imageView){
         DataCache dataCache = new DataCache(context);
         int head = dataCache.getData("head");
         Glide.with(context)
-                .load(SchoolTask.HEAD_URL + userId + ".png")
+                .load(SchoolTask.HEAD + userId + ".png")
                 .dontAnimate()
-                .signature(new StringSignature(head+""))
-                .diskCacheStrategy(skipMemoryCache ? DiskCacheStrategy.NONE : DiskCacheStrategy.ALL)
-                .skipMemoryCache(skipMemoryCache)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.head)
                 .error(R.drawable.head)
+                .signature(new StringSignature(head+""))
                 .into(imageView);
     }
 
@@ -41,7 +40,7 @@ public class GlideUtil {
         DataCache dataCache = new DataCache(context);
         int bg = dataCache.getData("bg");
         Glide.with(context)
-                .load(SchoolTask.BG_URL + userId + ".png")
+                .load(SchoolTask.BG + userId + ".png")
                 .signature(new StringSignature(bg+""))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.background)

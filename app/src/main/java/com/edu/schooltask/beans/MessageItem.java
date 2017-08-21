@@ -1,21 +1,15 @@
 package com.edu.schooltask.beans;
 
-import android.util.Log;
-
-import com.edu.schooltask.beans.Poll;
-import com.edu.schooltask.beans.UserInfoBase;
-
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by 夜夜通宵 on 2017/5/28.
  */
 
 public class MessageItem extends DataSupport implements Serializable{
-    UserInfoBase user;  //消息来源
+    UserInfo user;  //消息来源
     String lastMessage; //最新消息
     String lastTime;    //最新消息的时间
     int count;  //未读消息数
@@ -35,11 +29,11 @@ public class MessageItem extends DataSupport implements Serializable{
         this.lastTime = lastTime;
     }
 
-    public UserInfoBase getUser() {
+    public UserInfo getUser() {
         return user;
     }
 
-    public void setUser(UserInfoBase user) {
+    public void setUser(UserInfo user) {
         this.user = user;
     }
 

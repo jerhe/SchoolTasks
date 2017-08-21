@@ -14,7 +14,7 @@ public class StringUtil {
 
     //判断字符串为空
     public static boolean isEmpty(String string){
-        return string.length() == 0;
+        return string == null || string.length() == 0;
     }
 
     //判断一组字符串为空

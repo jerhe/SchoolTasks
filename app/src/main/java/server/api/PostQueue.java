@@ -3,7 +3,7 @@ package server.api;
 import android.util.Log;
 
 import com.edu.schooltask.beans.UserInfo;
-import com.edu.schooltask.data.DataCache;
+import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.utils.UserUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -47,7 +47,11 @@ public class PostQueue {
 
             PostFormBuilder builder = OkHttpUtils.post();
             builder.url(requestBody.getUrl());
-            builder.addHeader("token", UserUtil.getLoginUser().getToken());
+            UserInfoWithToken user = UserUtil.getLoginUser();
+            if(user == null) {
+                throw new RuntimeException("User has lost!");
+            }
+            builder.addHeader("token", user.getToken());
             Map<String, String> params = requestBody.getParams();
             if(params != null) builder.params(params);
             builder.build().execute(callBack);

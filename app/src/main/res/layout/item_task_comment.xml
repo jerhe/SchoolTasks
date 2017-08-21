@@ -7,13 +7,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <include layout="@layout/user_item_small"/>
+        <com.edu.schooltask.ui.view.useritem.UserItemCommentView
+            android:id="@+id/tc_uicv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.edu.schooltask.ui.view.useritem.UserItemCommentView>
         <TextView
             android:id="@+id/tc_child_count"
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:gravity="center"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

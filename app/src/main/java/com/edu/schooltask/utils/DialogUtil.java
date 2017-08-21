@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.edu.schooltask.R;
-import com.edu.schooltask.activity.SetPayPwdActivity;
-import com.edu.schooltask.base.BaseActivity;
+import com.edu.schooltask.ui.activity.SetPayPwdActivity;
+import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.filter.MoneyFilter;
 import com.edu.schooltask.filter.NumberFilter;
-import com.edu.schooltask.view.Content;
-import com.edu.schooltask.view.Inputtextview.InputTextView;
+import com.edu.schooltask.ui.view.TaskContentView;
+import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
@@ -39,20 +39,22 @@ public class DialogUtil {
     public static DialogPlus createTextDialog(Context context, String title,
                                               String content, String hint, String yesText,
                                               final OnClickListener listener, String noText){
+        int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
         DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_text))
+                .setMargin(margin,0,margin,0)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         switch (view.getId()){
-                            case R.id.dt_yes:
+                            case R.id.dt_ok:
                                 dialog.dismiss();
                                 listener.onClick(dialog);
                                 break;
-                            case R.id.dt_no:
+                            case R.id.dt_cancel:
                                 dialog.dismiss();
                                 break;
                         }
@@ -60,11 +62,11 @@ public class DialogUtil {
                 })
                 .create();
         View dialogView = dialog.getHolderView();
-        TextView titleText = (TextView) dialogView.findViewById(R.id.dt_title);
+        TextView titleText = (TextView) dialogView.findViewById(R.id.dialog_title);
         TextView contentText = (TextView) dialogView.findViewById(R.id.dt_content);
         TextView hintText = (TextView) dialogView.findViewById(R.id.dt_hint);
-        TextView yesBtn = (TextView) dialogView.findViewById(R.id.dt_yes);
-        TextView noBtn = (TextView) dialogView.findViewById(R.id.dt_no);
+        TextView yesBtn = (TextView) dialogView.findViewById(R.id.dt_ok);
+        TextView noBtn = (TextView) dialogView.findViewById(R.id.dt_cancel);
         titleText.setText(title);
         contentText.setText(content);
         if(hint.length() == 0) hintText.setVisibility(View.GONE);
@@ -75,10 +77,12 @@ public class DialogUtil {
     }
 
     public static DialogPlus createPayDialog(final BaseActivity activity, final OnPayListener listener, String cost, final BaseTokenEvent event){
+        int margin = (int)activity.getResources().getDimension(R.dimen.dialog_margin);
         final DialogPlus payDialog = DialogPlus.newDialog(activity)
                 .setContentHolder(new ViewHolder(R.layout.dialog_pay))
                 .setGravity(Gravity.CENTER)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setMargin(margin,0,margin,0)
                 .setOutAnimation(R.anim.dialog_out)
                 .setCancelable(false)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
@@ -140,11 +144,13 @@ public class DialogUtil {
     }
 
     public static DialogPlus createListDialog(Context context, BaseAdapter adapter, OnItemClickListener listener){
+        int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
         DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ListHolder())
+                .setMargin(margin,0,margin,0)
                 .setAdapter(adapter)
                 .setOnItemClickListener(listener)
                 .create();
@@ -157,11 +163,13 @@ public class DialogUtil {
 
     public static DialogPlus createInputDialog(Context context, final OnInputClickListener listener,
                                                String title, String hint){
+        int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
         DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_input))
+                .setMargin(margin,0,margin,0)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
@@ -187,15 +195,17 @@ public class DialogUtil {
 
     public static DialogPlus createInputMultilineDialog(Context context, final OnInputClickListener listener,
                                                String title, String defaultContent){
+        int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
         DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_input_multiline))
+                .setMargin(margin,0,margin,0)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
-                        Content inputText = (Content) dialog.getHolderView().findViewById(R.id.dim_content);
+                        TaskContentView inputText = (TaskContentView) dialog.getHolderView().findViewById(R.id.dim_content);
                         switch (view.getId()){
                             case R.id.dim_yes:
                                 listener.onInputClick(dialog, inputText.getText().toString());
@@ -210,8 +220,8 @@ public class DialogUtil {
         View dialogView = dialog.getHolderView();
         TextView titleText = (TextView) dialogView.findViewById(R.id.dim_title);
         titleText.setText(title);
-        Content content = (Content) dialogView.findViewById(R.id.dim_content);
-        content.setText(defaultContent);
+        TaskContentView taskContentView = (TaskContentView) dialogView.findViewById(R.id.dim_content);
+        taskContentView.setText(defaultContent);
         return dialog;
     }
 
@@ -235,7 +245,7 @@ public class DialogUtil {
                 .create();
         View dialogView = dialog.getHolderView();
         GestureImageView imageView = (GestureImageView) dialogView.findViewById(R.id.image_image);
-        GlideUtil.setHead(context, userId, imageView, false);
+        GlideUtil.setHead(context, userId, imageView);
         return dialog;
     }
 
@@ -244,11 +254,13 @@ public class DialogUtil {
     }
 
     public static DialogPlus createRechargeDialog(final BaseActivity activity, final RechargeListener listener){
+        int margin = (int)activity.getResources().getDimension(R.dimen.dialog_margin);
         final DialogPlus dialog = DialogPlus.newDialog(activity)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
                 .setContentHolder(new ViewHolder(R.layout.dialog_recharge))
+                .setMargin(margin,0,margin,0)
                 .create();
         View dialogView = dialog.getHolderView();
         final InputTextView inputTextView = (InputTextView) dialogView.findViewById(R.id.recharge_money);

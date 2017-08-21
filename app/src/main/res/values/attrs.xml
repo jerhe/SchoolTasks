@@ -12,7 +12,7 @@
         <attr name="ST_text" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="Content">
+    <declare-styleable name="TaskContentView">
         <attr name="maxLength" format="integer"/>
         <attr name="contentHint" format="string"/>
     </declare-styleable>

@@ -44,8 +44,7 @@ public class PrivateMessageAdapter extends BaseMultiItemQuickAdapter<PrivateMess
             case 1: //接收
             case 2: //发送
                 CircleImageView fromHeadView = helper.getView(R.id.pm_head);
-                GlideUtil.setHead(fromHeadView.getContext(), poll.getFromUser().getUserId(),
-                        fromHeadView, false);
+                GlideUtil.setHead(fromHeadView.getContext(), poll.getFromUser().getUserId(), fromHeadView);
                 if(item.isShowTime()){
                     helper.setVisible(R.id.pm_time,true);
                     helper.setText(R.id.pm_time, DateUtil.getMessageLong(poll.getCreateTime()));

@@ -1,10 +1,5 @@
 package server.api.task.get;
 
-import com.edu.schooltask.item.TaskItem;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import server.api.base.BaseEvent;
 
 /**

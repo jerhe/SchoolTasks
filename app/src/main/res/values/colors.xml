@@ -8,9 +8,10 @@
     <color name="fontColor">#757575</color>
     <color name="hintColor">#999999</color>
     <color name="trans">#00000000</color>    <!-- 透明色 -->
-    <color name="shadow">#33000000</color>    <!-- 透明色 -->
+    <color name="shadow">#30000000</color>    <!-- 透明色 -->
     <color name="lineColor">#D8D8D8</color> <!-- 分割线颜色 -->
-    <color name="mainBackgroundColor">#F6F6F6</color> <!-- 背景颜色 -->
+    <color name="backgroundColor">#FAFAFA</color> <!-- 背景颜色 -->
+    <color name="baseBackgroundColor">#F2F2F2</color> <!-- 内容背景颜色 -->
     <color name="inputBackground">#FAFAFA</color>
     <color name="releaseColor">#1b9dff</color>  <!-- 发布颜色 -->
     <color name="acceptColor">#FFA500</color>  <!-- 接受颜色 -->
@@ -18,7 +19,6 @@
     <color name="jobColor">#778899</color>
     <color name="black">#000000</color>
     <color name="divide">#F3F3F3</color>
-    <color name="textNameColor">#EEEEEE</color>
-    <color name="imageBorderColor">#CCCCCC</color>
+    <color name="imageBorderColor">#CFCFCF</color>
     <color name="labelBackgroundColor">#eeeeee</color>
 </resources>

@@ -10,10 +10,7 @@
         android:gravity="center"
         android:textSize="16sp"
         android:text="请输入昵称"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/lineColor"/>
+    <include layout="@layout/line"/>
     <EditText
         android:id="@+id/di_input"
         android:layout_marginTop="10dp"
@@ -25,10 +22,7 @@
         android:singleLine="true"
         android:textSize="14sp"
         android:background="@drawable/bg_input_text"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/lineColor"/>
+    <include layout="@layout/line"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

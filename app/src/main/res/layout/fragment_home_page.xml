@@ -6,48 +6,62 @@
     app:refreshColor="@color/colorPrimary"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <android.support.design.widget.CoordinatorLayout
-
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/home_appbar"
+        <com.edu.schooltask.ui.view.MyScrollView
+            android:id="@+id/home_msv"
+            android:fillViewport="true"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll">
-                <com.youth.banner.Banner
-                    android:id="@+id/home_banner"
-                    android:background="@color/divide"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/home_header"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
-                </com.youth.banner.Banner>
-                <include layout="@layout/rv_btn"/>
+                    android:layout_height="wrap_content">
+                    <com.youth.banner.Banner
+                        android:id="@+id/home_banner"
+                        android:background="@color/divide"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
+                    </com.youth.banner.Banner>
+                    <include layout="@layout/rv_btn"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/home_tab_layout"
+                    android:orientation="vertical"
+                    android:background="@color/backgroundColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp">
+                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/home_rv"
+                        android:nestedScrollingEnabled="false"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
             </LinearLayout>
-            <com.edu.schooltask.view.ViewPagerTab
-                android:id="@+id/home_tab"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                app:layout_scrollFlags="snap">
-            </com.edu.schooltask.view.ViewPagerTab>
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.NestedScrollView
+        </com.edu.schooltask.ui.view.MyScrollView>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/home_tab_layout_top"
+            android:background="@color/backgroundColor"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/home_rv"
-                android:nestedScrollingEnabled="false"
-                android:fadingEdge="none"
-                android:overScrollMode="never"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.design.widget.CoordinatorLayout>
+            android:layout_height="35dp"
+            android:visibility="invisible">
+        </LinearLayout>
+    </RelativeLayout>
+
 </com.baoyz.widget.PullRefreshLayout>

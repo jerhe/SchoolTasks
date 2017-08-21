@@ -5,9 +5,12 @@ import android.graphics.Color;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
-import com.edu.schooltask.beans.UserInfoBase;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.item.OrderStateItem;
-import com.edu.schooltask.view.UserItemView;
+import com.edu.schooltask.ui.view.useritem.UserItemSmallView;
+import com.edu.schooltask.ui.view.useritem.UserItemView;
+import com.edu.schooltask.utils.DateUtil;
+import com.edu.schooltask.utils.StringUtil;
 
 import java.util.List;
 
@@ -32,19 +35,24 @@ public class OrderStateAdapter extends BaseQuickAdapter<OrderStateItem, BaseView
             helper.setImageResource(R.id.state_state_flag, R.drawable.ic_icon_state_unfinish);
 
         if(item.isAccept()){
-            helper.setVisible(R.id.os_uiv, true);
-            UserInfoBase acceptUser = item.getAcceptUser();
-            UserItemView userItemView = helper.getView(R.id.os_uiv);
-            userItemView.setAll(acceptUser);
+            helper.setVisible(R.id.os_uisv, true);
+            UserInfo acceptUser = item.getAcceptUser();
+            UserItemSmallView userItemSmallView = helper.getView(R.id.os_uisv);
+            userItemSmallView.setAll(acceptUser);
         }
         else{
-            helper.setVisible(R.id.os_uiv, false);
+            helper.setVisible(R.id.os_uisv, false);
         }
-        if(item.getName() != null){
+        if(!StringUtil.isEmpty(item.getName())){
             helper.setText(R.id.os_state_name, item.getName());
         }
-        if(item.getText() != null){
-            helper.setText(R.id.os_state_text, item.getText());
+        String text = item.getText();
+        if(!StringUtil.isEmpty(text)){
+            if(text.endsWith(".0")) text = text.replace(".0", "");
+            helper.setText(R.id.os_state_text, text);
+        }
+        else{
+            helper.setText(R.id.os_state_text, "");
         }
     }
 }

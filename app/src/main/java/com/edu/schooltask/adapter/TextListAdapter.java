@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
-import com.edu.schooltask.activity.PrivateMessageActivity;
 
 import java.util.List;
 

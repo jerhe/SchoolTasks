@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.edu.schooltask.activity.PrivateMessageActivity">
+    tools:context=".ui.activity.PrivateMessageActivity">
     <include layout="@layout/toolbar" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pm_rv"
@@ -18,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/lineColor"/>
-    <com.edu.schooltask.view.MessageInputBoard
+    <com.edu.schooltask.ui.view.MessageInputBoard
         android:id="@+id/pm_mib"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.edu.schooltask.view.MessageInputBoard>
+    </com.edu.schooltask.ui.view.MessageInputBoard>
 </LinearLayout>

@@ -1,148 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context="com.edu.schooltask.activity.TaskOrderActivity">
-
+    tools:context=".ui.activity.TaskOrderActivity">
     <RelativeLayout
+        android:id="@+id/order_bottom"
+        android:layout_alignParentBottom="true"
+        android:background="@color/divide"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <include layout="@layout/toolbar"/>
-            <com.baoyz.widget.PullRefreshLayout
-                android:id="@+id/order_prl"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:refreshColor="@color/colorPrimary">
-                <ScrollView
-                    android:id="@+id/order_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fadingEdge="none"
-                    android:overScrollMode="never"
-                    android:visibility="invisible">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_marginTop="20dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:text="订单信息"
-                            android:textSize="12sp"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10dp"/>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.1dp"
-                            android:background="@color/lineColor"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginLeft="10dp"/>
-                        <LinearLayout
-                            android:layout_marginTop="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="60dp"
-                                android:layout_height="match_parent"
-                                android:text="订单号"
-                                android:textSize="12sp"
-                                android:gravity="center"/>
-                            <TextView
-                                android:id="@+id/order_id"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textSize="12sp"
-                                android:gravity="center_vertical"
-                                android:textIsSelectable="true"/>
-                        </LinearLayout>
-                        <com.edu.schooltask.view.TaskItemView
-                            android:id="@+id/order_tiv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                        </com.edu.schooltask.view.TaskItemView>
-                        <TextView
-                            android:layout_marginTop="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:text="订单状态"
-                            android:textSize="12sp"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10dp"/>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.1dp"
-                            android:background="@color/lineColor"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginLeft="10dp"/>
-                        <com.edu.schooltask.view.recyclerview.OrderStateRecyclerView
-                            android:layout_marginTop="20dp"
-                            android:id="@+id/order_osrv"
-                            android:fadingEdge="none"
-                            android:overScrollMode="never"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                        </com.edu.schooltask.view.recyclerview.OrderStateRecyclerView>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="10dp"
-                            android:background="@color/divide"/>
-                        <com.edu.schooltask.view.TaskCountView
-                            android:id="@+id/order_count"
-                            android:layout_marginTop="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.1dp"
-                            android:background="@color/lineColor"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginLeft="10dp"/>
-                        <!-- 这个布局是为了防止RecyclerView显示不全 -->
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <com.edu.schooltask.view.recyclerview.CommentRecyclerView
-                                android:layout_marginTop="10dp"
-                                android:id="@+id/order_crv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                            </com.edu.schooltask.view.recyclerview.CommentRecyclerView>
-                        </RelativeLayout>
-
-                    </LinearLayout>
-                </ScrollView>
-            </com.baoyz.widget.PullRefreshLayout>
-        </LinearLayout>
-
-        <com.edu.schooltask.view.CommentReplyView
-            android:id="@+id/order_comment_reply_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadingEdge="none"
-            android:overScrollMode="never"
-            android:visibility="invisible">
-        </com.edu.schooltask.view.CommentReplyView>
-    </RelativeLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/lineColor"/>
-    <RelativeLayout
-        android:background="@color/mainBackgroundColor"
-        android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="60dp">
         <RelativeLayout
             android:id="@+id/order_btn_layout"
@@ -212,12 +82,126 @@
                     android:visibility="gone"/>
             </LinearLayout>
         </RelativeLayout>
-        <com.edu.schooltask.view.CommentInputBoard
+        <com.edu.schooltask.ui.view.CommentInputBoard
             android:id="@+id/order_cib"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-        </com.edu.schooltask.view.CommentInputBoard>
+        </com.edu.schooltask.ui.view.CommentInputBoard>
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_above="@id/order_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/toolbar"/>
+            <com.baoyz.widget.PullRefreshLayout
+                android:id="@+id/order_prl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:refreshColor="@color/colorPrimary">
+                <ScrollView
+                    android:id="@+id/order_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fadingEdge="none"
+                    android:overScrollMode="never">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="订单信息"
+                            android:textSize="12sp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"/>
+                        <include layout="@layout/line_margin"/>
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="订单号"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:textSize="12sp"
+                                android:gravity="center"/>
+                            <TextView
+                                android:id="@+id/order_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textSize="12sp"
+                                android:gravity="center_vertical"
+                                android:textIsSelectable="true"/>
+                        </LinearLayout>
+                        <com.edu.schooltask.ui.view.TaskItemView
+                            android:id="@+id/order_tiv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </com.edu.schooltask.ui.view.TaskItemView>
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:text="订单状态"
+                            android:textSize="12sp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"/>
+                        <include layout="@layout/line_margin"/>
+                        <com.edu.schooltask.ui.view.recyclerview.OrderStateRecyclerView
+                            android:layout_marginTop="20dp"
+                            android:id="@+id/order_osrv"
+                            android:fadingEdge="none"
+                            android:overScrollMode="never"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </com.edu.schooltask.ui.view.recyclerview.OrderStateRecyclerView>
+                        <include layout="@layout/divide"/>
+                        <com.edu.schooltask.ui.view.TaskCountView
+                            android:id="@+id/order_count"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <include layout="@layout/line_margin"/>
+                        <!-- 这个布局是为了防止RecyclerView显示不全 -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView
+                                android:layout_marginTop="10dp"
+                                android:id="@+id/order_crv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                            </com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </com.baoyz.widget.PullRefreshLayout>
+        </LinearLayout>
 
-</LinearLayout>
+        <com.edu.schooltask.ui.view.CommentReplyView
+            android:id="@+id/order_comment_reply_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:visibility="invisible">
+        </com.edu.schooltask.ui.view.CommentReplyView>
+    </RelativeLayout>
+    <View
+        android:layout_above="@id/order_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_bottom_shadow"/>
+
+
+</RelativeLayout>

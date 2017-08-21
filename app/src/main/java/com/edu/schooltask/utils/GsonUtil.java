@@ -3,20 +3,20 @@ package com.edu.schooltask.utils;
 import com.edu.schooltask.beans.Detail;
 import com.edu.schooltask.beans.PersonalCenterInfo;
 import com.edu.schooltask.beans.Poll;
-import com.edu.schooltask.beans.TaskCommentList;
-import com.edu.schooltask.beans.TaskCount;
-import com.edu.schooltask.beans.TaskOrder;
+import com.edu.schooltask.beans.comment.TaskCommentList;
+import com.edu.schooltask.beans.task.TaskOrderInfo;
 import com.edu.schooltask.beans.TaskUploadKey;
 import com.edu.schooltask.beans.UploadKey;
 import com.edu.schooltask.beans.UserConfig;
 import com.edu.schooltask.beans.UserHomePageInfo;
+import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.beans.UserInfo;
-import com.edu.schooltask.beans.UserInfoBase;
-import com.edu.schooltask.item.TaskItem;
+import com.edu.schooltask.beans.Voucher;
+import com.edu.schooltask.beans.task.TaskItem;
+import com.edu.schooltask.beans.task.TaskOrderItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -62,8 +62,8 @@ public class GsonUtil {
         return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<TaskItem>>() {}.getType());
     }
 
-    public static TaskOrder toTaskOrder(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<TaskOrder>() {}.getType());
+    public static TaskOrderInfo toTaskOrder(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<TaskOrderInfo>() {}.getType());
     }
 
     public static TaskCommentList toTaskCommentList(Object data){
@@ -78,23 +78,31 @@ public class GsonUtil {
         return new Gson().fromJson(new Gson().toJson(data), new TypeToken<Integer>() {}.getType());
     }
 
-    public static UserInfoBase toUserInfoBase(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<UserInfoBase>() {}.getType());
-    }
-
-    public static TaskCount toTaskCount(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<TaskCount>() {}.getType());
-    }
-
     public static UserInfo toUserInfo(Object data){
         return new Gson().fromJson(new Gson().toJson(data), new TypeToken<UserInfo>() {}.getType());
     }
 
-    public static List<TaskOrder> toTaskOrderList(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<TaskOrder>>() {}.getType());
+    public static UserInfoWithToken toUserInfoWithToken(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<UserInfoWithToken>() {}.getType());
     }
 
-    public static List<UserInfoBase> toUserInfoBaseList(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<UserInfoBase>>() {}.getType());
+    public static List<TaskOrderInfo> toTaskOrderList(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<TaskOrderInfo>>() {}.getType());
+    }
+
+    public static List<UserInfo> toUserInfoBaseList(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<UserInfo>>() {}.getType());
+    }
+
+    public static List<Voucher> toVoucherList(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<Voucher>>() {}.getType());
+    }
+
+    public static List<TaskOrderItem> toTaskOrderItem(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<TaskOrderItem>>() {}.getType());
+    }
+
+    public static TaskItem toTaskItem(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<TaskItem>() {}.getType());
     }
 }

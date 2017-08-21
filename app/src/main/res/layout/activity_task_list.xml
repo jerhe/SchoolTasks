@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.edu.schooltask.activity.TaskListActivity">
+    tools:context=".ui.activity.TaskListActivity">
     <Space
         android:id="@+id/tl_space"
         android:layout_width="match_parent"
@@ -28,17 +28,20 @@
         android:background="@color/shadow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"/>
-    <com.edu.schooltask.view.TaskFilter
-        android:id="@+id/tl_tf"
+        android:visibility="invisible" />
+    <com.edu.schooltask.ui.view.TaskFilterView
+        android:id="@+id/tl_tfv"
+        android:elevation="3dp"
+        android:background="@color/backgroundColor"
         android:layout_below="@id/tl_space"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible">
-    </com.edu.schooltask.view.TaskFilter>
+    </com.edu.schooltask.ui.view.TaskFilterView>
     <RelativeLayout
-        android:background="@color/colorPrimary"
+        android:background="@color/backgroundColor"
         android:layout_width="match_parent"
+        android:elevation="3dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_height="50dp">
@@ -56,12 +59,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
+            android:background="@color/backgroundColor"
+            android:textColor="@color/black"
             android:maxLines="1"
             android:textColorHint="@color/white"
             android:textSize="14sp"
-            android:hint="寻找任务"
+            android:hint="搜索"
             android:textCursorDrawable="@null"/>
         <TextView
             android:id="@+id/tl_tf_btn"
@@ -69,9 +72,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="筛选"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/btn_hollow_white"/>
+            android:background="@drawable/btn_hollow_black"/>
     </RelativeLayout>
 </RelativeLayout>

@@ -2,8 +2,8 @@ package com.edu.schooltask.utils;
 
 import android.content.ContentValues;
 
-import com.edu.schooltask.beans.LoginUser;
 import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.UserInfoWithToken;
 
 import org.litepal.crud.DataSupport;
 
@@ -14,25 +14,24 @@ import org.litepal.crud.DataSupport;
 public class UserUtil {
     //判断是否登录
     public static boolean hasLogin(){
-        LoginUser loginUser = DataSupport.findFirst(LoginUser.class);
+        UserInfoWithToken loginUser = DataSupport.findFirst(UserInfoWithToken.class);
         return loginUser != null;
     }
 
     //保存登录用户
-    public static void saveLoginUser(UserInfo userInfo) {
-        DataSupport.deleteAll(LoginUser.class); //清空已存在的用户
-        LoginUser loginUser = new LoginUser(userInfo);
-        loginUser.save();
+    public static void saveLoginUser(UserInfoWithToken userInfoWithToken) {
+        DataSupport.deleteAll(UserInfoWithToken.class); //清空已存在的用户
+        userInfoWithToken.save();
     }
 
     //删除登录用户
     public static void deleteLoginUser(){
-        DataSupport.deleteAll(LoginUser.class);
+        DataSupport.deleteAll(UserInfoWithToken.class);
     }
 
     //获取登录用户
-    public static UserInfo getLoginUser(){
-        LoginUser loginUser = DataSupport.findFirst(LoginUser.class);
+    public static UserInfoWithToken getLoginUser(){
+        UserInfoWithToken loginUser = DataSupport.findFirst(UserInfoWithToken.class);
         return loginUser;
     }
 
@@ -40,6 +39,20 @@ public class UserUtil {
     public static void updateToken(String token) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("token", token);
-        DataSupport.updateAll(LoginUser.class, contentValues);
+        DataSupport.updateAll(UserInfoWithToken.class, contentValues);
+    }
+
+    //更新信息
+    public static void updateInfo(UserInfo userInfo){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", userInfo.getName());
+        contentValues.put("birth", userInfo.getBirth());
+        contentValues.put("email", userInfo.getEmail());
+        contentValues.put("fansCount", userInfo.getFansCount());
+        contentValues.put("followerCount", userInfo.getFollowerCount());
+        contentValues.put("school", userInfo.getSchool());
+        contentValues.put("sex", userInfo.getSex());
+        contentValues.put("sign", userInfo.getSign());
+        DataSupport.updateAll(UserInfoWithToken.class, contentValues);
     }
 }

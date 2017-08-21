@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_marginTop="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:orientation="horizontal"
-    android:layout_height="40dp">
-    <com.edu.schooltask.view.Inputtextview.InputTextNameView
+    android:layout_height="wrap_content">
+    <com.edu.schooltask.ui.view.Inputtextview.InputTextNameView
         android:id="@+id/st_name"
-        android:layout_width="70dp"
         android:gravity="center"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
+        android:layout_width="70dp"
+        android:layout_height="39dp"
         android:text="文本"/>
     <com.jaredrummler.materialspinner.MaterialSpinner
         android:id="@+id/st_spinner"
+        android:layout_toRightOf="@id/st_name"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="40dp"/>
+</RelativeLayout>
