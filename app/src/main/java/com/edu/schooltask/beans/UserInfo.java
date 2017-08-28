@@ -1,10 +1,15 @@
 package com.edu.schooltask.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 
-public class UserInfo extends DataSupport implements Serializable{
+import io.rong.push.common.ParcelUtils;
+
+public class UserInfo extends DataSupport implements Serializable,Parcelable{
 	String userId;
 	String name;
 	String school;
@@ -12,8 +17,6 @@ public class UserInfo extends DataSupport implements Serializable{
 	int sex;
 	String birth;
 	String email;
-	int followerCount;
-	int fansCount;
 	
 	
 	public UserInfo() {
@@ -27,13 +30,10 @@ public class UserInfo extends DataSupport implements Serializable{
 		this.school = user.getSchool();
 		this.sex = user.getSex();
 		this.birth = user.getBirth();
-		this.followerCount = user.getFollowerCount();
-		this.fansCount = user.getFansCount();
 		this.email = user.getEmail();
 	}
 
-	public UserInfo(String userId, String name, String sign, String school, int sex, String birth,
-                    int followers, int fans) {
+	public UserInfo(String userId, String name, String sign, String school, int sex, String birth) {
 		super();
 		this.userId = userId;
 		this.name = name;
@@ -41,8 +41,16 @@ public class UserInfo extends DataSupport implements Serializable{
 		this.school = school;
 		this.sex = sex;
 		this.birth = birth;
-		this.followerCount = followers;
-		this.fansCount = fans;
+	}
+
+	public UserInfo(Parcel in){
+		setUserId(ParcelUtils.readFromParcel(in));
+		setName(ParcelUtils.readFromParcel(in));
+		setSchool(ParcelUtils.readFromParcel(in));
+		setSign(ParcelUtils.readFromParcel(in));
+		setSex(ParcelUtils.readIntFromParcel(in));
+		setBirth(ParcelUtils.readFromParcel(in));
+		setEmail(ParcelUtils.readFromParcel(in));
 	}
 
 
@@ -108,24 +116,36 @@ public class UserInfo extends DataSupport implements Serializable{
 		this.email = email;
 	}
 
-	public int getFollowerCount() {
-		return followerCount;
-	}
-
-	public void setFollowers(int followerCount) {
-		this.followerCount = followerCount;
-	}
-
-	public int getFansCount() {
-		return fansCount;
-	}
-
-	public void setFans(int fansCount) {
-		this.fansCount = fansCount;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		return ((UserInfo)obj).getUserId().equals(userId);
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		ParcelUtils.writeToParcel(dest, userId);
+		ParcelUtils.writeToParcel(dest, name);
+		ParcelUtils.writeToParcel(dest, school);
+		ParcelUtils.writeToParcel(dest, sign);
+		ParcelUtils.writeToParcel(dest, sex);
+		ParcelUtils.writeToParcel(dest, birth);
+		ParcelUtils.writeToParcel(dest, email);
+	}
+
+	public static final Parcelable.Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
+		@Override
+		public UserInfo createFromParcel(Parcel source) {
+			return new UserInfo(source);
+		}
+
+		@Override
+		public UserInfo[] newArray(int size) {
+			return new UserInfo[size];
+		}
+	};
 }

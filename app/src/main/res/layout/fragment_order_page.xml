@@ -26,7 +26,6 @@
     </RelativeLayout>
     <com.edu.schooltask.ui.view.TaskFilterView
         android:id="@+id/op_tfv"
-        android:elevation="3dp"
         android:background="@color/backgroundColor"
         android:layout_below="@id/op_space"
         android:layout_width="match_parent"
@@ -36,7 +35,6 @@
     <RelativeLayout
         android:id="@+id/op_toolbar"
         android:background="@color/white"
-        android:elevation="3dp"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <TextView
@@ -57,5 +55,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_hollow_black"
             android:text="筛选"/>
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor"/>
     </RelativeLayout>
 </RelativeLayout>

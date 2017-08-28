@@ -8,8 +8,8 @@
     tools:context=".ui.activity.ReleaseTaskActivity">
     <RelativeLayout
         android:id="@+id/rt_bottom"
+        android:background="@color/backgroundColor"
         android:layout_alignParentBottom="true"
-        android:background="@color/divide"
         android:layout_width="match_parent"
         android:layout_height="60dp">
         <Button
@@ -43,8 +43,14 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
-        <ScrollView
+        <View
+            android:id="@+id/toolbar_line"
             android:layout_below="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor"/>
+        <ScrollView
+            android:layout_below="@id/toolbar_line"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
@@ -129,6 +135,6 @@
     <View
         android:layout_above="@id/rt_bottom"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@drawable/bg_bottom_shadow"/>
+        android:layout_height="1dp"
+        android:background="@color/lineColor"/>
 </RelativeLayout>

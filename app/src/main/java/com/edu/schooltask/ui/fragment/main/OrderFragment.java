@@ -3,6 +3,7 @@ package com.edu.schooltask.ui.fragment.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,7 +31,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
+import server.api.task.accept.AcceptTaskEvent;
 import server.api.task.order.GetTaskOrderListEvent;
+import server.api.task.release.ReleaseTaskEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
@@ -97,7 +100,7 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getActivity(), TaskOrderActivity.class);
-                intent.putExtra("order_id", orderList.get(position).getOrderId());
+                intent.putExtra("orderId", orderList.get(position).getOrderId());
                 startActivity(intent);
             }
         });
@@ -157,6 +160,20 @@ public class OrderFragment extends BaseFragment {
         tipRecyclerView.notifyDataChanged();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReleaseTask(ReleaseTaskEvent event){
+        if(event.isOk()){
+            tipRecyclerView.refresh();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAcceptTask(AcceptTaskEvent event){
+        if(event.isOk()){
+            tipRecyclerView.refresh();
+        }
+    }
+
     //登录事件
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccess(LoginSuccessEvent event){
@@ -168,4 +185,6 @@ public class OrderFragment extends BaseFragment {
     public void onLogout(LogoutEvent event){
         tipRecyclerView.logout();
     }
+
+
 }

@@ -29,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.register.RegisterEvent;
+import server.api.user.register.RegisterEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.

@@ -6,10 +6,14 @@
     android:orientation="vertical"
     tools:context=".ui.activity.MessageAndPrivacyActivity">
     <include layout="@layout/toolbar"/>
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineColor"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/map_rv"
         android:visibility="invisible"
-        android:background="@color/divide"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>

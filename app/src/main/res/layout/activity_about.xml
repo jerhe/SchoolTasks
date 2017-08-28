@@ -51,7 +51,6 @@
         android:layout_below="@id/toolbar"
         android:layout_height="50dp"
         android:layout_width="match_parent"
-        android:background="@color/divide"
         android:visibility="gone">
     </LinearLayout>
 </RelativeLayout>

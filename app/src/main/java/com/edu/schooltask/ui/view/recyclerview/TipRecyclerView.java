@@ -98,6 +98,11 @@ public class TipRecyclerView extends RelativeLayout {
         page = 0;
     }
 
+    public void refresh(){
+        clear();
+        refreshListener.onRefresh(page);
+    }
+
     public void showLoginTip(){
         loginTip.setVisibility(VISIBLE);
         refreshLayout.setVisibility(GONE);

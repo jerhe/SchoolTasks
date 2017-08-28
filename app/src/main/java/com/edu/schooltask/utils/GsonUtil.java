@@ -1,8 +1,9 @@
 package com.edu.schooltask.utils;
 
 import com.edu.schooltask.beans.Detail;
+import com.edu.schooltask.beans.FriendList;
+import com.edu.schooltask.beans.FriendRequest;
 import com.edu.schooltask.beans.PersonalCenterInfo;
-import com.edu.schooltask.beans.Poll;
 import com.edu.schooltask.beans.comment.TaskCommentList;
 import com.edu.schooltask.beans.task.TaskOrderInfo;
 import com.edu.schooltask.beans.TaskUploadKey;
@@ -36,14 +37,6 @@ public class GsonUtil {
 
     public static List<String> toStringList(Object data){
         return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<String>>() {}.getType());
-    }
-
-    public static List<Poll> toPollList(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<Poll>>() {}.getType());
-    }
-
-    public static Poll toPoll(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<Poll>() {}.getType());
     }
 
     public static PersonalCenterInfo toPersonalCenterInfo(Object data){
@@ -104,5 +97,13 @@ public class GsonUtil {
 
     public static TaskItem toTaskItem(Object data){
         return new Gson().fromJson(new Gson().toJson(data), new TypeToken<TaskItem>() {}.getType());
+    }
+
+    public static List<FriendRequest> toFriendRequestList(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<FriendRequest>>() {}.getType());
+    }
+
+    public static FriendList toFriendList(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<FriendList>() {}.getType());
     }
 }

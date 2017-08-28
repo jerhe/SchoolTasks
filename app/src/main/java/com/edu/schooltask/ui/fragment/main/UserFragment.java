@@ -12,10 +12,24 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.edu.schooltask.R;
+import com.edu.schooltask.adapter.IconMenuAdapter;
+import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.UserInfoWithToken;
+import com.edu.schooltask.event.LoginSuccessEvent;
+import com.edu.schooltask.event.LogoutEvent;
+import com.edu.schooltask.item.IconMenuItem;
 import com.edu.schooltask.ui.activity.AboutActivity;
 import com.edu.schooltask.ui.activity.HelpActivity;
 import com.edu.schooltask.ui.activity.LoginActivity;
-import com.edu.schooltask.R;
+import com.edu.schooltask.ui.activity.MoneyActivity;
+import com.edu.schooltask.ui.activity.SettingActivity;
+import com.edu.schooltask.ui.activity.UserActivity;
+import com.edu.schooltask.ui.activity.VoucherActivity;
+import com.edu.schooltask.ui.base.BaseFragment;
+import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.UserUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,26 +38,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.edu.schooltask.ui.activity.MoneyActivity;
-import com.edu.schooltask.ui.activity.SettingActivity;
-import com.edu.schooltask.ui.activity.UserActivity;
-import com.edu.schooltask.ui.activity.VoucherActivity;
-import com.edu.schooltask.adapter.IconMenuAdapter;
-import com.edu.schooltask.ui.base.BaseFragment;
-import com.edu.schooltask.beans.UserInfoWithToken;
-import com.edu.schooltask.beans.UserInfo;
-import com.edu.schooltask.event.LoginSuccessEvent;
-import com.edu.schooltask.event.LogoutEvent;
-import com.edu.schooltask.item.IconMenuItem;
-import com.edu.schooltask.utils.GlideUtil;
-import com.edu.schooltask.utils.GsonUtil;
-import com.edu.schooltask.utils.UserUtil;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import server.api.SchoolTask;
+import io.rong.imkit.RongIM;
 import server.api.user.UpdateUserInfoEvent;
 
 
@@ -145,7 +144,7 @@ public class UserFragment extends BaseFragment{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), UserActivity.class);
-                intent.putExtra("userId", user.getUserId());
+                intent.putExtra("name", user.getName());
                 startActivity(intent);
             }
         });
@@ -179,11 +178,12 @@ public class UserFragment extends BaseFragment{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event){
-        UserUtil.deleteLoginUser();
+        UserUtil.deleteLoginUser(); //删除用户
         nameText.setText("登录/注册");
         homeBtn.setVisibility(View.GONE);
-        Glide.with(this).load(R.drawable.head).into(headImage);
+        Glide.with(this).load(R.drawable.rc_default_portrait).into(headImage);
         Glide.with(this).load(R.drawable.background).into(bgImage);
+        RongIM.getInstance().logout();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

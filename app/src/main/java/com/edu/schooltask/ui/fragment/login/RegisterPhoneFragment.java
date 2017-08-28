@@ -26,8 +26,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.register.CheckCodeEvent;
-import server.api.register.GetCodeEvent;
+import server.api.user.register.CheckCodeEvent;
+import server.api.user.register.GetCodeEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.

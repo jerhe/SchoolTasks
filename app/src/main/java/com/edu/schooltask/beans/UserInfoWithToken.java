@@ -19,8 +19,8 @@ public class UserInfoWithToken extends UserInfo {
     }
 
     public UserInfoWithToken(String userId, String token, String name, String school, String sign, int sex,
-                             String birth, int follow, int fans) {
-        super(userId, name, sign, school, sex, birth, follow, fans);
+                             String birth) {
+        super(userId, name, sign, school, sex, birth);
         this.token = token;
     }
 
@@ -31,8 +31,6 @@ public class UserInfoWithToken extends UserInfo {
         this.school = userInfo.getSchool();
         this.sex = userInfo.getSex();
         this.birth = userInfo.getBirth();
-        this.followerCount = userInfo.getFollowerCount();
-        this.fansCount = userInfo.getFansCount();
         return this;
     }
 

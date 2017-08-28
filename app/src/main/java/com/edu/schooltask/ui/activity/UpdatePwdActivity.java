@@ -8,6 +8,7 @@ import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.PasswordFilter;
+import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
 
@@ -77,9 +78,9 @@ public class UpdatePwdActivity extends BaseActivity {
             return;
         }
         if(type == 0)
-            SchoolTask.updateLoginPwd(StringUtil.getMD5(oldPwd), StringUtil.getMD5(newPwd));
+            SchoolTask.updateLoginPwd(EncriptUtil.getMD5(oldPwd), EncriptUtil.getMD5(newPwd));
         else
-            SchoolTask.updatePayPwd(StringUtil.getMD5(oldPwd), StringUtil.getMD5(newPwd));
+            SchoolTask.updatePayPwd(EncriptUtil.getMD5(oldPwd), EncriptUtil.getMD5(newPwd));
     }
 
     int type = 0;

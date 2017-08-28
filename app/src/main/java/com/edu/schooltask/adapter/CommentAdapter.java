@@ -37,29 +37,23 @@ public class CommentAdapter extends BaseQuickAdapter<TaskComment, BaseViewHolder
         userView.setAll(userInfo.getUserId(), userInfo.getName(), userInfo.getSex(),
                 taskComment.getCreateTime(), userInfo.getSchool());
         //评论信息
+        TextView textView = helper.getView(R.id.tc_comment);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());   //设置可点击
+        textView.setFocusable(false);   //点击冲突
         if(taskComment.getParentId() != 0){ //子评论
             String toName = taskComment.getToName();
             if(StringUtil.isEmpty(toName)){
-                helper.setText(R.id.tc_comment, taskComment.getComment());
+                helper.setText(R.id.tc_comment,
+                        StringUtil.atString(helper.itemView.getContext(), taskComment.getComment()));
             }
             else{
-                String replyText = "回复@" + toName +"："+taskComment.getComment();
-                TextView textView = helper.getView(R.id.tc_comment);
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
-                CustomClickableSpan span = new CustomClickableSpan() {
-                    @Override
-                    public void onClick(View widget) {
-                        Log.e("11","21");
-                    }
-                };
-                SpannableString spannableString = new SpannableString(replyText);
-                spannableString.setSpan(span, 2, 3+toName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                helper.setText(R.id.tc_comment, spannableString);
+                String replyText = "回复@" + toName +" ："+taskComment.getComment();
+                helper.setText(R.id.tc_comment, StringUtil.atString(helper.itemView.getContext(), replyText));
             }
             helper.setVisible(R.id.tc_child_count, false);
         }
         else{   //顶层评论
-            helper.setText(R.id.tc_comment, taskComment.getComment());
+            helper.setText(R.id.tc_comment, StringUtil.atString(helper.itemView.getContext(), taskComment.getComment()));
             if(taskComment.getReplyCount() != 0){
                 helper.setVisible(R.id.tc_child_count, true);
                 helper.setText(R.id.tc_child_count, taskComment.getReplyCount() + "条回复");

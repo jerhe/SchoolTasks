@@ -5,12 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     tools:context=".ui.activity.TaskOrderActivity">
     <RelativeLayout
         android:id="@+id/order_bottom"
         android:layout_alignParentBottom="true"
-        android:background="@color/divide"
+        android:background="@color/backgroundColor"
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="60dp">
@@ -25,7 +24,6 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/btn_white"
-                android:visibility="invisible"
                 android:text="评论"/>
             <LinearLayout
                 android:orientation="horizontal"
@@ -98,6 +96,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <include layout="@layout/toolbar"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lineColor"/>
             <com.baoyz.widget.PullRefreshLayout
                 android:id="@+id/order_prl"
                 android:layout_width="match_parent"
@@ -114,16 +116,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <TextView
-                            android:layout_marginTop="20dp"
+                            android:paddingTop="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:text="订单信息"
+                            android:background="@color/white"
                             android:textSize="12sp"
                             android:gravity="center_vertical"
                             android:paddingLeft="10dp"/>
                         <include layout="@layout/line_margin"/>
                         <LinearLayout
-                            android:layout_marginTop="10dp"
+                            android:paddingTop="10dp"
+                            android:background="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:orientation="horizontal">
@@ -153,22 +157,22 @@
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:text="订单状态"
+                            android:background="@color/white"
                             android:textSize="12sp"
                             android:gravity="center_vertical"
                             android:paddingLeft="10dp"/>
                         <include layout="@layout/line_margin"/>
                         <com.edu.schooltask.ui.view.recyclerview.OrderStateRecyclerView
-                            android:layout_marginTop="20dp"
+                            android:paddingTop="20dp"
                             android:id="@+id/order_osrv"
                             android:fadingEdge="none"
                             android:overScrollMode="never"
+                            android:background="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                         </com.edu.schooltask.ui.view.recyclerview.OrderStateRecyclerView>
-                        <include layout="@layout/divide"/>
                         <com.edu.schooltask.ui.view.TaskCountView
                             android:id="@+id/order_count"
-                            android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                         <include layout="@layout/line_margin"/>
@@ -177,8 +181,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView
-                                android:layout_marginTop="10dp"
                                 android:id="@+id/order_crv"
+                                android:background="@color/white"
+                                android:fadingEdge="none"
+                                android:overScrollMode="never"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
                             </com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView>
@@ -200,8 +206,8 @@
     <View
         android:layout_above="@id/order_bottom"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@drawable/bg_bottom_shadow"/>
+        android:layout_height="1dp"
+        android:background="@color/lineColor"/>
 
 
 </RelativeLayout>

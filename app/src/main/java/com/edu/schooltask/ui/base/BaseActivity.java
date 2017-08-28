@@ -17,9 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edu.schooltask.R;
-import com.edu.schooltask.ui.activity.PrivateMessageActivity;
 import com.edu.schooltask.ui.activity.UserActivity;
-import com.edu.schooltask.data.DataCache;
+import com.edu.schooltask.other.DataCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.List;
  */
 
 public class BaseActivity extends AppCompatActivity {
-    protected static List<Activity> activities = new ArrayList<>();
+    protected static List<BaseActivity> activities = new ArrayList<>();
     protected Toolbar toolbar;
     protected TextView titleText;
     protected Toast toast;
@@ -88,7 +87,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void initActionBar(){
         View v = findViewById(R.id.toolbar);
         initStateBar();
-        if(v!=null){
+        if(v != null){
             toolbar = (Toolbar)v;
             setSupportActionBar(toolbar);
             titleText = (TextView)v.findViewById(R.id.toolbar_title);
@@ -114,6 +113,11 @@ public class BaseActivity extends AppCompatActivity {
         return foregroundCount > 0;
     }
 
+    //获取打开的活动
+    public static List<BaseActivity> getActivities(){
+        return activities;
+    }
+
     //-----------------------------------------------------------
 
     protected <T extends View> T getView(int resId){
@@ -130,13 +134,6 @@ public class BaseActivity extends AppCompatActivity {
         for(int i=activities.size()-1; i>0; i--){
             Activity activity = activities.get(i);
             if(activity.getClass().equals(UserActivity.class)) activity.finish();
-        }
-    }
-
-    public static void destroyPrivateMessageActivity(){
-        for(int i=activities.size()-1; i>0; i--){
-            Activity activity = activities.get(i);
-            if(activity.getClass().equals(PrivateMessageActivity.class)) activity.finish();
         }
     }
 

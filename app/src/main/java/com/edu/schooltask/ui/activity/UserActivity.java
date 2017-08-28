@@ -14,29 +14,35 @@ import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.ViewPagerAdapter;
-import com.edu.schooltask.ui.base.BaseActivity;
-import com.edu.schooltask.beans.UserInfoWithToken;
-import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.beans.UserHomePageInfo;
+import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.UserInfoWithToken;
+import com.edu.schooltask.rong.message.FriendMessage;
+import com.edu.schooltask.ui.base.BaseActivity;
+import com.edu.schooltask.ui.view.ViewPagerTab;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GlideUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.ui.view.ViewPagerTab;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.Message;
 import server.api.SchoolTask;
-import server.api.user.relation.UpdateRelationEvent;
+import server.api.friend.FriendRequestEvent;
 import server.api.user.GetUserHomePageInfoEvent;
 
 public class UserActivity extends BaseActivity {
@@ -44,10 +50,7 @@ public class UserActivity extends BaseActivity {
     @BindView(R.id.user_abl) AppBarLayout topLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.toolbar_name) TextView titleText;
-    @BindView(R.id.user_follow)  TextView followText;
-    @BindView(R.id.user_fans) TextView fansText;
-    @BindView(R.id.user_follow_btn)  TextView followButton;
-    @BindView(R.id.user_message) ImageView messageBtn;
+    @BindView(R.id.user_friend_btn)  TextView friendButton;
     @BindView(R.id.user_head) CircleImageView headImage;
     @BindView(R.id.user_bg) ImageView bgImage;
     @BindView(R.id.user_name) TextView nameText;
@@ -59,26 +62,11 @@ public class UserActivity extends BaseActivity {
     public void showUserHead(){
         DialogUtil.createHeadImageDialog(UserActivity.this, user.getUserId()).show();
     }
-    @OnClick(R.id.user_message)
-    public void talk(){
+
+    @OnClick(R.id.user_friend_btn)
+    public void addFriend(){
         if(!isMe){
-            destroyPrivateMessageActivity();
-            Intent intent = new Intent(UserActivity.this, PrivateMessageActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
-        }
-    }
-    @OnClick(R.id.user_follow_btn)
-    public void follow(){
-        if(!isMe){
-            switch (relationType){
-                case 0:
-                    SchoolTask.updateRelation(me.getUserId(), user.getUserId(), 1);
-                    break;
-                case 1:
-                    SchoolTask.updateRelation(me.getUserId(), user.getUserId(), 0);
-                    break;
-            }
+            SchoolTask.friendRequest(user.getUserId());
         }
     }
 
@@ -88,7 +76,7 @@ public class UserActivity extends BaseActivity {
     private ViewPagerAdapter adapter;
     private List<Fragment> fragmentList = new ArrayList<>();
 
-    String userId;
+    String name;
     UserInfo user;
     int relationType;
 
@@ -116,18 +104,11 @@ public class UserActivity extends BaseActivity {
         });
 
         Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
+        name = intent.getStringExtra("name");
 
         me = UserUtil.getLoginUser();
-        if(me != null){
-            isMe = me.getUserId().equals(userId);
-            messageBtn.setVisibility(isMe ? View.GONE : View.VISIBLE);
-            followButton.setVisibility(isMe ? View.GONE : View.VISIBLE);
-            SchoolTask.getUserHomePageInfo(isMe ? me.getUserId() : userId, userId);
-        }
-        else{
-            SchoolTask.getUserHomePageInfo(userId, userId);
-        }
+        isMe = name.equals(me.getName());
+        SchoolTask.getUserHomePageInfo(name);
     }
 
     @Override
@@ -142,28 +123,8 @@ public class UserActivity extends BaseActivity {
         String sign = user.getSign();
         if(sign.length() == 0) sign = "无";
         signText.setText("简介：" + sign);
-        followText.setText("关注 "+user.getFollowerCount());
-        fansText.setText("粉丝 "+user.getFansCount());
         GlideUtil.setHead(UserActivity.this, user.getUserId(), headImage);
         GlideUtil.setBackground(UserActivity.this, user.getUserId(), bgImage);
-    }
-
-    private void setRelation(){
-        switch (relationType){
-            case 0:
-                followButton.setText("关注");
-                followButton.setVisibility(View.VISIBLE);
-                followButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
-                break;
-            case 1:
-                followButton.setText("已关注");
-                followButton.setVisibility(View.VISIBLE);
-                followButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
-                break;
-            case 2:
-                followButton.setVisibility(View.GONE);  //拉黑不可关注
-                break;
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -173,9 +134,7 @@ public class UserActivity extends BaseActivity {
             layout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
             UserHomePageInfo userHomePageInfo = GsonUtil.toUserHomePageInfo(event.getData());
             user = userHomePageInfo.getUserInfo();
-            relationType = userHomePageInfo.getRelationType();
             setUserInfo();
-            if(!isMe)setRelation();
             //TODO get other info
         }
         else{
@@ -184,26 +143,16 @@ public class UserActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdateRelation(UpdateRelationEvent event){
+    public void onFriendRequest(FriendRequestEvent event){
         if(event.isOk()){
-            relationType = GsonUtil.toInteger(event.getData());
-            setRelation();
-            switch (relationType){
-                case 0:
-                    toastShort("取消关注");
-                    break;
-                case 1:
-                    toastShort("关注成功");
-                    break;
-                case 2:
-                    toastShort("拉黑成功");
-                    break;
-                default:
-                    toastShort("错误");
-            }
+            FriendMessage message = new FriendMessage("已发出好友请求");
+            RongIM.getInstance().insertOutgoingMessage(Conversation.ConversationType.SYSTEM, "验证消息",
+                    Message.SentStatus.SENT, message, null);
+            toastShort("好友请求已发出");
         }
         else{
             toastShort(event.getError());
         }
+
     }
 }

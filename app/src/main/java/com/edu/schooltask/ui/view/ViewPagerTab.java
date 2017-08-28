@@ -32,7 +32,7 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
     private ViewPager viewPager;
 
     private List<String> texts = new ArrayList<>();
-    public List<TextView> textViews = new ArrayList<>();
+    public List<ViewPagerTabItem> items = new ArrayList<>();
     public List<View> pointViews = new ArrayList<>();
     private int oldPosition = 0;
     public ViewPagerTab(Context context, AttributeSet attrs) {
@@ -50,17 +50,16 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
      */
     public void addTab(String text){
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1);
-        for(TextView textView : textViews){
-            textView.setLayoutParams(layoutParams);
+        for(ViewPagerTabItem item : items){
+            item.setLayoutParams(layoutParams);
         }
-        TextView textView = new TextView(getContext());
-        textView.setGravity(Gravity.CENTER);    //标签文本居中
-        textView.setLayoutParams(layoutParams); //标签布局
-        textView.setText(text);
-        textView.setOnClickListener(this);  //添加切换事件
+        ViewPagerTabItem item = new ViewPagerTabItem(getContext(), null);
+        item.setLayoutParams(layoutParams); //标签布局
+        item.setText(text);
+        item.setOnClickListener(this);  //添加切换事件
         texts.add(text);
-        textViews.add(textView);
-        layout.addView(textView);
+        items.add(item);
+        layout.addView(item);
         View pointView = new View(getContext());    //新建滚条
         if(pointViews.size() == 0) {    //滚条数为0设置为高亮
             pointView.setBackgroundColor(pointLightColor);
@@ -96,9 +95,10 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
      * @param position  标签位置，从0开始
      */
     public void select(int position){
-        if(position < textViews.size()){    //防止越界
-            textViews.get(oldPosition).setTextColor(textColor); //原标签恢复默认颜色
-            textViews.get(position).setTextColor(textLightColor);   //新标签高亮
+        if(position < items.size()){    //防止越界
+            items.get(oldPosition).setTextColor(textColor); //原标签恢复默认颜色
+            items.get(position).setTextColor(textLightColor);   //新标签高亮
+            items.get(position).setTip(false);  //取消圆点
             oldPosition = position;
             if(viewPager != null) {
                 viewPager.setCurrentItem(position); //切换页面
@@ -138,9 +138,22 @@ public class ViewPagerTab extends LinearLayout implements View.OnClickListener{
         if(pointViews.size() > 0)pointViews.get(0).setBackgroundColor(color);
     }
 
+    public ViewPagerTabItem getTab(int index){
+        return items.get(index);
+    }
+
+    public int getPosition(){
+        return oldPosition;
+    }
+
+    public void setTip(int position, boolean show){
+        if(show && oldPosition != position) getTab(position).setTip(true);
+        if(!show) getTab(position).setTip(false);
+    }
+
     @Override
     public void onClick(View v) {
-        int position = textViews.indexOf(v);
+        int position = items.indexOf(v);
         select(position);
     }
 

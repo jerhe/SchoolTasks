@@ -45,7 +45,7 @@ public class UserItemSmallView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), UserActivity.class);
-                intent.putExtra("userId", userInfo.getUserId());
+                intent.putExtra("name", userInfo.getName());
                 getContext().startActivity(intent);
             }
         });

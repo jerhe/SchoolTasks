@@ -46,11 +46,15 @@ public class CommentRecyclerView extends BasePageRecyclerView<TaskComment> {
                 commentReplyView.refresh();
     }
 
+    public void cancelInputBoard(){
+        this.inputBoard = null;
+    }
+
     //////////////////////////////子评论/////////////////////////////////////
 
     //初始化子评论
     public void initChild(final CommentReplyView childView, OnGetPageDataListener listener,
-                          final CommentInputBoard inputBoard){
+                          CommentInputBoard inputBoard){
         this.inputBoard = inputBoard;
         commentReplyView = childView;
         commentReplyView.setGetDataPageListener(listener);
@@ -58,9 +62,9 @@ public class CommentRecyclerView extends BasePageRecyclerView<TaskComment> {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(inputBoard != null) {
-                    inputBoard.setHint(list.get(position).getUserInfo().getName());
-                    inputBoard.show();
+                if(CommentRecyclerView.this.inputBoard != null) {
+                    CommentRecyclerView.this.inputBoard.setHint(list.get(position).getUserInfo().getName());
+                    CommentRecyclerView.this.inputBoard.show();
                 }
                 setParentId(list.get(position).getId());
             }
@@ -77,11 +81,11 @@ public class CommentRecyclerView extends BasePageRecyclerView<TaskComment> {
         commentReplyView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(inputBoard != null){
+                if(CommentRecyclerView.this.inputBoard != null){
                     UserInfo userInfo = commentReplyView.getComments().get(position).getUserInfo();
                     setToUserId(userInfo.getUserId());
-                    inputBoard.setHint(userInfo.getName());
-                    inputBoard.show();
+                    CommentRecyclerView.this.inputBoard.setHint(userInfo.getName());
+                    CommentRecyclerView.this.inputBoard.show();
                 }
             }
         });

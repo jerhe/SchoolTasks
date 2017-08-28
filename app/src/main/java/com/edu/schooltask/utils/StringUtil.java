@@ -1,5 +1,17 @@
 package com.edu.schooltask.utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.util.Log;
+import android.view.View;
+
+import com.edu.schooltask.other.CustomClickableSpan;
+import com.edu.schooltask.ui.activity.UserActivity;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -43,27 +55,6 @@ public class StringUtil {
         return string.length() == length;
     }
 
-    //MD5加密
-    public static String getMD5(String val) {
-        MessageDigest md5 = null;
-        try {
-            md5 = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        md5.update(val.getBytes());
-        byte[] m = md5.digest();//加密
-        return getString(m);
-    }
-
-    private static String getString(byte[] b){
-        StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < b.length; i ++){
-            sb.append(b[i]);
-        }
-        return sb.toString();
-    }
-
     //获取指定长度的随机字符串
     public static String getRandStr(int length){
         String str = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -95,5 +86,44 @@ public class StringUtil {
         if(sb.toString().startsWith(","))sb.deleteCharAt(0);
         sb.append(money.substring(pointIndex));
         return sb.toString();
+    }
+
+    //@Span
+    public static SpannableString atString(final Context context, final String text){
+        SpannableString spannableString = new SpannableString(text);
+        int start = -1;
+        int end = -1;
+        for(int i=0; i<text.length(); i++){
+            char c = text.charAt(i);
+            if(c == '@'){
+                start = i;
+            }
+            else{
+                if(start != -1) {
+                    if(c == ' '){
+                        end = i;
+                    } else {
+                        if(i == text.length() - 1){
+                            end = i + 1;
+                        }
+                    }
+                }
+                if(end != -1){
+                    final String name = text.substring(start+1, end);
+                    CustomClickableSpan span = new CustomClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            Intent intent = new Intent(context, UserActivity.class);
+                            intent.putExtra("name", name);
+                            context.startActivity(intent);
+                        }
+                    };
+                    spannableString.setSpan(span, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    start = -1;
+                    end = -1;
+                }
+            }
+        }
+        return spannableString;
     }
 }

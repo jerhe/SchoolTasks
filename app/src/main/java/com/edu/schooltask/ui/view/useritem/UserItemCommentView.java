@@ -38,7 +38,7 @@ public class UserItemCommentView extends RelativeLayout{
     }
 
     //设置所有信息
-    public void setAll(final String userId, String name, int sex, String commentTime, String school){
+    public void setAll(String userId, final String name, int sex, String commentTime, String school){
         setHead(userId);
         setName(name);
         setSex(sex);
@@ -49,7 +49,7 @@ public class UserItemCommentView extends RelativeLayout{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), UserActivity.class);
-                intent.putExtra("userId", userId);
+                intent.putExtra("name", name);
                 getContext().startActivity(intent);
             }
         });

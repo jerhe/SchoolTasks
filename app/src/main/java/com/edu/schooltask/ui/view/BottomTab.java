@@ -37,7 +37,7 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
 
     int oldPosition = 0;
 
-    private TextView messageNum;    //消息圆点
+    private TextView messageTip;    //消息圆点
 
     private ViewPager viewPager;
 
@@ -60,7 +60,7 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
         orderLayout.setOnClickListener(this);
         userLayout.setOnClickListener(this);
 
-        messageNum = (TextView) findViewById(R.id.bm_talk_num);
+        messageTip = (TextView) findViewById(R.id.bm_tip);
     }
 
     @Override
@@ -89,6 +89,7 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 talkIcon.setImageResource(R.drawable.ic_action_talk_light);
                 orderIcon.setImageResource(R.drawable.ic_action_order);
                 userIcon.setImageResource(R.drawable.ic_action_user);
+                setMessageTip(false);
                 break;
             case R.id.bm_order:
                 onMenuSelectedListener.onMenuSelected(PAGE_ORDER);
@@ -146,13 +147,18 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
     }
 
     /**
-     * setMessageNum 设置显示的未读消息红点
-     * @params num 未读消息数，为0则不显示
+     * setMessageNum 设置显示消息红点
+     * @params show
      */
-    public void setMessageNum(int num){
-        messageNum.setText(num + "");
-        if(num == 0) messageNum.setVisibility(INVISIBLE);
-        else messageNum.setVisibility(VISIBLE);
+    public void setMessageTip(boolean show){
+        if(show){
+            if (oldPosition != 1){
+                messageTip.setVisibility(VISIBLE);
+            }
+        }
+        else{
+            messageTip.setVisibility(INVISIBLE);
+        }
     }
 
     public void setViewPager(ViewPager viewPager){

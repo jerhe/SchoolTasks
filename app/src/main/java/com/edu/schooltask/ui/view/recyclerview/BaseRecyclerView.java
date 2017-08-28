@@ -40,7 +40,7 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
     }
 
     public void add(List<T> list){
-        this.list.addAll(list);
+        adapter.addData(list);
         adapter.notifyDataSetChanged();
     }
 
@@ -68,6 +68,10 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
     public void setEmptyView(int resId){
         adapter.bindToRecyclerView(this);
         adapter.setEmptyView(resId);
+    }
+
+    public void notifyDataSetChanged(){
+        adapter.notifyDataSetChanged();
     }
 
     //--------------------------------------------------------------------
@@ -100,5 +104,10 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
     //点击项事件
     public void setOnItemClickListener(BaseQuickAdapter.OnItemClickListener listener) {
         adapter.setOnItemClickListener(listener);
+    }
+
+    //子项点击事件
+    public void setOnItemChildClickListener(BaseQuickAdapter.OnItemChildClickListener listener){
+        adapter.setOnItemChildClickListener(listener);
     }
 }

@@ -31,7 +31,6 @@
         android:visibility="invisible" />
     <com.edu.schooltask.ui.view.TaskFilterView
         android:id="@+id/tl_tfv"
-        android:elevation="3dp"
         android:background="@color/backgroundColor"
         android:layout_below="@id/tl_space"
         android:layout_width="match_parent"
@@ -41,7 +40,6 @@
     <RelativeLayout
         android:background="@color/backgroundColor"
         android:layout_width="match_parent"
-        android:elevation="3dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_height="50dp">
@@ -76,5 +74,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/btn_hollow_black"/>
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor"/>
     </RelativeLayout>
 </RelativeLayout>

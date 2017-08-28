@@ -1,19 +1,14 @@
 package com.edu.schooltask.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.edu.schooltask.R;
-import com.edu.schooltask.data.DataCache;
+import com.edu.schooltask.other.DataCache;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import server.api.SchoolTask;
 
 /**
@@ -30,8 +25,8 @@ public class GlideUtil {
                 .load(SchoolTask.HEAD + userId + ".png")
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.head)
-                .error(R.drawable.head)
+                .placeholder(R.drawable.rc_default_portrait)
+                .error(R.drawable.rc_default_portrait)
                 .signature(new StringSignature(head+""))
                 .into(imageView);
     }

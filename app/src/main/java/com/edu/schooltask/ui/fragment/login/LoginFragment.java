@@ -1,18 +1,21 @@
 package com.edu.schooltask.ui.fragment.login;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.Button;
 
 import com.edu.schooltask.R;
-import com.edu.schooltask.ui.base.BaseFragment;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.filter.PasswordFilter;
 import com.edu.schooltask.filter.PhoneFilter;
+import com.edu.schooltask.ui.base.BaseFragment;
+import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
+import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.login.LoginEvent;
+import server.api.user.login.LoginEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
@@ -55,7 +58,7 @@ public class LoginFragment extends BaseFragment {
         KeyBoardUtil.hideKeyBoard(getActivity());   //隐藏输入法
         loginBtn.setText("登录中...");
         loginBtn.setEnabled(false);
-        SchoolTask.login(id, StringUtil.getMD5(pwd));
+        SchoolTask.login(id, EncriptUtil.getMD5(pwd));
     }
 
     public LoginFragment() {
@@ -63,14 +66,14 @@ public class LoginFragment extends BaseFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
@@ -91,8 +94,8 @@ public class LoginFragment extends BaseFragment {
         }
         else{
             pwdText.clear();
-            loginBtn.setText("登录");
             loginBtn.setEnabled(true);
+            loginBtn.setText("登录");
             toastShort(event.getError());
         }
     }

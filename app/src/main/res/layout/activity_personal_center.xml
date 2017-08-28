@@ -6,9 +6,15 @@
     android:orientation="vertical"
     tools:context=".ui.activity.PersonalCenterActivity">
     <include layout="@layout/toolbar"/>
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineColor"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pc_rv"
-        android:background="@color/divide"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible">

@@ -1,7 +1,5 @@
 package server.api.base;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.Callback;
 
@@ -9,8 +7,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.Call;
 import okhttp3.Response;
-import server.api.token.RefreshTokenEvent;
-import server.api.token.TokenErrorEvent;
+import server.api.user.token.RefreshTokenEvent;
+import server.api.user.token.TokenErrorEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/18.
@@ -32,7 +30,9 @@ public class BaseTokenCallBack extends Callback<BaseTokenEvent> {
     @Override
     public BaseTokenEvent parseNetworkResponse(Response response, int id) throws Exception {
         String result = response.body().string();   //获取后台返回数据
-        event = new Gson().fromJson(result, event.getClass());  //将数据转换成事件对象
+        BaseTokenEvent responseEvent = new Gson().fromJson(result, event.getClass());
+        if(responseEvent != null)
+            event = responseEvent;  //将数据转换成事件对象
         if(event.isUpdate()){   //Token需要更新，event对象包含刷新Token
             EventBus.getDefault().post(new RefreshTokenEvent(event.getToken()));    //Post刷新Token
         }

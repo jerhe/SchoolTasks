@@ -22,6 +22,7 @@ import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.item.OrderStateItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.ui.view.CommentInputBoard;
 import com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView;
@@ -48,7 +49,7 @@ import server.api.task.order.ChangeTaskOrderStateEvent;
 import server.api.task.order.GetTaskOrderInfoEvent;
 
 
-//intent param: order_id
+//intent param: orderId
 public class TaskOrderActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.order_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.order_id) TextView orderIdText;
@@ -83,7 +84,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         Intent intent = getIntent();
-        orderId = intent.getStringExtra("order_id");
+        orderId = intent.getStringExtra("orderId");
         initView();
         orderStateRecyclerView.refresh();
     }
@@ -171,9 +172,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             boolean isReleaseUser = me.getUserId().equals(taskOrderInfo.getReleaseId());
             orderIdText.setText(orderId);
             taskItemView.setAll(taskOrderInfo.toTaskItem(), true);
-            //是否显示评论按钮
-            if(taskOrderInfo.getState() == 0) commentBtn.setVisibility(View.VISIBLE);
-            else commentBtn.setVisibility(View.GONE);
             //评论数和浏览数
             taskCountView.setCommentCount(taskOrderInfo.getTaskInfo().getCommentCount());
             taskCountView.setLookCount(taskOrderInfo.getTaskInfo().getLookCount());
@@ -182,6 +180,14 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             //接单人信息
             UserInfo acceptUser = taskOrderInfo.getAcceptUserInfo();
             orderStateRecyclerView.add(new OrderStateItem(true, "发布订单", taskOrderInfo.getReleaseTime()));
+            if(state < 3){
+                bottomLayout.setVisibility(View.VISIBLE);
+                bottomLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+            }
+            else {
+                bottomLayout.setVisibility(View.GONE);
+                commentRecyclerView.cancelInputBoard();  //防止点击评论弹出
+            }
             switch (state){
                 case 0:
                     orderStateRecyclerView.add(new OrderStateItem(false, "等待接单", ""));
@@ -189,8 +195,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         cancelBtn.setVisibility(View.VISIBLE);
                         cancelBtn.setOnClickListener(this);
                     }
-                    bottomLayout.setVisibility(View.VISIBLE);
-                    bottomLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
                     break;
                 case 1:
                     orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
@@ -205,8 +209,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         finishBtn.setVisibility(View.VISIBLE);
                         finishBtn.setOnClickListener(this);
                     }
-                    bottomLayout.setVisibility(View.VISIBLE);
-                    bottomLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
                     break;
                 case 2:
                     orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
@@ -216,8 +218,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         confirmBtn.setVisibility(View.VISIBLE);
                         confirmBtn.setOnClickListener(this);
                     }
-                    bottomLayout.setVisibility(View.VISIBLE);
-                    bottomLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
                     break;
                 case 3:
                     orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
@@ -293,6 +293,14 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         if(event.isOk()){
             TaskCommentList taskCommentList = GsonUtil.toTaskCommentList(event.getData());
             List<TaskComment> taskComments = taskCommentList.getTaskComments();
+            //设置回复对象昵称
+            for(TaskComment taskComment : taskComments){
+                String toId = taskComment.getToId();
+                commentReplyView.addUserMap(taskComment.getFromId(), taskComment.getUserInfo().getName());
+                if(!StringUtil.isEmpty(toId)){
+                    taskComment.setToName(commentReplyView.getUserName(toId));
+                }
+            }
             commentReplyView.addComments(taskComments);
         }
         else{

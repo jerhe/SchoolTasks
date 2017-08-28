@@ -19,3 +19,4 @@
 -keepclasseswithmembers class c.b.** { *; }
 -keep interface c.b.PListener{ *; }
 -keep interface c.b.QListener{ *; }
+

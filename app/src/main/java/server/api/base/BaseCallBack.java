@@ -1,7 +1,5 @@
 package server.api.base;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.Callback;
 
@@ -9,7 +7,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.Call;
 import okhttp3.Response;
-import server.api.login.LoginEvent;
+import server.api.user.login.LoginEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/18.
@@ -25,7 +23,8 @@ public class BaseCallBack extends Callback<BaseEvent> {
     @Override
     public BaseEvent parseNetworkResponse(Response response, int id) throws Exception {
         String result = response.body().string();
-        event = new Gson().fromJson(result, event.getClass());
+        BaseEvent responseEvent = new Gson().fromJson(result, event.getClass());
+        if(responseEvent != null) event = responseEvent;
         return event;
     }
 

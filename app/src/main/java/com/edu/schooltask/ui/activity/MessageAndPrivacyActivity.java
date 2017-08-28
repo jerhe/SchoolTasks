@@ -19,6 +19,7 @@ import com.edu.schooltask.beans.UserConfig;
 import com.edu.schooltask.item.IconMenuItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
@@ -32,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import server.api.SchoolTask;
-import server.api.user.config.GetUserConfigEvent;
+import server.api.user.GetUserConfigEvent;
 
 public class MessageAndPrivacyActivity extends BaseActivity {
     @BindView(R.id.map_rv) RecyclerView recyclerView;
@@ -154,7 +155,7 @@ public class MessageAndPrivacyActivity extends BaseActivity {
     private void updateConfig(){
         UserConfig userConfig = new UserConfig(message, fansItem.isChecked(), commentItem.isChecked(),
                 privateMessageItem.isChecked());
-        mDataCache.saveData("userConfig", userConfig);
+        mDataCache.saveUserConfig(UserUtil.getLoginUser().getUserId(), userConfig);
         SchoolTask.updateUserConfig(userConfig);
     }
 

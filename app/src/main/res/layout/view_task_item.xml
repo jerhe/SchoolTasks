@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@drawable/bg_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
@@ -41,6 +41,4 @@
         android:layout_marginBottom="15dp"
         android:nestedScrollingEnabled="false">
     </com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView>
-
-    <include layout="@layout/divide"/>
 </LinearLayout>

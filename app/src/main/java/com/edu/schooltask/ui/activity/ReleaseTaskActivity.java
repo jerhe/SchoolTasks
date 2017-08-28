@@ -28,6 +28,7 @@ import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.other.SchoolAutoComplement;
 import com.edu.schooltask.utils.DensityUtil;
 import com.edu.schooltask.utils.DialogUtil;
+import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
@@ -329,7 +330,7 @@ public class ReleaseTaskActivity extends BaseActivity {
                 public void onPay(String pwd) {
                     KeyBoardUtil.hideKeyBoard(ReleaseTaskActivity.this);
                     progressDialog = ProgressDialog.show(ReleaseTaskActivity.this, "", "发布中...", true, false);
-                    payPwd = StringUtil.getMD5(pwd);
+                    payPwd = EncriptUtil.getMD5(pwd);
                     if(tempFiles.size() == 0){ //无图片发布
                         SchoolTask.releaseTask("", school, description, content, money, taskCost, time, payPwd,
                                 voucher == null ? 0 : voucher.getId(), 0);

@@ -6,14 +6,12 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:elevation="3dp"
     android:background="@color/backgroundColor"
     app:navigationIcon="@drawable/ic_action_back">
     <TextView
         android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:textSize="17sp"
         android:layout_gravity="center"/>
     </android.support.v7.widget.Toolbar>

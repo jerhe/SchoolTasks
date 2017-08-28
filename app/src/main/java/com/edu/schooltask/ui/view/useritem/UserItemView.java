@@ -9,8 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
-import com.edu.schooltask.ui.activity.PrivateMessageActivity;
 import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.ui.activity.UserActivity;
 import com.edu.schooltask.utils.GlideUtil;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,13 +49,5 @@ public class UserItemView extends RelativeLayout {
         setHead(user.getUserId());
         setName(user.getName());
         setSign(user.getSign());
-        this.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent talkIntent = new Intent(getContext(), PrivateMessageActivity.class);
-                talkIntent.putExtra("user", user);
-                getContext().startActivity(talkIntent);
-            }
-        });
     }
 }

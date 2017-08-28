@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -133,6 +134,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.OnScrollL
         initBanner();
         initButton();
         initTab();
+        clearList();
         getSchoolTask();
     }
 

@@ -60,7 +60,7 @@ public class UserItemReleaseView extends RelativeLayout {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), UserActivity.class);
-                    intent.putExtra("userId", userInfo.getUserId());
+                    intent.putExtra("name", userInfo.getName());
                     getContext().startActivity(intent);
                 }
             });

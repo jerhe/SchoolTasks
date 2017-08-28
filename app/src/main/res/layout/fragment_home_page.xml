@@ -27,7 +27,6 @@
                     android:layout_height="wrap_content">
                     <com.youth.banner.Banner
                         android:id="@+id/home_banner"
-                        android:background="@color/divide"
                         android:layout_width="match_parent"
                         android:layout_height="200dp">
                     </com.youth.banner.Banner>
@@ -36,7 +35,6 @@
                 <LinearLayout
                     android:id="@+id/home_tab_layout"
                     android:orientation="vertical"
-                    android:background="@color/backgroundColor"
                     android:layout_width="match_parent"
                     android:layout_height="35dp">
                 </LinearLayout>
@@ -57,7 +55,6 @@
         <LinearLayout
             android:orientation="vertical"
             android:id="@+id/home_tab_layout_top"
-            android:background="@color/backgroundColor"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:visibility="invisible">
