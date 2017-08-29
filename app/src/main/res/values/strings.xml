@@ -1,3 +1,89 @@
 <resources>
     <string name="app_name">SchoolTask</string>
+    <string name="code_success">验证码已经通过短信发送至您的手机</string>
+    <string name="code_tip"> 秒后可发送</string>
+
+    <string name="friend_request_id">验证消息</string>
+    <string name="friend_agree_message">已同意 %1$s 的好友请求</string>
+    <string name="friend_object_message">已拒绝 %1$s 的好友请求</string>
+
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="logout">退出账号</string>
+    <string name="unlogin_tip">请先登录</string>
+    <string name="logout_tip">确定要退出登录吗？</string>
+    <string name="user_error">账号异常，请重新登录</string>
+
+    <string name="school">学校</string>
+    <string name="description">分类</string>
+    <string name="reward">报酬</string>
+    <string name="voucher">代金券</string>
+    <string name="money">钱包</string>
+
+    <string name="tip">提示</string>
+    <string name="vibrate">震动</string>
+    <string name="ring">声音</string>
+    <string name="message_notify">消息提醒</string>
+    <string name="blacklist">黑名单</string>
+
+    <string name="getError">获取失败</string>
+    <string name="getPayInfoError">获取支付信息失败，如未到账请联系客服</string>
+    <string name="payCancel">取消支付</string>
+    <string name="moneySign">¥%1$s</string>
+
+    <string name="editUserInfo">编辑资料</string>
+    <string name="loginPassword">登录密码</string>
+    <string name="payPassword">支付密码</string>
+    <string name="credit">信用值</string>
+    <string name="registerTime">注册时间</string>
+    <string name="personalCenter">个人中心</string>
+    <string name="more">更多</string>
+    <string name="message">消息</string>
+    <string name="clearCache">清理缓存</string>
+    <string name="unset">未设置</string>
+
+    <string name="release">发布任务</string>
+    <string name="releasing">发布中...</string>
+    <string name="releaseSuccess">发布成功</string>
+    <string name="releaseFailed">发布失败</string>
+    <string name="success">成功</string>
+    <string name="commentSuccess">评论成功</string>
+
+    <string name="waitAccept">等待接单</string>
+    <string name="hasAccept">已经接单</string>
+    <string name="waitFinish">等待完成</string>
+    <string name="hasFinished">任务完成</string>
+    <string name="waitConfirm">等待确认</string>
+    <string name="orderFinished">订单完成</string>
+    <string name="confirmTip">超过三天将自动确认完成</string>
+    <string name="orderOvertime">订单超时</string>
+    <string name="taskOvertime">任务超时</string>
+    <string name="orderLost">订单失效</string>
+    <string name="orderCancel">订单取消</string>
+    <string name="taskAbandon">放弃任务</string>
+    <string name="taskCancelConfirm">确定要取消该任务吗？</string>
+    <string name="taskLostTip">订单的报酬将退回您的账户</string>
+    <string name="taskOvertimeConfirm">确定任务已经超时吗？</string>
+    <string name="taskFinishedConfirm">确定任务已经完成吗？</string>
+    <string name="taskFinishedTip">接单人将收到您的报酬</string>
+    <string name="taskAbandonConfirm">确定要放弃任务吗？</string>
+    <string name="taskAbandonTip">放弃任务将扣除您的信用值</string>
+    <string name="confirm">确定</string>
+    <string name="back">返回</string>
+
+    <string name="setSuccess">设置成功</string>
+    <string name="clearSuccess">已清除</string>
+    <string name="cancel">取消</string>
+    <string name="exit">退出</string>
+
+    <string name="inputTip">请输入%1$s</string>
+    <string name="inputAgainTip">请再次输入%1$s</string>
+    <string name="inputError">%1$s错误，请重新输入</string>
+    <string name="inputMoneyMin">最低报酬为1元，请重新输入</string>
+    <string name="inputMoneyMax">最高报酬为10000元，请重新输入</string>
+    <string name="inputAgainError">两次输入的密码不一样，请重新输入</string>
+    <string name="imageSelectTitle">选择图片</string>
+    <string name="imageMax">最多添加9张图片</string>
+    <string name="useVoucher">使用代金券</string>
+    <string name="withoutVoucher">不使用代金券</string>
 </resources>

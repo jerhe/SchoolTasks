@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
@@ -42,11 +41,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.task.comment.GetTaskReplyListEvent;
-import server.api.task.comment.GetTaskCommentListEvent;
-import server.api.task.comment.NewTaskCommentEvent;
-import server.api.task.order.ChangeTaskOrderStateEvent;
-import server.api.task.order.GetTaskOrderInfoEvent;
+import server.api.event.task.comment.GetTaskReplyListEvent;
+import server.api.event.task.comment.GetTaskCommentListEvent;
+import server.api.event.task.comment.NewTaskCommentEvent;
+import server.api.event.task.order.ChangeTaskOrderStateEvent;
+import server.api.event.task.order.GetTaskOrderInfoEvent;
 
 
 //intent param: orderId
@@ -131,7 +130,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                             commentRecyclerView.getToUserId(), comment);
                 }
                 else{
-                    toastShort("请输入评论");
+                    toastShort(getString(R.string.inputTip, "评论"));
                 }
             }
         });
@@ -179,7 +178,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             int state = taskOrderInfo.getState();
             //接单人信息
             UserInfo acceptUser = taskOrderInfo.getAcceptUserInfo();
-            orderStateRecyclerView.add(new OrderStateItem(true, "发布订单", taskOrderInfo.getReleaseTime()));
+            orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.release), taskOrderInfo.getReleaseTime()));
             if(state < 3){
                 bottomLayout.setVisibility(View.VISIBLE);
                 bottomLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
@@ -190,15 +189,16 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             }
             switch (state){
                 case 0:
-                    orderStateRecyclerView.add(new OrderStateItem(false, "等待接单", ""));
+                    orderStateRecyclerView.add(new OrderStateItem(false, getString(R.string.waitAccept), ""));
                     if(isReleaseUser){
                         cancelBtn.setVisibility(View.VISIBLE);
                         cancelBtn.setOnClickListener(this);
                     }
                     break;
                 case 1:
-                    orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
-                    orderStateRecyclerView.add(new OrderStateItem(false, "等待完成", ""));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.hasAccept),
+                            taskOrderInfo.getAcceptTime(), acceptUser));
+                    orderStateRecyclerView.add(new OrderStateItem(false, getString(R.string.waitFinish), ""));
                     if(isReleaseUser){
                         overtimeBtn.setVisibility(View.VISIBLE);
                         overtimeBtn.setOnClickListener(this);
@@ -211,36 +211,45 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                     }
                     break;
                 case 2:
-                    orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "任务完成", taskOrderInfo.getFinishedTime()));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "等待确认", "超过三天将自动确认"));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.hasAccept),
+                            taskOrderInfo.getAcceptTime(), acceptUser));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.hasFinished),
+                            taskOrderInfo.getFinishedTime()));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.waitConfirm),
+                            getString(R.string.confirmTip)));
                     if(isReleaseUser) {
                         confirmBtn.setVisibility(View.VISIBLE);
                         confirmBtn.setOnClickListener(this);
                     }
                     break;
                 case 3:
-                    orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "任务完成", taskOrderInfo.getFinishedTime()));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "订单完成", ""));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.hasAccept),
+                            taskOrderInfo.getAcceptTime(), acceptUser));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.hasFinished),
+                            taskOrderInfo.getFinishedTime()));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.orderFinished), ""));
                     break;
                 case 4:
-                    orderStateRecyclerView.add(new OrderStateItem(true, "订单超时", taskOrderInfo.getOverTime()));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "订单失效", ""));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.orderOvertime),
+                            taskOrderInfo.getOverTime()));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.orderLost), ""));
                     break;
                 case 5:
-                    orderStateRecyclerView.add(new OrderStateItem(true, "订单取消", taskOrderInfo.getCancelTime()));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "订单失效", ""));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.orderCancel),
+                            taskOrderInfo.getCancelTime()));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.orderLost), ""));
                     break;
                 case 6:
-                    orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "放弃任务", taskOrderInfo.getAbandonTime()));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "订单失效", ""));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.hasAccept),
+                            taskOrderInfo.getAcceptTime(), acceptUser));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.taskAbandon),
+                            taskOrderInfo.getAbandonTime()));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.orderLost), ""));
                     break;
                 case 7:
-                    orderStateRecyclerView.add(new OrderStateItem(true, "已经接单", taskOrderInfo.getAcceptTime(), acceptUser));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "任务超时", taskOrderInfo.getOverTime()));
-                    orderStateRecyclerView.add(new OrderStateItem(true, "订单失效", ""));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.hasAccept), taskOrderInfo.getAcceptTime(), acceptUser));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.taskOvertime), taskOrderInfo.getOverTime()));
+                    orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.orderLost), ""));
                     break;
             }
         }
@@ -252,7 +261,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewTaskComment(NewTaskCommentEvent event){
         if(event.isOk()){
-            toastShort("评论成功");
+            toastShort(getString(R.string.commentSuccess));
             commentInputBoard.clear();
             orderStateRecyclerView.refresh();
         }
@@ -264,7 +273,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onChangeTaskOrderState(ChangeTaskOrderStateEvent event){
         if(event.isOk()){
-            toastShort("成功");
+            toastShort(getString(R.string.success));
             orderStateRecyclerView.refresh();
         }
         else{
@@ -314,54 +323,54 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         DialogPlus confirmDialog = null;
         switch (v.getId()){
             case R.id.order_cancel_btn:
-                confirmDialog = DialogUtil.createTextDialog(this, "提示",
-                        "是否要取消该任务", "取消后订单的金额(不包括时限支出)将退回您的账户", "是",
+                confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
+                        getString(R.string.taskCancelConfirm), getString(R.string.taskLostTip), getString(R.string.confirm),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 5);
                             }
-                        }, "否");
+                        }, getString(R.string.back));
                 break;
             case R.id.order_overtime_btn:
-                confirmDialog = DialogUtil.createTextDialog(this, "提示",
-                        "任务已经超时？", "超时后订单的金额(不包括时限支出)将退回您的账户", "超时",
+                confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
+                        getString(R.string.taskOvertimeConfirm), getString(R.string.taskLostTip), getString(R.string.confirm),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 7);
                             }
-                        }, "否");
+                        }, getString(R.string.back));
                 break;
             case R.id.order_confirm_btn:
-                confirmDialog = DialogUtil.createTextDialog(this, "提示",
-                        "确定任务已经完成？", "确定完成后接单人将收到您的付款", "确定",
+                confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
+                        getString(R.string.taskFinishedConfirm), getString(R.string.taskFinishedTip), getString(R.string.confirm),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 3);
                             }
-                        }, "取消");
+                        }, getString(R.string.back));
                 break;
             case R.id.order_finish_btn:
-                confirmDialog = DialogUtil.createTextDialog(this, "提示",
-                        "确定任务已经完成？", "完成任务时请尽量保留照片或者其余可以表明您已经完成任务的物件，以避免不必要的纠纷", "确定",
+                confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
+                        getString(R.string.taskFinishedConfirm), "", getString(R.string.confirm),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 2);
                             }
-                        }, "取消");
+                        }, getString(R.string.back));
                 break;
             case R.id.order_abandon_btn:
-                confirmDialog = DialogUtil.createTextDialog(this, "提示",
-                        "确定要放弃任务吗？", "放弃任务将会导致您的信用值降低，可信用值过低会造成您不能接受任务", "放弃",
+                confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
+                        getString(R.string.taskAbandonConfirm), getString(R.string.taskAbandonTip), getString(R.string.confirm),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 6);
                             }
-                        }, "取消");
+                        }, getString(R.string.back));
                 break;
         }
         if( confirmDialog != null) confirmDialog.show();

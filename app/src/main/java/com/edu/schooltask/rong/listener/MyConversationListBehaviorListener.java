@@ -2,15 +2,19 @@ package com.edu.schooltask.rong.listener;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.ui.activity.FriendRequestActivity;
+import com.edu.schooltask.utils.UserUtil;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.model.UIConversation;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * Created by 夜夜通宵 on 2017/8/25.

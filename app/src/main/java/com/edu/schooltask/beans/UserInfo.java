@@ -1,17 +1,14 @@
 package com.edu.schooltask.beans;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 
-import io.rong.push.common.ParcelUtils;
-
-public class UserInfo extends DataSupport implements Serializable,Parcelable{
+public class UserInfo extends DataSupport implements Serializable{
 	String userId;
 	String name;
+	String head;
+	String bg;
 	String school;
 	String sign;
 	int sex;
@@ -26,6 +23,8 @@ public class UserInfo extends DataSupport implements Serializable,Parcelable{
 	public UserInfo(UserInfo user){
 		this.userId = user.getUserId();
 		this.name = user.getName();
+		this.head = user.getHead();
+		this.bg = user.getBg();
 		this.sign = user.getSign();
 		this.school = user.getSchool();
 		this.sex = user.getSex();
@@ -33,24 +32,16 @@ public class UserInfo extends DataSupport implements Serializable,Parcelable{
 		this.email = user.getEmail();
 	}
 
-	public UserInfo(String userId, String name, String sign, String school, int sex, String birth) {
-		super();
+	public UserInfo(String userId, String name, String head, String bg, String sign, String school,
+					int sex, String birth) {
 		this.userId = userId;
 		this.name = name;
+		this.head = head;
+		this.bg = bg;
 		this.sign = sign;
 		this.school = school;
 		this.sex = sex;
 		this.birth = birth;
-	}
-
-	public UserInfo(Parcel in){
-		setUserId(ParcelUtils.readFromParcel(in));
-		setName(ParcelUtils.readFromParcel(in));
-		setSchool(ParcelUtils.readFromParcel(in));
-		setSign(ParcelUtils.readFromParcel(in));
-		setSex(ParcelUtils.readIntFromParcel(in));
-		setBirth(ParcelUtils.readFromParcel(in));
-		setEmail(ParcelUtils.readFromParcel(in));
 	}
 
 
@@ -71,6 +62,22 @@ public class UserInfo extends DataSupport implements Serializable,Parcelable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getHead() {
+		return head;
+	}
+
+	public void setHead(String head) {
+		this.head = head;
+	}
+
+	public String getBg() {
+		return bg;
+	}
+
+	public void setBg(String bg) {
+		this.bg = bg;
 	}
 
 	public String getSign() {
@@ -121,31 +128,4 @@ public class UserInfo extends DataSupport implements Serializable,Parcelable{
 		return ((UserInfo)obj).getUserId().equals(userId);
 	}
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		ParcelUtils.writeToParcel(dest, userId);
-		ParcelUtils.writeToParcel(dest, name);
-		ParcelUtils.writeToParcel(dest, school);
-		ParcelUtils.writeToParcel(dest, sign);
-		ParcelUtils.writeToParcel(dest, sex);
-		ParcelUtils.writeToParcel(dest, birth);
-		ParcelUtils.writeToParcel(dest, email);
-	}
-
-	public static final Parcelable.Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
-		@Override
-		public UserInfo createFromParcel(Parcel source) {
-			return new UserInfo(source);
-		}
-
-		@Override
-		public UserInfo[] newArray(int size) {
-			return new UserInfo[size];
-		}
-	};
 }

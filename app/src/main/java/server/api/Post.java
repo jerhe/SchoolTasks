@@ -18,7 +18,7 @@ import server.api.base.BaseEvent;
 public class Post {
     private String url;
     private Map<String,String> params;
-    private BaseEvent event;
+    private BaseCallBack callBack;
 
     public static Post newPost(){
         return new Post();
@@ -38,7 +38,7 @@ public class Post {
     }
 
     public Post event(BaseEvent event) {
-        this.event = event;
+        callBack = new BaseCallBack(event);
         return this;
     }
 
@@ -51,6 +51,6 @@ public class Post {
                 .addHeader("sign", EncriptUtil.getSHA(time + "20170828"))
                 .params(params)
                 .build()
-                .execute(new BaseCallBack(event));
+                .execute(callBack);
     }
 }

@@ -21,7 +21,6 @@ import com.edu.schooltask.rong.message.FriendMessage;
 import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.ui.view.ViewPagerTab;
 import com.edu.schooltask.utils.DialogUtil;
-import com.edu.schooltask.utils.GlideUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
 
@@ -30,7 +29,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,12 +36,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import server.api.SchoolTask;
-import server.api.friend.FriendRequestEvent;
-import server.api.user.GetUserHomePageInfoEvent;
+import server.api.event.friend.FriendRequestEvent;
+import server.api.event.user.GetUserHomePageInfoEvent;
 
 public class UserActivity extends BaseActivity {
     @BindView(R.id.user_layout) CoordinatorLayout layout;
@@ -60,7 +57,7 @@ public class UserActivity extends BaseActivity {
 
     @OnClick(R.id.user_head)
     public void showUserHead(){
-        DialogUtil.createHeadImageDialog(UserActivity.this, user.getUserId()).show();
+        DialogUtil.createHeadImageDialog(UserActivity.this, user).show();
     }
 
     @OnClick(R.id.user_friend_btn)
@@ -78,7 +75,6 @@ public class UserActivity extends BaseActivity {
 
     String name;
     UserInfo user;
-    int relationType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +119,8 @@ public class UserActivity extends BaseActivity {
         String sign = user.getSign();
         if(sign.length() == 0) sign = "无";
         signText.setText("简介：" + sign);
-        GlideUtil.setHead(UserActivity.this, user.getUserId(), headImage);
-        GlideUtil.setBackground(UserActivity.this, user.getUserId(), bgImage);
+        UserUtil.setHead(UserActivity.this, user, headImage);
+        UserUtil.setBackground(UserActivity.this, user, bgImage);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

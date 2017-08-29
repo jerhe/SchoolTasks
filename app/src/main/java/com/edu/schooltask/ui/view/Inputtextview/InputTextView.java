@@ -98,6 +98,10 @@ public class InputTextView extends LinearLayout {
         }
     }
 
+    public String getName(){
+        return nameText.getText().toString();
+    }
+
     public void setText(String text){
         inputText.setText(text);
     }

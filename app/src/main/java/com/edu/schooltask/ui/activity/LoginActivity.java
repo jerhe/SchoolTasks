@@ -32,7 +32,6 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        setTitle("登录");
         initViewPager();
     }
 
@@ -51,6 +50,21 @@ public class LoginActivity extends BaseActivity {
                 return true;
             }
         });
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 2){
+                    registerItem.setVisible(false);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
@@ -65,9 +79,18 @@ public class LoginActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_register:    //点击注册按钮则隐藏
-                viewPager.setCurrentItem(1);
-                setTitle("注册");
-                registerItem.setVisible(false);
+                if("注册".equals(registerItem.getTitle())){
+                    viewPager.setCurrentItem(1);
+                    setTitle("注册");
+                    registerItem.setTitle("登录");
+                    return true;
+                }
+                if("登录".equals(registerItem.getTitle())){
+                    viewPager.setCurrentItem(0);
+                    setTitle("登录");
+                    registerItem.setTitle("注册");
+                    return true;
+                }
         }
         return true;
     }

@@ -2,10 +2,8 @@ package com.edu.schooltask.other;
 
 import android.content.Context;
 
-import com.edu.schooltask.beans.UserConfig;
-import com.edu.schooltask.beans.UserInfo;
+import com.edu.schooltask.beans.MessageConfig;
 import com.edu.schooltask.utils.FileUtil;
-import com.edu.schooltask.utils.UserUtil;
 
 import java.io.File;
 
@@ -63,15 +61,15 @@ public class DataCache {
     }
 
     //获取用户配置
-    public UserConfig getUserConfig(String userId){
-        UserConfig userConfig = getData("userConfig" + userId);
-        if(userConfig == null) return new UserConfig(0, true, true, true);
-        return userConfig;
+    public MessageConfig getMessageConfig(){
+        MessageConfig messageConfig = getData("messageConfig");
+        if(messageConfig == null) return new MessageConfig(true, true);
+        return messageConfig;
     }
 
     //保存用户配置
-    public void saveUserConfig(String userId, UserConfig userConfig){
-        saveData("userConfig" + userId, userConfig);
+    public void saveMessageConfig(MessageConfig messageConfig){
+        saveData("messageConfig", messageConfig);
     }
 
     public void saveSchool(List<String> schools){

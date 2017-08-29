@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.ui.activity.SetPayPwdActivity;
@@ -29,20 +30,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.user.register.RegisterEvent;
+import server.api.event.user.register.RegisterEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.
  */
 
 public class RegisterInfoFragment extends BaseFragment {
-    @BindView(R.id.ri_school)
-    InputTextView schoolText;
-    @BindView(R.id.ri_name)
-    InputTextView nameText;
-    @BindView(R.id.ri_pwd)
-    InputTextView pwdText;
-    @BindView(R.id.ri_finish) Button finishBtn;
+    @BindView(R.id.ri_school) InputTextView schoolText;
+    @BindView(R.id.ri_name) InputTextView nameText;
+    @BindView(R.id.ri_pwd) InputTextView pwdText;
+    @BindView(R.id.ri_finish) TextView finishBtn;
 
     @OnClick(R.id.ri_finish)
     public void register(){

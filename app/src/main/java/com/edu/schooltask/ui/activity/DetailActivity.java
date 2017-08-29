@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import server.api.SchoolTask;
-import server.api.user.account.GetDetailEvent;
+import server.api.event.user.account.GetDetailEvent;
 
 public class DetailActivity extends BaseActivity {
     @BindView(R.id.detail_srl) SwipeRefreshLayout swipeRefreshLayout;

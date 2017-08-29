@@ -20,6 +20,7 @@ import org.litepal.LitePalApplication;
 
 import java.util.concurrent.TimeUnit;
 
+import c.b.BP;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imkit.model.UIConversation;
@@ -64,7 +65,6 @@ public class MyApplication extends LitePalApplication {
         RongIM.registerMessageTemplate(new OrderMessageProvider());
         RongIM.registerMessageTemplate(new FriendMessageProvider());
 
-        //BP.init("b8423903660c0d5aa0f0bcee7af3fb09");    //Bomb初始化
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)    //连接超时时间
                 .readTimeout(10, TimeUnit.SECONDS)       //读取超时时间

@@ -37,4 +37,8 @@ public class SelectText extends RelativeLayout {
     public String getText(){
         return spinner.getText().toString();
     }
+
+    public int getSelectedIndex(){
+        return spinner.getSelectedIndex();
+    }
 }

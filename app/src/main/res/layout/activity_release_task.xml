@@ -12,19 +12,21 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="60dp">
-        <Button
+        <TextView
             android:id="@+id/rt_voucher_btn"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/btn_height"
+            android:gravity="center"
             android:text="使用代金券"
             android:background="@drawable/btn_white"/>
-        <Button
+        <TextView
             android:id="@+id/rt_release_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/btn_height"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:background="@drawable/btn_theme"
             android:textColor="@color/white"
             android:layout_alignParentRight="true"
@@ -59,7 +61,6 @@
                 android:layout_height="match_parent">
                 <com.edu.schooltask.ui.view.Inputtextview.InputTextView
                     android:id="@+id/rt_school"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:IT_hint="请输入学校"

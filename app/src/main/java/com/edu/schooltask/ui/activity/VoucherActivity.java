@@ -19,7 +19,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import server.api.SchoolTask;
-import server.api.voucher.GetAvailableVouchersEvent;
+import server.api.event.voucher.GetAvailableVouchersEvent;
 
 
 public class VoucherActivity extends BaseActivity {

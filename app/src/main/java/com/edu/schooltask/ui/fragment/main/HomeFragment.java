@@ -3,10 +3,8 @@ package com.edu.schooltask.ui.fragment.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,7 +41,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import server.api.SchoolTask;
-import server.api.task.get.GetSchoolTaskEvent;
+import server.api.event.task.GetSchoolTaskEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.

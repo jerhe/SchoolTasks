@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.edu.schooltask.R;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.ui.activity.SetPayPwdActivity;
 import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.filter.MoneyFilter;
@@ -230,7 +231,7 @@ public class DialogUtil {
     }
 
 
-    public static DialogPlus createHeadImageDialog(Context context, String userId){
+    public static DialogPlus createHeadImageDialog(Context context, UserInfo userInfo){
         DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_trans)
                 .setGravity(Gravity.CENTER)
@@ -245,7 +246,7 @@ public class DialogUtil {
                 .create();
         View dialogView = dialog.getHolderView();
         GestureImageView imageView = (GestureImageView) dialogView.findViewById(R.id.image_image);
-        GlideUtil.setHead(context, userId, imageView);
+        UserUtil.setHead(context, userInfo, imageView);
         return dialog;
     }
 

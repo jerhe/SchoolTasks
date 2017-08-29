@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="SchoolTask" />
 
-    <version value="7" />
+    <version value="8" />
 
     <list>
         <mapping class="com.edu.schooltask.beans.UserInfoWithToken"/>

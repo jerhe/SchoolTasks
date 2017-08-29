@@ -6,7 +6,6 @@ import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.builder.PostFormBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import server.api.base.BaseTokenCallBack;
-import server.api.user.login.UnloginEvent;
+import com.edu.schooltask.event.UnloginEvent;
 
 /**
  * Post队列：包含Token的请求需要加入这个队列以保证Token不错乱
@@ -39,7 +38,7 @@ public class TokenPost {
         posting = true;
         if(bodies.size() > 0){
             TokenRequestBody tokenRequestBody = bodies.get(0);
-            BaseTokenCallBack callBack = new BaseTokenCallBack(tokenRequestBody.getEvent());
+            BaseTokenCallBack callBack = tokenRequestBody.getCallBack();
             callBack.setResponseListener(new BaseTokenCallBack.ResponseListener() {
                 @Override
                 public void onResponse() {
@@ -52,15 +51,16 @@ public class TokenPost {
             if(user == null) {
                 Log.e("Queue","user has lost!");
                 EventBus.getDefault().post(new UnloginEvent());
-                nextPost();
+                bodies.clear();
+                posting = false;
                 return;
             }
             Calendar c = Calendar.getInstance();
             String time = String.valueOf(c.getTimeInMillis());
             Map<String, String> params = tokenRequestBody.getParams();
             if(params == null) params = new HashMap<>();
-            params.put("token", user.getToken());
             params.put("userId", user.getUserId());
+            params.put("token", EncriptUtil.getMD5(user.getUserId()+user.getToken()));
 
             OkHttpUtils.post()
                     .url(tokenRequestBody.getUrl())
@@ -82,6 +82,7 @@ public class TokenPost {
     }
 
     public void enqueue(TokenRequestBody body){
+        if(body.getCallBack() == null) throw new RuntimeException("callback must not be null!");
         bodies.add(body);
     }
 }

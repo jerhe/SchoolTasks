@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.user.account.SetPayPwdEvent;
+import server.api.event.user.account.SetPayPwdEvent;
 
 public class SetPayPwdActivity extends BaseActivity {
     @BindView(R.id.spp_pwd)
@@ -28,22 +28,22 @@ public class SetPayPwdActivity extends BaseActivity {
         String pwd1 = pwdText.getText();
         String pwd2 = pwdText2.getText();
         if(pwd1.length() == 0){
-            toastShort("请输入支付密码");
+            toastShort(getString(R.string.inputTip, pwdText.getName()));
             pwdText.requestFocus();
             return;
         }
         if(pwd2.length() == 0){
-            toastShort("请再次输入支付密码");
+            toastShort(getString(R.string.inputAgainTip, pwdText.getName()));
             pwdText.requestFocus();
             return;
         }
         if(pwd1.length() != 6){
-            toastShort("支付密码必须为6位数字，请重新输入");
+            toastShort(getString(R.string.inputError, pwdText.getName()));
             pwdText.requestFocus();
             return;
         }
         if(!pwd1.equals(pwd2)){
-            toastShort("两次输入的密码不一致");
+            toastShort(getString(R.string.inputAgainError));
             return;
         }
         SchoolTask.setPayPwd(pwd1);
@@ -69,7 +69,7 @@ public class SetPayPwdActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSetPayPwd(SetPayPwdEvent event){
         if(event.isOk()){
-            toastShort("设置成功");
+            toastShort(getString(R.string.setSuccess));
             finish();
         }
         else{

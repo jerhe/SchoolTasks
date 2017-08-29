@@ -1,5 +1,6 @@
 package com.edu.schooltask.ui.activity;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,9 +25,9 @@ import butterknife.OnClick;
 import c.b.BP;
 import c.b.PListener;
 import c.b.QListener;
-import server.api.user.account.GetMoneyEvent;
+import server.api.event.user.account.GetMoneyEvent;
 import server.api.SchoolTask;
-import server.api.user.account.RechargeEvent;
+import server.api.event.user.account.RechargeEvent;
 
 import static android.view.View.GONE;
 import static com.edu.schooltask.utils.StringUtil.moneyFormat;
@@ -39,6 +40,7 @@ public class MoneyActivity extends BaseActivity {
 
     @OnClick(R.id.money_recharge)
     public void recharge(){
+        BP.init("b8423903660c0d5aa0f0bcee7af3fb09");
         DialogUtil.createRechargeDialog(MoneyActivity.this, new DialogUtil.RechargeListener() {
             @Override
             public void onRecharge(final BigDecimal money, final String type) {
@@ -83,7 +85,15 @@ public class MoneyActivity extends BaseActivity {
             }
         }).show();
     }
-
+    @OnClick(R.id.money_transfer)
+    public void transfer(){
+        new AlertDialog.Builder(this)
+                .setTitle("标题").setMessage("123")
+                .setNegativeButton("确定",null)
+                .setNeutralButton("aa", null)
+                .setPositiveButton("bb", null)
+                .create().show();
+    }
 
     String orderId;
 
@@ -110,7 +120,7 @@ public class MoneyActivity extends BaseActivity {
             moneyText.setText(moneyFormat(money));
         }
         else{
-            moneyText.setText("获取失败");
+            moneyText.setText(getString(R.string.getError));
             toastShort(event.getError());
         }
     }
@@ -121,7 +131,7 @@ public class MoneyActivity extends BaseActivity {
             getMoney();
         }
         else{
-            toastShort("获取支付信息失败，如未到账请联系客服");
+            toastShort(getString(R.string.getPayInfoError));
         }
     }
 

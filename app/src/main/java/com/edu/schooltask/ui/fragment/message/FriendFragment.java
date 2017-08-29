@@ -3,12 +3,12 @@ package com.edu.schooltask.ui.fragment.message;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
+import com.edu.schooltask.beans.FriendList;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.ui.base.BaseFragment;
 import com.edu.schooltask.ui.view.recyclerview.BaseRecyclerView;
@@ -25,11 +25,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.rong.imkit.RongIM;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import server.api.SchoolTask;
-import server.api.friend.AgreeRequestEvent;
-import server.api.friend.GetFriendListEvent;
+import server.api.event.friend.AgreeRequestEvent;
+import server.api.event.friend.GetFriendListEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/8/25.
@@ -57,8 +56,6 @@ public class FriendFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 UserInfo userInfo = recyclerView.get(position);
-                RongIM.getInstance().refreshUserInfoCache(new io.rong.imlib.model.UserInfo(userInfo.getUserId(),
-                        userInfo.getName(), Uri.parse(UserUtil.getHeadUrl(userInfo.getUserId()))));
                 Bundle bundle = new Bundle();
                 bundle.putString("school", userInfo.getSchool());
                 RongIM.getInstance().startConversation(getContext(), Conversation.ConversationType.PRIVATE,
@@ -90,7 +87,12 @@ public class FriendFragment extends BaseFragment {
     public void onGetFriendList(GetFriendListEvent event){
         refreshLayout.setRefreshing(false);
         if (event.isOk()){
-            recyclerView.add(GsonUtil.toFriendList(event.getData()).getList());
+            FriendList friendList = GsonUtil.toFriendList(event.getData());
+            List<UserInfo> list = friendList.getList();
+            for(UserInfo userInfo : list){  //当好友加载到好友列表时刷新融云用户信息
+                RongIM.getInstance().refreshUserInfoCache(UserUtil.toRongUserInfo(userInfo));
+            }
+            recyclerView.add(list);
         }
         else{
             toastShort(event.getError());

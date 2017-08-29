@@ -23,11 +23,11 @@ import com.edu.schooltask.ui.activity.AboutActivity;
 import com.edu.schooltask.ui.activity.HelpActivity;
 import com.edu.schooltask.ui.activity.LoginActivity;
 import com.edu.schooltask.ui.activity.MoneyActivity;
+import com.edu.schooltask.ui.activity.PersonalCenterActivity;
 import com.edu.schooltask.ui.activity.SettingActivity;
 import com.edu.schooltask.ui.activity.UserActivity;
 import com.edu.schooltask.ui.activity.VoucherActivity;
 import com.edu.schooltask.ui.base.BaseFragment;
-import com.edu.schooltask.utils.GlideUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
 
@@ -43,7 +43,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
-import server.api.user.UpdateUserInfoEvent;
+import server.api.event.user.RefreshHeadBGEvent;
+import server.api.event.user.UpdateUserInfoEvent;
 
 
 /**
@@ -80,18 +81,19 @@ public class UserFragment extends BaseFragment{
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, 1);
         userFunctionRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         userFunctionRecyclerView.setAdapter(userIconMenuAdapter);
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_action_account, "校园服务"));
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_action_account, "代金券"));
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_action_account, "任务商店"));
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_action_account, "账户"));
+        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.personal, getString(R.string.personalCenter)));
+        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_action_about, "更多"));
+        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.voucher, getString(R.string.voucher)));
+        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.money, getString(R.string.money)));
         userIconMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (UserUtil.hasLogin()) {
                     switch (position) {
                         case 0:
+                            openActivity(PersonalCenterActivity.class);
                             break;
-                        case 1:
+                        case 2:
                             openActivity(VoucherActivity.class);
                             break;
                         case 3:
@@ -101,7 +103,7 @@ public class UserFragment extends BaseFragment{
                     }
                 }
                 else {
-                    toastShort("请先登录");
+                    toastShort(getString(R.string.unlogin_tip));
                     openActivity(LoginActivity.class);
                 }
             }
@@ -112,9 +114,9 @@ public class UserFragment extends BaseFragment{
         systemFunctionRecyclerView.setLayoutManager(linearLayoutManager);
         systemFunctionRecyclerView.setAdapter(systemIconMenuAdapter);
         systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "设置"));
-        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "帮助"));
-        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "分享"));
-        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "关于"));
+        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_help, "帮助"));
+        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_share, "分享"));
+        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_about, "关于"));
         systemIconMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -151,8 +153,8 @@ public class UserFragment extends BaseFragment{
     }
 
     private void setUserImage(UserInfoWithToken user){
-        GlideUtil.setHead(getContext(), user.getUserId(), headImage);
-        GlideUtil.setBackground(getContext(), user.getUserId(), bgImage);
+        UserUtil.setHead(getContext(), user, headImage);
+        UserUtil.setBackground(getContext(), user, bgImage);
     }
 
     @Override
@@ -195,15 +197,11 @@ public class UserFragment extends BaseFragment{
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        UserInfoWithToken user = UserUtil.getLoginUser();
-        if(user != null){
-            Glide.clear(bgImage);
-            GlideUtil.setBackground(getContext(), user.getUserId(), bgImage);
-            Glide.clear(headImage);
-            GlideUtil.setHead(getContext(), user.getUserId(), headImage);
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateHeadBG(RefreshHeadBGEvent event){
+        if (event.isOk()){
+            setUserImage(UserUtil.getLoginUser());
         }
     }
 }

@@ -43,5 +43,5 @@
         android:layout_margin="20dp"
         android:textColor="@color/white"
         android:text="确定"
-        android:background="@drawable/btn_theme"/>
+        android:background="@drawable/btn_theme_normal"/>
 </LinearLayout>

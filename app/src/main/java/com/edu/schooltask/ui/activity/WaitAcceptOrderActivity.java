@@ -2,10 +2,9 @@ package com.edu.schooltask.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.edu.schooltask.R;
@@ -36,43 +35,42 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.task.accept.AcceptTaskEvent;
-import server.api.task.comment.GetTaskCommentListEvent;
-import server.api.task.comment.GetTaskReplyListEvent;
-import server.api.task.comment.NewTaskCommentEvent;
-import server.api.task.get.GetTaskInfoEvent;
+import server.api.event.task.AcceptTaskEvent;
+import server.api.event.task.comment.GetTaskCommentListEvent;
+import server.api.event.task.comment.GetTaskReplyListEvent;
+import server.api.event.task.comment.NewTaskCommentEvent;
+import server.api.event.task.GetTaskInfoEvent;
 
 public class WaitAcceptOrderActivity extends BaseActivity {
     @BindView(R.id.wao_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.wao_crv) CommentRecyclerView commentRecyclerView;
     @BindView(R.id.wao_comment_reply_view) CommentReplyView commentReplyView;
-    @BindView(R.id.wao_accept_btn) Button acceptBtn;
-    @BindView(R.id.wao_comment_btn) Button commentBtn;
+    @BindView(R.id.wao_accept_btn) TextView acceptBtn;
+    @BindView(R.id.wao_comment_btn) TextView commentBtn;
     @BindView(R.id.wao_btn_layout) RelativeLayout btnLayout;
     @BindView(R.id.wao_cib) CommentInputBoard inputBoard;
 
     @OnClick(R.id.wao_accept_btn)
     public void accept(){
-        if("接单".equals(acceptBtn.getText())){
-            UserInfoWithToken user = UserUtil.getLoginUser();
-            if(user != null){
-                if(user.getUserId().equals(taskItem.getUserInfo().getUserId())){
-                    toastShort("不能接自己发布的任务哦");
-                }
-                else{
-                    DialogUtil.createTextDialog(WaitAcceptOrderActivity.this, "提示", "确定接受该任务吗",
-                            "请确保自身有能力完成该任务，接单后对于订单的疑问可联系发布人", "确定", new DialogUtil.OnClickListener() {
-                                @Override
-                                public void onClick(DialogPlus dialogPlus) {
-                                    SchoolTask.acceptTask(orderId);
-                                }
-                            }, "取消").show();
-                }
+        if(taskItem == null) return;
+        UserInfoWithToken user = UserUtil.getLoginUser();
+        if(user != null){
+            if(user.getUserId().equals(taskItem.getUserInfo().getUserId())){
+                toastShort("不能接自己发布的任务哦");
             }
             else{
-                toastShort("请先登录");
-                openActivity(LoginActivity.class);
+                DialogUtil.createTextDialog(WaitAcceptOrderActivity.this, "提示", "确定接受该任务吗",
+                        "", "确定", new DialogUtil.OnClickListener() {
+                            @Override
+                            public void onClick(DialogPlus dialogPlus) {
+                                SchoolTask.acceptTask(orderId);
+                            }
+                        }, "取消").show();
             }
+        }
+        else{
+            toastShort("请先登录");
+            openActivity(LoginActivity.class);
         }
     }
     @OnClick(R.id.wao_comment_btn)

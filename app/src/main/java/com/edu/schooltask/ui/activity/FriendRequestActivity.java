@@ -27,9 +27,9 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import server.api.SchoolTask;
-import server.api.friend.AgreeRequestEvent;
-import server.api.friend.GetRequestListEvent;
-import server.api.friend.RejectRequestEvent;
+import server.api.event.friend.AgreeRequestEvent;
+import server.api.event.friend.GetRequestListEvent;
+import server.api.event.friend.RejectRequestEvent;
 
 public class FriendRequestActivity extends BaseActivity {
 
@@ -103,8 +103,9 @@ public class FriendRequestActivity extends BaseActivity {
     public void onAgreeRequest(AgreeRequestEvent event){
         if (event.isOk()){
             String name = (String)event.getData();
-            RongIM.getInstance().insertOutgoingMessage(Conversation.ConversationType.SYSTEM, "验证消息",
-                    Message.SentStatus.SENT, new FriendMessage("已同意 " + name + " 的好友请求"), null);
+            RongIM.getInstance().insertOutgoingMessage(Conversation.ConversationType.SYSTEM,
+                    getString(R.string.friend_request_id), Message.SentStatus.SENT,
+                    new FriendMessage(getString(R.string.friend_agree_message, name)), null);
             recyclerView.refresh();
         }
         else{
@@ -117,8 +118,9 @@ public class FriendRequestActivity extends BaseActivity {
     public void onRejectRequest(RejectRequestEvent event){
         if (event.isOk()){
             String name = (String)event.getData();
-            RongIM.getInstance().insertOutgoingMessage(Conversation.ConversationType.SYSTEM, "验证消息",
-                    Message.SentStatus.SENT, new FriendMessage("已拒绝 " + name + " 的好友请求"), null);
+            RongIM.getInstance().insertOutgoingMessage(Conversation.ConversationType.SYSTEM,
+                    getString(R.string.friend_request_id), Message.SentStatus.SENT,
+                    new FriendMessage(getString(R.string.friend_object_message, name)), null);
             recyclerView.refresh();
         }
         else{

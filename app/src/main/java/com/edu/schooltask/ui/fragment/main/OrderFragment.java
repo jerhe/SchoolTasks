@@ -3,7 +3,6 @@ package com.edu.schooltask.ui.fragment.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,9 +30,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.task.accept.AcceptTaskEvent;
-import server.api.task.order.GetTaskOrderListEvent;
-import server.api.task.release.ReleaseTaskEvent;
+import server.api.event.task.AcceptTaskEvent;
+import server.api.event.task.order.GetTaskOrderListEvent;
+import server.api.event.task.ReleaseTaskEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/3.

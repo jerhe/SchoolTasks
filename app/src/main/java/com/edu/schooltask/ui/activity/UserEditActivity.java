@@ -2,6 +2,7 @@ package com.edu.schooltask.ui.activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -13,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +31,8 @@ import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.other.SchoolAutoComplement;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GlideCacheUtil;
-import com.edu.schooltask.utils.GlideUtil;
 import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.ui.view.UserEditItem;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -53,12 +53,13 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imkit.RongIM;
 import server.api.SchoolTask;
-import server.api.qiniu.GetBGUploadKeyEvent;
-import server.api.qiniu.GetHeadUploadKeyEvent;
-import server.api.user.UpdateUserInfoEvent;
-import server.api.qiniu.UploadBGEvent;
-import server.api.qiniu.UploadHeadEvent;
+import server.api.event.qiniu.GetBGUploadKeyEvent;
+import server.api.event.qiniu.GetHeadUploadKeyEvent;
+import server.api.event.user.UpdateUserInfoEvent;
+import server.api.event.qiniu.UploadBGEvent;
+import server.api.event.qiniu.UploadHeadEvent;
 
 public class UserEditActivity extends BaseActivity{
     @BindView(R.id.ue_head) UserEditItem headItem;
@@ -148,19 +149,6 @@ public class UserEditActivity extends BaseActivity{
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
-
-    Runnable headRunable = new Runnable() {
-        @Override
-        public void run() {
-            setHead(UserUtil.getLoginUser());
-        }
-    };
-    Runnable bgRunable = new Runnable() {
-        @Override
-        public void run() {
-            setBg(UserUtil.getLoginUser());
-        }
-    };
 
     List<String> imageSelectList = new ArrayList<>();
     BaseAdapter imageSelectAdapter = new BaseAdapter() {
@@ -262,6 +250,8 @@ public class UserEditActivity extends BaseActivity{
         }
     };
 
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -284,8 +274,6 @@ public class UserEditActivity extends BaseActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        headItem.removeCallbacks(headRunable);
-        bgItem.removeCallbacks(bgRunable);
         EventBus.getDefault().unregister(this);
     }
 
@@ -370,20 +358,21 @@ public class UserEditActivity extends BaseActivity{
 
     private void setHead(UserInfoWithToken user){
         Glide.clear(headItem.getHeadView());
-        GlideUtil.setHead(UserEditActivity.this, user.getUserId(), headItem.getHeadView());
+        GlideCacheUtil.getInstance().clearImageMemoryCache(this);
+        UserUtil.setHead(UserEditActivity.this, user, headItem.getHeadView());
     }
 
     private void setBg(UserInfoWithToken user){
         Glide.clear(bgItem.getImageView());
-        GlideUtil.setBackground(UserEditActivity.this, user.getUserId(), bgItem.getImageView());
+        GlideCacheUtil.getInstance().clearImageMemoryCache(this);
+        UserUtil.setBackground(UserEditActivity.this, user, bgItem.getImageView());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUploadBG(UploadBGEvent event){
         if (event.isOk()){
             toastShort("上传背景成功");
-            mDataCache.saveData("bg",new Random().nextInt(99999));
-            bgItem.postDelayed(bgRunable, 3000);
+            setBg(UserUtil.getLoginUser());
         }
         else{
             toastShort("上传背景失败");
@@ -394,8 +383,7 @@ public class UserEditActivity extends BaseActivity{
     public void onUploadHead(UploadHeadEvent event){
         if (event.isOk()){
             toastShort("上传头像成功");
-            mDataCache.saveData("head",new Random().nextInt(99999));
-            headItem.postDelayed(headRunable, 3000);
+            setHead(UserUtil.getLoginUser());
         }
         else{
             toastShort("上传头像失败");
@@ -408,9 +396,13 @@ public class UserEditActivity extends BaseActivity{
             if(nameDialog != null)
                 if(nameDialog.isShowing()){
                     nameDialog.dismiss();
+                    KeyBoardUtil.hideKeyBoard(this);
                 }
             UserInfo updateUserInfo = GsonUtil.toUserInfo(event.getData());
             setInfo(updateUserInfo);
+            io.rong.imlib.model.UserInfo userInfo = UserUtil.toRongUserInfo(updateUserInfo);
+            RongIM.getInstance().refreshUserInfoCache(userInfo);
+            RongIM.getInstance().setCurrentUserInfo(userInfo);
         }
         else{
             toastShort(event.getError());
@@ -421,7 +413,7 @@ public class UserEditActivity extends BaseActivity{
     public void onGetHeadUploadKey(GetHeadUploadKeyEvent event){
         if(event.isOk()){
             UploadKey uploadKey = GsonUtil.toUploadKey(event.getData());
-            SchoolTask.uploadHead(headImage, uploadKey);
+            SchoolTask.uploadHead(this, headImage, uploadKey);
         }
         else{
             toastShort(event.getError());
@@ -432,7 +424,7 @@ public class UserEditActivity extends BaseActivity{
     public void onGetBGUploadKey(GetBGUploadKeyEvent event){
         if(event.isOk()){
             UploadKey uploadKey = GsonUtil.toUploadKey(event.getData());
-            SchoolTask.uploadBG(bgImage, uploadKey);
+            SchoolTask.uploadBG(this, bgImage, uploadKey);
         }
         else{
             toastShort(event.getError());

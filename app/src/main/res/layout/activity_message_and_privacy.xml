@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.MessageAndPrivacyActivity">
+    tools:context=".ui.activity.MessageSettingActivity">
     <include layout="@layout/toolbar"/>
     <View
         android:layout_alignParentBottom="true"
@@ -13,7 +13,8 @@
         android:background="@color/lineColor"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/map_rv"
-        android:visibility="invisible"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>

@@ -9,7 +9,6 @@ import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.PasswordFilter;
 import com.edu.schooltask.utils.EncriptUtil;
-import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,8 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
-import server.api.user.account.UpdatePaypwdEvent;
-import server.api.user.UpdateLoginPwdEvent;
+import server.api.event.user.account.UpdatePaypwdEvent;
+import server.api.event.user.UpdateLoginPwdEvent;
 
 public class UpdatePwdActivity extends BaseActivity {
     @BindView(R.id.up_old)
@@ -38,15 +37,15 @@ public class UpdatePwdActivity extends BaseActivity {
         String newPwd = newText.getText();
         String newAgainPwd = newAgainText.getText();
         if(oldPwd.length() == 0){
-            toastShort("请输入原密码");
+            toastShort(getString(R.string.inputTip, oldText.getName()));
             return;
         }
         if(newPwd.length() == 0){
-            toastShort("请输入新密码");
+            toastShort(getString(R.string.inputTip, newText.getName()));
             return;
         }
         if(newAgainPwd.length() == 0){
-            toastShort("请再次输入新密码");
+            toastShort(getString(R.string.inputAgainTip, newText.getName()));
             return;
         }
         if(type == 0){

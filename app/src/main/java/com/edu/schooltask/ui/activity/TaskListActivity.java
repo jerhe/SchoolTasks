@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import server.api.SchoolTask;
-import server.api.task.get.GetTaskListEvent;
+import server.api.event.task.GetTaskListEvent;
 
 public class TaskListActivity extends BaseActivity {
     @BindView(R.id.tl_prl) PullRefreshLayout refreshLayout;
@@ -100,9 +100,9 @@ public class TaskListActivity extends BaseActivity {
     private void init(){
         UserInfoWithToken user = UserUtil.getLoginUser();
         taskFilterView.setShadowView(shadow);
-        taskFilterView.addFilter("学校", "所有学校", user == null ? null : user.getSchool());
-        taskFilterView.addFilter("分类", "所有","学习","生活","娱乐","运动","商家","其他");
-        taskFilterView.addFilter("报酬", "所有","1-5元","5-10元","10-20元","20-100元","100元以上");
+        taskFilterView.addFilter(getString(R.string.school), "所有学校", user == null ? null : user.getSchool());
+        taskFilterView.addFilter(getString(R.string.description), getResources().getStringArray(R.array.taskDescription));
+        taskFilterView.addFilter(getString(R.string.reward), getResources().getStringArray(R.array.taskReward));
         taskFilterView.setFilterChangeListener(new TaskFilterView.FilterChangeListener() {
             @Override
             public void onFilterChange() {

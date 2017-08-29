@@ -7,8 +7,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.Call;
 import okhttp3.Response;
-import server.api.user.token.RefreshTokenEvent;
-import server.api.user.token.TokenErrorEvent;
+import server.api.event.user.RefreshTokenEvent;
+import com.edu.schooltask.event.TokenErrorEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/18.
@@ -22,6 +22,8 @@ public class BaseTokenCallBack extends Callback<BaseTokenEvent> {
     //Token刷新时需要自增
     public static int tokenTag;
 
+    public BaseTokenCallBack(){}
+
     public BaseTokenCallBack(BaseTokenEvent event){
         this.event = event;
     }
@@ -30,9 +32,7 @@ public class BaseTokenCallBack extends Callback<BaseTokenEvent> {
     @Override
     public BaseTokenEvent parseNetworkResponse(Response response, int id) throws Exception {
         String result = response.body().string();   //获取后台返回数据
-        BaseTokenEvent responseEvent = new Gson().fromJson(result, event.getClass());
-        if(responseEvent != null)
-            event = responseEvent;  //将数据转换成事件对象
+        event = new Gson().fromJson(result, event.getClass());
         if(event.isUpdate()){   //Token需要更新，event对象包含刷新Token
             EventBus.getDefault().post(new RefreshTokenEvent(event.getToken()));    //Post刷新Token
         }

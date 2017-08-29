@@ -10,9 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
+import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.ui.activity.UserActivity;
 import com.edu.schooltask.utils.DateUtil;
-import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.utils.UserUtil;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,10 +39,10 @@ public class UserItemCommentView extends RelativeLayout{
     }
 
     //设置所有信息
-    public void setAll(String userId, final String name, int sex, String commentTime, String school){
-        setHead(userId);
-        setName(name);
-        setSex(sex);
+    public void setAll(final UserInfo userInfo, String commentTime, String school){
+        setHead(userInfo);
+        setName(userInfo.getName());
+        setSex(userInfo.getSex());
         setCommentTime(commentTime);
         setSchool(school);
         //点击跳转到用户主页
@@ -49,7 +50,7 @@ public class UserItemCommentView extends RelativeLayout{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), UserActivity.class);
-                intent.putExtra("name", name);
+                intent.putExtra("name", userInfo.getName());
                 getContext().startActivity(intent);
             }
         });
@@ -57,8 +58,8 @@ public class UserItemCommentView extends RelativeLayout{
     }
 
     //设置头像
-    public void setHead(String userId){
-        GlideUtil.setHead(getContext(), userId, headView);
+    public void setHead(UserInfo userInfo){
+        UserUtil.setHead(getContext(), userInfo, headView);
     }
 
     //设置昵称

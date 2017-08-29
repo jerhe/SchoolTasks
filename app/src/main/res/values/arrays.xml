@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="taskDescriptionOption">
+        <item>请选择任务类型</item>
+        <item>跑腿</item>
+        <item>学习</item>
+        <item>生活</item>
+        <item>娱乐</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="taskDescription">
+        <item>所有</item>
+        <item>跑腿</item>
+        <item>学习</item>
+        <item>生活</item>
+        <item>娱乐</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="taskReward">
+        <item>所有</item>
+        <item>1&#8211;5元</item>
+        <item>5&#8211;10元</item>
+        <item>10&#8211;20元</item>
+        <item>20&#8211;100元</item>
+        <item>100元以上</item>
+    </string-array>
+</resources>

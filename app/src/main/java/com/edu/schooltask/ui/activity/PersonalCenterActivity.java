@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import server.api.SchoolTask;
-import server.api.user.GetPersonalCenterInfoEvent;
+import server.api.event.user.GetPersonalCenterInfoEvent;
 
 public class PersonalCenterActivity extends BaseActivity {
     @BindView(R.id.pc_rv) RecyclerView recyclerView;
@@ -80,13 +80,13 @@ public class PersonalCenterActivity extends BaseActivity {
     }
 
     private void setData(int credit, String registerTime){
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "编辑资料"));
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "登录密码"));
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "支付密码",
-                hasPayPwd ? "":"未设置"));
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, getString(R.string.editUserInfo)));
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, getString(R.string.loginPassword)));
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, getString(R.string.payPassword),
+                hasPayPwd ? "" : getString(R.string.unset)));
         items.add(new IconMenuItem());
-        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, "信用积分", credit+""));
-        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, "注册时间", registerTime));
+        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, getString(R.string.credit), credit+""));
+        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, getString(R.string.registerTime), registerTime));
         adapter.notifyDataSetChanged();
     }
 

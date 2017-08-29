@@ -61,6 +61,6 @@
             android:layout_height="wrap_content"
             android:text="同意"
             android:textColor="@color/white"
-            android:background="@drawable/btn_theme"/>
+            android:background="@drawable/btn_theme_normal"/>
     </RelativeLayout>
 </LinearLayout>

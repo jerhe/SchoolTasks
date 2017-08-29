@@ -1,9 +1,15 @@
 package server.api;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.Uri;
+import android.util.Log;
+
 import com.edu.schooltask.beans.TaskUploadKey;
 import com.edu.schooltask.beans.UploadKey;
-import com.edu.schooltask.beans.UserConfig;
 import com.edu.schooltask.beans.UserInfoWithToken;
+import com.edu.schooltask.event.UnloginEvent;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.qiniu.android.common.Zone;
@@ -11,59 +17,64 @@ import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.qiniu.android.storage.UploadOptions;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.net.URI;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
-import server.api.base.BaseTokenCallBack;
-import server.api.friend.AgreeRequestEvent;
-import server.api.friend.FriendRequestEvent;
-import server.api.friend.GetFriendListEvent;
-import server.api.friend.GetRequestListEvent;
-import server.api.friend.RejectRequestEvent;
-import server.api.qiniu.GetBGUploadKeyEvent;
-import server.api.qiniu.GetHeadUploadKeyEvent;
-import server.api.qiniu.GetTaskUploadKeyEvent;
-import server.api.qiniu.UploadBGEvent;
-import server.api.qiniu.UploadHeadEvent;
-import server.api.qiniu.UploadTaskImageEvent;
-import server.api.rong.GetTokenEvent;
-import server.api.school.GetSchoolEvent;
-import server.api.task.accept.AcceptTaskEvent;
-import server.api.task.comment.GetTaskCommentListEvent;
-import server.api.task.comment.GetTaskReplyListEvent;
-import server.api.task.comment.NewTaskCommentEvent;
-import server.api.task.get.GetSchoolTaskEvent;
-import server.api.task.get.GetTaskInfoEvent;
-import server.api.task.get.GetTaskListEvent;
-import server.api.task.order.ChangeTaskOrderStateEvent;
-import server.api.task.order.GetTaskOrderInfoEvent;
-import server.api.task.order.GetTaskOrderListEvent;
-import server.api.task.release.ReleaseTaskEvent;
-import server.api.user.GetPersonalCenterInfoEvent;
-import server.api.user.GetUserConfigEvent;
-import server.api.user.GetUserHomePageInfoEvent;
-import server.api.user.GetUserInfoEvent;
-import server.api.user.UpdateLoginPwdEvent;
-import server.api.user.UpdateUserInfoEvent;
-import server.api.user.account.GetDetailEvent;
-import server.api.user.account.GetMoneyEvent;
-import server.api.user.account.RechargeEvent;
-import server.api.user.account.SetPayPwdEvent;
-import server.api.user.account.UpdatePaypwdEvent;
-import server.api.user.login.LoginEvent;
-import server.api.user.login.UnloginEvent;
-import server.api.user.register.CheckCodeEvent;
-import server.api.user.register.GetCodeEvent;
-import server.api.user.register.RegisterEvent;
-import server.api.voucher.GetAvailableVouchersEvent;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.UserInfo;
+import okhttp3.Call;
+import okhttp3.Response;
+import server.api.event.friend.AgreeRequestEvent;
+import server.api.event.friend.FriendRequestEvent;
+import server.api.event.friend.GetFriendListEvent;
+import server.api.event.friend.GetRequestListEvent;
+import server.api.event.friend.RejectRequestEvent;
+import server.api.event.qiniu.GetBGUploadKeyEvent;
+import server.api.event.qiniu.GetHeadUploadKeyEvent;
+import server.api.event.qiniu.GetTaskUploadKeyEvent;
+import server.api.event.qiniu.UploadBGEvent;
+import server.api.event.qiniu.UploadHeadEvent;
+import server.api.event.qiniu.UploadTaskImageEvent;
+import server.api.event.rong.GetTokenEvent;
+import server.api.event.school.GetSchoolEvent;
+import server.api.event.task.AcceptTaskEvent;
+import server.api.event.task.GetSchoolTaskEvent;
+import server.api.event.task.GetTaskInfoEvent;
+import server.api.event.task.GetTaskListEvent;
+import server.api.event.task.ReleaseTaskEvent;
+import server.api.event.task.comment.GetTaskCommentListEvent;
+import server.api.event.task.comment.GetTaskReplyListEvent;
+import server.api.event.task.comment.NewTaskCommentEvent;
+import server.api.event.task.order.ChangeTaskOrderStateEvent;
+import server.api.event.task.order.GetTaskOrderInfoEvent;
+import server.api.event.task.order.GetTaskOrderListEvent;
+import server.api.event.user.GetLoginCodeEvent;
+import server.api.event.user.GetPersonalCenterInfoEvent;
+import server.api.event.user.GetUserHomePageInfoEvent;
+import server.api.event.user.GetUserInfoEvent;
+import server.api.event.user.LoginEvent;
+import server.api.event.user.RefreshHeadBGEvent;
+import server.api.event.user.UpdateLoginPwdEvent;
+import server.api.event.user.UpdateUserInfoEvent;
+import server.api.event.user.account.GetDetailEvent;
+import server.api.event.user.account.GetMoneyEvent;
+import server.api.event.user.account.RechargeEvent;
+import server.api.event.user.account.SetPayPwdEvent;
+import server.api.event.user.account.UpdatePaypwdEvent;
+import server.api.event.user.register.CheckRegisterCodeEvent;
+import server.api.event.user.register.GetRegisterCodeEvent;
+import server.api.event.user.register.RegisterEvent;
+import server.api.event.voucher.GetAvailableVouchersEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/17.
@@ -73,10 +84,12 @@ public class SchoolTask {
     private final static String SERVER = "http://192.168.191.1:8080/SchoolTask/";
 
     //VerifyCode
-    private final static String GET_CODE = SERVER + "verifyCode/getCode";
-    private final static String CHECK_CODE = SERVER + "verifyCode/checkCode";
+    private final static String GET_REGISTER_CODE = SERVER + "verifyCode/getRegisterCode";
+    private final static String GET_LOGIN_CODE = SERVER + "verifyCode/getLoginCode";
 
     //User
+    private final static String CHECK_REGISTER_CODE = SERVER + "user/checkRegisterCode";
+    private final static String CHECK_LOGIN_CODE = SERVER + "user/checkLoginCode";
     private final static String REGISTER = SERVER + "user/register";
     private final static String LOGIN = SERVER + "user/login";
     private final static String GET_USER_INFO = SERVER + "user/getUserInfo";
@@ -84,8 +97,8 @@ public class SchoolTask {
     private final static String UPDATE_LOGIN_PWD = SERVER + "user/updateLoginPwd";
     private final static String GET_USER_HOME_PAGE_INFO = SERVER + "user/getUserHomePageInfo";
     private final static String GET_PERSONAL_CENTER_INFO = SERVER + "user/getPersonalCenterInfo";
-    private final static String GET_USER_CONFIG = SERVER + "user/getUserConfig";
-    private final static String UPDATE_USER_CONFIG = SERVER + "user/updateUserConfig";
+    private final static String REFRESH_HEAD = SERVER + "user/refreshHead";
+    private final static String REFRESH_BG = SERVER + "user/refreshBg";
 
     //Account
     private final static String GET_MONEY = SERVER + "account/getMoney";
@@ -114,7 +127,6 @@ public class SchoolTask {
     private final static String GET_TASK_UPLOAD_KEY = SERVER + "qiniu/getTaskUploadKey";
     private final static String GET_HEAD_UPLOAD_KEY = SERVER + "qiniu/getHeadUploadKey";
     private final static String GET_BG_UPLOAD_KEY = SERVER + "qiniu/getBGUploadKey";
-    private final static String QINIU_REFRESH = SERVER + "qiniu/refresh";
 
     //Voucher
     private final static String GET_AVAILABLE_VOUCHERS = SERVER + "voucher/getAvailableVoucherList";
@@ -338,14 +350,6 @@ public class SchoolTask {
     }
 
 
-    //获取用户配置
-    public static void getUserConfig(){
-        tokenPost.newPost()
-                .url(GET_USER_CONFIG)
-                .event(new GetUserConfigEvent())
-                .enqueue();
-    }
-
     //充值
     public static void recharge(String orderId, BigDecimal money, String type){
         tokenPost.newPost()
@@ -416,6 +420,23 @@ public class SchoolTask {
                 .enqueue();
     }
 
+    public static void refreshHead(String head){
+        tokenPost.newPost()
+                .url(REFRESH_HEAD)
+                .addParam("head", head)
+                .event(new RefreshHeadBGEvent())
+                .enqueue();
+    }
+
+    public static void refreshBg(String bg){
+        tokenPost.newPost()
+                .url(REFRESH_BG)
+                .addParam("bg", bg)
+                .event(new RefreshHeadBGEvent())
+                .enqueue();
+    }
+
+
     //用于判断用户已登录
     private static UserInfoWithToken getUser(){
         UserInfoWithToken user = UserUtil.getLoginUser();
@@ -427,59 +448,52 @@ public class SchoolTask {
     }
 
     /**
-     * ---------------------------无需返回----------------------------------
-     */
-
-    //更新用户配置
-    public static void updateUserConfig(UserConfig userConfig){
-        UserInfoWithToken user = getUser();
-        if(user != null){
-            OkHttpUtils.post()
-                    .url(UPDATE_USER_CONFIG)
-                    .addHeader("token", user.getToken())
-                    .addParams("message", userConfig.getMessage()+"")
-                    .addParams("fans", userConfig.isFans()+"")
-                    .addParams("comment", userConfig.isComment()+"")
-                    .addParams("privateMessage", userConfig.isPrivateMessage()+"")
-                    .build()
-                    .execute(null);
-        }
-    }
-
-    /**
      * ----------------------------QINIU----------------------------------
      */
     //上传头像
-    public static void uploadHead(File head, UploadKey uploadKey){
+    public static void uploadHead(Context context, File head, UploadKey uploadKey){
         final UserInfoWithToken user = getUser();
-        uploadManager.put(head, "head/" + user.getUserId() +".png", uploadKey.getKey(), new UpCompletionHandler() {
+        final String headPath = uploadKey.getPath();
+        final ProgressDialog progressDialog = ProgressDialog.show(context, null, "上传中...", true, false);
+        uploadManager.put(head, headPath, uploadKey.getKey(), new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
+                if(info.isOK()){
+                    user.setHead(TASK_IMAGE + headPath);
+                    user.updateAll();
+                    refreshHead(TASK_IMAGE + headPath); //刷新服务端头像
+                    UserInfo userInfo = UserUtil.toRongUserInfo(user);  //刷新融云本地缓存
+                    RongIM.getInstance().refreshUserInfoCache(userInfo);
+                    RongIM.getInstance().setCurrentUserInfo(userInfo);  //修改当前用户头像
+                }
+                else{
+                    Log.e("uploadHead", info.error);
+                }
+                progressDialog.dismiss();
                 EventBus.getDefault().post(new UploadHeadEvent(info.isOK()));
-                OkHttpUtils.post()
-                        .url(QINIU_REFRESH)
-                        .addParams("path","head/"+user.getUserId() +".png")
-                        .build()
-                        .execute(null);
             }
         }, null);
     }
 
     //上传背景
-    public static void uploadBG(File bg, UploadKey uploadKey){
+    public static void uploadBG(Context context, File bg, UploadKey uploadKey){
         final UserInfoWithToken user = getUser();
-        uploadManager.put(bg, "bg/" + user.getUserId() +".png", uploadKey.getKey(), new UpCompletionHandler() {
+        final String bgPath = uploadKey.getPath();
+        final ProgressDialog progressDialog = ProgressDialog.show(context, null, "上传中...", true, false);
+        uploadManager.put(bg, bgPath, uploadKey.getKey(), new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
+                if(info.isOK()){
+                    user.setBg(TASK_IMAGE + bgPath);
+                    user.updateAll();
+                    refreshBg(TASK_IMAGE + bgPath); //刷新服务端背景
+                }
+                progressDialog.dismiss();
                 EventBus.getDefault().post(new UploadBGEvent(info.isOK()));
-                OkHttpUtils.post()
-                        .url(QINIU_REFRESH)
-                        .addParams("path","bg/"+user.getUserId() +".png")
-                        .build()
-                        .execute(null);
             }
         }, null);
     }
+
 
     /**
      * ----------------------------不需要Token----------------------------------
@@ -496,22 +510,40 @@ public class SchoolTask {
     }
 
     //注册时获取验证码
-    public static void getCode(String userId){
+    public static void getRegisterCode(String userId){
         Post.newPost()
-                .url(GET_CODE)
+                .url(GET_REGISTER_CODE)
                 .addParam("id", userId)
-                .event(new GetCodeEvent())
+                .event(new GetRegisterCodeEvent())
+                .post();
+    }
+
+    //登录时获取验证码
+    public static void getLoginCode(String userId){
+        Post.newPost()
+                .url(GET_LOGIN_CODE)
+                .addParam("id", userId)
+                .event(new GetLoginCodeEvent())
                 .post();
     }
 
     //验证注册验证码
-    public static void checkCode(String userId, String code){
+    public static void checkRegisterCode(String userId, String code){
         Post.newPost()
-                .url(CHECK_CODE)
+                .url(CHECK_REGISTER_CODE)
                 .addParam("id", userId)
                 .addParam("code", code)
-                .addParam("type", 0 + "")
-                .event(new CheckCodeEvent())
+                .event(new CheckRegisterCodeEvent())
+                .post();
+    }
+
+    //验证注册验证码
+    public static void checkLoginCode(String userId, String code){
+        Post.newPost()
+                .url(CHECK_LOGIN_CODE)
+                .addParam("id", userId)
+                .addParam("code", code)
+                .event(new LoginEvent())
                 .post();
     }
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -15,7 +14,7 @@ import com.edu.schooltask.R;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.ui.activity.UserActivity;
 import com.edu.schooltask.utils.DateUtil;
-import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.utils.UserUtil;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,7 +47,7 @@ public class UserItemReleaseView extends RelativeLayout {
     //设置所有信息
     public void setAll(final UserInfo userInfo, String releaseTime, String school,
                        String des, boolean event){
-        setHead(userInfo.getUserId());
+        setHead(userInfo);
         setName(userInfo.getName());
         setSex(userInfo.getSex());
         setReleaseTime(releaseTime);
@@ -68,8 +67,8 @@ public class UserItemReleaseView extends RelativeLayout {
     }
 
     //设置头像
-    public void setHead(String userId){
-        GlideUtil.setHead(getContext(), userId, headView);
+    public void setHead(UserInfo userInfo){
+        UserUtil.setHead(getContext(), userInfo, headView);
     }
 
     //设置昵称

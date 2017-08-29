@@ -3,18 +3,18 @@ package com.edu.schooltask.ui.activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.ViewPagerAdapter;
-import com.edu.schooltask.beans.UserConfig;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.event.LoginSuccessEvent;
 import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.event.MessageCountEvent;
+import com.edu.schooltask.event.TokenErrorEvent;
+import com.edu.schooltask.event.UnloginEvent;
 import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.ui.fragment.main.HomeFragment;
 import com.edu.schooltask.ui.fragment.main.MessageFragment;
@@ -31,8 +31,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.RunnableScheduledFuture;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,13 +39,10 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.UserInfo;
 import server.api.SchoolTask;
 import server.api.base.BaseTokenCallBack;
-import server.api.user.login.UnloginEvent;
-import server.api.rong.GetTokenEvent;
-import server.api.school.GetSchoolEvent;
-import server.api.user.token.RefreshTokenEvent;
-import server.api.user.token.TokenErrorEvent;
-import server.api.user.GetUserInfoEvent;
-import server.api.user.GetUserConfigEvent;
+import server.api.event.rong.GetTokenEvent;
+import server.api.event.school.GetSchoolEvent;
+import server.api.event.user.GetUserInfoEvent;
+import server.api.event.user.RefreshTokenEvent;
 
 public class MainActivity extends BaseActivity {
     List<Fragment> fragments = new ArrayList<>();
@@ -123,23 +118,13 @@ public class MainActivity extends BaseActivity {
     public void onLoginSuccess(LoginSuccessEvent event){
         SchoolTask.rongGetToken();  //获取融云Token
         SchoolTask.getUserInfo(); //获取用户信息
-        SchoolTask.getUserConfig(); //获取用户配置信息
     }
 
-    //事件：获取用户配置信息
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetUserConfig(GetUserConfigEvent event){
-        UserConfig userConfig;
-        if(event.isOk()){   //获取用户配置信息成功
-            userConfig = GsonUtil.toUserConfig(event.getData());
-            mDataCache.saveUserConfig(UserUtil.getLoginUser().getUserId(), userConfig);
-        }
-    }
 
     //事件：用户未登录
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUnlogin(UnloginEvent event){
-        toastShort("请先登录");
+        toastShort(getString(R.string.unlogin_tip));
         openActivity(LoginActivity.class);  //进入登录页
     }
 
@@ -149,7 +134,7 @@ public class MainActivity extends BaseActivity {
         UserUtil.deleteLoginUser();    //删除已存用户
         remainHome();   //关闭主页以外所有活动
         EventBus.getDefault().post(new LogoutEvent());  //post登出事件
-        toastShort("账号异常，请重新登录");
+        toastShort(getString(R.string.user_error));
         openActivity(LoginActivity.class);  //进入登录页
     }
 
@@ -209,8 +194,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onSuccess(String s) {
                 UserInfoWithToken user = UserUtil.getLoginUser();
-                RongIM.getInstance().setCurrentUserInfo(new UserInfo(user.getUserId(), user.getName(),
-                        Uri.parse(SchoolTask.HEAD + user.getUserId() + ".png")));
+                if(user == null) return;
+                RongIM.getInstance().setCurrentUserInfo(UserUtil.toRongUserInfo(user));
                 RongIM.getInstance().setMessageAttachedUserInfo(true);
                 RongIM.getInstance().enableNewComingMessageIcon(true);//显示新消息提醒
                 RongIM.getInstance().enableUnreadMessageIcon(true);//显示未读消息数目

@@ -32,7 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.LoginActivity" android:label="@string/login"/>
         <activity
             android:name=".ui.activity.ReleaseTaskActivity"
             android:label="发布任务"
@@ -84,9 +84,6 @@
             android:name=".ui.activity.AboutActivity"
             android:label="关于" />
         <activity android:name=".ui.activity.UpdatePwdActivity" />
-        <activity
-            android:name=".ui.activity.MessageAndPrivacyActivity"
-            android:label="消息隐私" />
         <activity android:name="cn.bmob.pay.v3.act.PayAct" />
         <activity
             android:name=".ui.activity.VoucherActivity"

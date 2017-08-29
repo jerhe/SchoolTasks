@@ -3,12 +3,12 @@ package com.edu.schooltask.utils;
 import com.edu.schooltask.beans.Detail;
 import com.edu.schooltask.beans.FriendList;
 import com.edu.schooltask.beans.FriendRequest;
+import com.edu.schooltask.beans.MessageConfig;
 import com.edu.schooltask.beans.PersonalCenterInfo;
 import com.edu.schooltask.beans.comment.TaskCommentList;
 import com.edu.schooltask.beans.task.TaskOrderInfo;
 import com.edu.schooltask.beans.TaskUploadKey;
 import com.edu.schooltask.beans.UploadKey;
-import com.edu.schooltask.beans.UserConfig;
 import com.edu.schooltask.beans.UserHomePageInfo;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.beans.UserInfo;
@@ -31,8 +31,8 @@ public class GsonUtil {
         return new Gson().fromJson(new Gson().toJson(data), new TypeToken<List<Detail>>() {}.getType());
     }
 
-    public static UserConfig toUserConfig(Object data){
-        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<UserConfig>() {}.getType());
+    public static MessageConfig toUserConfig(Object data){
+        return new Gson().fromJson(new Gson().toJson(data), new TypeToken<MessageConfig>() {}.getType());
     }
 
     public static List<String> toStringList(Object data){

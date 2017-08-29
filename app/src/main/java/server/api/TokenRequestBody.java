@@ -3,6 +3,7 @@ package server.api;
 import java.util.HashMap;
 import java.util.Map;
 
+import server.api.base.BaseTokenCallBack;
 import server.api.base.BaseTokenEvent;
 
 /**
@@ -13,35 +14,23 @@ import server.api.base.BaseTokenEvent;
 public class TokenRequestBody {
     private String url;
     private Map<String,String> params;
-    private BaseTokenEvent event;
+    private BaseTokenCallBack callBack;
     private TokenPost tokenPost;
 
     public TokenRequestBody(TokenPost tokenPost){
         this.tokenPost = tokenPost;
     }
 
-    public String getUrl() {
-        return url;
+    public BaseTokenCallBack getCallBack(){
+        return callBack;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Map<String, String> getParams() {
+    public Map getParams(){
         return params;
     }
 
-    public void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-
-    public BaseTokenEvent getEvent() {
-        return event;
-    }
-
-    public void setEvent(BaseTokenEvent event) {
-        this.event = event;
+    public String getUrl(){
+        return url;
     }
 
     public TokenRequestBody url(String url) {
@@ -56,7 +45,7 @@ public class TokenRequestBody {
     }
 
     public TokenRequestBody event(BaseTokenEvent event) {
-        this.event = event;
+        callBack = new BaseTokenCallBack(event);
         return this;
     }
 

@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,10 +57,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.zelory.compressor.Compressor;
 import server.api.SchoolTask;
-import server.api.qiniu.GetTaskUploadKeyEvent;
-import server.api.qiniu.UploadTaskImageEvent;
-import server.api.task.release.ReleaseTaskEvent;
-import server.api.voucher.GetAvailableVouchersEvent;
+import server.api.event.qiniu.GetTaskUploadKeyEvent;
+import server.api.event.qiniu.UploadTaskImageEvent;
+import server.api.event.task.ReleaseTaskEvent;
+import server.api.event.voucher.GetAvailableVouchersEvent;
 
 public class ReleaseTaskActivity extends BaseActivity {
     private static final int SELECT_IMAGE_CODE = 0;
@@ -69,12 +68,11 @@ public class ReleaseTaskActivity extends BaseActivity {
     @BindView(R.id.rt_school) InputTextView schoolText;
     @BindView(R.id.rt_des) SelectText desText;
     @BindView(R.id.rt_cost) InputTextView costText;
-    @BindView(R.id.rt_content)
-    TaskContentView taskContentViewText;
+    @BindView(R.id.rt_content) TaskContentView taskContentViewText;
     @BindView(R.id.rt_limit_time) InputTextView limitTimeText;
     @BindView(R.id.rt_irv) ImageRecyclerView imageRecyclerView;
-    @BindView(R.id.rt_voucher_btn) Button voucherBtn;
-    @BindView(R.id.rt_release_btn) Button releaseBtn;
+    @BindView(R.id.rt_voucher_btn) TextView voucherBtn;
+    @BindView(R.id.rt_release_btn) TextView releaseBtn;
     @BindView(R.id.rt_pay_text) TextView payText;
     @BindView(R.id.rt_vrv) VoucherRecyclerView voucherRecyclerView;
     @BindView(R.id.rt_shadow) View shadowView;
@@ -152,7 +150,7 @@ public class ReleaseTaskActivity extends BaseActivity {
         schoolText.setText(UserUtil.getLoginUser().getSchool());    //默认学校
         schoolText.getInputText().addTextChangedListener(   //学校自动匹配
                 new SchoolAutoComplement(schoolText.getInputText(), mDataCache.getSchool()));
-        desText.setItems("请选择任务类型","跑腿","学习","生活","娱乐","其他");
+        desText.setItems(getResources().getStringArray(R.array.taskDescriptionOption));
         costText.requestFocus();   //设置标题为默认焦点
         //需支付金额
         costText.getInputText().addTextChangedListener(new TextWatcher() {
@@ -200,7 +198,7 @@ public class ReleaseTaskActivity extends BaseActivity {
         if (payDialog != null){
             if(payDialog.isShowing()){
                 payDialog.dismiss();
-                EventBus.getDefault().post(new ReleaseTaskEvent("取消支付"));
+                EventBus.getDefault().post(new ReleaseTaskEvent(getString(R.string.payCancel)));
                 return;
             }
             else finish();
@@ -236,7 +234,7 @@ public class ReleaseTaskActivity extends BaseActivity {
                         .setScale(2, BigDecimal.ROUND_HALF_DOWN);
                 if(voucher != null) money = money.subtract(voucher.getMoney());
                 if(money.compareTo(new BigDecimal(0)) == -1) money = new BigDecimal(0);
-                payText.setText("¥" + money);
+                payText.setText(getString(R.string.moneySign, money));
             }
         }
     }
@@ -245,7 +243,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     public void onReleaseTask(ReleaseTaskEvent event){
         clear();
         if(event.isOk()){
-            toastShort("发布成功");
+            toastShort(getString(R.string.releaseSuccess));
             finish();
         }
         else{
@@ -267,44 +265,44 @@ public class ReleaseTaskActivity extends BaseActivity {
         limitTime = limitTimeText.getText();
 
         if(school.length() == 0){
-            toastShort("请输入学校");
+            toastShort(getString(R.string.inputTip, schoolText.getName()));
             return;
         }
 
-        if("请选择任务类型".equals(description)){
-            toastShort("请选择任务类型");
+        if(desText.getSelectedIndex() == 0){
+            toastShort(description);
             return;
         }
 
         if(content.length() == 0){
-            toastShort("请输入内容");
+            toastShort(getString(R.string.inputTip, "内容"));
             return;
         }
         if(cost.length() == 0){
-            toastShort("请输入金额");
+            toastShort(getString(R.string.inputTip, costText.getName()));
             return;
         }
         if(limitTime.length() == 0){
-            toastShort("请输入时限");
+            toastShort(getString(R.string.inputTip, limitTimeText.getName()));
             return;
         }
         if(!StringUtil.isMoney(cost)){
-            toastShort("金额错误，请重新输入");
+            toastShort(getString(R.string.inputError, costText.getName()));
             return;
         }
         taskCost = new BigDecimal(cost);
         if(taskCost.compareTo(new BigDecimal(1)) == -1){
-            toastShort("最小金额为1元，请重新输入");
+            toastShort(getString(R.string.inputMoneyMin));
             costText.clear();
             return;
         }
         if(taskCost.compareTo(new BigDecimal(10000)) == 1){
-            toastShort("最大金额为10000元，请重新输入");
+            toastShort(getString(R.string.inputMoneyMax));
             return;
         }
         time = Integer.parseInt(limitTime);
         if(time == 0 || time >= 7 * 24){
-            toastShort("时限错误,请重新输入");
+            toastShort(getString(R.string.inputError, limitTimeText.getName()));
             limitTimeText.clear();
             return;
         }
@@ -329,7 +327,8 @@ public class ReleaseTaskActivity extends BaseActivity {
                 @Override
                 public void onPay(String pwd) {
                     KeyBoardUtil.hideKeyBoard(ReleaseTaskActivity.this);
-                    progressDialog = ProgressDialog.show(ReleaseTaskActivity.this, "", "发布中...", true, false);
+                    progressDialog = ProgressDialog.show(ReleaseTaskActivity.this, "",
+                            getString(R.string.releasing), true, false);
                     payPwd = EncriptUtil.getMD5(pwd);
                     if(tempFiles.size() == 0){ //无图片发布
                         SchoolTask.releaseTask("", school, description, content, money, taskCost, time, payPwd,
@@ -347,19 +346,19 @@ public class ReleaseTaskActivity extends BaseActivity {
     public void multiSelect() {
         int imageCount = 9 - imageRecyclerView.get().size() + 1;
         if(imageCount == 0){
-            toastShort("最多添加9张图片");
+            toastShort(getString(R.string.imageMax));
             return;
         }
         config = new ImgSelConfig.Builder(this, loader)
                 .multiSelect(true)//是否多选, 默认true
                 .rememberSelected(false)//是否记住上次选中记录, 仅当multiSelect为true的时候配置，默认为true
                 .btnBgColor(Color.WHITE)//确定按钮背景色
-                .btnTextColor(Color.parseColor("#1B9DFF"))//确定按钮文字颜色
-                .statusBarColor(Color.parseColor("#000000"))//使用沉浸式状态栏
+                .btnTextColor(getResources().getColor(R.color.colorPrimary))//确定按钮文字颜色
+                .statusBarColor(Color.BLACK)//使用沉浸式状态栏
                 .backResId(R.drawable.ic_action_back)//返回图标ResId
-                .title("选择图片")//标题
+                .title(getString(R.string.imageSelectTitle))//标题
                 .titleColor(Color.WHITE)//标题文字颜色
-                .titleBgColor(Color.parseColor("#1B9DFF"))//TitleBar背景色
+                .titleBgColor(getResources().getColor(R.color.colorPrimary))//TitleBar背景色
                 .needCamera(true)//第一个是否显示相机，默认true
                 .maxNum(imageCount)//最大选择图片数量，默认9
                 .build();
@@ -395,7 +394,7 @@ public class ReleaseTaskActivity extends BaseActivity {
                 SchoolTask.releaseTask(orderId, school, description, content, money, taskCost, time,
                         payPwd, voucher == null ? 0 : voucher.getId(), uploadNum);
             else
-                toastShort("发布失败");
+                toastShort(getString(R.string.releaseFailed));
             tempFiles.clear();
         }
     }
@@ -407,7 +406,7 @@ public class ReleaseTaskActivity extends BaseActivity {
             voucherRecyclerView.add(vouchers);
             if(vouchers.size() != 0){
                 TextView textView = new TextView(this);
-                textView.setText("不使用代金券");
+                textView.setText(getString(R.string.withoutVoucher));
                 textView.setPadding(DensityUtil.dipToPx(this, 30), DensityUtil.dipToPx(this, 20),
                         DensityUtil.dipToPx(this, 10), DensityUtil.dipToPx(this, 10));
                 textView.setOnClickListener(new View.OnClickListener() {
@@ -415,7 +414,7 @@ public class ReleaseTaskActivity extends BaseActivity {
                     public void onClick(View v) {
                         hideVoucherView();
                         voucher = null;
-                        voucherBtn.setText("使用代金券");
+                        voucherBtn.setText(getString(R.string.useVoucher));
                         updatePayText();
                     }
                 });

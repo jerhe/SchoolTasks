@@ -1,17 +1,14 @@
 package com.edu.schooltask.ui.view.useritem;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.UserInfo;
-import com.edu.schooltask.ui.activity.UserActivity;
-import com.edu.schooltask.utils.GlideUtil;
+import com.edu.schooltask.utils.UserUtil;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,12 +38,12 @@ public class UserItemView extends RelativeLayout {
         signText.setText(sign);
     }
 
-    public void setHead(String userId){
-        GlideUtil.setHead(getContext(), userId, headView);
+    public void setHead(UserInfo userInfo){
+        UserUtil.setHead(getContext(), userInfo, headView);
     }
 
-    public void setAll(final UserInfo user){
-        setHead(user.getUserId());
+    public void setAll(UserInfo user){
+        setHead(user);
         setName(user.getName());
         setSign(user.getSign());
     }

@@ -34,8 +34,7 @@ public class CommentAdapter extends BaseQuickAdapter<TaskComment, BaseViewHolder
         //用户信息
         UserItemCommentView userView = helper.getView(R.id.tc_uicv);
         UserInfo userInfo = taskComment.getUserInfo();
-        userView.setAll(userInfo.getUserId(), userInfo.getName(), userInfo.getSex(),
-                taskComment.getCreateTime(), userInfo.getSchool());
+        userView.setAll(userInfo, taskComment.getCreateTime(), userInfo.getSchool());
         //评论信息
         TextView textView = helper.getView(R.id.tc_comment);
         textView.setMovementMethod(LinkMovementMethod.getInstance());   //设置可点击
