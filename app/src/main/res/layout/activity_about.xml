@@ -5,52 +5,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.AboutActivity">
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
-    <com.edu.schooltask.ui.view.MyScrollView
-        android:id="@+id/about_sv"
-        android:layout_below="@id/toolbar"
-        android:fillViewport="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <View
-                android:id="@+id/about_head"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/black">
-            </View>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:id="@+id/about_tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/colorPrimary">
-            </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/about_rv"
-                    android:nestedScrollingEnabled="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/acceptColor">
-                </android.support.v7.widget.RecyclerView>
-            </RelativeLayout>
-
-        </LinearLayout>
-    </com.edu.schooltask.ui.view.MyScrollView>
-    <LinearLayout
-        android:id="@+id/about_tab_layout_2"
-        android:orientation="horizontal"
-        android:layout_below="@id/toolbar"
-        android:layout_height="50dp"
-        android:layout_width="match_parent"
-        android:visibility="gone">
-    </LinearLayout>
+    <include layout="@layout/toolbar"/>
 </RelativeLayout>

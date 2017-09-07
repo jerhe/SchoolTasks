@@ -8,10 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.VoucherActivity">
     <include layout="@layout/toolbar"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
     <com.baoyz.widget.PullRefreshLayout
         android:id="@+id/voucher_prl"
         android:layout_width="match_parent"

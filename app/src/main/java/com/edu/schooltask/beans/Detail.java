@@ -63,4 +63,10 @@ public class Detail {
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Detail)) return false;
+        return ((Detail)obj).getId() == getId();
+    }
 }

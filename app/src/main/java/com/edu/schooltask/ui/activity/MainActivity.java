@@ -6,7 +6,14 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
 import com.edu.schooltask.adapter.ViewPagerAdapter;
 import com.edu.schooltask.beans.UserInfoWithToken;
@@ -21,6 +28,7 @@ import com.edu.schooltask.ui.fragment.main.MessageFragment;
 import com.edu.schooltask.ui.fragment.main.OrderFragment;
 import com.edu.schooltask.ui.fragment.main.UserFragment;
 import com.edu.schooltask.ui.view.BottomTab;
+import com.edu.schooltask.ui.view.ReleaseMenu;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
 
@@ -34,6 +42,7 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.UserInfo;
@@ -53,6 +62,7 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.main_vp) ViewPager viewPager;
     @BindView(R.id.main_bm) BottomTab bottomTab;
+    @BindView(R.id.main_rm) ReleaseMenu releaseMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +121,39 @@ public class MainActivity extends BaseActivity {
         });
         bottomTab.setPagePosition(0);
         bottomTab.setViewPager(viewPager);
+
+        bottomTab.setReleaseListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (releaseMenu.isShown()) {
+                    releaseMenu.hide();
+                }
+                else {
+                    releaseMenu.show();
+                }
+            }
+        });
+        bottomTab.setReleaseLongListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                openActivity(ReleaseTaskActivity.class);
+                return true;
+            }
+        });
+
+        releaseMenu.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                releaseMenu.hide();
+                switch (position){
+                    case 0:
+                        openActivity(ReleaseTaskActivity.class);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     //事件：登录成功

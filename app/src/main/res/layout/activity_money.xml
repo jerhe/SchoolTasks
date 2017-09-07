@@ -4,10 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/toolbar"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
     <TextView
         android:padding="5dp"
         android:text="温馨提示：在您使用转出功能时请务必核对转出账户"

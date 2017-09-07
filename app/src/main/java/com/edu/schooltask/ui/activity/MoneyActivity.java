@@ -87,12 +87,7 @@ public class MoneyActivity extends BaseActivity {
     }
     @OnClick(R.id.money_transfer)
     public void transfer(){
-        new AlertDialog.Builder(this)
-                .setTitle("标题").setMessage("123")
-                .setNegativeButton("确定",null)
-                .setNeutralButton("aa", null)
-                .setPositiveButton("bb", null)
-                .create().show();
+
     }
 
     String orderId;

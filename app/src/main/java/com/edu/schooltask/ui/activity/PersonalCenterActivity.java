@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -33,6 +34,8 @@ public class PersonalCenterActivity extends BaseActivity {
     List<IconMenuItem> items = new ArrayList<>();
     IconMenuAdapter adapter;
 
+    Animation fadeInAnimation;
+
     boolean hasPayPwd;
 
     @Override
@@ -41,6 +44,7 @@ public class PersonalCenterActivity extends BaseActivity {
         setContentView(R.layout.activity_personal_center);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         adapter = new IconMenuAdapter(items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -80,9 +84,9 @@ public class PersonalCenterActivity extends BaseActivity {
     }
 
     private void setData(int credit, String registerTime){
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, getString(R.string.editUserInfo)));
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, getString(R.string.loginPassword)));
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, getString(R.string.payPassword),
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_user_edit, getString(R.string.editUserInfo)));
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_lock, getString(R.string.updateLoginPassword)));
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_lock2, getString(R.string.updatePayPassword),
                 hasPayPwd ? "" : getString(R.string.unset)));
         items.add(new IconMenuItem());
         items.add(new IconMenuItem(IconMenuItem.VALUE, 0, getString(R.string.credit), credit+""));
@@ -97,7 +101,7 @@ public class PersonalCenterActivity extends BaseActivity {
             hasPayPwd = personalCenterInfo.isHasPayPwd();
             setData(personalCenterInfo.getCredit(), personalCenterInfo.getRegisterTime());
             recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+            recyclerView.startAnimation(fadeInAnimation);
         }
         else{
             toastShort(event.getError());

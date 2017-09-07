@@ -3,6 +3,7 @@ package com.edu.schooltask.ui.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,9 +95,18 @@ public class TaskItemView extends LinearLayout{
         }
     }
 
+    public void setLengthLimit(){
+        contentText.setEllipsize(TextUtils.TruncateAt.END);
+        contentText.setMaxLines(5);
+    }
+
     private void openWaitAcceptOrderActivity(String orderId){
         Intent intent = new Intent(getContext(), WaitAcceptOrderActivity.class);
         intent.putExtra("orderId", orderId);
         getContext().startActivity(intent);
+    }
+
+    public String getContent(){
+        return contentText.getText().toString();
     }
 }

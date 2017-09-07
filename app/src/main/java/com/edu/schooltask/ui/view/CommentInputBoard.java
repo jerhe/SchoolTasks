@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.utils.KeyBoardUtil;
@@ -18,7 +19,7 @@ import com.edu.schooltask.utils.KeyBoardUtil;
 
 public class CommentInputBoard extends LinearLayout {
     EditText inputText;
-    Button commentBtn;
+    TextView commentBtn;
     OnBtnClickListener listener;
 
     View oppositeView;
@@ -27,7 +28,7 @@ public class CommentInputBoard extends LinearLayout {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_comment_input_board,this);
         inputText = (EditText) findViewById(R.id.cib_input);
-        commentBtn = (Button) findViewById(R.id.cib_btn);
+        commentBtn = (TextView) findViewById(R.id.cib_btn);
         TypedArray typedArray = context.obtainStyledAttributes(R.styleable.CommentInputBoard);
         String hint = typedArray.getString(R.styleable.CommentInputBoard_inputHint);
         if(hint != null){
@@ -83,7 +84,7 @@ public class CommentInputBoard extends LinearLayout {
 
     public void hide(){
         if(oppositeView != null) oppositeView.setVisibility(VISIBLE);
-        this.setVisibility(View.INVISIBLE);
+        this.setVisibility(View.GONE);
     }
 
     public void hide(View oppositeView){

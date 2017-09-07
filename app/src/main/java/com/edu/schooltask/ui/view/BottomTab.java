@@ -1,9 +1,6 @@
 package com.edu.schooltask.ui.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -29,11 +26,13 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
     private LinearLayout talkLayout;
     private LinearLayout orderLayout;
     private LinearLayout userLayout;
+    private LinearLayout releaseLayout;
 
     private ImageView homeIcon; //图标
     private ImageView talkIcon;
     private ImageView orderIcon;
     private ImageView userIcon;
+    private ImageView releaseIcon;
 
     int oldPosition = 0;
 
@@ -49,11 +48,13 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
         talkLayout = (LinearLayout) findViewById(R.id.bm_talk);
         orderLayout = (LinearLayout) findViewById(R.id.bm_order);
         userLayout = (LinearLayout) findViewById(R.id.bm_user);
+        releaseLayout = (LinearLayout) findViewById(R.id.bm_release);
 
         homeIcon = (ImageView) findViewById(R.id.bm_home_icon);
         talkIcon = (ImageView) findViewById(R.id.bm_talk_icon);
         orderIcon = (ImageView) findViewById(R.id.bm_order_icon);
         userIcon = (ImageView) findViewById(R.id.bm_user_icon);
+        releaseIcon = (ImageView) findViewById(R.id.bm_release_icon);
 
         homeLayout.setOnClickListener(this);
         talkLayout.setOnClickListener(this);
@@ -78,33 +79,34 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
         switch (lightViewId){
             case R.id.bm_home:
                 onMenuSelectedListener.onMenuSelected(PAGE_HOME);
-                homeIcon.setImageResource(R.drawable.ic_action_home_light);
-                talkIcon.setImageResource(R.drawable.ic_action_talk);
-                orderIcon.setImageResource(R.drawable.ic_action_order);
-                userIcon.setImageResource(R.drawable.ic_action_user);
+                homeIcon.setImageResource(R.drawable.ic_home_light);
+                talkIcon.setImageResource(R.drawable.ic_message);
+                orderIcon.setImageResource(R.drawable.ic_order);
+                userIcon.setImageResource(R.drawable.ic_user);
                 break;
             case R.id.bm_talk:
                 onMenuSelectedListener.onMenuSelected(PAGE_TALK);
-                homeIcon.setImageResource(R.drawable.ic_action_home);
-                talkIcon.setImageResource(R.drawable.ic_action_talk_light);
-                orderIcon.setImageResource(R.drawable.ic_action_order);
-                userIcon.setImageResource(R.drawable.ic_action_user);
+                homeIcon.setImageResource(R.drawable.ic_home);
+                talkIcon.setImageResource(R.drawable.ic_message_light);
+                orderIcon.setImageResource(R.drawable.ic_order);
+                userIcon.setImageResource(R.drawable.ic_user);
                 setMessageTip(false);
                 break;
             case R.id.bm_order:
                 onMenuSelectedListener.onMenuSelected(PAGE_ORDER);
-                homeIcon.setImageResource(R.drawable.ic_action_home);
-                talkIcon.setImageResource(R.drawable.ic_action_talk);
-                orderIcon.setImageResource(R.drawable.ic_action_order_light);
-                userIcon.setImageResource(R.drawable.ic_action_user);
+                homeIcon.setImageResource(R.drawable.ic_home);
+                talkIcon.setImageResource(R.drawable.ic_message);
+                orderIcon.setImageResource(R.drawable.ic_order_light);
+                userIcon.setImageResource(R.drawable.ic_user);
                 break;
             case R.id.bm_user:
                 onMenuSelectedListener.onMenuSelected(PAGE_USER);
-                homeIcon.setImageResource(R.drawable.ic_action_home);
-                talkIcon.setImageResource(R.drawable.ic_action_talk);
-                orderIcon.setImageResource(R.drawable.ic_action_order);
-                userIcon.setImageResource(R.drawable.ic_action_user_light);
+                homeIcon.setImageResource(R.drawable.ic_home);
+                talkIcon.setImageResource(R.drawable.ic_message);
+                orderIcon.setImageResource(R.drawable.ic_order);
+                userIcon.setImageResource(R.drawable.ic_user_light);
                 break;
+
         }
     }
 
@@ -174,4 +176,13 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
             public void onPageScrollStateChanged(int state) {}
         });
     }
+
+    public void setReleaseListener(OnClickListener listener){
+        releaseLayout.setOnClickListener(listener);
+    }
+
+    public void setReleaseLongListener(OnLongClickListener listener){
+        releaseLayout.setOnLongClickListener(listener);
+    }
+
 }

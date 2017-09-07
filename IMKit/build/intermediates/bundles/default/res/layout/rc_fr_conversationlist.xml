@@ -43,23 +43,25 @@
         android:id="@+id/rc_conversation_list_empty_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:alpha="0.7"
         android:gravity="center"
         android:visibility="gone"
         android:orientation="vertical"
-        android:layout_marginTop="127dp">
+        android:layout_centerInParent="true">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/rc_conversation_list_empty"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_empty"/>
 
         <TextView
             android:id="@+id/rc_empty_tv"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#999999"
             android:text="@string/rc_conversation_list_empty_prompt"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
 </RelativeLayout>

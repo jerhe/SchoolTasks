@@ -34,10 +34,6 @@
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
     <fragment
         android:id="@+id/conversation"
         android:name="io.rong.imkit.fragment.ConversationFragment"

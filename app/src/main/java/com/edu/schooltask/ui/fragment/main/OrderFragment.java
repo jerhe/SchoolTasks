@@ -39,21 +39,13 @@ import server.api.event.task.ReleaseTaskEvent;
  */
 
 public class OrderFragment extends BaseFragment {
-    @BindView(R.id.op_filter_btn) TextView filterBtn;
     @BindView(R.id.op_tfv) TaskFilterView taskFilterView;
-    @BindView(R.id.op_shadow) View shadow;
     @BindView(R.id.op_tr) TipRecyclerView tipRecyclerView;
 
     @OnClick(R.id.op_filter_btn)
     public void filterBtn(){
         if(taskFilterView.isShown()) taskFilterView.hide();
         else taskFilterView.show();
-    }
-    @OnClick(R.id.op_shadow)
-    public void shadow(){
-        if(taskFilterView.isShown()){
-            taskFilterView.hide();
-        }
     }
 
     int type = 0;
@@ -70,7 +62,6 @@ public class OrderFragment extends BaseFragment {
     @Override
     protected void init(){
         ButterKnife.bind(this, view);
-        taskFilterView.setShadowView(shadow);
         taskFilterView.addFilter("类型", "所有","发布的任务","接受的任务");
         taskFilterView.addFilter("状态", "所有","待完成订单","完成订单","失效订单");
         taskFilterView.addFilter("排序", "按发布时间排序","按状态排序");
@@ -98,9 +89,7 @@ public class OrderFragment extends BaseFragment {
         taskOrderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(getActivity(), TaskOrderActivity.class);
-                intent.putExtra("orderId", orderList.get(position).getOrderId());
-                startActivity(intent);
+                openTaskOrderActivity(orderList.get(position).getOrderId());
             }
         });
         taskOrderAdapter.setEmptyView(R.layout.empty_order);
@@ -117,6 +106,7 @@ public class OrderFragment extends BaseFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
 
     private void saveFilterSelected(){
         mDataCache.saveData("filterType", type);

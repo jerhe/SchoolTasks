@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edu.schooltask.R;
+import com.edu.schooltask.ui.activity.TaskOrderActivity;
 import com.edu.schooltask.ui.activity.UserActivity;
 import com.edu.schooltask.other.DataCache;
 
@@ -139,6 +140,12 @@ public class BaseActivity extends AppCompatActivity {
 
     public void openActivity(Class cls){
         Intent intent = new Intent(this, cls);
+        startActivity(intent);
+    }
+
+    public void openTaskOrderActivity(String orderId){
+        Intent intent = new Intent(this, TaskOrderActivity.class);
+        intent.putExtra("orderId", orderId);
         startActivity(intent);
     }
 

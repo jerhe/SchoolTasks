@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.edu.schooltask.other.DataCache;
+import com.edu.schooltask.ui.activity.TaskOrderActivity;
 
 /**
  * Created by 夜夜通宵 on 2017/5/9.
@@ -63,6 +64,12 @@ public abstract class BaseFragment extends Fragment {
 
     public void openActivity(Class cls){
         Intent intent = new Intent(getActivity(), cls);
+        startActivity(intent);
+    }
+
+    public void openTaskOrderActivity(String orderId){
+        Intent intent = new Intent(getActivity(), TaskOrderActivity.class);
+        intent.putExtra("orderId", orderId);
         startActivity(intent);
     }
 

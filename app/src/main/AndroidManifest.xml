@@ -32,7 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity" android:label="@string/login"/>
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:label="@string/login"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activity.ReleaseTaskActivity"
             android:label="发布任务"
@@ -64,7 +67,7 @@
             android:label="修改资料" />
         <activity
             android:name=".ui.activity.TaskListActivity"
-            android:label="任务列表" />
+            android:label="任务栏" />
         <activity
             android:name=".ui.activity.DetailActivity"
             android:label="账单" />

@@ -3,8 +3,6 @@ package com.edu.schooltask.ui.fragment.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
-import com.edu.schooltask.adapter.IconMenuAdapter;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.event.LoginSuccessEvent;
@@ -28,15 +25,13 @@ import com.edu.schooltask.ui.activity.SettingActivity;
 import com.edu.schooltask.ui.activity.UserActivity;
 import com.edu.schooltask.ui.activity.VoucherActivity;
 import com.edu.schooltask.ui.base.BaseFragment;
+import com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,12 +47,12 @@ import server.api.event.user.UpdateUserInfoEvent;
  */
 
 public class UserFragment extends BaseFragment{
-    @BindView(R.id.up_rv) RecyclerView userFunctionRecyclerView;
+    @BindView(R.id.up_rv) IconMenuRecyclerView userRecyclerView;
     @BindView(R.id.up_name) TextView nameText;
     @BindView(R.id.up_head) CircleImageView headImage;
     @BindView(R.id.up_bg) ImageView bgImage;
     @BindView(R.id.up_home) TextView homeBtn;
-    @BindView(R.id.up_rv2) RecyclerView systemFunctionRecyclerView;
+    @BindView(R.id.up_rv2) IconMenuRecyclerView systemRecyclerView;
 
     @OnClick(R.id.up_bg)
     public void bgClick(){
@@ -67,9 +62,6 @@ public class UserFragment extends BaseFragment{
         }
     }
 
-    private List<IconMenuItem> userIconMenuItemList = new ArrayList<>();
-    private List<IconMenuItem> systemIconMenuItemList = new ArrayList<>();
-
     public UserFragment(){
         super(R.layout.fragment_user_page);
     }
@@ -77,15 +69,13 @@ public class UserFragment extends BaseFragment{
     @Override
     protected void init() {
         ButterKnife.bind(this, view);
-        IconMenuAdapter userIconMenuAdapter = new IconMenuAdapter(userIconMenuItemList);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, 1);
-        userFunctionRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-        userFunctionRecyclerView.setAdapter(userIconMenuAdapter);
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.personal, getString(R.string.personalCenter)));
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_action_about, "更多"));
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.voucher, getString(R.string.voucher)));
-        userIconMenuItemList.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.money, getString(R.string.money)));
-        userIconMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        userRecyclerView.setLayoutManager(staggeredGridLayoutManager);
+        userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_personal_center, getString(R.string.personalCenter)));
+        userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_about, "更多"));
+        userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_voucher, getString(R.string.voucher)));
+        userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_account, getString(R.string.money)));
+        userRecyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (UserUtil.hasLogin()) {
@@ -109,15 +99,11 @@ public class UserFragment extends BaseFragment{
             }
         });
 
-        IconMenuAdapter systemIconMenuAdapter = new IconMenuAdapter(systemIconMenuItemList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        systemFunctionRecyclerView.setLayoutManager(linearLayoutManager);
-        systemFunctionRecyclerView.setAdapter(systemIconMenuAdapter);
-        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_set, "设置"));
-        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_help, "帮助"));
-        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_share, "分享"));
-        systemIconMenuItemList.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_action_about, "关于"));
-        systemIconMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        systemRecyclerView.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_setting, "设置"));
+        systemRecyclerView.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_help, "帮助"));
+        systemRecyclerView.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_share, "分享"));
+        systemRecyclerView.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_about, "关于"));
+        systemRecyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (position) {

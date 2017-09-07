@@ -13,11 +13,11 @@
     <include layout="@layout/line"/>
     <TextView
         android:id="@+id/dt_content"
-        android:paddingTop="20dp"
+        android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="我是内容"/>
@@ -42,7 +42,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/btn_dialog_left"
             android:layout_height="match_parent"
             android:text="取消"/>
         <View
@@ -54,7 +54,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/btn_dialog_right"
             android:textColor="@color/colorPrimary"
             android:layout_height="match_parent"
             android:text="确定"/>

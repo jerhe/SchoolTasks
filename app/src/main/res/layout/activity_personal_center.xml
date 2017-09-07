@@ -6,11 +6,6 @@
     android:orientation="vertical"
     tools:context=".ui.activity.PersonalCenterActivity">
     <include layout="@layout/toolbar"/>
-    <View
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pc_rv"
         android:fadingEdge="none"

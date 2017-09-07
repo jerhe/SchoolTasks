@@ -48,7 +48,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,14 +96,14 @@ public class UserEditActivity extends BaseActivity{
     }
     @OnClick(R.id.ue_sign)
     public void sign(){
-        DialogUtil.createInputMultilineDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
+        DialogUtil.createInputSignDialog(UserEditActivity.this, new DialogUtil.OnInputClickListener() {
             @Override
             public void onInputClick(DialogPlus dialogPlus, String input) {
                 dialogPlus.dismiss();
                 if(UserUtil.getLoginUser().getSign().equals(input))return;
                 SchoolTask.updateUserInfo(input, 1);
             }
-        }, "修改简介", UserUtil.getLoginUser().getSign()).show();
+        }, UserUtil.getLoginUser().getSign()).show();
     }
     @OnClick(R.id.ue_school)
     public void school(){

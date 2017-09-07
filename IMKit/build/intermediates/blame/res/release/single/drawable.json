@@ -184,6 +184,10 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_read_receipt_request_button.xml"
     },
     {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable\\ic_empty.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\ic_empty.png"
+    },
+    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable\\rc_cs_admin_selector.xml",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_cs_admin_selector.xml"
     },

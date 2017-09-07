@@ -15,7 +15,7 @@
     <ImageView
         android:id="@+id/image_back"
         android:paddingLeft="10dp"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="?attr/actionBarSize"
         android:src="@drawable/ic_action_back"/>
     <ImageView

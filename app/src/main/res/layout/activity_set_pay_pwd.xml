@@ -7,11 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.activity.SetPayPwdActivity">
     <include layout="@layout/toolbar"/>
-    <View
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
     <com.edu.schooltask.ui.view.Inputtextview.InputTextView
         android:id="@+id/spp_pwd"
         android:layout_width="match_parent"

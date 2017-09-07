@@ -11,9 +11,10 @@ public class IconMenuItem implements MultiItemEntity{
     public static int EMPTY = 0;
     public static int HORIZONTAL = 1;
     public static int VERTICAL = 2;
-    public static int SWITCH = 3;
-    public static int VALUE = 4;
-    public static int TITLE = 5;
+    public static int VERTICAL_LARGE = 3;
+    public static int SWITCH = 4;
+    public static int VALUE = 5;
+    public static int TITLE = 6;
 
     private int itemType;
     private int resId;
@@ -21,6 +22,7 @@ public class IconMenuItem implements MultiItemEntity{
     private String hint;
     private String value;
     private boolean checked;
+    private int border;
 
     //空项，作为分割条
     public IconMenuItem(){
@@ -48,6 +50,13 @@ public class IconMenuItem implements MultiItemEntity{
         this.hint = hint;
     }
 
+    //竖直 Border
+    public IconMenuItem(int itemType, int resId, int border, String name){
+        this.itemType = itemType;
+        this.resId = resId;
+        this.border = border;
+        this.name = name;
+    }
 
 
     public String getName() {
@@ -88,6 +97,14 @@ public class IconMenuItem implements MultiItemEntity{
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public int getBorder() {
+        return border;
+    }
+
+    public void setBorder(int border) {
+        this.border = border;
     }
 
     @Override

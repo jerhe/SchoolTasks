@@ -2,9 +2,15 @@ package com.edu.schooltask.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import server.api.SchoolTask;
+import server.api.event.task.UpdateTaskInfoEvent;
 import server.api.event.task.comment.GetTaskReplyListEvent;
 import server.api.event.task.comment.GetTaskCommentListEvent;
 import server.api.event.task.comment.NewTaskCommentEvent;
@@ -55,12 +62,12 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.order_tiv) TaskItemView taskItemView;
     @BindView(R.id.order_bottom) RelativeLayout bottomLayout;
     @BindView(R.id.order_btn_layout) RelativeLayout btnLayout;
-    @BindView(R.id.order_comment_btn) Button commentBtn;
-    @BindView(R.id.order_confirm_btn) Button confirmBtn;
-    @BindView(R.id.order_finish_btn) Button finishBtn;
-    @BindView(R.id.order_overtime_btn) Button overtimeBtn;
-    @BindView(R.id.order_cancel_btn) Button cancelBtn;
-    @BindView(R.id.order_abandon_btn) Button abandonBtn;
+    @BindView(R.id.order_comment_btn) ImageView commentBtn;
+    @BindView(R.id.order_confirm_btn) TextView confirmBtn;
+    @BindView(R.id.order_finish_btn) TextView finishBtn;
+    @BindView(R.id.order_overtime_btn) TextView overtimeBtn;
+    @BindView(R.id.order_cancel_btn) TextView cancelBtn;
+    @BindView(R.id.order_abandon_btn) TextView abandonBtn;
     @BindView(R.id.order_cib) CommentInputBoard commentInputBoard;
     @BindView(R.id.order_osrv) OrderStateRecyclerView orderStateRecyclerView;
     @BindView(R.id.order_crv) CommentRecyclerView commentRecyclerView;
@@ -73,8 +80,10 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     }
 
     private String orderId;
-
     UserInfoWithToken me;
+    Animation fadeInAnimation;
+    MenuItem editMenu;
+    DialogPlus editDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +97,36 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         orderStateRecyclerView.refresh();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.task_order, menu);
+        editMenu = menu.getItem(0);
+        editMenu.setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        editDialog = DialogUtil.createTaskContentDialog(this, new DialogUtil.OnInputClickListener() {
+            @Override
+            public void onInputClick(DialogPlus dialogPlus, String input) {
+                if(input.length() == 0) {
+                    toastShort("任务内容不能为空");
+                    return;
+                }
+                if(taskItemView.getContent().equals(input)) {
+                    dialogPlus.dismiss();
+                    return;
+                }
+                SchoolTask.updateTaskInfo(orderId, input);
+            }
+        }, taskItemView.getContent());
+        editDialog.show();
+        return true;
+    }
+
     private void initView(){
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         me = UserUtil.getLoginUser();
         //状态列表初始化
         orderStateRecyclerView.setNestedScrollingEnabled(false);
@@ -179,9 +217,11 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
             //接单人信息
             UserInfo acceptUser = taskOrderInfo.getAcceptUserInfo();
             orderStateRecyclerView.add(new OrderStateItem(true, getString(R.string.release), taskOrderInfo.getReleaseTime()));
+            if (state == 0) editMenu.setVisible(true);
+            else editMenu.setVisible(false);
             if(state < 3){
                 bottomLayout.setVisibility(View.VISIBLE);
-                bottomLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+                bottomLayout.startAnimation(fadeInAnimation);
             }
             else {
                 bottomLayout.setVisibility(View.GONE);
@@ -317,6 +357,18 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateTaskInfo(UpdateTaskInfoEvent event){
+        if (event.isOk()){
+            if(editDialog.isShowing()) editDialog.dismiss();
+            orderStateRecyclerView.refresh();
+            toastShort("修改成功");
+        }
+        else{
+            toastShort(event.getError());
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -324,53 +376,53 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.order_cancel_btn:
                 confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
-                        getString(R.string.taskCancelConfirm), getString(R.string.taskLostTip), getString(R.string.confirm),
+                        getString(R.string.taskCancelConfirm), getString(R.string.taskLostTip),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 5);
                             }
-                        }, getString(R.string.back));
+                        });
                 break;
             case R.id.order_overtime_btn:
                 confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
-                        getString(R.string.taskOvertimeConfirm), getString(R.string.taskLostTip), getString(R.string.confirm),
+                        getString(R.string.taskOvertimeConfirm), getString(R.string.taskLostTip),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 7);
                             }
-                        }, getString(R.string.back));
+                        });
                 break;
             case R.id.order_confirm_btn:
                 confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
-                        getString(R.string.taskFinishedConfirm), getString(R.string.taskFinishedTip), getString(R.string.confirm),
+                        getString(R.string.taskFinishedConfirm), getString(R.string.taskFinishedTip),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 3);
                             }
-                        }, getString(R.string.back));
+                        });
                 break;
             case R.id.order_finish_btn:
                 confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
-                        getString(R.string.taskFinishedConfirm), "", getString(R.string.confirm),
+                        getString(R.string.taskFinishedConfirm), "",
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 2);
                             }
-                        }, getString(R.string.back));
+                        });
                 break;
             case R.id.order_abandon_btn:
                 confirmDialog = DialogUtil.createTextDialog(this, getString(R.string.tip),
-                        getString(R.string.taskAbandonConfirm), getString(R.string.taskAbandonTip), getString(R.string.confirm),
+                        getString(R.string.taskAbandonConfirm), getString(R.string.taskAbandonTip),
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.changeTaskOrderState(orderId, 6);
                             }
-                        }, getString(R.string.back));
+                        });
                 break;
         }
         if( confirmDialog != null) confirmDialog.show();

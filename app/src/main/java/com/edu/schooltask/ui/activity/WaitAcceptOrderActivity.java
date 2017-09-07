@@ -3,6 +3,7 @@ package com.edu.schooltask.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,7 +47,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     @BindView(R.id.wao_crv) CommentRecyclerView commentRecyclerView;
     @BindView(R.id.wao_comment_reply_view) CommentReplyView commentReplyView;
     @BindView(R.id.wao_accept_btn) TextView acceptBtn;
-    @BindView(R.id.wao_comment_btn) TextView commentBtn;
+    @BindView(R.id.wao_comment_btn) ImageView commentBtn;
     @BindView(R.id.wao_btn_layout) RelativeLayout btnLayout;
     @BindView(R.id.wao_cib) CommentInputBoard inputBoard;
 
@@ -56,20 +57,20 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         UserInfoWithToken user = UserUtil.getLoginUser();
         if(user != null){
             if(user.getUserId().equals(taskItem.getUserInfo().getUserId())){
-                toastShort("不能接自己发布的任务哦");
+                toastShort(getString(R.string.acceptSelfTip));
             }
             else{
                 DialogUtil.createTextDialog(WaitAcceptOrderActivity.this, "提示", "确定接受该任务吗",
-                        "", "确定", new DialogUtil.OnClickListener() {
+                        "", new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
                                 SchoolTask.acceptTask(orderId);
                             }
-                        }, "取消").show();
+                        }).show();
             }
         }
         else{
-            toastShort("请先登录");
+            toastShort(getString(R.string.unlogin_tip));
             openActivity(LoginActivity.class);
         }
     }
@@ -106,7 +107,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
                             commentRecyclerView.getToUserId(), comment);
                 }
                 else{
-                    toastShort("请输入评论");
+                    toastShort(getString(R.string.commentInputTip));
                 }
             }
         });
@@ -185,8 +186,10 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAcceptTask(AcceptTaskEvent event){
         if(event.isOk()){
-            toastShort("接受任务成功，快去完成吧");
-            acceptBtn.setText("已接单");
+            toastShort(getString(R.string.acceptTip));
+            acceptBtn.setText(getString(R.string.hasAccept));
+            openTaskOrderActivity(orderId);
+            finish();
         }
         else{
             toastShort(event.getError());
@@ -196,7 +199,7 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewTaskComment(NewTaskCommentEvent event){
         if(event.isOk()){
-            toastShort("评论成功");
+            toastShort(getString(R.string.commentSuccess));
             inputBoard.clear();
             SchoolTask.getTaskInfo(orderId);
             commentRecyclerView.refresh();

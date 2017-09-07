@@ -52,6 +52,7 @@ import server.api.event.task.GetSchoolTaskEvent;
 import server.api.event.task.GetTaskInfoEvent;
 import server.api.event.task.GetTaskListEvent;
 import server.api.event.task.ReleaseTaskEvent;
+import server.api.event.task.UpdateTaskInfoEvent;
 import server.api.event.task.comment.GetTaskCommentListEvent;
 import server.api.event.task.comment.GetTaskReplyListEvent;
 import server.api.event.task.comment.NewTaskCommentEvent;
@@ -82,6 +83,7 @@ import server.api.event.voucher.GetAvailableVouchersEvent;
 
 public class SchoolTask {
     private final static String SERVER = "http://192.168.191.1:8080/SchoolTask/";
+    //private final static String SERVER = "http://119.29.91.152:8080/SchoolTask/";
 
     //VerifyCode
     private final static String GET_REGISTER_CODE = SERVER + "verifyCode/getRegisterCode";
@@ -119,6 +121,7 @@ public class SchoolTask {
     private final static String GET_COMMENT = SERVER + "task/getCommentList";
     private final static String GET_REPLY_LIST = SERVER + "task/getReplyList";
     private final static String SEARCH_TASK = SERVER + "task/searchTask";
+    private final static String UPDATE_TASK_INFO = SERVER + "task/updateTaskInfo";
 
     //School
     private final static String GET_SCHOOL = SERVER + "school/getSchoolList";
@@ -161,6 +164,8 @@ public class SchoolTask {
         uploadManager = new UploadManager(config);
     }
 
+
+
     //--------------------------需要Token------------------------------------
 
     //查询余额
@@ -196,10 +201,23 @@ public class SchoolTask {
     }
 
 
-    //发布任务
+    /**
+     * 发布订单
+     * @param orderId       订单号
+     * @param school        学校
+     * @param description   类别
+     * @param content       内容
+     * @param cost          实际支付金额
+     * @param reward        任务报酬
+     * @param limitTime     时限
+     * @param payPwd        支付密码
+     * @param voucherId     代金券编号
+     * @param voucher       代金券金额
+     * @param imageNum      图片数
+     */
     public static void releaseTask(String orderId, String school, String description, String content,
-                                   BigDecimal cost, BigDecimal taskCost, int limitTime, String payPwd,
-                                   long voucherId, int imageNum){
+                                   BigDecimal cost, BigDecimal reward, int limitTime, String payPwd,
+                                   long voucherId, BigDecimal voucher, int imageNum){
         tokenPost.newPost()
                 .url(RELEASE_TASK)
                 .addParam("orderId", orderId)
@@ -207,10 +225,11 @@ public class SchoolTask {
                 .addParam("description", description)
                 .addParam("content",content)
                 .addParam("cost", cost)
-                .addParam("taskCost", taskCost)
+                .addParam("reward", reward)
                 .addParam("limitTime", limitTime)
                 .addParam("payPwd", payPwd)
                 .addParam("voucherId", voucherId)
+                .addParam("voucher", voucher)
                 .addParam("imageNum", imageNum)
                 .event(new ReleaseTaskEvent())
                 .enqueue();
@@ -433,6 +452,16 @@ public class SchoolTask {
                 .url(REFRESH_BG)
                 .addParam("bg", bg)
                 .event(new RefreshHeadBGEvent())
+                .enqueue();
+    }
+
+    //修改任务信息
+    public static void updateTaskInfo(String orderId, String content){
+        tokenPost.newPost()
+                .url(UPDATE_TASK_INFO)
+                .addParam("orderId", orderId)
+                .addParam("content", content)
+                .event(new UpdateTaskInfoEvent())
                 .enqueue();
     }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/rm_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/shadow"/>
+    <com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView
+        android:id="@+id/rm_imrv"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/backgroundColor">
+    </com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView>
+
+</RelativeLayout>

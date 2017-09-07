@@ -7,11 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.UpdatePwdActivity">
     <include layout="@layout/toolbar"/>
-    <View
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
     <com.edu.schooltask.ui.view.Inputtextview.InputTextView
         android:id="@+id/up_old"
         android:layout_width="match_parent"

@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
@@ -25,6 +28,7 @@ import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.SchoolFilter;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.other.SchoolAutoComplement;
+import com.edu.schooltask.ui.view.recyclerview.BaseRecyclerView;
 import com.edu.schooltask.utils.DensityUtil;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.EncriptUtil;
@@ -74,6 +78,8 @@ public class ReleaseTaskActivity extends BaseActivity {
     @BindView(R.id.rt_voucher_btn) TextView voucherBtn;
     @BindView(R.id.rt_release_btn) TextView releaseBtn;
     @BindView(R.id.rt_pay_text) TextView payText;
+    @BindView(R.id.rt_voucher_layout) LinearLayout voucherLayout;
+    @BindView(R.id.rt_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.rt_vrv) VoucherRecyclerView voucherRecyclerView;
     @BindView(R.id.rt_shadow) View shadowView;
 
@@ -83,7 +89,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     }
     @OnClick(R.id.rt_voucher_btn)
     public void voucher(){
-        if(voucherRecyclerView.isShown())  hideVoucherView();
+        if(refreshLayout.isShown())  hideVoucherView();
         else showVoucherView();
     }
     @OnClick(R.id.rt_shadow)
@@ -93,6 +99,9 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     ProgressDialog progressDialog;
     DialogPlus payDialog;
+
+    Animation fadeInAnimation;
+    Animation fadeOutAnimation;
 
     List<File> tempFiles = new ArrayList<>();
     ImgSelConfig config;
@@ -126,6 +135,8 @@ public class ReleaseTaskActivity extends BaseActivity {
         setContentView(R.layout.activity_release_task);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
         imageRecyclerView.add(new ImageItem(0));
         imageRecyclerView.setImageClickListener(new ImageRecyclerView.ImageClickListener() {
             @Override
@@ -174,8 +185,6 @@ public class ReleaseTaskActivity extends BaseActivity {
             }
         });
         //获取代金券
-        SchoolTask.getAvailableVouchers();
-        voucherRecyclerView.setEmptyView(R.layout.empty_voucher);
         voucherRecyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -185,6 +194,36 @@ public class ReleaseTaskActivity extends BaseActivity {
                 voucherBtn.setText(voucher.getMoney().intValue() + "元代金券");
             }
         });
+        voucherRecyclerView.setOnGetDataListener(new BaseRecyclerView.OnGetDataListener() {
+            @Override
+            public void onGetData() {
+                SchoolTask.getAvailableVouchers();
+            }
+        });
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                voucherRecyclerView.refresh();
+            }
+        });
+        voucherRecyclerView.bind();
+        voucherRecyclerView.setEmptyView(R.layout.empty_voucher);
+
+        TextView textView = new TextView(this);
+        textView.setText(getString(R.string.withoutVoucher));
+        textView.setPadding(DensityUtil.dipToPx(this, 30), DensityUtil.dipToPx(this, 20),
+                DensityUtil.dipToPx(this, 10), DensityUtil.dipToPx(this, 10));
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideVoucherView();
+                voucher = null;
+                voucherBtn.setText(getString(R.string.useVoucher));
+                updatePayText();
+            }
+        });
+        voucherRecyclerView.addFooter(textView);
+        voucherRecyclerView.refresh();
     }
 
     @Override
@@ -212,14 +251,16 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     private void showVoucherView(){
         shadowView.setVisibility(View.VISIBLE);
-        shadowView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
-        voucherRecyclerView.setVisibility(View.VISIBLE);
+        shadowView.startAnimation(fadeInAnimation);
+        voucherLayout.setVisibility(View.VISIBLE);
+        voucherLayout.startAnimation(fadeInAnimation);
     }
 
     private void hideVoucherView(){
         shadowView.setVisibility(View.GONE);
-        shadowView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
-        voucherRecyclerView.setVisibility(View.GONE);
+        shadowView.startAnimation(fadeOutAnimation);
+        voucherLayout.setVisibility(View.GONE);
+        voucherLayout.startAnimation(fadeOutAnimation);
     }
 
     private void updatePayText(){
@@ -332,7 +373,8 @@ public class ReleaseTaskActivity extends BaseActivity {
                     payPwd = EncriptUtil.getMD5(pwd);
                     if(tempFiles.size() == 0){ //无图片发布
                         SchoolTask.releaseTask("", school, description, content, money, taskCost, time, payPwd,
-                                voucher == null ? 0 : voucher.getId(), 0);
+                                voucher == null ? 0 : voucher.getId(),
+                                voucher == null ? new BigDecimal(0) : voucher.getMoney(), 0);
                     }
                     else{   //带图片发布
                         SchoolTask.getTaskUploadKey(payPwd);
@@ -371,7 +413,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetUploadKey(GetTaskUploadKeyEvent event){
+    public void onGetTaskUploadKey(GetTaskUploadKeyEvent event){
         if(event.isOk()){
             TaskUploadKey taskUploadKey = GsonUtil.toTaskUploadKey(event.getData());
             orderId = taskUploadKey.getOrderId();
@@ -392,7 +434,8 @@ public class ReleaseTaskActivity extends BaseActivity {
         if(uploadNum == tempFiles.size()){
             if(uploadResult)
                 SchoolTask.releaseTask(orderId, school, description, content, money, taskCost, time,
-                        payPwd, voucher == null ? 0 : voucher.getId(), uploadNum);
+                        payPwd, voucher == null ? 0 : voucher.getId(),
+                        voucher == null ? new BigDecimal(0) : voucher.getMoney(), uploadNum);
             else
                 toastShort(getString(R.string.releaseFailed));
             tempFiles.clear();
@@ -401,25 +444,10 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetVouchers(GetAvailableVouchersEvent event){
+        refreshLayout.setRefreshing(false);
         if(event.isOk()){
             List<Voucher> vouchers = GsonUtil.toVoucherList(event.getData());
             voucherRecyclerView.add(vouchers);
-            if(vouchers.size() != 0){
-                TextView textView = new TextView(this);
-                textView.setText(getString(R.string.withoutVoucher));
-                textView.setPadding(DensityUtil.dipToPx(this, 30), DensityUtil.dipToPx(this, 20),
-                        DensityUtil.dipToPx(this, 10), DensityUtil.dipToPx(this, 10));
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        hideVoucherView();
-                        voucher = null;
-                        voucherBtn.setText(getString(R.string.useVoucher));
-                        updatePayText();
-                    }
-                });
-                voucherRecyclerView.addFooter(textView);
-            }
         }
         else{
             toastShort(event.getError());

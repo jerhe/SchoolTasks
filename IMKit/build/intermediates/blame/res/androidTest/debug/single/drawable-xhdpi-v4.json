@@ -832,12 +832,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_unread_remind_list_count.png"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_cs_group_check.png",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_cs_group_check.png"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_cs_resolved_hover.png",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_cs_resolved_hover.png"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_cs_group_check.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_cs_group_check.png"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ext_location_marker.png",
@@ -872,12 +872,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_unread_remind_without_count.png"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_real_time_location_exit.png",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_real_time_location_exit.png"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f61d.png",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f61d.png"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_real_time_location_exit.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_real_time_location_exit.png"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ext_plugin_toggle.png",
@@ -1052,12 +1052,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_ad_list_audio_icon.png"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f621.png",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f621.png"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_ic_location_normal.png",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\rc_ic_location_normal.png"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\u1f621.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\u1f621.png"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\rc_cs_evaluate_plugin_hover.png",

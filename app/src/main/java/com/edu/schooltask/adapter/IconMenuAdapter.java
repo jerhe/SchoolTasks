@@ -21,6 +21,7 @@ public class IconMenuAdapter extends BaseMultiItemQuickAdapter<IconMenuItem, Bas
         addItemType(IconMenuItem.EMPTY, R.layout.item_icon_menu_empty); //空项，作为分割条
         addItemType(IconMenuItem.HORIZONTAL, R.layout.item_icon_menu_horizontal);   //水平菜单，图标在左,带提示
         addItemType(IconMenuItem.VERTICAL, R.layout.item_icon_menu_vertical);   //竖直菜单，图标在上
+        addItemType(IconMenuItem.VERTICAL_LARGE, R.layout.item_icon_menu_vertical_large);
         addItemType(IconMenuItem.SWITCH, R.layout.item_icon_menu_switch);   //水平带Switch的菜单，图标在左，带提示
         addItemType(IconMenuItem.VALUE, R.layout.item_icon_menu_value); //水平带文本值的菜单，图标在左，带提示
         addItemType(IconMenuItem.TITLE, R.layout.item_icon_menu_title); //标题，无图标
@@ -36,6 +37,10 @@ public class IconMenuAdapter extends BaseMultiItemQuickAdapter<IconMenuItem, Bas
         }
         else {
             helper.setImageResource(R.id.im_image, item.getResId());
+            int border = item.getBorder();
+            if(border != 0){
+                helper.setBackgroundRes(R.id.im_image, border);
+            }
         }
 
         //文本

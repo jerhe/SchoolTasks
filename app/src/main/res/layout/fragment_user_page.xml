@@ -44,15 +44,15 @@
             android:visibility="invisible"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView
         android:id="@+id/up_rv"
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+    </com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView>
 
-    <android.support.v7.widget.RecyclerView
+    <com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView
         android:id="@+id/up_rv2"
         android:layout_marginTop="10dp"
         android:fadingEdge="none"
@@ -60,5 +60,5 @@
         android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+    </com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView>
 </LinearLayout>

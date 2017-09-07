@@ -30,7 +30,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="200dp">
                     </com.youth.banner.Banner>
-                    <include layout="@layout/rv_btn"/>
+                    <com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView
+                        android:id="@+id/home_imrv"
+                        android:background="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp">
+                    </com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView>
+                    <include layout="@layout/line"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/home_tab_layout"
@@ -47,7 +55,7 @@
                         android:fadingEdge="none"
                         android:overScrollMode="never"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
                     </android.support.v7.widget.RecyclerView>
                 </RelativeLayout>
             </LinearLayout>

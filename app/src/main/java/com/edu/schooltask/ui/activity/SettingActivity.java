@@ -15,6 +15,7 @@ import com.edu.schooltask.event.LogoutEvent;
 import com.edu.schooltask.item.IconMenuItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.GlideCacheUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.orhanobut.dialogplus.DialogPlus;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,7 +60,8 @@ public class SettingActivity extends BaseActivity {
         items.add(new IconMenuItem());
         items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, 0, getString(R.string.clearCache), cacheSize));
         items.add(new IconMenuItem());
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, 0, getString(R.string.logout)));
+        if(UserUtil.hasLogin())
+            items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, 0, getString(R.string.logout)));
 
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -74,14 +76,14 @@ public class SettingActivity extends BaseActivity {
                         break;
                     case 7:
                         DialogUtil.createTextDialog(SettingActivity.this, getString(R.string.tip),
-                                getString(R.string.logout_tip), "", getString(R.string.exit), new DialogUtil.OnClickListener() {
+                                getString(R.string.logout_tip), "", new DialogUtil.OnClickListener() {
                                     @Override
                                     public void onClick(DialogPlus dialogPlus) {
                                         EventBus.getDefault().post(new LogoutEvent());
                                         dialogPlus.dismiss();
                                         finish();
                                     }
-                                }, getString(R.string.cancel)).show();
+                                }).show();
                         break;
                 }
             }

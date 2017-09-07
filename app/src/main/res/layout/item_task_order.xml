@@ -60,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
             android:textSize="11sp"
             android:layout_toRightOf="@id/tc_time_ic"
             android:text="5小时21分"/>

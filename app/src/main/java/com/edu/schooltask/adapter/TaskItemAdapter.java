@@ -23,5 +23,6 @@ public class TaskItemAdapter extends BaseQuickAdapter<TaskItem, BaseViewHolder> 
     protected void convert(BaseViewHolder helper, TaskItem item) {
         TaskItemView taskItemView = helper.getView(R.id.tv_tiv);
         taskItemView.setAll(item, false);
+        taskItemView.setLengthLimit();
     }
 }

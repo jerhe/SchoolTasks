@@ -42,17 +42,9 @@
         android:layout_above="@id/rt_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar"/>
-        <View
-            android:id="@+id/toolbar_line"
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lineColor"/>
+        <include layout="@layout/toolbar"/>
         <ScrollView
-            android:layout_below="@id/toolbar_line"
+            android:layout_below="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
@@ -122,20 +114,29 @@
             android:visibility="gone"
             android:background="@color/black"/>
     </RelativeLayout>
-    <com.edu.schooltask.ui.view.recyclerview.VoucherRecyclerView
-        android:id="@+id/rt_vrv"
+    <LinearLayout
+        android:id="@+id/rt_voucher_layout"
         android:layout_above="@id/rt_bottom"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:fadingEdge="none"
-        android:overScrollMode="never"
-        android:paddingBottom="10dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone">
-    </com.edu.schooltask.ui.view.recyclerview.VoucherRecyclerView>
-    <View
-        android:layout_above="@id/rt_bottom"
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/rt_prl"
+            android:layout_width="wrap_content"
+            android:background="@color/white"
+            android:layout_height="200dp"
+            app:refreshColor="@color/colorPrimary">
+            <com.edu.schooltask.ui.view.recyclerview.VoucherRecyclerView
+                android:id="@+id/rt_vrv"
+                android:layout_width="match_parent"
+                android:fadingEdge="none"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"/>
+        </com.baoyz.widget.PullRefreshLayout>
+    </LinearLayout>
+
+    <include layout="@layout/line_bottom"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
+        android:layout_height="0.5dp"
+        android:layout_above="@id/rt_bottom"/>
 </RelativeLayout>

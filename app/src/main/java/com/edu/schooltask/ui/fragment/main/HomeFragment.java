@@ -5,30 +5,31 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
+import com.edu.schooltask.adapter.TaskItemAdapter;
+import com.edu.schooltask.beans.UserInfoWithToken;
+import com.edu.schooltask.beans.task.TaskItem;
+import com.edu.schooltask.event.LoginSuccessEvent;
+import com.edu.schooltask.event.LogoutEvent;
+import com.edu.schooltask.item.IconMenuItem;
+import com.edu.schooltask.other.GlideImageLoader;
 import com.edu.schooltask.ui.activity.LoginActivity;
 import com.edu.schooltask.ui.activity.ReleaseTaskActivity;
 import com.edu.schooltask.ui.activity.TaskListActivity;
 import com.edu.schooltask.ui.activity.WaitAcceptOrderActivity;
-import com.edu.schooltask.adapter.TaskItemAdapter;
 import com.edu.schooltask.ui.base.BaseFragment;
-import com.edu.schooltask.beans.UserInfoWithToken;
-import com.edu.schooltask.event.LoginSuccessEvent;
-import com.edu.schooltask.event.LogoutEvent;
-import com.edu.schooltask.beans.task.TaskItem;
-import com.edu.schooltask.other.GlideImageLoader;
-import com.edu.schooltask.ui.view.MyScrollView;
-import com.edu.schooltask.utils.GsonUtil;
-import com.edu.schooltask.utils.NetUtil;
-import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.ui.view.CustomLoadMoreView;
+import com.edu.schooltask.ui.view.MyScrollView;
 import com.edu.schooltask.ui.view.ViewPagerTab;
+import com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView;
+import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,10 +54,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.OnScrollL
     @BindView(R.id.home_tab_layout) LinearLayout tabLayout;
     @BindView(R.id.home_tab_layout_top) LinearLayout tabLayoutTop;
     @BindView(R.id.home_banner) Banner banner;
-    @BindView(R.id.home_task_release) ImageView taskReleaseBtn;
-    @BindView(R.id.home_task_search) ImageView taskSearchBtn;
-    @BindView(R.id.home_secondhand) ImageView secondhandBtn;
-    @BindView(R.id.home_job) ImageView jobBtn;
+    @BindView(R.id.home_imrv) IconMenuRecyclerView iconMenuRecyclerView;
     //@BindView(R.id.home_tab) ViewPagerTab tab;
     @BindView(R.id.home_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.home_rv) RecyclerView recyclerView;
@@ -65,7 +63,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.OnScrollL
     private TaskItemAdapter adapter;
     private List<TaskItem> taskItems = new ArrayList<>();
 
-    private int type = 0;   //0.附近任务 1.二手交易 2.最新兼职
+    private int type = 0;   //0.最新任务 1.校圈动态
     private int page = 0;
 
     List<String> images = new ArrayList<>();
@@ -94,6 +92,8 @@ public class HomeFragment extends BaseFragment implements MyScrollView.OnScrollL
         adapter = new TaskItemAdapter(taskItems);
         adapter.setLoadMoreView(new CustomLoadMoreView());
         adapter.bindToRecyclerView(recyclerView);
+        recyclerView.setAdapter(adapter);
+        adapter.setEmptyView(R.layout.empty_task);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
@@ -109,7 +109,6 @@ public class HomeFragment extends BaseFragment implements MyScrollView.OnScrollL
                 }
             }
         },recyclerView);
-        recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -139,46 +138,49 @@ public class HomeFragment extends BaseFragment implements MyScrollView.OnScrollL
     private void initBanner(){
         banner.setImageLoader(new GlideImageLoader());
         images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
-        images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
-        images.add("http://oqqzw04zt.bkt.clouddn.com/banner1.jpg");
         banner.setImages(images);
         banner.start();
     }
 
     private void initButton(){
-        View.OnClickListener listener = new View.OnClickListener() {
+        iconMenuRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, 1));
+        iconMenuRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL_LARGE, R.drawable.ic_release_task,
+                R.drawable.shape_ring_release, "发布任务"));
+        iconMenuRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL_LARGE, R.drawable.ic_task_list,
+                R.drawable.shape_ring_task_list, "任务栏"));
+        iconMenuRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL_LARGE, R.drawable.ic_market,
+                R.drawable.shape_ring_market, "校园市场"));
+        iconMenuRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL_LARGE, R.drawable.ic_school_circle,
+                R.drawable.shape_ring_school_circle, "校圈"));
+        iconMenuRecyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                if(NetUtil.isNetworkConnected(getContext())){  //网络已连接
-                    if(UserUtil.hasLogin()){
-                        switch (v.getId()){
-                            case R.id.home_task_release:
-                                openActivity(ReleaseTaskActivity.class);
-                                break;
-                            case R.id.home_task_search:
-                                openActivity(TaskListActivity.class);
-                                break;
-                        }
-                    }
-                    else{
-                        toastShort("请先登录");
-                        openActivity(LoginActivity.class);
-                    }
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if(!UserUtil.hasLogin()){
+                    toastShort(getString(R.string.unlogin_tip));
+                    openActivity(LoginActivity.class);
+                    return;
                 }
-                else{
-                    toastShort("请检查网络连接");
+                switch (position){
+                    case 0:
+                        openActivity(ReleaseTaskActivity.class);
+                        break;
+                    case 1:
+                        openActivity(TaskListActivity.class);
+                        break;
+                    case 2:
+                        toastShort("开发中，敬请期待...");
+                        break;
+                    case 3:
+                        break;
                 }
             }
-        };
-        taskReleaseBtn.setOnClickListener(listener);
-        taskSearchBtn.setOnClickListener(listener);
+        });
     }
 
     private void initTab(){
         tab = new ViewPagerTab(getContext(), null);
-        tab.addTab("附近任务");
-        tab.addTab("最新二手");
-        tab.addTab("最新兼职");
+        tab.addTab("最新任务");
+        tab.addTab("校圈动态");
         tab.select(0);
         tabLayout.addView(tab);
     }

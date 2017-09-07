@@ -3,9 +3,15 @@ package com.edu.schooltask.ui.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.edu.schooltask.R;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -17,15 +23,74 @@ import java.util.Map;
  * Created by 夜夜通宵 on 2017/5/25.
  */
 
-public class TaskFilterView extends LinearLayout{
-    private FilterChangeListener listener;
-    Map<String, FilterSelectView> filterMap = new HashMap<>();
+public class TaskFilterView extends RelativeLayout{
 
-    View shadowView;
+    private FilterChangeListener listener;  //筛选监听器
+    Map<String, FilterSelectView> filterMap = new HashMap<>();  //筛选项
+
+    LinearLayout filterLayout;  //筛选布局
+    View shadowView;     //阴影布局
+
+    Animation fadeInAnimation;
+    Animation fadeOutAnimation;
+    Animation translateDownAnimation;
+    Animation translateUpAnimation;
+    Animation emptyAnimation;
 
     public TaskFilterView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setOrientation(LinearLayout.VERTICAL);
+        fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+        fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+        translateDownAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_down);
+        translateUpAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_up);
+        emptyAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.empty);
+        //阴影布局
+        shadowView = new View(context, null);
+        shadowView.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        shadowView.setBackgroundColor(getResources().getColor(R.color.shadow));
+        shadowView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hide();
+            }
+        });
+        this.addView(shadowView);
+        //筛选布局
+        filterLayout = new LinearLayout(context, null);
+        filterLayout.setBackgroundColor(getResources().getColor(R.color.backgroundColor));
+        filterLayout.setOrientation(LinearLayout.VERTICAL);
+        filterLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        this.addView(filterLayout);
+        //焦点
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+        setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN){
+                    if(keyCode == KeyEvent.KEYCODE_BACK){
+                        hide();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        //失去焦点关闭
+        setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    if(isShown()){
+                        hide();
+                    }
+                }
+            }
+        });
     }
 
     public void addFilter(String name, String...values){
@@ -38,7 +103,7 @@ public class TaskFilterView extends LinearLayout{
                 if(listener != null) listener.onFilterChange();
             }
         });
-        this.addView(view);
+        filterLayout.addView(view);
         filterMap.put(name, view);
     }
 
@@ -54,26 +119,18 @@ public class TaskFilterView extends LinearLayout{
         return filterMap.get(name).getSelectedIndex();
     }
 
-    public void setShadowView(View view){
-        shadowView = view;
-    }
-
     public void show(){
         setVisibility(VISIBLE);
-        startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.translate_down));
-        if(shadowView != null){
-            shadowView.setVisibility(VISIBLE);
-            shadowView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
-        }
+        filterLayout.startAnimation(translateDownAnimation);
+        shadowView.startAnimation(fadeInAnimation);
+        requestFocus();
     }
 
     public void hide(){
-        setVisibility(View.INVISIBLE);
-        startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.translate_up));
-        if(shadowView != null){
-            shadowView.setVisibility(View.INVISIBLE);
-            shadowView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out));
-        }
+        filterLayout.startAnimation(translateUpAnimation);
+        shadowView.startAnimation(fadeOutAnimation);
+        startAnimation(emptyAnimation);
+        setVisibility(GONE);
     }
 
     public void setFilterChangeListener(FilterChangeListener listener){
@@ -84,4 +141,5 @@ public class TaskFilterView extends LinearLayout{
     public interface FilterChangeListener{
         void onFilterChange();
     }
+
 }

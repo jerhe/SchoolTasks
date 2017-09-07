@@ -252,6 +252,10 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_ext_plugin_location_selector.xml"
     },
     {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_empty.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\ic_empty.png"
+    },
+    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_an_voice_sent.xml",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_an_voice_sent.xml"
     }

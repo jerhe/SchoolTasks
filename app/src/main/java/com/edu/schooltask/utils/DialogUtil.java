@@ -37,9 +37,8 @@ import server.api.base.BaseTokenEvent;
 
 public class DialogUtil {
 
-    public static DialogPlus createTextDialog(Context context, String title,
-                                              String content, String hint, String yesText,
-                                              final OnClickListener listener, String noText){
+    public static DialogPlus createTextDialog(Context context, String title, String content, String hint,
+                                              final OnClickListener listener){
         int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
         DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
@@ -66,14 +65,10 @@ public class DialogUtil {
         TextView titleText = (TextView) dialogView.findViewById(R.id.dialog_title);
         TextView contentText = (TextView) dialogView.findViewById(R.id.dt_content);
         TextView hintText = (TextView) dialogView.findViewById(R.id.dt_hint);
-        TextView yesBtn = (TextView) dialogView.findViewById(R.id.dt_ok);
-        TextView noBtn = (TextView) dialogView.findViewById(R.id.dt_cancel);
         titleText.setText(title);
         contentText.setText(content);
         if(hint.length() == 0) hintText.setVisibility(View.GONE);
         else hintText.setText(hint);
-        yesBtn.setText(yesText);
-        noBtn.setText(noText);
         return dialog;
     }
 
@@ -194,24 +189,24 @@ public class DialogUtil {
         return dialog;
     }
 
-    public static DialogPlus createInputMultilineDialog(Context context, final OnInputClickListener listener,
-                                               String title, String defaultContent){
+    public static DialogPlus createInputSignDialog(Context context, final OnInputClickListener listener,
+                                                   String defaultContent){
         int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
         DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
-                .setContentHolder(new ViewHolder(R.layout.dialog_input_multiline))
+                .setContentHolder(new ViewHolder(R.layout.dialog_input_sign))
                 .setMargin(margin,0,margin,0)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
-                        TaskContentView inputText = (TaskContentView) dialog.getHolderView().findViewById(R.id.dim_content);
+                        TaskContentView inputText = (TaskContentView) dialog.getHolderView().findViewById(R.id.dis_content);
                         switch (view.getId()){
-                            case R.id.dim_yes:
+                            case R.id.dis_yes:
                                 listener.onInputClick(dialog, inputText.getText().toString());
                                 break;
-                            case R.id.dim_no:
+                            case R.id.dis_no:
                                 dialog.dismiss();
                                 break;
                         }
@@ -219,9 +214,37 @@ public class DialogUtil {
                 })
                 .create();
         View dialogView = dialog.getHolderView();
-        TextView titleText = (TextView) dialogView.findViewById(R.id.dim_title);
-        titleText.setText(title);
-        TaskContentView taskContentView = (TaskContentView) dialogView.findViewById(R.id.dim_content);
+        TaskContentView taskContentView = (TaskContentView) dialogView.findViewById(R.id.dis_content);
+        taskContentView.setText(defaultContent);
+        return dialog;
+    }
+
+    public static DialogPlus createTaskContentDialog(Context context, final OnInputClickListener listener,
+                                                    String defaultContent){
+        int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
+        DialogPlus dialog = DialogPlus.newDialog(context)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setGravity(Gravity.CENTER)
+                .setOutAnimation(R.anim.dialog_out)
+                .setContentHolder(new ViewHolder(R.layout.dialog_task_content))
+                .setMargin(margin,0,margin,0)
+                .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        TaskContentView inputText = (TaskContentView) dialog.getHolderView().findViewById(R.id.dis_content);
+                        switch (view.getId()){
+                            case R.id.dis_yes:
+                                listener.onInputClick(dialog, inputText.getText().toString());
+                                break;
+                            case R.id.dis_no:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                })
+                .create();
+        View dialogView = dialog.getHolderView();
+        TaskContentView taskContentView = (TaskContentView) dialogView.findViewById(R.id.dis_content);
         taskContentView.setText(defaultContent);
         return dialog;
     }

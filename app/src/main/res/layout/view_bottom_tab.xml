@@ -16,7 +16,7 @@
             android:id="@+id/bm_home_icon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/ic_action_home"/>
+            android:src="@drawable/ic_home"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_action_talk"/>
+                android:src="@drawable/ic_message"/>
             <TextView
                 android:id="@+id/bm_tip"
                 android:layout_alignParentRight="true"
@@ -58,6 +58,18 @@
             android:text="消息"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/bm_release"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/bm_release_icon"
+            android:layout_margin="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_add"/>
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/bm_order"
         android:layout_weight="1"
         android:layout_width="0dp"
@@ -69,7 +81,7 @@
             android:id="@+id/bm_order_icon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/ic_action_order"/>
+            android:src="@drawable/ic_order"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,7 +101,7 @@
             android:id="@+id/bm_user_icon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/ic_action_user"/>
+            android:src="@drawable/ic_user"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

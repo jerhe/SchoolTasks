@@ -12,27 +12,30 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:background="@color/backgroundColor"
-        android:layout_height="60dp">
+        android:layout_height="wrap_content">
         <com.edu.schooltask.ui.view.CommentInputBoard
             android:id="@+id/wao_cib"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:visibility="invisible">
         </com.edu.schooltask.ui.view.CommentInputBoard>
         <RelativeLayout
             android:id="@+id/wao_btn_layout"
             android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerVertical="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
+            android:layout_height="wrap_content">
+            <ImageView
                 android:id="@+id/wao_comment_btn"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="15dp"
-                android:text="评论"
-                android:background="@drawable/btn_white"
-                android:gravity="center"
-                android:layout_width="70dp"
-                android:layout_height="@dimen/btn_height" />
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_comment"/>
+
             <TextView
                 android:id="@+id/wao_accept_btn"
                 android:layout_alignParentRight="true"
@@ -51,15 +54,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include layout="@layout/toolbar"/>
-        <View
-            android:id="@+id/toolbar_line"
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lineColor"/>
         <com.baoyz.widget.PullRefreshLayout
             android:id="@+id/wao_prl"
-            android:layout_below="@id/toolbar_line"
+            android:layout_below="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:refreshColor="@color/colorPrimary">
@@ -80,9 +77,8 @@
             android:layout_height="match_parent">
         </com.edu.schooltask.ui.view.CommentReplyView>
     </RelativeLayout>
-    <View
-        android:layout_above="@id/wao_bottom"
+    <include layout="@layout/line_bottom"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lineColor"/>
+        android:layout_height="0.5dp"
+        android:layout_above="@id/wao_bottom"/>
 </RelativeLayout>

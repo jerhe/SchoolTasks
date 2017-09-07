@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
@@ -125,7 +126,8 @@ public class RegisterPhoneFragment extends BaseFragment{
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCheckRegisterCode(CheckRegisterCodeEvent event){
         if(event.isOk()){   //验证码正确跳转到下一步
-            EventBus.getDefault().post(new RegisterNextEvent((String)event.getData()));
+            String id = (String)event.getData();
+            EventBus.getDefault().post(new RegisterNextEvent(id));
             viewPager.setCurrentItem(2);
         }
         else{

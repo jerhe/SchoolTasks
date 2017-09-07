@@ -66,7 +66,6 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
     }
 
     public void setEmptyView(int resId){
-        adapter.bindToRecyclerView(this);
         adapter.setEmptyView(resId);
     }
 
@@ -89,6 +88,10 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
         if(getDataListener == null) throw new RuntimeException("未设置获取数据接口");
         clear(false);
         getDataListener.onGetData();
+    }
+
+    public void bind(){
+        adapter.bindToRecyclerView(this);
     }
 
     //添加头部

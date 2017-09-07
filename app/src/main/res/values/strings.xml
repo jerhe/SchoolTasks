@@ -32,7 +32,9 @@
     <string name="moneySign">¥%1$s</string>
 
     <string name="editUserInfo">编辑资料</string>
+    <string name="updateLoginPassword">修改登录密码</string>
     <string name="loginPassword">登录密码</string>
+    <string name="updatePayPassword">修改支付密码</string>
     <string name="payPassword">支付密码</string>
     <string name="credit">信用值</string>
     <string name="registerTime">注册时间</string>
@@ -48,6 +50,7 @@
     <string name="releaseFailed">发布失败</string>
     <string name="success">成功</string>
     <string name="commentSuccess">评论成功</string>
+    <string name="commentInputTip">请输入评论</string>
 
     <string name="waitAccept">等待接单</string>
     <string name="hasAccept">已经接单</string>
@@ -86,4 +89,8 @@
     <string name="imageMax">最多添加9张图片</string>
     <string name="useVoucher">使用代金券</string>
     <string name="withoutVoucher">不使用代金券</string>
+
+    <string name="acceptTask">接受任务</string>
+    <string name="acceptTip">接受任务成功，快去完成吧</string>
+    <string name="acceptSelfTip">不能接自己发布的任务哦</string>
 </resources>

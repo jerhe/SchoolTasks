@@ -12,8 +12,8 @@ public class Voucher {
     private BigDecimal money;	//金额
     private String explanation;	//说明
     private boolean available;	//有效性
-    private String ExpireTime;	//到期时间
-    private String CreateTime;	//获得时间
+    private String expireTime;	//到期时间
+    private String createTime;	//获得时间
 
     public Voucher(){}
 
@@ -58,18 +58,24 @@ public class Voucher {
     }
 
     public String getExpireTime() {
-        return ExpireTime;
+        return expireTime;
     }
 
     public void setExpireTime(String expireTime) {
-        ExpireTime = expireTime;
+        expireTime = expireTime;
     }
 
     public String getCreateTime() {
-        return CreateTime;
+        return createTime;
     }
 
     public void setCreateTime(String createTime) {
-        CreateTime = createTime;
+        createTime = createTime;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Voucher)) return false;
+        return ((Voucher)obj).getId() == getId();
     }
 }

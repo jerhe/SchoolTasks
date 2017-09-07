@@ -8,29 +8,18 @@
         android:id="@+id/op_space"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
-    <RelativeLayout
+    <com.edu.schooltask.ui.view.recyclerview.TipRecyclerView
+        android:id="@+id/op_tr"
         android:layout_below="@id/op_space"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.edu.schooltask.ui.view.recyclerview.TipRecyclerView
-            android:id="@+id/op_tr"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.edu.schooltask.ui.view.recyclerview.TipRecyclerView>
-        <View
-            android:id="@+id/op_shadow"
-            android:background="@color/shadow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible"/>
-    </RelativeLayout>
+    </com.edu.schooltask.ui.view.recyclerview.TipRecyclerView>
     <com.edu.schooltask.ui.view.TaskFilterView
         android:id="@+id/op_tfv"
-        android:background="@color/backgroundColor"
         android:layout_below="@id/op_space"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible">
+        android:layout_height="match_parent"
+        android:visibility="gone">
     </com.edu.schooltask.ui.view.TaskFilterView>
     <RelativeLayout
         android:id="@+id/op_toolbar"
@@ -44,17 +33,26 @@
             android:layout_height="match_parent"
             android:text="我的订单"
             android:textSize="18sp" />
-        <TextView
+        <LinearLayout
             android:id="@+id/op_filter_btn"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textSize="13sp"
-            android:textColor="@color/black"
-            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_hollow_black"
-            android:text="筛选"/>
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_filter"/>
+            <TextView
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="筛选"/>
+        </LinearLayout>
+
+
         <View
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"

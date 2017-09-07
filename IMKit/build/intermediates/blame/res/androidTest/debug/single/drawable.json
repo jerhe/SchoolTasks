@@ -252,6 +252,10 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_cs_group_dialog_ok_selector.xml"
     },
     {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\ic_empty.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\ic_empty.png"
+    },
+    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_selector_grid_camera_mask.xml",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_selector_grid_camera_mask.xml"
     }

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -67,6 +68,8 @@ public class UserActivity extends BaseActivity {
         }
     }
 
+    Animation fadeInAnimation;
+
     UserInfoWithToken me;
     boolean isMe = true;
 
@@ -82,6 +85,7 @@ public class UserActivity extends BaseActivity {
         setContentView(R.layout.activity_user);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(adapter);
@@ -127,7 +131,7 @@ public class UserActivity extends BaseActivity {
     public void onGetUserHomePageInfo(GetUserHomePageInfoEvent event){
         if(event.isOk()){
             layout.setVisibility(View.VISIBLE);
-            layout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+            layout.startAnimation(fadeInAnimation);
             UserHomePageInfo userHomePageInfo = GsonUtil.toUserHomePageInfo(event.getData());
             user = userHomePageInfo.getUserInfo();
             setUserInfo();

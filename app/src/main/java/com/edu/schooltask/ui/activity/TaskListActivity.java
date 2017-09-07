@@ -3,30 +3,32 @@ package com.edu.schooltask.ui.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
-import com.edu.schooltask.adapter.TaskItemAdapter;
-import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.beans.task.TaskItem;
+import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.ui.view.TaskFilterView;
+import com.edu.schooltask.ui.view.recyclerview.BasePageRecyclerView;
+import com.edu.schooltask.ui.view.recyclerview.TaskItemRecyclerView;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.ui.view.CustomLoadMoreView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,11 +40,10 @@ import server.api.event.task.GetTaskListEvent;
 
 public class TaskListActivity extends BaseActivity {
     @BindView(R.id.tl_prl) PullRefreshLayout refreshLayout;
-    @BindView(R.id.tl_rv) RecyclerView recyclerView;
+    @BindView(R.id.tl_rv) TaskItemRecyclerView recyclerView;
+    @BindView(R.id.tl_search_layout) RelativeLayout searchLayout;
     @BindView(R.id.tl_search_text) EditText searchText;
     @BindView(R.id.tl_tfv) TaskFilterView taskFilterView;
-    @BindView(R.id.tl_tf_btn) TextView taskFilterBtn;
-    @BindView(R.id.tl_shadow) View shadow;
 
     @OnClick(R.id.tl_tf_btn)
     public void textFilter(){
@@ -50,22 +51,12 @@ public class TaskListActivity extends BaseActivity {
         else taskFilterView.show();
 
     }
-    @OnClick(R.id.tl_shadow)
-    public void shadow(){
-        if(shadow.isShown()){
-            taskFilterView.hide();
-        }
-    }
+
     @OnTextChanged(R.id.tl_search_text)
     public void searchTextChanged(){
-        getTaskList();
+        getTaskList(0);
     }
 
-
-    private TaskItemAdapter adapter;
-    private List<TaskItem> taskItems = new ArrayList<>();
-
-    int page = 0;
     String school;
     String des;
     String search;
@@ -87,73 +78,78 @@ public class TaskListActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        if(taskFilterView.isShown()){
-            taskFilterView.hide();
-        }
-        else{
-            super.onBackPressed();
-        }
-    }
-
     private void init(){
         UserInfoWithToken user = UserUtil.getLoginUser();
-        taskFilterView.setShadowView(shadow);
         taskFilterView.addFilter(getString(R.string.school), "所有学校", user == null ? null : user.getSchool());
         taskFilterView.addFilter(getString(R.string.description), getResources().getStringArray(R.array.taskDescription));
         taskFilterView.addFilter(getString(R.string.reward), getResources().getStringArray(R.array.taskReward));
         taskFilterView.setFilterChangeListener(new TaskFilterView.FilterChangeListener() {
             @Override
             public void onFilterChange() {
-                getTaskList();
+                getTaskList(0);
             }
         });
         searchText.setHintTextColor(Color.GRAY);
-        adapter = new TaskItemAdapter(taskItems);
-        adapter.setLoadMoreView(new CustomLoadMoreView());
-        adapter.openLoadAnimation();
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        adapter.setEnableLoadMore(true);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+
+        recyclerView.setEmptyView(R.layout.empty_task);
+        recyclerView.setOnGetPageDataListener(new BasePageRecyclerView.OnGetPageDataListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(TaskListActivity.this, WaitAcceptOrderActivity.class);
-                intent.putExtra("taskItem", taskItems.get(position));
-                startActivity(intent);
+            public void onGetPageData(int page) {
+                getTaskList(page);
             }
         });
 
+        recyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(TaskListActivity.this, WaitAcceptOrderActivity.class);
+                intent.putExtra("taskItem", recyclerView.get(position));
+                startActivity(intent);
+            }
+        });
+        recyclerView.addHeader(LayoutInflater.from(TaskListActivity.this).inflate(R.layout.header_task_list, null));
         refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 0;
-                taskItems.clear();
-                getTaskList();
+                recyclerView.refresh();
             }
         });
-        getTaskList();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if(dy > 0) {
+                    if(searchLayout.isShown()){
+                        searchLayout.setVisibility(View.GONE);
+                        searchLayout.startAnimation(AnimationUtils.loadAnimation(TaskListActivity.this ,
+                                R.anim.translate_up));
+                    }
+                    return;
+                }
+                if(dy < 0){
+                    if(!searchLayout.isShown()){
+                        searchLayout.setVisibility(View.VISIBLE);
+                        searchLayout.startAnimation(AnimationUtils.loadAnimation(TaskListActivity.this ,
+                                R.anim.translate_down));
+                    }
+                }
+            }
+        });
+        getTaskList(0);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetTaskList(GetTaskListEvent event){
+        refreshLayout.setRefreshing(false);
         if(event.isOk()){
-            refreshLayout.setRefreshing(false);
-            page++;
             List<TaskItem> taskItems = GsonUtil.toTaskItemList(event.getData());
-            this.taskItems.addAll(taskItems);
-            adapter.loadMoreComplete();
-            if(taskItems.size() == 0) adapter.loadMoreEnd();
-            adapter.notifyDataSetChanged();
+            recyclerView.add(taskItems);
         }
         else{
-            adapter.loadMoreFail();
             toastShort(event.getError());
         }
     }
 
-    private void getTaskList(){
+    private void getTaskList(int page){
         refreshLayout.setRefreshing(true);
         String school = taskFilterView.getValue("学校");
         if("所有学校".equals(school)) school = "";
@@ -195,7 +191,7 @@ public class TaskListActivity extends BaseActivity {
         //赋值
         if(!(school.equals(this.school) && des.equals(this.des) && search.equals(this.search)
         && minCost.compareTo(this.minCost) == 0 && maxCost.compareTo(this.maxCost) == 0)) {
-            taskItems.clear();
+            recyclerView.clear(false);
             page = 0;
             this.school = school;
             this.des = des;
