@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import server.api.SchoolTask;
 import server.api.event.user.GetPersonalCenterInfoEvent;
+import server.api.event.user.account.SetPayPwdEvent;
 
 public class PersonalCenterActivity extends BaseActivity {
     @BindView(R.id.pc_rv) RecyclerView recyclerView;
@@ -37,6 +38,8 @@ public class PersonalCenterActivity extends BaseActivity {
     Animation fadeInAnimation;
 
     boolean hasPayPwd;
+    String credit;
+    String registerTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +60,11 @@ public class PersonalCenterActivity extends BaseActivity {
                         openActivity(UserEditActivity.class);
                         break;
                     case 1:
-                        Intent loginPwdIntent = new Intent(PersonalCenterActivity.this, UpdatePwdActivity.class);
-                        loginPwdIntent.putExtra("relationType",0);
-                        startActivity(loginPwdIntent);
+                        openActivity(UpdateLoginPwdActivity.class);
                         break;
                     case 2:
                         if(hasPayPwd){
-                            Intent intent = new Intent(PersonalCenterActivity.this, UpdatePwdActivity.class);
-                            intent.putExtra("relationType",1);
-                            startActivity(intent);
+                            openActivity(UpdatePayPwdActivity.class);
                         }
                         else{
                             openActivity(SetPayPwdActivity.class);
@@ -83,13 +82,14 @@ public class PersonalCenterActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private void setData(int credit, String registerTime){
+    private void setData(){
+        if(items.size() > 0) items.clear();
         items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_user_edit, getString(R.string.editUserInfo)));
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_lock, getString(R.string.updateLoginPassword)));
-        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_lock2, getString(R.string.updatePayPassword),
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_lock, getString(R.string.loginPassword)));
+        items.add(new IconMenuItem(IconMenuItem.HORIZONTAL, R.drawable.ic_lock2, getString(R.string.payPassword),
                 hasPayPwd ? "" : getString(R.string.unset)));
         items.add(new IconMenuItem());
-        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, getString(R.string.credit), credit+""));
+        items.add(new IconMenuItem(IconMenuItem.VALUE, 0, getString(R.string.credit), credit));
         items.add(new IconMenuItem(IconMenuItem.VALUE, 0, getString(R.string.registerTime), registerTime));
         adapter.notifyDataSetChanged();
     }
@@ -99,12 +99,22 @@ public class PersonalCenterActivity extends BaseActivity {
         if(event.isOk()){
             PersonalCenterInfo personalCenterInfo = GsonUtil.toPersonalCenterInfo(event.getData());
             hasPayPwd = personalCenterInfo.isHasPayPwd();
-            setData(personalCenterInfo.getCredit(), personalCenterInfo.getRegisterTime());
+            credit = String.valueOf(personalCenterInfo.getCredit());
+            registerTime = personalCenterInfo.getRegisterTime();
+            setData();
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.startAnimation(fadeInAnimation);
         }
         else{
             toastShort(event.getError());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSetPayPwd(SetPayPwdEvent event){
+        if(event.isOk()){
+            hasPayPwd = true;
+            setData();
         }
     }
 }

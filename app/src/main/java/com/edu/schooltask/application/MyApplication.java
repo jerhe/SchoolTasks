@@ -66,8 +66,8 @@ public class MyApplication extends LitePalApplication {
         RongIM.registerMessageTemplate(new FriendMessageProvider());
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)    //连接超时时间
-                .readTimeout(10, TimeUnit.SECONDS)       //读取超时时间
+                .connectTimeout(20, TimeUnit.SECONDS)    //连接超时时间
+                .readTimeout(20, TimeUnit.SECONDS)       //读取超时时间
                 .retryOnConnectionFailure(true)         //是否重试
                 .build();
         OkHttpUtils.initClient(client); //设置为默认client

@@ -126,4 +126,12 @@ public class StringUtil {
         }
         return spannableString;
     }
+
+    public static String toString(int[] integers){
+        StringBuilder sb = new StringBuilder();
+        for(int x : integers){
+            sb.append(x);
+        }
+        return sb.toString();
+    }
 }

@@ -48,12 +48,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f3b5.png"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_ic_volume_4.png",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ic_volume_4.png"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_ext_indicator.png",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ext_indicator.png"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_ic_volume_4.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ic_volume_4.png"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_ext_plugin_toggle_hover.png",
@@ -552,12 +552,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ic_bubble_right_file.9.png"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_cs_follow.png",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_cs_follow.png"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_ad_list_pdf_icon.png",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ad_list_pdf_icon.png"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_cs_follow.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_cs_follow.png"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_praise.png",

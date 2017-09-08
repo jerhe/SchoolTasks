@@ -4,36 +4,41 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+    <com.edu.schooltask.ui.view.InputTextView
         android:id="@+id/rp_id"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:IT_text="手机号"
+        app:IT_number="true"
         app:IT_hint="请输入手机号">
-    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
-    <LinearLayout
+    </com.edu.schooltask.ui.view.InputTextView>
+    <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_height="wrap_content">
-        <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+        <com.edu.schooltask.ui.view.InputTextView
             android:id="@+id/rp_code"
-            android:layout_width="0dp"
-            android:layout_weight="7"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:IT_number="true"
             app:IT_text="验证码">
-        </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+        </com.edu.schooltask.ui.view.InputTextView>
         <TextView
             android:id="@+id/rp_get_code"
-            android:layout_width="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="3"
+            android:layout_width="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_height="@dimen/btn_height"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/colorPrimary"
             android:gravity="center"
             android:layout_marginRight="20dp"
-            android:background="@drawable/btn_white"
             android:text="获取验证码"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/rp_next"

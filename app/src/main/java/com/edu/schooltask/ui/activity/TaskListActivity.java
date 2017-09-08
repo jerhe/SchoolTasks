@@ -6,11 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -57,6 +56,10 @@ public class TaskListActivity extends BaseActivity {
         getTaskList(0);
     }
 
+    Animation searchLayoutInAnimation;
+    Animation searchLayoutOutAnimation;
+
+
     String school;
     String des;
     String search;
@@ -79,6 +82,10 @@ public class TaskListActivity extends BaseActivity {
     }
 
     private void init(){
+        searchLayoutInAnimation = AnimationUtils.loadAnimation(TaskListActivity.this ,
+                R.anim.translate_top_in);
+        searchLayoutOutAnimation = AnimationUtils.loadAnimation(TaskListActivity.this ,
+                R.anim.translate_top_out);
         UserInfoWithToken user = UserUtil.getLoginUser();
         taskFilterView.addFilter(getString(R.string.school), "所有学校", user == null ? null : user.getSchool());
         taskFilterView.addFilter(getString(R.string.description), getResources().getStringArray(R.array.taskDescription));
@@ -120,16 +127,14 @@ public class TaskListActivity extends BaseActivity {
                 if(dy > 0) {
                     if(searchLayout.isShown()){
                         searchLayout.setVisibility(View.GONE);
-                        searchLayout.startAnimation(AnimationUtils.loadAnimation(TaskListActivity.this ,
-                                R.anim.translate_up));
+                        searchLayout.startAnimation(searchLayoutOutAnimation);
                     }
                     return;
                 }
                 if(dy < 0){
                     if(!searchLayout.isShown()){
                         searchLayout.setVisibility(View.VISIBLE);
-                        searchLayout.startAnimation(AnimationUtils.loadAnimation(TaskListActivity.this ,
-                                R.anim.translate_down));
+                        searchLayout.startAnimation(searchLayoutInAnimation);
                     }
                 }
             }

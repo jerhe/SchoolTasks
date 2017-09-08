@@ -4,13 +4,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+    <com.edu.schooltask.ui.view.InputTextView
         android:id="@+id/login_id"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:IT_text="手机号"
+        app:IT_number="true"
         app:IT_hint="请输入手机号">
-    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+    </com.edu.schooltask.ui.view.InputTextView>
     <RelativeLayout
         android:id="@+id/login_switch_layout"
         android:layout_width="match_parent"
@@ -20,14 +23,14 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+            <com.edu.schooltask.ui.view.InputTextView
                 android:id="@+id/login_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:IT_inputType="password"
                 app:IT_hint="请输入密码"
-                app:IT_text="密  码">
-            </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+                app:IT_text="密\t\t码">
+            </com.edu.schooltask.ui.view.InputTextView>
             <TextView
                 android:layout_gravity="right"
                 android:layout_alignParentRight="true"
@@ -41,30 +44,31 @@
                 android:paddingRight="10dp"
                 android:text="忘记密码"/>
         </RelativeLayout>
-        <LinearLayout
+        <RelativeLayout
             android:visibility="gone"
             android:id="@+id/login_sms_layout"
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+            <com.edu.schooltask.ui.view.InputTextView
                 android:id="@+id/login_code"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:IT_number="true"
                 app:IT_text="验证码">
-            </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+            </com.edu.schooltask.ui.view.InputTextView>
             <TextView
                 android:id="@+id/login_get_code"
-                android:layout_width="0dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="3"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/btn_height"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/colorPrimary"
                 android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/btn_white"
                 android:text="获取验证码"/>
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout

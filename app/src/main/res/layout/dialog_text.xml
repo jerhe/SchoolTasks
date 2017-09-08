@@ -13,11 +13,8 @@
     <include layout="@layout/line"/>
     <TextView
         android:id="@+id/dt_content"
-        android:layout_marginTop="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:padding="20dp"
         android:gravity="center"
-        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="我是内容"/>
@@ -28,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginBottom="20dp"
+        android:paddingBottom="20dp"
         android:textSize="12sp"
         android:text="提示"
         android:textColor="@color/hintColor"/>
@@ -46,6 +43,7 @@
             android:layout_height="match_parent"
             android:text="取消"/>
         <View
+            android:id="@+id/dt_line"
             android:layout_width="0.1dp"
             android:layout_height="match_parent"
             android:background="@color/lineColor"/>

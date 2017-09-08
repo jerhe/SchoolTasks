@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/pay_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/shadow"/>
+    <LinearLayout
+        android:id="@+id/pay_layout"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/pay_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="支付确认"/>
+        <include layout="@layout/line"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/backgroundColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.edu.schooltask.ui.view.InputTextView
+                android:id="@+id/pay_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:IT_inputType="payPassword"
+                app:IT_text="支付密码">
+            </com.edu.schooltask.ui.view.InputTextView>
+        </LinearLayout>
+
+        <com.edu.schooltask.ui.view.PayPasswordInputBoard
+            android:id="@+id/pay_ppib"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.edu.schooltask.ui.view.PayPasswordInputBoard>
+    </LinearLayout>
+
+</RelativeLayout>

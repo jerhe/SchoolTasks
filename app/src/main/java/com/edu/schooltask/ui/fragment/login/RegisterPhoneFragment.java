@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
@@ -13,7 +12,7 @@ import com.edu.schooltask.event.RegisterNextEvent;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.PhoneFilter;
 import com.edu.schooltask.ui.base.BaseFragment;
-import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
+import com.edu.schooltask.ui.view.InputTextView;
 import com.edu.schooltask.utils.StringUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,7 +43,7 @@ public class RegisterPhoneFragment extends BaseFragment{
             toastShort("请输入正确的手机号");
             return;
         }
-        getCodeBtn.setEnabled(false);
+        setGetCodeEnable(false);
         SchoolTask.getRegisterCode(id);
     }
     @OnClick(R.id.rp_next)
@@ -99,7 +98,7 @@ public class RegisterPhoneFragment extends BaseFragment{
     public void onGetRegisterCode(GetRegisterCodeEvent event){
         if(event.isOk()){
             toastShort(getString(R.string.code_success));
-            getCodeBtn.setEnabled(false);
+            setGetCodeEnable(false);
             new CountDownTimer(60000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -112,12 +111,12 @@ public class RegisterPhoneFragment extends BaseFragment{
                 @Override
                 public void onFinish() {
                     getCodeBtn.setText("获取验证码");
-                    getCodeBtn.setEnabled(true);
+                    setGetCodeEnable(true);
                 }
             }.start();
         }
         else{
-            getCodeBtn.setEnabled(true);
+            setGetCodeEnable(true);
             toastShort(event.getError());
         }
     }
@@ -133,6 +132,16 @@ public class RegisterPhoneFragment extends BaseFragment{
         else{
             nextBtn.setEnabled(true);
             toastShort(event.getError());
+        }
+    }
+
+    private void setGetCodeEnable(boolean enable){
+        getCodeBtn.setEnabled(enable);
+        if(enable){
+            getCodeBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+        else{
+            getCodeBtn.setTextColor(getResources().getColor(R.color.hintColor));
         }
     }
 }

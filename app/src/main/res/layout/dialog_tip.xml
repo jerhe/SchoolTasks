@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="我是标题"/>
+    <include layout="@layout/line"/>
+    <TextView
+        android:id="@+id/dt_content"
+        android:padding="20dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="我是内容"/>
+    <include layout="@layout/line"/>
+        <TextView
+            android:id="@+id/dt_ok"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:background="@drawable/btn_dialog_center"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="40dp"
+            android:text="确定"/>
+</LinearLayout>

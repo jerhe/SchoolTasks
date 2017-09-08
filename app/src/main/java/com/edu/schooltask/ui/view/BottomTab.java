@@ -16,23 +16,31 @@ import com.edu.schooltask.R;
 
 public class BottomTab extends LinearLayout implements View.OnClickListener{
     public final static int PAGE_HOME = 0;  //首页
-    public final static int PAGE_TALK = 1;  //消息
+    public final static int PAGE_MESSAGE = 1;  //消息
     public final static int PAGE_ORDER = 2; //订单
     public final static int PAGE_USER = 3;  //用户
 
     private OnMenuSelectedListener onMenuSelectedListener;  //菜单选择监听器
 
     private LinearLayout homeLayout;    //按钮
-    private LinearLayout talkLayout;
+    private LinearLayout messageLayout;
     private LinearLayout orderLayout;
     private LinearLayout userLayout;
     private LinearLayout releaseLayout;
 
     private ImageView homeIcon; //图标
-    private ImageView talkIcon;
+    private ImageView messageIcon;
     private ImageView orderIcon;
     private ImageView userIcon;
     private ImageView releaseIcon;
+
+    private TextView homeText;  //文本
+    private TextView messageText;
+    private TextView orderText;
+    private TextView userText;
+
+    int normalColor;
+    int lightColor;
 
     int oldPosition = 0;
 
@@ -40,24 +48,31 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
 
     private ViewPager viewPager;
 
-
     public BottomTab(Context context, AttributeSet attrs) {
         super(context, attrs);
         LinearLayout.inflate(context,R.layout.view_bottom_tab,this);
         homeLayout = (LinearLayout) findViewById(R.id.bm_home);
-        talkLayout = (LinearLayout) findViewById(R.id.bm_talk);
+        messageLayout = (LinearLayout) findViewById(R.id.bm_talk);
         orderLayout = (LinearLayout) findViewById(R.id.bm_order);
         userLayout = (LinearLayout) findViewById(R.id.bm_user);
         releaseLayout = (LinearLayout) findViewById(R.id.bm_release);
 
         homeIcon = (ImageView) findViewById(R.id.bm_home_icon);
-        talkIcon = (ImageView) findViewById(R.id.bm_talk_icon);
+        messageIcon = (ImageView) findViewById(R.id.bm_message_icon);
         orderIcon = (ImageView) findViewById(R.id.bm_order_icon);
         userIcon = (ImageView) findViewById(R.id.bm_user_icon);
         releaseIcon = (ImageView) findViewById(R.id.bm_release_icon);
 
+        homeText = (TextView) findViewById(R.id.bm_home_text);
+        messageText = (TextView) findViewById(R.id.bm_message_text);
+        orderText = (TextView) findViewById(R.id.bm_order_text);
+        userText = (TextView) findViewById(R.id.bm_user_text);
+
+        normalColor = getResources().getColor(R.color.fontColor);
+        lightColor = getResources().getColor(R.color.colorPrimary);
+
         homeLayout.setOnClickListener(this);
-        talkLayout.setOnClickListener(this);
+        messageLayout.setOnClickListener(this);
         orderLayout.setOnClickListener(this);
         userLayout.setOnClickListener(this);
 
@@ -80,31 +95,47 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
             case R.id.bm_home:
                 onMenuSelectedListener.onMenuSelected(PAGE_HOME);
                 homeIcon.setImageResource(R.drawable.ic_home_light);
-                talkIcon.setImageResource(R.drawable.ic_message);
+                messageIcon.setImageResource(R.drawable.ic_message);
                 orderIcon.setImageResource(R.drawable.ic_order);
                 userIcon.setImageResource(R.drawable.ic_user);
+                homeText.setTextColor(lightColor);
+                messageText.setTextColor(normalColor);
+                orderText.setTextColor(normalColor);
+                userText.setTextColor(normalColor);
                 break;
             case R.id.bm_talk:
-                onMenuSelectedListener.onMenuSelected(PAGE_TALK);
+                onMenuSelectedListener.onMenuSelected(PAGE_MESSAGE);
                 homeIcon.setImageResource(R.drawable.ic_home);
-                talkIcon.setImageResource(R.drawable.ic_message_light);
+                messageIcon.setImageResource(R.drawable.ic_message_light);
                 orderIcon.setImageResource(R.drawable.ic_order);
                 userIcon.setImageResource(R.drawable.ic_user);
+                homeText.setTextColor(normalColor);
+                messageText.setTextColor(lightColor);
+                orderText.setTextColor(normalColor);
+                userText.setTextColor(normalColor);
                 setMessageTip(false);
                 break;
             case R.id.bm_order:
                 onMenuSelectedListener.onMenuSelected(PAGE_ORDER);
                 homeIcon.setImageResource(R.drawable.ic_home);
-                talkIcon.setImageResource(R.drawable.ic_message);
+                messageIcon.setImageResource(R.drawable.ic_message);
                 orderIcon.setImageResource(R.drawable.ic_order_light);
                 userIcon.setImageResource(R.drawable.ic_user);
+                homeText.setTextColor(normalColor);
+                messageText.setTextColor(normalColor);
+                orderText.setTextColor(lightColor);
+                userText.setTextColor(normalColor);
                 break;
             case R.id.bm_user:
                 onMenuSelectedListener.onMenuSelected(PAGE_USER);
                 homeIcon.setImageResource(R.drawable.ic_home);
-                talkIcon.setImageResource(R.drawable.ic_message);
+                messageIcon.setImageResource(R.drawable.ic_message);
                 orderIcon.setImageResource(R.drawable.ic_order);
                 userIcon.setImageResource(R.drawable.ic_user_light);
+                homeText.setTextColor(normalColor);
+                messageText.setTextColor(normalColor);
+                orderText.setTextColor(normalColor);
+                userText.setTextColor(lightColor);
                 break;
 
         }

@@ -1,5 +1,6 @@
 package com.edu.schooltask.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -14,7 +15,10 @@ import com.edu.schooltask.beans.comment.TaskComment;
 import com.edu.schooltask.beans.comment.TaskCommentList;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.beans.task.TaskItem;
+import com.edu.schooltask.ui.view.PayPasswordView;
+import com.edu.schooltask.ui.view.PayView;
 import com.edu.schooltask.utils.DialogUtil;
+import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
@@ -50,29 +54,23 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     @BindView(R.id.wao_comment_btn) ImageView commentBtn;
     @BindView(R.id.wao_btn_layout) RelativeLayout btnLayout;
     @BindView(R.id.wao_cib) CommentInputBoard inputBoard;
+    @BindView(R.id.wao_pv) PayView payView;
 
     @OnClick(R.id.wao_accept_btn)
     public void accept(){
         if(taskItem == null) return;
         UserInfoWithToken user = UserUtil.getLoginUser();
-        if(user != null){
-            if(user.getUserId().equals(taskItem.getUserInfo().getUserId())){
-                toastShort(getString(R.string.acceptSelfTip));
-            }
-            else{
-                DialogUtil.createTextDialog(WaitAcceptOrderActivity.this, "提示", "确定接受该任务吗",
-                        "", new DialogUtil.OnClickListener() {
-                            @Override
-                            public void onClick(DialogPlus dialogPlus) {
-                                SchoolTask.acceptTask(orderId);
-                            }
-                        }).show();
-            }
-        }
-        else{
+        if(user == null) {
             toastShort(getString(R.string.unlogin_tip));
             openActivity(LoginActivity.class);
+            return;
         }
+        if(user.getUserId().equals(taskItem.getUserInfo().getUserId())){
+            toastShort(getString(R.string.acceptSelfTip));
+            return;
+        }
+        payView.setTitle("接单确认");
+        payView.show();
     }
     @OnClick(R.id.wao_comment_btn)
     public void comment(){
@@ -82,6 +80,8 @@ public class WaitAcceptOrderActivity extends BaseActivity {
     //header
     TaskItemView taskItemView;
     TaskCountView taskCountView;
+
+    ProgressDialog progressDialog;
 
     TaskItem taskItem;
     String orderId;
@@ -120,6 +120,14 @@ public class WaitAcceptOrderActivity extends BaseActivity {
             }
         });
         initRecyclerView();
+
+        payView.setPayPasswordFinishedListener(new PayPasswordView.PayPasswordFinishedListener() {
+            @Override
+            public void onFinished(String password) {
+                progressDialog = ProgressDialog.show(WaitAcceptOrderActivity.this, "", "接单中...", true, false);
+                SchoolTask.acceptTask(orderId, EncriptUtil.getMD5(password));
+            }
+        });
 
         SchoolTask.getTaskInfo(orderId);
     }
@@ -185,14 +193,27 @@ public class WaitAcceptOrderActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAcceptTask(AcceptTaskEvent event){
+        if(progressDialog != null) progressDialog.dismiss();
         if(event.isOk()){
             toastShort(getString(R.string.acceptTip));
+            payView.hide();
             acceptBtn.setText(getString(R.string.hasAccept));
             openTaskOrderActivity(orderId);
             finish();
         }
         else{
+            payView.clearPassword();
             toastShort(event.getError());
+            switch (event.getCode()){
+                case 301:   //未设置支付密码
+                    openActivity(SetPayPwdActivity.class);
+                    break;
+                case 304:
+                    break;
+                default:
+                    payView.hide();
+                    break;
+            }
         }
     }
 

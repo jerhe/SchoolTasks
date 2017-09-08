@@ -4,12 +4,13 @@
     <declare-styleable name="InputTextView">
         <attr name="IT_text" format="string"/>
         <attr name="IT_hint" format="string"/>
+        <attr name="IT_number" format="boolean"/>
         <attr name="IT_inputType" format="string"/>
         <attr name="IT_tip" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="SelectText">
-        <attr name="ST_text" format="string"/>
+    <declare-styleable name="TextSpinner">
+        <attr name="TS_text" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="TaskContentView">

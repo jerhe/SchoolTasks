@@ -49,47 +49,51 @@
             android:layout_height="match_parent">
             <LinearLayout
                 android:orientation="vertical"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+                <com.edu.schooltask.ui.view.InputTextView
                     android:id="@+id/rt_school"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:IT_hint="请输入学校"
                     app:IT_text="学校"
                     app:IT_tip="任务所在学校">
-                </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+                </com.edu.schooltask.ui.view.InputTextView>
 
-                <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+                <com.edu.schooltask.ui.view.InputTextView
                     android:id="@+id/rt_cost"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:IT_text="报酬"
                     app:IT_hint="元"
+                    app:IT_number="true"
                     app:IT_tip="任务完成后接受者可获得的报酬，最低是1元">
-                </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
-                <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+                </com.edu.schooltask.ui.view.InputTextView>
+                <com.edu.schooltask.ui.view.InputTextView
                     android:id="@+id/rt_limit_time"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:IT_text="时限"
                     app:IT_hint="小时"
+                    app:IT_number="true"
                     app:IT_tip="任务发布有效的时间，超过时间还未被接受的任务将自动取消。每1小时需支付0.1元">
-                </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
-                <com.edu.schooltask.ui.view.SelectText
+                </com.edu.schooltask.ui.view.InputTextView>
+                <com.edu.schooltask.ui.view.TextSpinner
                     android:id="@+id/rt_des"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    app:ST_text="分类">
-                </com.edu.schooltask.ui.view.SelectText>
+                    app:TS_text="分类">
+                </com.edu.schooltask.ui.view.TextSpinner>
                 <com.edu.schooltask.ui.view.TaskContentView
                     android:id="@+id/rt_content"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     app:maxLength="200"
                     app:contentHint="任务内容">
                 </com.edu.schooltask.ui.view.TaskContentView>
@@ -139,4 +143,10 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_above="@id/rt_bottom"/>
+    <com.edu.schooltask.ui.view.PayView
+        android:id="@+id/rt_pay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </com.edu.schooltask.ui.view.PayView>
 </RelativeLayout>

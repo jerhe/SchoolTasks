@@ -1,11 +1,15 @@
 package com.edu.schooltask.ui.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.ui.base.BaseActivity;
-import com.edu.schooltask.filter.NumberFilter;
-import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
+import com.edu.schooltask.ui.view.InputTextView;
+import com.edu.schooltask.ui.view.PayPasswordView;
+import com.edu.schooltask.ui.view.PayPasswordInputBoard;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,36 +22,23 @@ import server.api.SchoolTask;
 import server.api.event.user.account.SetPayPwdEvent;
 
 public class SetPayPwdActivity extends BaseActivity {
-    @BindView(R.id.spp_pwd)
-    InputTextView pwdText;
-    @BindView(R.id.spp_pwd_2)
-    InputTextView pwdText2;
+    @BindView(R.id.spp_pwd) InputTextView pwdText;
+    @BindView(R.id.spp_pwd_2) InputTextView pwdText2;
+    @BindView(R.id.spp_ppib) PayPasswordInputBoard inputBoard;
+    @BindView(R.id.spp_pre_btn) TextView preBtn;
+    @BindView(R.id.spp_success_tip) TextView successText;
 
-    @OnClick(R.id.spp_confirm_btn)
-    public void setPayPwd(){
-        String pwd1 = pwdText.getText();
-        String pwd2 = pwdText2.getText();
-        if(pwd1.length() == 0){
-            toastShort(getString(R.string.inputTip, pwdText.getName()));
-            pwdText.requestFocus();
-            return;
-        }
-        if(pwd2.length() == 0){
-            toastShort(getString(R.string.inputAgainTip, pwdText.getName()));
-            pwdText.requestFocus();
-            return;
-        }
-        if(pwd1.length() != 6){
-            toastShort(getString(R.string.inputError, pwdText.getName()));
-            pwdText.requestFocus();
-            return;
-        }
-        if(!pwd1.equals(pwd2)){
-            toastShort(getString(R.string.inputAgainError));
-            return;
-        }
-        SchoolTask.setPayPwd(pwd1);
+    @OnClick(R.id.spp_pre_btn)
+    public void pre(){
+        preBtn.setVisibility(View.GONE);
+        pwdText.clearPayPassword();
+        pwdText2.clearPayPassword();
+        pwdText.setVisibility(View.VISIBLE);
+        pwdText2.setVisibility(View.INVISIBLE);
+        inputBoard.setPasswordView(pwdText);
     }
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +47,29 @@ public class SetPayPwdActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
-        pwdText.setInputFilter(new NumberFilter());
-        pwdText2.setInputFilter(new NumberFilter());
+        inputBoard.setPasswordView(pwdText);
+        pwdText.setPayPasswordFinishedListener(new PayPasswordView.PayPasswordFinishedListener() {
+            @Override
+            public void onFinished(String password) {
+                pwdText.setVisibility(View.INVISIBLE);
+                pwdText2.setVisibility(View.VISIBLE);
+                inputBoard.setPasswordView(pwdText2);
+                preBtn.setVisibility(View.VISIBLE);
+            }
+        });
+        pwdText2.setPayPasswordFinishedListener(new PayPasswordView.PayPasswordFinishedListener() {
+            @Override
+            public void onFinished(String password) {
+                if(password.equals(pwdText.getPayPassword())){
+                    progressDialog = ProgressDialog.show(SetPayPwdActivity.this, "", "请稍候...", true, false);
+                    SchoolTask.setPayPwd(password);
+                }
+                else{
+                    toastShort("两次输入的密码不一致");
+                    pwdText2.clearPayPassword();
+                }
+            }
+        });
     }
 
     @Override
@@ -68,12 +80,16 @@ public class SetPayPwdActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSetPayPwd(SetPayPwdEvent event){
+        if(progressDialog != null) progressDialog.dismiss();
         if(event.isOk()){
-            toastShort(getString(R.string.setSuccess));
-            finish();
+            pwdText2.setVisibility(View.INVISIBLE);
+            preBtn.setVisibility(View.GONE);
+            successText.setVisibility(View.VISIBLE);
+            inputBoard.hide();
         }
         else{
             toastShort(event.getError());
+            pwdText2.clearPayPassword();
         }
     }
 }

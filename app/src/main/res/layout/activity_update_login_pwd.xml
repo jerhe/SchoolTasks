@@ -5,34 +5,37 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.UpdatePwdActivity">
+    tools:context=".ui.activity.UpdateLoginPwdActivity">
     <include layout="@layout/toolbar"/>
-    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
-        android:id="@+id/up_old"
+    <com.edu.schooltask.ui.view.InputTextView
+        android:id="@+id/ulp_old"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:IT_inputType="password"
         app:IT_hint="请输入当前密码"
-        app:IT_text="原密码">
-    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
-    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
-        android:id="@+id/up_new"
+        app:IT_text="原\t密\t码">
+    </com.edu.schooltask.ui.view.InputTextView>
+    <com.edu.schooltask.ui.view.InputTextView
+        android:id="@+id/ulp_new"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:IT_inputType="password"
         app:IT_hint="请输入新密码"
-        app:IT_text="新密码">
-    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
-    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
-        android:id="@+id/up_new_again"
+        app:IT_text="新\t密\t码">
+    </com.edu.schooltask.ui.view.InputTextView>
+    <com.edu.schooltask.ui.view.InputTextView
+        android:id="@+id/ulp_new_again"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:IT_inputType="password"
         app:IT_text="确认密码"
         app:IT_hint="请再次输入新密码">
-    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+    </com.edu.schooltask.ui.view.InputTextView>
     <Button
-        android:id="@+id/up_btn"
+        android:id="@+id/ulp_btn"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="20dp"

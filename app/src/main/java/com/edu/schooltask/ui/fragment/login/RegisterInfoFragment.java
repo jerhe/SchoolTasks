@@ -3,7 +3,6 @@ package com.edu.schooltask.ui.fragment.login;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
@@ -20,7 +19,7 @@ import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
-import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
+import com.edu.schooltask.ui.view.InputTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

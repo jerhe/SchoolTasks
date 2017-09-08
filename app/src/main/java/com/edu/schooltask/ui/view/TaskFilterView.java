@@ -1,15 +1,12 @@
 package com.edu.schooltask.ui.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -41,8 +38,8 @@ public class TaskFilterView extends RelativeLayout{
         super(context, attrs);
         fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in);
         fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-        translateDownAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_down);
-        translateUpAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_up);
+        translateDownAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_top_in);
+        translateUpAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_top_out);
         emptyAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.empty);
         //阴影布局
         shadowView = new View(context, null);
@@ -120,6 +117,7 @@ public class TaskFilterView extends RelativeLayout{
     }
 
     public void show(){
+        if (isShown()) return;
         setVisibility(VISIBLE);
         filterLayout.startAnimation(translateDownAnimation);
         shadowView.startAnimation(fadeInAnimation);
@@ -127,6 +125,7 @@ public class TaskFilterView extends RelativeLayout{
     }
 
     public void hide(){
+        if(!isShown()) return;
         filterLayout.startAnimation(translateUpAnimation);
         shadowView.startAnimation(fadeOutAnimation);
         startAnimation(emptyAnimation);

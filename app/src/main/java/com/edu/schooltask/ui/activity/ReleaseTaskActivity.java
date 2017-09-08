@@ -28,20 +28,20 @@ import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.SchoolFilter;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.other.SchoolAutoComplement;
+import com.edu.schooltask.ui.view.PayPasswordView;
+import com.edu.schooltask.ui.view.PayView;
 import com.edu.schooltask.ui.view.recyclerview.BaseRecyclerView;
 import com.edu.schooltask.utils.DensityUtil;
-import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.ui.view.TaskContentView;
-import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
-import com.edu.schooltask.ui.view.SelectText;
+import com.edu.schooltask.ui.view.InputTextView;
+import com.edu.schooltask.ui.view.TextSpinner;
 import com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView;
 import com.edu.schooltask.ui.view.recyclerview.VoucherRecyclerView;
-import com.orhanobut.dialogplus.DialogPlus;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
 import com.yuyh.library.imgsel.ImgSelConfig;
@@ -70,7 +70,8 @@ public class ReleaseTaskActivity extends BaseActivity {
     private static final int SELECT_IMAGE_CODE = 0;
 
     @BindView(R.id.rt_school) InputTextView schoolText;
-    @BindView(R.id.rt_des) SelectText desText;
+    @BindView(R.id.rt_des)
+    TextSpinner desText;
     @BindView(R.id.rt_cost) InputTextView costText;
     @BindView(R.id.rt_content) TaskContentView taskContentViewText;
     @BindView(R.id.rt_limit_time) InputTextView limitTimeText;
@@ -82,6 +83,7 @@ public class ReleaseTaskActivity extends BaseActivity {
     @BindView(R.id.rt_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.rt_vrv) VoucherRecyclerView voucherRecyclerView;
     @BindView(R.id.rt_shadow) View shadowView;
+    @BindView(R.id.rt_pay) PayView payView;
 
     @OnClick(R.id.rt_release_btn)
     public void releaseTask(){
@@ -98,7 +100,6 @@ public class ReleaseTaskActivity extends BaseActivity {
     }
 
     ProgressDialog progressDialog;
-    DialogPlus payDialog;
 
     Animation fadeInAnimation;
     Animation fadeOutAnimation;
@@ -184,6 +185,23 @@ public class ReleaseTaskActivity extends BaseActivity {
                 updatePayText();
             }
         });
+        //支付界面
+        payView.setPayPasswordFinishedListener(new PayPasswordView.PayPasswordFinishedListener() {
+            @Override
+            public void onFinished(String password) {
+                progressDialog = ProgressDialog.show(ReleaseTaskActivity.this, "",
+                        getString(R.string.releasing), true, false);
+                payPwd = EncriptUtil.getMD5(password);
+                if(tempFiles.size() == 0){ //无图片发布
+                    SchoolTask.releaseTask("", school, description, content, money, taskCost, time, payPwd,
+                            voucher == null ? 0 : voucher.getId(),
+                            voucher == null ? new BigDecimal(0) : voucher.getMoney(), 0);
+                }
+                else{   //带图片发布
+                    SchoolTask.getTaskUploadKey(payPwd);
+                }
+            }
+        });
         //获取代金券
         voucherRecyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -208,7 +226,6 @@ public class ReleaseTaskActivity extends BaseActivity {
         });
         voucherRecyclerView.bind();
         voucherRecyclerView.setEmptyView(R.layout.empty_voucher);
-
         TextView textView = new TextView(this);
         textView.setText(getString(R.string.withoutVoucher));
         textView.setPadding(DensityUtil.dipToPx(this, 30), DensityUtil.dipToPx(this, 20),
@@ -234,14 +251,6 @@ public class ReleaseTaskActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (payDialog != null){
-            if(payDialog.isShowing()){
-                payDialog.dismiss();
-                EventBus.getDefault().post(new ReleaseTaskEvent(getString(R.string.payCancel)));
-                return;
-            }
-            else finish();
-        }
         if(voucherRecyclerView.isShown()) {
             hideVoucherView();
             return;
@@ -289,11 +298,16 @@ public class ReleaseTaskActivity extends BaseActivity {
         }
         else{
             toastShort(event.getError());
-            if(event.getCode() == 4){
-                //TODO 跳转到充值页面
-            }
-            if(event.getCode() == 3){   //未设置支付密码
-                openActivity(SetPayPwdActivity.class);
+            payView.clearPassword();
+            switch (event.getCode()){
+                case 301:   //未设置支付密码
+                    openActivity(SetPayPwdActivity.class);
+                    break;
+                case 305:   //余额不足
+                    break;
+                default:
+                    payView.hide();
+                    break;
             }
         }
     }
@@ -363,25 +377,10 @@ public class ReleaseTaskActivity extends BaseActivity {
                         .setCompressFormat(Bitmap.CompressFormat.PNG)
                         .setQuality(100).build().compressToFile(new File(path)));
             }
-            //支付密码
-            payDialog = DialogUtil.createPayDialog(this, new DialogUtil.OnPayListener() {
-                @Override
-                public void onPay(String pwd) {
-                    KeyBoardUtil.hideKeyBoard(ReleaseTaskActivity.this);
-                    progressDialog = ProgressDialog.show(ReleaseTaskActivity.this, "",
-                            getString(R.string.releasing), true, false);
-                    payPwd = EncriptUtil.getMD5(pwd);
-                    if(tempFiles.size() == 0){ //无图片发布
-                        SchoolTask.releaseTask("", school, description, content, money, taskCost, time, payPwd,
-                                voucher == null ? 0 : voucher.getId(),
-                                voucher == null ? new BigDecimal(0) : voucher.getMoney(), 0);
-                    }
-                    else{   //带图片发布
-                        SchoolTask.getTaskUploadKey(payPwd);
-                    }
-                }
-            },money.toString() ,new ReleaseTaskEvent());
-            payDialog.show();
+            KeyBoardUtil.hideKeyBoard(this);
+            //支付界面
+            payView.setTitle("支付金额：" + money.toString() + "元");
+            payView.show();
         }
     }
 
@@ -422,6 +421,16 @@ public class ReleaseTaskActivity extends BaseActivity {
         else{
             clear();
             toastShort(event.getError());
+            switch (event.getCode()){
+                case 301:   //未设置支付密码
+                    openActivity(SetPayPwdActivity.class);
+                    break;
+                case 304:   //支付密码错误
+                    break;
+                default:    //其他
+                    payView.hide();
+                    break;
+            }
         }
     }
 
@@ -472,8 +481,6 @@ public class ReleaseTaskActivity extends BaseActivity {
     private void clear(){
         tempFiles.clear();
         uploadNum = 0;
-        if(progressDialog != null)
-            if(progressDialog.isShowing())
-                progressDialog.dismiss();
+        if(progressDialog != null) progressDialog.dismiss();
     }
 }

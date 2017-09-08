@@ -2,8 +2,6 @@ package server.api;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.net.Uri;
 import android.util.Log;
 
 import com.edu.schooltask.beans.TaskUploadKey;
@@ -17,23 +15,16 @@ import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
-import com.qiniu.android.storage.UploadOptions;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.net.URI;
-import java.util.Calendar;
 import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
-import okhttp3.Call;
-import okhttp3.Response;
 import server.api.event.friend.AgreeRequestEvent;
 import server.api.event.friend.FriendRequestEvent;
 import server.api.event.friend.GetFriendListEvent;
@@ -67,11 +58,12 @@ import server.api.event.user.LoginEvent;
 import server.api.event.user.RefreshHeadBGEvent;
 import server.api.event.user.UpdateLoginPwdEvent;
 import server.api.event.user.UpdateUserInfoEvent;
+import server.api.event.user.account.CheckPayPasswordEvent;
 import server.api.event.user.account.GetDetailEvent;
 import server.api.event.user.account.GetMoneyEvent;
 import server.api.event.user.account.RechargeEvent;
 import server.api.event.user.account.SetPayPwdEvent;
-import server.api.event.user.account.UpdatePaypwdEvent;
+import server.api.event.user.account.UpdatePayPasswordEvent;
 import server.api.event.user.register.CheckRegisterCodeEvent;
 import server.api.event.user.register.GetRegisterCodeEvent;
 import server.api.event.user.register.RegisterEvent;
@@ -108,6 +100,8 @@ public class SchoolTask {
     private final static String UPDATE_PAY_PWD = SERVER + "account/updatePayPwd";
     private final static String RECHARGE = SERVER + "account/recharge";
     private final static String GET_DETAIL = SERVER + "account/getDetailList";
+    private final static String CHECK_PAY_PASSWORD = SERVER + "account/checkPayPassword";
+
 
     //Task
     private final static String RELEASE_TASK = SERVER + "task/release";
@@ -177,10 +171,10 @@ public class SchoolTask {
     }
 
     //获取七牛上传凭证
-    public static void getTaskUploadKey(String payPwd){
+    public static void getTaskUploadKey(String payPassword){
         tokenPost.newPost()
                 .url(GET_TASK_UPLOAD_KEY)
-                .addParam("payPwd", payPwd)
+                .addParam("payPassword", payPassword)
                 .event(new GetTaskUploadKeyEvent())
                 .enqueue();
     }
@@ -210,13 +204,13 @@ public class SchoolTask {
      * @param cost          实际支付金额
      * @param reward        任务报酬
      * @param limitTime     时限
-     * @param payPwd        支付密码
+     * @param payPassword   支付密码
      * @param voucherId     代金券编号
      * @param voucher       代金券金额
      * @param imageNum      图片数
      */
     public static void releaseTask(String orderId, String school, String description, String content,
-                                   BigDecimal cost, BigDecimal reward, int limitTime, String payPwd,
+                                   BigDecimal cost, BigDecimal reward, int limitTime, String payPassword,
                                    long voucherId, BigDecimal voucher, int imageNum){
         tokenPost.newPost()
                 .url(RELEASE_TASK)
@@ -227,7 +221,7 @@ public class SchoolTask {
                 .addParam("cost", cost)
                 .addParam("reward", reward)
                 .addParam("limitTime", limitTime)
-                .addParam("payPwd", payPwd)
+                .addParam("payPassword", payPassword)
                 .addParam("voucherId", voucherId)
                 .addParam("voucher", voucher)
                 .addParam("imageNum", imageNum)
@@ -278,21 +272,32 @@ public class SchoolTask {
                 .enqueue();
     }
 
+    //检测支付密码
+    public static void checkPayPassword(String payPassword){
+        tokenPost.newPost()
+                .url(CHECK_PAY_PASSWORD)
+                .addParam("payPassword", EncriptUtil.getMD5(payPassword))
+                .event(new CheckPayPasswordEvent())
+                .enqueue();
+    }
+
     //接受任务
-    public static void acceptTask(String orderId){
+    public static void acceptTask(String orderId, String payPassword){
         tokenPost.newPost()
                 .url(ACCEPT_TASK)
                 .addParam("orderId", orderId)
+                .addParam("payPassword", payPassword)
                 .event(new AcceptTaskEvent())
                 .enqueue();
     }
 
     //改变任务状态
-    public static void changeTaskOrderState(String orderId, int state){
+    public static void changeTaskOrderState(String orderId, int state, String payPassword){
         tokenPost.newPost()
                 .url(CHANGE_ORDER_STATE)
                 .addParam("orderId", orderId)
                 .addParam("state", state)
+                .addParam("payPassword", payPassword)
                 .event(new ChangeTaskOrderStateEvent())
                 .enqueue();
     }
@@ -332,7 +337,7 @@ public class SchoolTask {
                 .enqueue();
     }
 
-    //修改密码
+    //修改登录密码
     public static void updateLoginPwd(String oldPwd, String newPwd){
         tokenPost.newPost()
                 .url(UPDATE_LOGIN_PWD)
@@ -356,7 +361,7 @@ public class SchoolTask {
                 .url(UPDATE_PAY_PWD)
                 .addParam("oldPayPwd", oldPayPwd)
                 .addParam("newPayPwd", newPayPwd)
-                .event(new UpdatePaypwdEvent())
+                .event(new UpdatePayPasswordEvent())
                 .enqueue();
     }
 

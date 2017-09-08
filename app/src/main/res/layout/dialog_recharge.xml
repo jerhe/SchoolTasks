@@ -29,14 +29,14 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp" />
     </LinearLayout>
-    <com.edu.schooltask.ui.view.Inputtextview.InputTextView
+    <com.edu.schooltask.ui.view.InputTextView
         android:id="@+id/recharge_money"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:IT_text="充值金额">
-    </com.edu.schooltask.ui.view.Inputtextview.InputTextView>
+    </com.edu.schooltask.ui.view.InputTextView>
     <Button
         android:id="@+id/recharge_btn"
         android:layout_width="match_parent"

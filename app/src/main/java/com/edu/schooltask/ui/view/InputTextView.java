@@ -1,4 +1,4 @@
-package com.edu.schooltask.ui.view.Inputtextview;
+package com.edu.schooltask.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,14 +15,17 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
+import com.edu.schooltask.utils.DialogUtil;
+import com.orhanobut.dialogplus.DialogPlus;
 
 /**
  * Created by 夜夜通宵 on 2017/5/4.
  */
 
 public class InputTextView extends LinearLayout {
-    private InputTextNameView nameText;
-    private InputTextTextView inputText;
+    private TextView nameText;
+    private EditText inputText;
+    private PayPasswordView payPasswordView;
     private ImageView tipBtn;
     private Boolean inputEnable = true;
 
@@ -31,7 +34,8 @@ public class InputTextView extends LinearLayout {
     int fontColor;
     int lineColor;
 
-    PopupWindow tipWindow;
+    PayPasswordInputBoard payPasswordInputBoard;
+    DialogPlus tipDialog;
 
     public InputTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,8 +49,11 @@ public class InputTextView extends LinearLayout {
         String hint = typedArray.getString(R.styleable.InputTextView_IT_hint);
         String inputType = typedArray.getString(R.styleable.InputTextView_IT_inputType);
         String tip = typedArray.getString(R.styleable.InputTextView_IT_tip);
-        nameText = (InputTextNameView) findViewById(R.id.it_name);
-        inputText = (InputTextTextView)findViewById(R.id.it_input);
+        boolean isNumber = typedArray.getBoolean(R.styleable.InputTextView_IT_number, false);
+
+        nameText = (TextView) findViewById(R.id.it_name);
+        inputText = (EditText) findViewById(R.id.it_input);
+        payPasswordView = (PayPasswordView) findViewById(R.id.it_pay_password);
         tipBtn = (ImageView) findViewById(R.id.it_tip);
         nameText.setText(text);
         nameText.setOnClickListener(new OnClickListener() {
@@ -59,15 +66,9 @@ public class InputTextView extends LinearLayout {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus && inputEnable){
-                    //nameText.setBackground(backGroundLightColor);
-                    //AnimationUtil.colorAnimation(nameText, "background", 100, backgroundColor, backGroundLightColor);
-                    //AnimationUtil.colorAnimation(inputText, "background", 100, lineColor, backGroundLightColor);
                     nameText.setTextColor(backGroundLightColor);
                 }
                 else{
-                    //nameText.setBackground(backgroundColor);
-                    //AnimationUtil.colorAnimation(nameText, "background", 0, backGroundLightColor, backgroundColor);
-                    //AnimationUtil.colorAnimation(inputText, "background", 0, backGroundLightColor, lineColor);
                     nameText.setTextColor(fontColor);
                 }
             }
@@ -76,26 +77,30 @@ public class InputTextView extends LinearLayout {
         if("password".equals(inputType)){
             inputText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
         }
+        if("payPassword".equals(inputType)){
+            inputText.setVisibility(GONE);
+            payPasswordView.setVisibility(VISIBLE);
+            payPasswordView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(payPasswordInputBoard != null) payPasswordInputBoard.show();
+                }
+            });
+        }
         if(tip == null){
             tipBtn.setVisibility(GONE);
         }
         else{
             tipBtn.setVisibility(VISIBLE);
-            tipWindow = new PopupWindow(this);
-            View view = LayoutInflater.from(context).inflate(R.layout.layout_text_tip, null);
-            ((TextView) view.findViewById(R.id.tt_tip)).setText(tip);
-            tipWindow.setContentView(view);
-            tipWindow.setHeight(LayoutParams.WRAP_CONTENT);
-            tipWindow.setOutsideTouchable(true);
+            tipDialog = DialogUtil.createTipDialog(context, text, tip);
             tipBtn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    inputText.requestFocus();
-                    tipWindow.setWidth(nameText.getWidth() + inputText.getWidth());
-                    tipWindow.showAsDropDown(nameText, 0, -5);
+                    tipDialog.show();
                 }
             });
         }
+        if(isNumber) inputText.setInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     public String getName(){
@@ -130,5 +135,32 @@ public class InputTextView extends LinearLayout {
 
     public EditText getInputText(){
         return inputText;
+    }
+
+    /**
+     * ---------------------------pay password-------------------------------
+     */
+    public void setPayPasswordInputBoard(PayPasswordInputBoard inputBoard){
+        this.payPasswordInputBoard = inputBoard;
+    }
+
+    public void inputPayPassword(int x){
+        payPasswordView.input(x);
+    }
+
+    public String getPayPassword(){
+        return payPasswordView.get();
+    }
+
+    public void setPayPasswordFinishedListener(PayPasswordView.PayPasswordFinishedListener listener){
+        payPasswordView.setPayPasswordFinishedListener(listener);
+    }
+
+    public void deletePayPassword(){
+        payPasswordView.delete();
+    }
+
+    public void clearPayPassword(){
+        payPasswordView.clear();
     }
 }

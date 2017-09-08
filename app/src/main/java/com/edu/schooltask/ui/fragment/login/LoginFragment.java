@@ -5,18 +5,17 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.event.LoginSuccessEvent;
-import com.edu.schooltask.filter.NumberFilter;
+import com.edu.schooltask.filter.CodeFilter;
 import com.edu.schooltask.filter.PasswordFilter;
 import com.edu.schooltask.filter.PhoneFilter;
 import com.edu.schooltask.ui.base.BaseFragment;
-import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
+import com.edu.schooltask.ui.view.InputTextView;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.KeyBoardUtil;
@@ -47,7 +46,7 @@ public class LoginFragment extends BaseFragment{
     @BindView(R.id.login_code) InputTextView codeText;
     @BindView(R.id.login_get_code) TextView getCodeBtn;
     @BindView(R.id.login_pwd_layout) RelativeLayout pwdLayout;
-    @BindView(R.id.login_sms_layout) LinearLayout smsLayout;
+    @BindView(R.id.login_sms_layout) RelativeLayout smsLayout;
 
     @OnClick(R.id.login_login_btn)
     public void login(){
@@ -113,7 +112,7 @@ public class LoginFragment extends BaseFragment{
             toastShort("请输入正确的手机号");
             return;
         }
-        getCodeBtn.setEnabled(false);
+        setGetCodeEnable(false);
         SchoolTask.getLoginCode(id);
     }
 
@@ -140,7 +139,7 @@ public class LoginFragment extends BaseFragment{
         ButterKnife.bind(this, view);
         idText.setInputFilter(new PhoneFilter());
         pwdText.setInputFilter(new PasswordFilter());
-        codeText.setInputFilter(new NumberFilter());
+        codeText.setInputFilter(new CodeFilter());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -161,7 +160,7 @@ public class LoginFragment extends BaseFragment{
     public void onGetLoginCode(GetLoginCodeEvent event){
         if(event.isOk()){
             toastShort(getString(R.string.code_success));
-            getCodeBtn.setEnabled(false);
+            setGetCodeEnable(false);
             new CountDownTimer(60000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -174,13 +173,23 @@ public class LoginFragment extends BaseFragment{
                 @Override
                 public void onFinish() {
                     getCodeBtn.setText("获取验证码");
-                    getCodeBtn.setEnabled(true);
+                    setGetCodeEnable(true);
                 }
             }.start();
         }
         else{
-            getCodeBtn.setEnabled(true);
+            setGetCodeEnable(true);
             toastShort(event.getError());
+        }
+    }
+
+    private void setGetCodeEnable(boolean enable){
+        getCodeBtn.setEnabled(enable);
+        if(enable){
+            getCodeBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+        else{
+            getCodeBtn.setTextColor(getResources().getColor(R.color.hintColor));
         }
     }
 }

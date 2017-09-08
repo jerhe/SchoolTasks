@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
     android:orientation="horizontal"
-    android:layout_height="40dp">
+    android:background="@color/white"
+    android:layout_height="wrap_content">
     <LinearLayout
-        android:id="@+id/it_bg"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.edu.schooltask.ui.view.Inputtextview.InputTextNameView
-            android:id="@+id/it_name"
-            android:layout_width="70dp"
-            android:gravity="center"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:text="文本"/>
-        <com.edu.schooltask.ui.view.Inputtextview.InputTextTextView
-            android:id="@+id/it_input"
-            android:paddingLeft="10dp"
-            android:textSize="14sp"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/it_bg"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:textColor="@color/fontColor"
-            android:layout_height="match_parent"
-            android:background="@null"/>
+            android:layout_height="40dp">
+            <TextView
+                android:id="@+id/it_name"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:text="文本"/>
+            <EditText
+                android:id="@+id/it_input"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:textColor="@color/fontColor"
+                android:layout_height="match_parent"
+                android:background="@null"/>
+        </LinearLayout>
+        <com.edu.schooltask.ui.view.PayPasswordView
+            android:id="@+id/it_pay_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone">
+        </com.edu.schooltask.ui.view.PayPasswordView>
     </LinearLayout>
+
     <ImageView
         android:id="@+id/it_tip"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
         android:src="@drawable/ic_action_tip"
         android:gravity="center"
         android:textColor="@color/white"

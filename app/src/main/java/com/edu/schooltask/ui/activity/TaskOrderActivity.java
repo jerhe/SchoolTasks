@@ -1,5 +1,6 @@
 package com.edu.schooltask.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import com.baoyz.widget.PullRefreshLayout;
 import com.edu.schooltask.R;
 import com.edu.schooltask.ui.base.BaseActivity;
+import com.edu.schooltask.ui.view.PayPasswordView;
+import com.edu.schooltask.ui.view.PayView;
 import com.edu.schooltask.ui.view.recyclerview.BasePageRecyclerView;
 import com.edu.schooltask.ui.view.recyclerview.BaseRecyclerView;
 import com.edu.schooltask.beans.comment.TaskComment;
@@ -26,6 +29,7 @@ import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.item.OrderStateItem;
 import com.edu.schooltask.utils.DialogUtil;
+import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.GsonUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
@@ -73,6 +77,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.order_crv) CommentRecyclerView commentRecyclerView;
     @BindView(R.id.order_count) TaskCountView taskCountView;
     @BindView(R.id.order_comment_reply_view) CommentReplyView commentReplyView;
+    @BindView(R.id.order_pv) PayView payView;
 
     @OnClick(R.id.order_comment_btn)
     public void showInputBoard(){
@@ -84,6 +89,9 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     Animation fadeInAnimation;
     MenuItem editMenu;
     DialogPlus editDialog;
+    int updateState = 0;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +178,15 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                 else{
                     toastShort(getString(R.string.inputTip, "评论"));
                 }
+            }
+        });
+        //支付界面
+        payView.setTitle("操作确认");
+        payView.setPayPasswordFinishedListener(new PayPasswordView.PayPasswordFinishedListener() {
+            @Override
+            public void onFinished(String password) {
+                progressDialog = ProgressDialog.show(TaskOrderActivity.this, "", "验证中...", true, false);
+                SchoolTask.changeTaskOrderState(orderId, updateState, EncriptUtil.getMD5(password));
             }
         });
     }
@@ -312,12 +329,25 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onChangeTaskOrderState(ChangeTaskOrderStateEvent event){
+        if(progressDialog != null) progressDialog.dismiss();
+        payView.clearPassword();
         if(event.isOk()){
             toastShort(getString(R.string.success));
+            payView.hide();
             orderStateRecyclerView.refresh();
         }
         else{
             toastShort(event.getError());
+            switch (event.getCode()){
+                case 301:   //未设置支付密码
+                    openActivity(SetPayPwdActivity.class);
+                    break;
+                case 304:   //支付密码错误
+                    break;
+                default:    //其他
+                    payView.hide();
+                    break;
+            }
         }
     }
 
@@ -380,7 +410,8 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
-                                SchoolTask.changeTaskOrderState(orderId, 5);
+                                updateState = 5;
+                                payView.show();
                             }
                         });
                 break;
@@ -390,7 +421,8 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
-                                SchoolTask.changeTaskOrderState(orderId, 7);
+                                updateState = 7;
+                                payView.show();
                             }
                         });
                 break;
@@ -400,7 +432,8 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
-                                SchoolTask.changeTaskOrderState(orderId, 3);
+                                updateState = 3;
+                                payView.show();
                             }
                         });
                 break;
@@ -410,7 +443,8 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
-                                SchoolTask.changeTaskOrderState(orderId, 2);
+                                updateState = 2;
+                                payView.show();
                             }
                         });
                 break;
@@ -420,7 +454,8 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                         new DialogUtil.OnClickListener() {
                             @Override
                             public void onClick(DialogPlus dialogPlus) {
-                                SchoolTask.changeTaskOrderState(orderId, 6);
+                                updateState = 6;
+                                payView.show();
                             }
                         });
                 break;

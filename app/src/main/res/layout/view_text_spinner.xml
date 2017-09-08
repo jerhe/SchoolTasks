@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/ts_name"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="文本"/>
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/ts_spinner"
+        android:layout_toRightOf="@id/ts_name"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

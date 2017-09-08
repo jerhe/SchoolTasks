@@ -6,30 +6,22 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.UserInfo;
-import com.edu.schooltask.ui.activity.SetPayPwdActivity;
 import com.edu.schooltask.ui.base.BaseActivity;
 import com.edu.schooltask.filter.MoneyFilter;
-import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.ui.view.TaskContentView;
-import com.edu.schooltask.ui.view.Inputtextview.InputTextView;
+import com.edu.schooltask.ui.view.InputTextView;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
-import com.orhanobut.dialogplus.OnBackPressListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.math.BigDecimal;
-
-import server.api.base.BaseTokenEvent;
 
 /**
  * Created by 夜夜通宵 on 2017/5/15.
@@ -52,7 +44,7 @@ public class DialogUtil {
                         switch (view.getId()){
                             case R.id.dt_ok:
                                 dialog.dismiss();
-                                listener.onClick(dialog);
+                                if(listener != null) listener.onClick(dialog);
                                 break;
                             case R.id.dt_cancel:
                                 dialog.dismiss();
@@ -72,68 +64,33 @@ public class DialogUtil {
         return dialog;
     }
 
-    public static DialogPlus createPayDialog(final BaseActivity activity, final OnPayListener listener, String cost, final BaseTokenEvent event){
-        int margin = (int)activity.getResources().getDimension(R.dimen.dialog_margin);
-        final DialogPlus payDialog = DialogPlus.newDialog(activity)
-                .setContentHolder(new ViewHolder(R.layout.dialog_pay))
-                .setGravity(Gravity.CENTER)
+    public static DialogPlus createTipDialog(Context context, String title, String content){
+        int margin = (int)context.getResources().getDimension(R.dimen.dialog_margin);
+        DialogPlus dialog = DialogPlus.newDialog(context)
                 .setContentBackgroundResource(R.drawable.bg_dialog)
-                .setMargin(margin,0,margin,0)
+                .setGravity(Gravity.CENTER)
                 .setOutAnimation(R.anim.dialog_out)
-                .setCancelable(false)
+                .setContentHolder(new ViewHolder(R.layout.dialog_tip))
+                .setMargin(margin,0,margin,0)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         switch (view.getId()){
-                            case R.id.pwd_confirm_btn:
-                                View dialogView = dialog.getHolderView();
-                                InputTextView pwdText = (InputTextView) dialogView.findViewById(R.id.pwd_pwd);
-                                String pwd = pwdText.getText();
-                                if(pwd.length() == 0){
-                                    activity.toastShort("请输入支付密码");
-                                    return;
-                                }
-                                if(pwd.length() != 6){
-                                    activity.toastShort("支付密码为6位数字");
-                                    return;
-                                }
+                            case R.id.dt_ok:
                                 dialog.dismiss();
-                                listener.onPay(pwd);
                                 break;
                         }
                     }
                 })
-                .setOnBackPressListener(new OnBackPressListener() {
-                    @Override
-                    public void onBackPressed(DialogPlus dialogPlus) {
-                        dialogPlus.dismiss();
-                        EventBus.getDefault().post(event.setError("取消支付"));
-                    }
-                })
                 .create();
-        LinearLayout moneyLayout = (LinearLayout) payDialog.findViewById(R.id.pay_money_layout);
-        if(null == cost){
-            moneyLayout.setVisibility(View.GONE);
-        }
-        else{
-            TextView moneyText = (TextView) payDialog.findViewById(R.id.pay_money);
-            moneyText.setText(cost + "元");
-        }
-        InputTextView pwdText = (InputTextView) payDialog.findViewById(R.id.pwd_pwd);
-        pwdText.setInputFilter(new NumberFilter());
-        TextView setPayPwdText = (TextView) payDialog.findViewById(R.id.pay_set_pwd);
-        setPayPwdText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.openActivity(SetPayPwdActivity.class);
-            }
-        });
-        return payDialog;
+        View dialogView = dialog.getHolderView();
+        TextView titleText = (TextView) dialogView.findViewById(R.id.dialog_title);
+        TextView contentText = (TextView) dialogView.findViewById(R.id.dt_content);
+        titleText.setText(title);
+        contentText.setText(content);
+        return dialog;
     }
 
-    public interface OnPayListener{
-        void onPay(String pwd);
-    }
 
     public interface OnClickListener{
         void onClick(DialogPlus dialogPlus);
@@ -247,10 +204,6 @@ public class DialogUtil {
         TaskContentView taskContentView = (TaskContentView) dialogView.findViewById(R.id.dis_content);
         taskContentView.setText(defaultContent);
         return dialog;
-    }
-
-    public interface DatePickerListener{
-        void onDatePicker(DialogPlus dialogPlus, String date);
     }
 
 

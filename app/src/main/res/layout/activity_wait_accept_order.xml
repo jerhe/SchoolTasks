@@ -81,4 +81,10 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_above="@id/wao_bottom"/>
+    <com.edu.schooltask.ui.view.PayView
+        android:id="@+id/wao_pv"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.edu.schooltask.ui.view.PayView>
 </RelativeLayout>
