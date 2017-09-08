@@ -3,6 +3,7 @@ package server.api;
 import android.util.Log;
 
 import com.edu.schooltask.beans.UserInfoWithToken;
+import com.edu.schooltask.event.UnloginEvent;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import server.api.base.BaseTokenCallBack;
-import com.edu.schooltask.event.UnloginEvent;
 
 /**
  * Post队列：包含Token的请求需要加入这个队列以保证Token不错乱
@@ -25,16 +25,14 @@ import com.edu.schooltask.event.UnloginEvent;
 
 
 public class TokenPost {
-    List<TokenRequestBody> bodies = new ArrayList<>();    //RequestBody集合
-    boolean posting;    //判断是否正在请求
+    static List<TokenRequestBody> bodies = new ArrayList<>();    //RequestBody集合
+    static boolean posting;    //判断是否正在请求
 
-    public TokenPost(){}
-
-    public TokenRequestBody newPost(){
-        return new TokenRequestBody(this);
+    public static TokenRequestBody newPost(){
+        return new TokenRequestBody();
     }
 
-    public void post(){
+    public static void post(){
         posting = true;
         if(bodies.size() > 0){
             TokenRequestBody tokenRequestBody = bodies.get(0);
@@ -75,13 +73,13 @@ public class TokenPost {
         }
     }
 
-    public void nextPost(){
+    private static void nextPost(){
         bodies.remove(0);
         posting = false;
         post();
     }
 
-    public void enqueue(TokenRequestBody body){
+    public static void enqueue(TokenRequestBody body){
         if(body.getCallBack() == null) throw new RuntimeException("callback must not be null!");
         bodies.add(body);
     }

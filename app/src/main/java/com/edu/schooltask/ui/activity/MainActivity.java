@@ -154,6 +154,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+        releaseMenu.setStartView(bottomTab.getReleaseTab());
     }
 
     //事件：登录成功

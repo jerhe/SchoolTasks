@@ -71,7 +71,9 @@ public class UserUtil {
         String url = userInfo.getHead();
         if(StringUtil.isEmpty(url)){    //头像为空
             Glide.with(context) //设置默认头像
-                    .load(R.drawable.rc_default_portrait)
+                    .load(R.drawable.ic_head_default)
+                    .dontAnimate()
+                    .placeholder(R.drawable.ic_head_default)
                     .into(imageView);
             return;
         }
@@ -79,8 +81,8 @@ public class UserUtil {
                 .load(url)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.rc_default_portrait)
-                .error(R.drawable.rc_default_portrait)
+                .placeholder(R.drawable.ic_head_default)
+                .error(R.drawable.ic_head_default)
                 .into(imageView);
     }
 

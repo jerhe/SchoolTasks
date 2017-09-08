@@ -73,6 +73,7 @@ public class PayView extends RelativeLayout{
     }
 
     public void show(){
+        clearPassword();
         setVisibility(VISIBLE);
         requestFocus();
         payLayout.startAnimation(showAnimation);

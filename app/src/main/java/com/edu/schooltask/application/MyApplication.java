@@ -1,8 +1,6 @@
 package com.edu.schooltask.application;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.View;
+import android.util.Log;
 
 import com.edu.schooltask.event.MessageCountEvent;
 import com.edu.schooltask.rong.listener.MyConversationBehaviorListener;
@@ -12,23 +10,21 @@ import com.edu.schooltask.rong.message.FriendMessage;
 import com.edu.schooltask.rong.message.OrderMessage;
 import com.edu.schooltask.rong.provider.FriendMessageProvider;
 import com.edu.schooltask.rong.provider.OrderMessageProvider;
-import com.edu.schooltask.ui.activity.UserActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.https.HttpsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePalApplication;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
-import c.b.BP;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
-import io.rong.imkit.model.UIConversation;
 import io.rong.imlib.AnnotationNotFoundException;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.Message;
-import io.rong.imlib.model.UserInfo;
 import okhttp3.OkHttpClient;
 
 /**
@@ -65,11 +61,21 @@ public class MyApplication extends LitePalApplication {
         RongIM.registerMessageTemplate(new OrderMessageProvider());
         RongIM.registerMessageTemplate(new FriendMessageProvider());
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(20, TimeUnit.SECONDS)    //连接超时时间
-                .readTimeout(20, TimeUnit.SECONDS)       //读取超时时间
-                .retryOnConnectionFailure(true)         //是否重试
-                .build();
-        OkHttpUtils.initClient(client); //设置为默认client
+        //okhttp
+        try {
+            HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(
+                    new InputStream[]{getAssets().open("school_task.cer")}, null, null);
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
+                    .connectTimeout(20, TimeUnit.SECONDS)    //连接超时时间
+                    .readTimeout(20, TimeUnit.SECONDS)       //读取超时时间
+                    .retryOnConnectionFailure(true)         //是否重试
+                    .build();
+            OkHttpUtils.initClient(client); //设置为默认client
+        } catch (IOException e) {
+            Log.e("okhttpInitError", e.toString());
+            e.printStackTrace();
+        }
+
     }
 }

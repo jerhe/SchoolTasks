@@ -330,13 +330,13 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onChangeTaskOrderState(ChangeTaskOrderStateEvent event){
         if(progressDialog != null) progressDialog.dismiss();
-        payView.clearPassword();
         if(event.isOk()){
             toastShort(getString(R.string.success));
             payView.hide();
             orderStateRecyclerView.refresh();
         }
         else{
+            payView.clearPassword();
             toastShort(event.getError());
             switch (event.getCode()){
                 case 301:   //未设置支付密码

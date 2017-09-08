@@ -298,15 +298,12 @@ public class ReleaseTaskActivity extends BaseActivity {
         }
         else{
             toastShort(event.getError());
-            payView.clearPassword();
+            payView.hide();
             switch (event.getCode()){
                 case 301:   //未设置支付密码
                     openActivity(SetPayPwdActivity.class);
                     break;
                 case 305:   //余额不足
-                    break;
-                default:
-                    payView.hide();
                     break;
             }
         }
@@ -420,15 +417,13 @@ public class ReleaseTaskActivity extends BaseActivity {
         }
         else{
             clear();
+            payView.hide();
             toastShort(event.getError());
             switch (event.getCode()){
                 case 301:   //未设置支付密码
                     openActivity(SetPayPwdActivity.class);
                     break;
                 case 304:   //支付密码错误
-                    break;
-                default:    //其他
-                    payView.hide();
                     break;
             }
         }

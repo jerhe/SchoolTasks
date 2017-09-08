@@ -69,10 +69,9 @@ public class UserFragment extends BaseFragment{
     @Override
     protected void init() {
         ButterKnife.bind(this, view);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, 1);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         userRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_personal_center, getString(R.string.personalCenter)));
-        userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_about, "更多"));
         userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_voucher, getString(R.string.voucher)));
         userRecyclerView.add(new IconMenuItem(IconMenuItem.VERTICAL, R.drawable.ic_account, getString(R.string.money)));
         userRecyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -83,10 +82,10 @@ public class UserFragment extends BaseFragment{
                         case 0:
                             openActivity(PersonalCenterActivity.class);
                             break;
-                        case 2:
+                        case 1:
                             openActivity(VoucherActivity.class);
                             break;
-                        case 3:
+                        case 2:
                             openActivity(MoneyActivity.class);
                             break;
                         default:

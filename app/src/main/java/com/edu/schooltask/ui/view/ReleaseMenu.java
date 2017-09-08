@@ -30,6 +30,8 @@ public class ReleaseMenu extends RelativeLayout {
     Animation iconMenuInAnimation;
     Animation iconMenuOutAnimation;
 
+    View startView;
+
 
     public ReleaseMenu(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -79,16 +81,22 @@ public class ReleaseMenu extends RelativeLayout {
         iconMenuRecyclerView.setOnItemClickListener(listener);
     }
 
+    public void setStartView(View v){
+        startView = v;
+    }
+
     public void show(){
         setVisibility(VISIBLE);
         requestFocus();
         startAnimation(fadeInAnimation);
         iconMenuRecyclerView.startAnimation(iconMenuInAnimation);
+        if(startView != null) startView.animate().rotationBy(180);
     }
 
     public void hide(){
         setVisibility(GONE);
         startAnimation(fadeOutAnimation);
         iconMenuRecyclerView.startAnimation(iconMenuOutAnimation);
+        if(startView != null) startView.animate().rotationBy(-180);
     }
 }

@@ -74,8 +74,8 @@ import server.api.event.voucher.GetAvailableVouchersEvent;
  */
 
 public class SchoolTask {
-    private final static String SERVER = "http://192.168.191.1:8080/SchoolTask/";
-    //private final static String SERVER = "http://119.29.91.152:8080/SchoolTask/";
+    //private final static String SERVER = "https://192.168.191.1:8443/SchoolTask/";
+    private final static String SERVER = "https://119.29.91.152:8443/SchoolTask/";
 
     //VerifyCode
     private final static String GET_REGISTER_CODE = SERVER + "verifyCode/getRegisterCode";
@@ -147,10 +147,7 @@ public class SchoolTask {
     static Configuration config;
     static UploadManager uploadManager;
 
-    static TokenPost tokenPost;
-
     public static void init(){
-        tokenPost = new TokenPost();
         config = new Configuration.Builder()
                 .zone(Zone.zone2)
                 .responseTimeout(20)
@@ -164,7 +161,7 @@ public class SchoolTask {
 
     //查询余额
     public static void getMoney(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_MONEY)
                 .event(new GetMoneyEvent())
                 .enqueue();
@@ -172,7 +169,7 @@ public class SchoolTask {
 
     //获取七牛上传凭证
     public static void getTaskUploadKey(String payPassword){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_TASK_UPLOAD_KEY)
                 .addParam("payPassword", payPassword)
                 .event(new GetTaskUploadKeyEvent())
@@ -212,7 +209,7 @@ public class SchoolTask {
     public static void releaseTask(String orderId, String school, String description, String content,
                                    BigDecimal cost, BigDecimal reward, int limitTime, String payPassword,
                                    long voucherId, BigDecimal voucher, int imageNum){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(RELEASE_TASK)
                 .addParam("orderId", orderId)
                 .addParam("school", school)
@@ -231,7 +228,7 @@ public class SchoolTask {
 
     //发表任务评论
     public static void comment(String orderId, long parentId, String toUserId, String comment){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(COMMENT)
                 .addParam("orderId", orderId)
                 .addParam("parentId", parentId)
@@ -243,7 +240,7 @@ public class SchoolTask {
 
     //获取用户订单
     public static void getUserOrderList(int type, int state, int sort, int page){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_USER_ORDER_LIST)
                 .addParam("type", type)
                 .addParam("state", state)
@@ -256,7 +253,7 @@ public class SchoolTask {
 
     //获取订单信息（订单页）
     public static void getOrderInfo(String orderId){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_ORDER_INFO)
                 .addParam("orderId", orderId)
                 .event(new GetTaskOrderInfoEvent())
@@ -265,7 +262,7 @@ public class SchoolTask {
 
     //设置支付密码
     public static void setPayPwd(String payPwd){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(SET_PAY_PWD)
                 .addParam("payPwd", EncriptUtil.getMD5(payPwd))
                 .event(new SetPayPwdEvent())
@@ -274,7 +271,7 @@ public class SchoolTask {
 
     //检测支付密码
     public static void checkPayPassword(String payPassword){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(CHECK_PAY_PASSWORD)
                 .addParam("payPassword", EncriptUtil.getMD5(payPassword))
                 .event(new CheckPayPasswordEvent())
@@ -283,7 +280,7 @@ public class SchoolTask {
 
     //接受任务
     public static void acceptTask(String orderId, String payPassword){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(ACCEPT_TASK)
                 .addParam("orderId", orderId)
                 .addParam("payPassword", payPassword)
@@ -293,7 +290,7 @@ public class SchoolTask {
 
     //改变任务状态
     public static void changeTaskOrderState(String orderId, int state, String payPassword){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(CHANGE_ORDER_STATE)
                 .addParam("orderId", orderId)
                 .addParam("state", state)
@@ -304,7 +301,7 @@ public class SchoolTask {
 
     //获取明细
     public static void getDetail(int page){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_DETAIL)
                 .addParam("page", page)
                 .event(new GetDetailEvent())
@@ -313,7 +310,7 @@ public class SchoolTask {
 
     //获取七牛上传凭证
     public static void getHeadUploadKey(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_HEAD_UPLOAD_KEY)
                 .event(new GetHeadUploadKeyEvent())
                 .enqueue();
@@ -321,7 +318,7 @@ public class SchoolTask {
 
     //获取七牛上传凭证
     public static void getBGUploadKey(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_BG_UPLOAD_KEY)
                 .event(new GetBGUploadKeyEvent())
                 .enqueue();
@@ -329,7 +326,7 @@ public class SchoolTask {
 
     //更新用户信息
     public static void updateUserInfo(String value, int type){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(UPDATE_USER_INFO)
                 .addParam("value", value)
                 .addParam("type", type)
@@ -339,7 +336,7 @@ public class SchoolTask {
 
     //修改登录密码
     public static void updateLoginPwd(String oldPwd, String newPwd){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(UPDATE_LOGIN_PWD)
                 .addParam("oldPwd", oldPwd)
                 .addParam("newPwd", newPwd)
@@ -349,7 +346,7 @@ public class SchoolTask {
 
     //获取用户个人中心信息
     public static void getPersonalCenterInfo(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_PERSONAL_CENTER_INFO)
                 .event(new GetPersonalCenterInfoEvent())
                 .enqueue();
@@ -357,7 +354,7 @@ public class SchoolTask {
 
     //修改支付密码
     public static void updatePayPwd(String oldPayPwd, String newPayPwd){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(UPDATE_PAY_PWD)
                 .addParam("oldPayPwd", oldPayPwd)
                 .addParam("newPayPwd", newPayPwd)
@@ -367,7 +364,7 @@ public class SchoolTask {
 
     //获取用户信息
     public static void getUserInfo(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_USER_INFO)
                 .event(new GetUserInfoEvent())
                 .enqueue();
@@ -376,7 +373,7 @@ public class SchoolTask {
 
     //充值
     public static void recharge(String orderId, BigDecimal money, String type){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(RECHARGE)
                 .addParam("orderId", orderId)
                 .addParam("money", money)
@@ -387,7 +384,7 @@ public class SchoolTask {
 
     //获取用户可用代金券
     public static void getAvailableVouchers(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_AVAILABLE_VOUCHERS)
                 .event(new GetAvailableVouchersEvent())
                 .enqueue();
@@ -395,7 +392,7 @@ public class SchoolTask {
 
     //获取融云Token
     public static void rongGetToken(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(RONG_GET_TOKEN)
                 .event(new GetTokenEvent())
                 .enqueue();
@@ -403,7 +400,7 @@ public class SchoolTask {
 
     //请求添加好友
     public static void friendRequest(String friendId){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(FRIEND_REQUEST)
                 .addParam("friendId", friendId)
                 .event(new FriendRequestEvent())
@@ -412,7 +409,7 @@ public class SchoolTask {
 
     //请求好友请求列表
     public static void getRequestList(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_REQUEST_LIST)
                 .event(new GetRequestListEvent())
                 .enqueue();
@@ -420,7 +417,7 @@ public class SchoolTask {
 
     //请求好友列表
     public static void getFriendList(){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(GET_FRIEND_LIST)
                 .event(new GetFriendListEvent())
                 .enqueue();
@@ -428,7 +425,7 @@ public class SchoolTask {
 
     //同意好友请求
     public static void agreeRequest(String friendId){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(AGREE_REQUEST)
                 .addParam("friendId", friendId)
                 .event(new AgreeRequestEvent())
@@ -437,7 +434,7 @@ public class SchoolTask {
 
     //同意好友请求
     public static void rejectRequest(String friendId){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(REJECT_REQUEST)
                 .addParam("friendId", friendId)
                 .event(new RejectRequestEvent())
@@ -445,7 +442,7 @@ public class SchoolTask {
     }
 
     public static void refreshHead(String head){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(REFRESH_HEAD)
                 .addParam("head", head)
                 .event(new RefreshHeadBGEvent())
@@ -453,7 +450,7 @@ public class SchoolTask {
     }
 
     public static void refreshBg(String bg){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(REFRESH_BG)
                 .addParam("bg", bg)
                 .event(new RefreshHeadBGEvent())
@@ -462,7 +459,7 @@ public class SchoolTask {
 
     //修改任务信息
     public static void updateTaskInfo(String orderId, String content){
-        tokenPost.newPost()
+        TokenPost.newPost()
                 .url(UPDATE_TASK_INFO)
                 .addParam("orderId", orderId)
                 .addParam("content", content)

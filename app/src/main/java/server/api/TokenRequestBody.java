@@ -15,11 +15,8 @@ public class TokenRequestBody {
     private String url;
     private Map<String,String> params;
     private BaseTokenCallBack callBack;
-    private TokenPost tokenPost;
 
-    public TokenRequestBody(TokenPost tokenPost){
-        this.tokenPost = tokenPost;
-    }
+    public TokenRequestBody(){}
 
     public BaseTokenCallBack getCallBack(){
         return callBack;
@@ -50,8 +47,8 @@ public class TokenRequestBody {
     }
 
     public void enqueue(){
-        tokenPost.enqueue(this);
-        if(!tokenPost.posting) tokenPost.post();
+        TokenPost.enqueue(this);
+        if(!TokenPost.posting) TokenPost.post();
     }
 
 }

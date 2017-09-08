@@ -52,7 +52,7 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
         super(context, attrs);
         LinearLayout.inflate(context,R.layout.view_bottom_tab,this);
         homeLayout = (LinearLayout) findViewById(R.id.bm_home);
-        messageLayout = (LinearLayout) findViewById(R.id.bm_talk);
+        messageLayout = (LinearLayout) findViewById(R.id.bm_message);
         orderLayout = (LinearLayout) findViewById(R.id.bm_order);
         userLayout = (LinearLayout) findViewById(R.id.bm_user);
         releaseLayout = (LinearLayout) findViewById(R.id.bm_release);
@@ -103,7 +103,7 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 orderText.setTextColor(normalColor);
                 userText.setTextColor(normalColor);
                 break;
-            case R.id.bm_talk:
+            case R.id.bm_message:
                 onMenuSelectedListener.onMenuSelected(PAGE_MESSAGE);
                 homeIcon.setImageResource(R.drawable.ic_home);
                 messageIcon.setImageResource(R.drawable.ic_message_light);
@@ -161,7 +161,7 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 setIcon(R.id.bm_home);
                 break;
             case 1:
-                setIcon(R.id.bm_talk);
+                setIcon(R.id.bm_message);
                 break;
             case 2:
                 setIcon(R.id.bm_order);
@@ -214,6 +214,10 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
 
     public void setReleaseLongListener(OnLongClickListener listener){
         releaseLayout.setOnLongClickListener(listener);
+    }
+
+    public View getReleaseTab(){
+        return releaseLayout;
     }
 
 }
