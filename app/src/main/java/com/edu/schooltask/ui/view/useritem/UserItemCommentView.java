@@ -42,9 +42,9 @@ public class UserItemCommentView extends RelativeLayout{
     public void setAll(final UserInfo userInfo, String commentTime, String school){
         setHead(userInfo);
         setName(userInfo.getName());
-        setSex(userInfo.getSex());
+        //setSex(userInfo.getSex());
         setCommentTime(commentTime);
-        setSchool(school);
+        //setSchool(school);
         //点击跳转到用户主页
         setOnClickListener(new OnClickListener() {
             @Override

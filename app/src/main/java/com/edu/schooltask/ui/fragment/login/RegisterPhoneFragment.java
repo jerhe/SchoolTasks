@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.event.RegisterNextEvent;
+import com.edu.schooltask.filter.CodeFilter;
 import com.edu.schooltask.filter.NumberFilter;
 import com.edu.schooltask.filter.PhoneFilter;
 import com.edu.schooltask.ui.base.BaseFragment;
@@ -90,7 +91,7 @@ public class RegisterPhoneFragment extends BaseFragment{
     protected void init(){
         ButterKnife.bind(this, view);
         idText.setInputFilter(new PhoneFilter());    //设置过滤
-        codeText.setInputFilter(new NumberFilter());
+        codeText.setInputFilter(new CodeFilter());
     }
 
     //获取验证码事件

@@ -101,6 +101,7 @@
                     android:id="@+id/rt_irv"
                     android:fadingEdge="none"
                     android:overScrollMode="never"
+                    android:layout_marginBottom="20dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"

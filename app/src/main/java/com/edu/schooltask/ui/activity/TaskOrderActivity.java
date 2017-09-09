@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.baoyz.widget.PullRefreshLayout;
 import com.edu.schooltask.R;
 import com.edu.schooltask.ui.base.BaseActivity;
+import com.edu.schooltask.ui.view.MyScrollView;
 import com.edu.schooltask.ui.view.PayPasswordView;
 import com.edu.schooltask.ui.view.PayView;
 import com.edu.schooltask.ui.view.recyclerview.BasePageRecyclerView;
@@ -31,6 +32,7 @@ import com.edu.schooltask.item.OrderStateItem;
 import com.edu.schooltask.utils.DialogUtil;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.GsonUtil;
+import com.edu.schooltask.utils.KeyBoardUtil;
 import com.edu.schooltask.utils.StringUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.edu.schooltask.ui.view.CommentInputBoard;
@@ -60,7 +62,7 @@ import server.api.event.task.order.GetTaskOrderInfoEvent;
 
 
 //intent param: orderId
-public class TaskOrderActivity extends BaseActivity implements View.OnClickListener{
+public class TaskOrderActivity extends BaseActivity implements View.OnClickListener, MyScrollView.OnScrollListener{
     @BindView(R.id.order_prl) PullRefreshLayout refreshLayout;
     @BindView(R.id.order_id) TextView orderIdText;
     @BindView(R.id.order_tiv) TaskItemView taskItemView;
@@ -75,9 +77,13 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.order_cib) CommentInputBoard commentInputBoard;
     @BindView(R.id.order_osrv) OrderStateRecyclerView orderStateRecyclerView;
     @BindView(R.id.order_crv) CommentRecyclerView commentRecyclerView;
-    @BindView(R.id.order_count) TaskCountView taskCountView;
     @BindView(R.id.order_comment_reply_view) CommentReplyView commentReplyView;
     @BindView(R.id.order_pv) PayView payView;
+
+    @BindView(R.id.order_msv) MyScrollView scrollView;
+    @BindView(R.id.order_header) LinearLayout headerLayout;
+    @BindView(R.id.order_count_layout) RelativeLayout countLayout;
+    @BindView(R.id.order_count_layout_top) RelativeLayout countLayoutTop;
 
     @OnClick(R.id.order_comment_btn)
     public void showInputBoard(){
@@ -91,6 +97,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     DialogPlus editDialog;
     int updateState = 0;
 
+    TaskCountView taskCountView;
     ProgressDialog progressDialog;
 
     @Override
@@ -102,7 +109,9 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         Intent intent = getIntent();
         orderId = intent.getStringExtra("orderId");
         initView();
+        refreshLayout.setRefreshing(true);
         orderStateRecyclerView.refresh();
+        commentRecyclerView.refresh();
     }
 
     @Override
@@ -122,6 +131,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                     toastShort("任务内容不能为空");
                     return;
                 }
+                KeyBoardUtil.hideKeyBoard(TaskOrderActivity.this);
                 if(taskItemView.getContent().equals(input)) {
                     dialogPlus.dismiss();
                     return;
@@ -133,8 +143,36 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         return true;
     }
 
+    @Override
+    public void onScroll(int scrollY) {
+        if(scrollY >= headerLayout.getHeight()){
+            if (taskCountView.getParent() != countLayoutTop) {
+                countLayout.removeView(taskCountView);
+                countLayoutTop.addView(taskCountView);
+                countLayoutTop.setVisibility(View.VISIBLE);
+            }
+        }else{
+            if (taskCountView.getParent() != countLayout) {
+                countLayoutTop.removeView(taskCountView);
+                countLayout.addView(taskCountView);
+                countLayoutTop.setVisibility(View.INVISIBLE);
+            }
+        }
+        if(scrollY > 0) refreshLayout.setEnabled(false);
+        else refreshLayout.setEnabled(true);
+    }
+
     private void initView(){
         fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        scrollView.setOnScrollListener(this);
+        taskCountView = new TaskCountView(this, null);
+        taskCountView.setOnOrderChangedListener(new TaskCountView.OnOrderChangedListener() {
+            @Override
+            public void onOrderChanged(String order) {
+                commentRecyclerView.refresh();
+            }
+        });
+        countLayout.addView(taskCountView);
         me = UserUtil.getLoginUser();
         //状态列表初始化
         orderStateRecyclerView.setNestedScrollingEnabled(false);
@@ -149,7 +187,7 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
         commentRecyclerView.setOnGetPageDataListener(new BasePageRecyclerView.OnGetPageDataListener() {
             @Override
             public void onGetPageData(int page) {
-                SchoolTask.getTaskComment(orderId, page);
+                SchoolTask.getTaskComment(orderId, taskCountView.getOrder(), page);
             }
         });
         commentRecyclerView.initChild(commentReplyView,
@@ -160,18 +198,21 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
                     }
                 }, commentInputBoard);
         commentRecyclerView.setOppositeView(toolbar);
+        commentRecyclerView.setEmptyView(R.layout.empty_comment);
         refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 orderStateRecyclerView.refresh();
+                commentRecyclerView.refresh();
             }
         });
         //评论框初始化
         commentInputBoard.setOppositeView(btnLayout);
-        commentInputBoard.setOnBtnClickListener(new CommentInputBoard.OnBtnClickListener() {
+        commentInputBoard.setOnCommentListener(new CommentInputBoard.OnCommentListener() {
             @Override
-            public void btnClick(String comment) {
+            public void onComment(String comment) {
                 if(comment.length() != 0){
+                    progressDialog = ProgressDialog.show(TaskOrderActivity.this, "", "评论中...", true, false);
                     SchoolTask.comment(orderId, commentRecyclerView.getParentId(),
                             commentRecyclerView.getToUserId(), comment);
                 }
@@ -216,7 +257,6 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
     public void onGetTaskOrderInfo(GetTaskOrderInfoEvent event){
         orderStateRecyclerView.clear(false);
         if(event.isOk()){
-            commentRecyclerView.refresh();  //先获取订单状态再获取评论
             abandonBtn.setVisibility(View.GONE);
             cancelBtn.setVisibility(View.GONE);
             confirmBtn.setVisibility(View.GONE);
@@ -317,10 +357,12 @@ public class TaskOrderActivity extends BaseActivity implements View.OnClickListe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewTaskComment(NewTaskCommentEvent event){
+        if(progressDialog != null) progressDialog.dismiss();
         if(event.isOk()){
             toastShort(getString(R.string.commentSuccess));
             commentInputBoard.clear();
-            orderStateRecyclerView.refresh();
+            taskCountView.addCommentCount();
+            commentRecyclerView.refresh();
         }
         else{
             toastShort(event.getError());

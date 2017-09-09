@@ -24,6 +24,7 @@ import com.edu.schooltask.beans.comment.TaskComment;
 import com.edu.schooltask.beans.comment.TaskCommentList;
 import com.edu.schooltask.beans.UserInfoWithToken;
 import com.edu.schooltask.beans.task.TaskItem;
+import com.edu.schooltask.ui.view.MyScrollView;
 import com.edu.schooltask.ui.view.PayPasswordView;
 import com.edu.schooltask.ui.view.PayView;
 import com.edu.schooltask.ui.view.recyclerview.TextRecyclerView;
@@ -56,8 +57,13 @@ import server.api.event.task.comment.GetTaskReplyListEvent;
 import server.api.event.task.comment.NewTaskCommentEvent;
 import server.api.event.task.GetTaskInfoEvent;
 
-public class WaitAcceptOrderActivity extends BaseActivity {
+public class WaitAcceptOrderActivity extends BaseActivity implements MyScrollView.OnScrollListener{
     @BindView(R.id.wao_prl) PullRefreshLayout refreshLayout;
+    @BindView(R.id.wao_msv) MyScrollView scrollView;
+    @BindView(R.id.wao_header) LinearLayout headerLayout;
+    @BindView(R.id.wao_tiv) TaskItemView taskItemView;
+    @BindView(R.id.wao_count_layout) RelativeLayout countLayout;
+    @BindView(R.id.wao_count_layout_top) RelativeLayout countLayoutTop;
     @BindView(R.id.wao_crv) CommentRecyclerView commentRecyclerView;
     @BindView(R.id.wao_comment_reply_view) CommentReplyView commentReplyView;
     @BindView(R.id.wao_accept_btn) TextView acceptBtn;
@@ -87,8 +93,6 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         inputBoard.show();
     }
 
-    //header
-    TaskItemView taskItemView;
     TaskCountView taskCountView;
 
     ProgressDialog progressDialog;
@@ -103,16 +107,17 @@ public class WaitAcceptOrderActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
-        //初始化任务信息和评论数和浏览数
         Intent intent = getIntent();
         orderId = intent.getStringExtra("orderId");
+        scrollView.setOnScrollListener(this);
 
         //初始化评论框
         inputBoard.setOppositeView(btnLayout);
-        inputBoard.setOnBtnClickListener(new CommentInputBoard.OnBtnClickListener() {
+        inputBoard.setOnCommentListener(new CommentInputBoard.OnCommentListener() {
             @Override
-            public void btnClick(String comment) {
+            public void onComment(String comment) {
                 if(comment.length() != 0){
+                    progressDialog = ProgressDialog.show(WaitAcceptOrderActivity.this, "", "评论中...", true, false);
                     SchoolTask.comment(orderId, commentRecyclerView.getParentId(),
                             commentRecyclerView.getToUserId(), comment);
                 }
@@ -139,14 +144,23 @@ public class WaitAcceptOrderActivity extends BaseActivity {
             }
         });
 
+        refreshLayout.setRefreshing(true);
         SchoolTask.getTaskInfo(orderId);
     }
 
     private void initRecyclerView(){
+        taskCountView = new TaskCountView(this, null);
+        taskCountView.setOnOrderChangedListener(new TaskCountView.OnOrderChangedListener() {
+            @Override
+            public void onOrderChanged(String order) {
+                commentRecyclerView.refresh();
+            }
+        });
+        countLayout.addView(taskCountView);
         commentRecyclerView.setOnGetPageDataListener(new BasePageRecyclerView.OnGetPageDataListener() {
             @Override
             public void onGetPageData(int page) {
-                SchoolTask.getTaskComment(orderId, page);
+                SchoolTask.getTaskComment(orderId, taskCountView.getOrder(), page);
             }
         });
         commentRecyclerView.initChild(commentReplyView, new BasePageRecyclerView.OnGetPageDataListener() {
@@ -156,14 +170,27 @@ public class WaitAcceptOrderActivity extends BaseActivity {
             }
         }, inputBoard);
         commentRecyclerView.setOppositeView(toolbar);
+        commentRecyclerView.setEmptyView(R.layout.empty_comment);
         commentRecyclerView.refresh();
+    }
 
-        //添加头部
-        taskItemView = new TaskItemView(this, null);
-        commentRecyclerView.addHeader(taskItemView);
-
-        taskCountView = new TaskCountView(this, null);
-        commentRecyclerView.addHeader(taskCountView);
+    @Override
+    public void onScroll(int scrollY) {
+        if(scrollY >= headerLayout.getHeight()){
+            if (taskCountView.getParent() != countLayoutTop) {
+                countLayout.removeView(taskCountView);
+                countLayoutTop.addView(taskCountView);
+                countLayoutTop.setVisibility(View.VISIBLE);
+            }
+        }else{
+            if (taskCountView.getParent() != countLayout) {
+                countLayoutTop.removeView(taskCountView);
+                countLayout.addView(taskCountView);
+                countLayoutTop.setVisibility(View.INVISIBLE);
+            }
+        }
+        if(scrollY > 0) refreshLayout.setEnabled(false);
+        else refreshLayout.setEnabled(true);
     }
 
     @Override
@@ -235,10 +262,11 @@ public class WaitAcceptOrderActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewTaskComment(NewTaskCommentEvent event){
+        if(progressDialog != null) progressDialog.dismiss();
         if(event.isOk()){
             toastShort(getString(R.string.commentSuccess));
             inputBoard.clear();
-            SchoolTask.getTaskInfo(orderId);
+            taskCountView.addCommentCount();
             commentRecyclerView.refresh();
         }
         else{

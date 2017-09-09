@@ -26,4 +26,10 @@ public class TaskComment extends Comment {
     public void setToName(String toName) {
         this.toName = toName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof TaskComment)) return false;
+        return getId() == ((TaskComment)obj).getId();
+    }
 }

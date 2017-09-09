@@ -43,6 +43,5 @@
         android:textColor="@color/hintColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
-        android:text="学校"/>
+        android:textSize="10sp"/>
 </RelativeLayout>

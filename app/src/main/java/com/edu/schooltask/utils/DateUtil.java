@@ -51,46 +51,12 @@ public class DateUtil {
                 }
             }
             else{
-                return calendarToString(c1, "M-d HH:mm");
+                return calendarToString(c1, "MM-dd HH:mm");
             }
         }
         else{   //不是今年则显示详细时间
-            return calendarToString(c1, "y-M-d HH:mm");
+            return calendarToString(c1, "yy-MM-dd HH:mm");
         }
-    }
-
-    public static String getMessageLong(String time){
-        Calendar c1 = stringToCalendar(time);
-        Calendar c2 = Calendar.getInstance();
-        boolean thisYear = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR) == 0;
-        boolean today = c2.get(Calendar.DAY_OF_MONTH) - c1.get(Calendar.DAY_OF_MONTH) == 0;
-        boolean yestoday = c2.get(Calendar.DAY_OF_MONTH) - c1.get(Calendar.DAY_OF_MONTH) == 1;
-        boolean frontday = c2.get(Calendar.DAY_OF_MONTH) - c1.get(Calendar.DAY_OF_MONTH) == 2;
-        if(thisYear){
-            if(today){
-                return calendarToString(c1, "HH:mm");
-            }
-            else{
-                if(yestoday){
-                    return calendarToString(c1, "昨天 HH:mm");
-                }
-                else{
-                    if(frontday){
-                        return calendarToString(c1, "前天 HH:mm");
-                    }
-                    else{
-                        return calendarToString(c1, "M月d日 HH:mm");
-                    }
-                }
-            }
-        }
-        else{
-            return calendarToString(c1, "yyyy年M月d日 HH:mm");
-        }
-    }
-
-    public static String getNow(){
-        return calendarToString(Calendar.getInstance(), "yyyy-MM-dd HH:mm:ss");
     }
 
     public static String getLimitTime(String limitTime){

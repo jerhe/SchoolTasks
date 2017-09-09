@@ -12,6 +12,7 @@ import android.widget.PopupWindow;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
+import com.edu.schooltask.ui.view.recyclerview.SchoolRecyclerView;
 import com.edu.schooltask.ui.view.recyclerview.TextRecyclerView;
 import com.edu.schooltask.utils.DensityUtil;
 
@@ -30,7 +31,7 @@ public class SchoolAutoComplement implements TextWatcher{
 
     private PopupWindow popupWindow;
     private View popupView;
-    private TextRecyclerView recyclerView;
+    private SchoolRecyclerView recyclerView;
 
 
     public SchoolAutoComplement(EditText editText, List<String> allSchools){
@@ -42,7 +43,7 @@ public class SchoolAutoComplement implements TextWatcher{
     //初始化
     private void initPopupWindow(){
         popupView = LayoutInflater.from(editText.getContext()).inflate(R.layout.list_school,null);
-        recyclerView = (TextRecyclerView) popupView.findViewById(R.id.school_rv);
+        recyclerView = (SchoolRecyclerView) popupView.findViewById(R.id.school_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(popupView.getContext()));
         recyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() { //选择学校
             @Override

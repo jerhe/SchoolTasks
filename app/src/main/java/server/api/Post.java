@@ -31,9 +31,9 @@ public class Post {
         return this;
     }
 
-    public Post addParam(String key, String value) {
+    public Post addParam(String key, Object value) {
         if(this.params == null) this.params = new HashMap<>();
-        this.params.put(key, value);
+        this.params.put(key, String.valueOf(value));
         return this;
     }
 

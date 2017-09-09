@@ -29,6 +29,7 @@ public class CommentReplyView extends LinearLayout {
     private CommentRecyclerView commentRecyclerView;
 
     View oppositeView;
+    TaskCommentView parentCommentView;
 
     HashMap<String, String> userMap = new HashMap<>();  //存储用户id和昵称
 
@@ -40,6 +41,9 @@ public class CommentReplyView extends LinearLayout {
         titleText = (TextView) findViewById(R.id.toolbar_title);
         refreshLayout = (PullRefreshLayout) findViewById(R.id.cp_prl);
         commentRecyclerView = (CommentRecyclerView) findViewById(R.id.cp_rv);
+        parentCommentView = new TaskCommentView(getContext(), null);
+        commentRecyclerView.addHeader(parentCommentView);
+        commentRecyclerView.addHeader(LayoutInflater.from(getContext()).inflate(R.layout.divide, null));
 
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
@@ -100,5 +104,9 @@ public class CommentReplyView extends LinearLayout {
     public void clear(){
         commentRecyclerView.clear(true);
         userMap.clear();
+    }
+
+    public void setParentComment(TaskComment taskComment){
+        parentCommentView.setAll(null, taskComment, true);
     }
 }

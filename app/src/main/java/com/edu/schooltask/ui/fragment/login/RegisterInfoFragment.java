@@ -104,7 +104,7 @@ public class RegisterInfoFragment extends BaseFragment {
             UserUtil.saveLoginUser(registerUser);
             EventBus.getDefault().post(new LoginSuccessEvent());
             toastShort("注册成功");
-            openActivity(SetPayPwdActivity.class);  //注册成功进入设置支付密码界面
+            //openActivity(SetPayPwdActivity.class);  //注册成功进入设置支付密码界面
             finish();
         }
         else{

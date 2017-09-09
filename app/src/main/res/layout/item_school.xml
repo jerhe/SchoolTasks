@@ -4,9 +4,13 @@
     android:background="@drawable/bg_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.edu.schooltask.ui.view.TaskCommentView
-        android:id="@+id/tc_tcv"
+    <TextView
+        android:id="@+id/text"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.edu.schooltask.ui.view.TaskCommentView>
+        android:layout_height="wrap_content" />
+    <include layout="@layout/line"/>
 </LinearLayout>

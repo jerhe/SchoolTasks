@@ -60,19 +60,59 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:refreshColor="@color/colorPrimary">
-            <com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView
-                android:id="@+id/wao_crv"
+            <com.edu.schooltask.ui.view.MyScrollView
+                android:id="@+id/wao_msv"
+                android:fillViewport="true"
                 android:fadingEdge="none"
                 android:overScrollMode="never"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/wao_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.edu.schooltask.ui.view.TaskItemView
+                            android:id="@+id/wao_tiv"
+                            android:layout_marginBottom="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </com.edu.schooltask.ui.view.TaskItemView>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/wao_count_layout"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView
+                            android:id="@+id/wao_crv"
+                            android:nestedScrollingEnabled="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </com.edu.schooltask.ui.view.MyScrollView>
+
         </com.baoyz.widget.PullRefreshLayout>
+        <RelativeLayout
+            android:id="@+id/wao_count_layout_top"
+            android:layout_below="@id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+        </RelativeLayout>
         <com.edu.schooltask.ui.view.CommentReplyView
             android:id="@+id/wao_comment_reply_view"
             android:visibility="gone"
-            android:fadingEdge="none"
-            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.edu.schooltask.ui.view.CommentReplyView>

@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
-import com.edu.schooltask.adapter.CommentAdapter;
+import com.edu.schooltask.adapter.TaskCommentAdapter;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.beans.comment.TaskComment;
 import com.edu.schooltask.ui.view.CommentInputBoard;
@@ -35,7 +35,7 @@ public class CommentRecyclerView extends BasePageRecyclerView<TaskComment> {
 
     @Override
     protected BaseQuickAdapter initAdapter(List<TaskComment> list) {
-        return new CommentAdapter(R.layout.item_task_comment, list);
+        return new TaskCommentAdapter(R.layout.item_task_comment, list);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CommentRecyclerView extends BasePageRecyclerView<TaskComment> {
                 TaskComment taskComment = list.get(position);
                 setParentId(taskComment.getId());
                 childView.refresh();
-                showChild();
+                showChild(taskComment);
             }
         });
         commentReplyView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -91,8 +91,9 @@ public class CommentRecyclerView extends BasePageRecyclerView<TaskComment> {
         });
     }
 
-    public void showChild(){
+    public void showChild(TaskComment taskComment){
         if(oppositeView != null) oppositeView.setVisibility(INVISIBLE);
+        commentReplyView.setParentComment(taskComment);
         commentReplyView.setVisibility(VISIBLE);
     }
 

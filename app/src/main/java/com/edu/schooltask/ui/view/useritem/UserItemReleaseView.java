@@ -45,11 +45,10 @@ public class UserItemReleaseView extends RelativeLayout {
     }
 
     //设置所有信息
-    public void setAll(final UserInfo userInfo, String releaseTime, String school,
-                       String des, boolean event){
+    public void setAll(final UserInfo userInfo, String releaseTime, String school, String des, boolean event){
         setHead(userInfo);
         setName(userInfo.getName());
-        setSex(userInfo.getSex());
+        //setSex(userInfo.getSex());
         setReleaseTime(releaseTime);
         setSchool(school);
         setDes(des);

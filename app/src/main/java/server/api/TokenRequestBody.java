@@ -46,6 +46,12 @@ public class TokenRequestBody {
         return this;
     }
 
+    //请求
+    public void post(){
+        TokenPost.post(this);
+    }
+
+    //入队
     public void enqueue(){
         TokenPost.enqueue(this);
         if(!TokenPost.posting) TokenPost.post();

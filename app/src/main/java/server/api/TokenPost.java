@@ -7,6 +7,7 @@ import com.edu.schooltask.event.UnloginEvent;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.UserUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.request.RequestCall;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -32,6 +33,7 @@ public class TokenPost {
         return new TokenRequestBody();
     }
 
+    //按队列顺序post
     public static void post(){
         posting = true;
         if(bodies.size() > 0){
@@ -44,7 +46,6 @@ public class TokenPost {
                     nextPost();
                 }
             });
-
             UserInfoWithToken user = UserUtil.getLoginUser();
             if(user == null) {
                 Log.e("Queue","user has lost!");
@@ -53,24 +54,22 @@ public class TokenPost {
                 posting = false;
                 return;
             }
-            Calendar c = Calendar.getInstance();
-            String time = String.valueOf(c.getTimeInMillis());
-            Map<String, String> params = tokenRequestBody.getParams();
-            if(params == null) params = new HashMap<>();
-            params.put("userId", user.getUserId());
-            params.put("token", EncriptUtil.getMD5(user.getUserId()+user.getToken()));
-
-            OkHttpUtils.post()
-                    .url(tokenRequestBody.getUrl())
-                    .addHeader("time", time)
-                    .addHeader("sign", EncriptUtil.getSHA(time + "20170828"))
-                    .params(params)
-                    .build()
-                    .execute(callBack);
+            packParams(user, tokenRequestBody).execute(callBack);
         }
         else{
             posting = false;
         }
+    }
+
+    //并行post
+    public static void post(TokenRequestBody requestBody){
+        UserInfoWithToken user = UserUtil.getLoginUser();
+        if(user == null) {
+            Log.e("Queue","user has lost");
+            EventBus.getDefault().post(new UnloginEvent());
+            return;
+        }
+        packParams(user, requestBody).execute(requestBody.getCallBack());
     }
 
     private static void nextPost(){
@@ -82,5 +81,20 @@ public class TokenPost {
     public static void enqueue(TokenRequestBody body){
         if(body.getCallBack() == null) throw new RuntimeException("callback must not be null!");
         bodies.add(body);
+    }
+
+    private static RequestCall packParams(UserInfoWithToken user, TokenRequestBody tokenRequestBody){
+        Calendar c = Calendar.getInstance();
+        String time = String.valueOf(c.getTimeInMillis());
+        Map<String, String> params = tokenRequestBody.getParams();
+        if(params == null) params = new HashMap<>();
+        params.put("userId", user.getUserId());
+        params.put("token", user.getToken());
+        return OkHttpUtils.post()
+                    .url(tokenRequestBody.getUrl())
+                    .addHeader("time", time)
+                    .addHeader("sign", EncriptUtil.getSHA(time + "20170828"))
+                    .params(params)
+                    .build();
     }
 }

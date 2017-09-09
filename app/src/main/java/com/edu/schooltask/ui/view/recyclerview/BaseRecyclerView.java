@@ -25,8 +25,8 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
         super(context, attrs);
         setLayoutManager(new LinearLayoutManager(context));
         adapter = initAdapter(list);
-        adapter.openLoadAnimation();
         setAdapter(adapter);
+        setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
     //禁止在该方法里面设置空布局setEmptyView
@@ -69,6 +69,10 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
         adapter.setEmptyView(resId);
     }
 
+    public void removeAllHeader(){
+        adapter.removeAllHeaderView();
+    }
+
     public void notifyDataSetChanged(){
         adapter.notifyDataSetChanged();
     }
@@ -97,6 +101,11 @@ public abstract class BaseRecyclerView<T> extends RecyclerView {
     //添加头部
     public void addHeader(View view){
         adapter.addHeaderView(view);
+    }
+
+    //设置头部和空布局同时显示
+    public void setHeaderAndEmpty(boolean b){
+        adapter.setHeaderAndEmpty(b);
     }
 
     //添加尾部

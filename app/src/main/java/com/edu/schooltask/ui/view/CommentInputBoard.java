@@ -20,7 +20,7 @@ import com.edu.schooltask.utils.KeyBoardUtil;
 public class CommentInputBoard extends LinearLayout {
     EditText inputText;
     TextView commentBtn;
-    OnBtnClickListener listener;
+    OnCommentListener listener;
 
     View oppositeView;
 
@@ -41,7 +41,7 @@ public class CommentInputBoard extends LinearLayout {
         commentBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listener!=null) listener.btnClick(inputText.getText().toString());
+                if(listener!=null) listener.onComment(inputText.getText().toString());
             }
         });
     }
@@ -62,7 +62,7 @@ public class CommentInputBoard extends LinearLayout {
         inputText.setText(text);
     }
 
-    public void setOnBtnClickListener(OnBtnClickListener listener){
+    public void setOnCommentListener(OnCommentListener listener){
         this.listener = listener;
     }
 
@@ -96,8 +96,8 @@ public class CommentInputBoard extends LinearLayout {
         return inputText;
     }
 
-    public interface OnBtnClickListener{
-        void btnClick(String comment);
+    public interface OnCommentListener{
+        void onComment(String comment);
     }
 
 
