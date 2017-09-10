@@ -68,4 +68,15 @@ public class DateUtil {
         long minute = time / (1000 * 60) - hour * 60;
         return hour + "小时" + minute + "分钟";
     }
+
+    public static String getDetailTime(String releaseTime){
+        Calendar c = stringToCalendar(releaseTime);
+        Calendar now = Calendar.getInstance();
+        if(c.get(Calendar.YEAR) == now.get(Calendar.YEAR)){
+            return calendarToString(c, "MM-dd HH:mm");
+        }
+        else{
+            return calendarToString(c, "yy-MM-dd HH:mm");
+        }
+    }
 }

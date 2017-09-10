@@ -63,7 +63,7 @@ public class ImageActivity extends BaseActivity {
         //新建View显示图片
         imageItems = (ArrayList<ImageItem>)intent.getSerializableExtra("images");
         for (ImageItem item : imageItems){
-            if(item.getType() == 1) addImageViewToList(item.getPath());
+            if(item.getType() != 0) addImageViewToList(item.getPath());
         }
         adapter = new ImagePagerAdapter(imageViews);
         viewPager.setAdapter(adapter);

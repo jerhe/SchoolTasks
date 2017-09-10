@@ -15,14 +15,14 @@
     <ImageView
         android:id="@+id/image_back"
         android:paddingLeft="10dp"
-        android:layout_width="30dp"
+        android:layout_width="40dp"
         android:layout_height="?attr/actionBarSize"
-        android:src="@drawable/ic_action_back"/>
+        android:src="@drawable/ic_action_back_light"/>
     <ImageView
         android:id="@+id/image_delete"
         android:paddingRight="10dp"
         android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
+        android:layout_width="35dp"
         android:layout_height="?attr/actionBarSize"
-        android:src="@drawable/ic_action_delete"/>
+        android:src="@drawable/ic_delete"/>
 </RelativeLayout>

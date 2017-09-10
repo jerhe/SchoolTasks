@@ -7,6 +7,8 @@ import android.util.Log;
 import com.edu.schooltask.beans.TaskUploadKey;
 import com.edu.schooltask.beans.UploadKey;
 import com.edu.schooltask.beans.UserInfoWithToken;
+import com.edu.schooltask.beans.Voucher;
+import com.edu.schooltask.beans.task.TaskPostBody;
 import com.edu.schooltask.event.UnloginEvent;
 import com.edu.schooltask.utils.EncriptUtil;
 import com.edu.schooltask.utils.UserUtil;
@@ -192,36 +194,22 @@ public class SchoolTask {
     }
 
 
-    /**
-     * 发布订单
-     * @param orderId       订单号
-     * @param school        学校
-     * @param description   类别
-     * @param content       内容
-     * @param cost          实际支付金额
-     * @param reward        任务报酬
-     * @param limitTime     时限
-     * @param payPassword   支付密码
-     * @param voucherId     代金券编号
-     * @param voucher       代金券金额
-     * @param imageNum      图片数
-     */
-    public static void releaseTask(String orderId, String school, String description, String content,
-                                   BigDecimal cost, BigDecimal reward, int limitTime, String payPassword,
-                                   long voucherId, BigDecimal voucher, int imageNum){
+    //发布订单（无图）
+    public static void releaseTask(TaskPostBody task){
+        Voucher voucher = task.getVoucher();
         TokenPost.newPost()
                 .url(RELEASE_TASK)
-                .addParam("orderId", orderId)
-                .addParam("school", school)
-                .addParam("description", description)
-                .addParam("content",content)
-                .addParam("cost", cost)
-                .addParam("reward", reward)
-                .addParam("limitTime", limitTime)
-                .addParam("payPassword", payPassword)
-                .addParam("voucherId", voucherId)
-                .addParam("voucher", voucher)
-                .addParam("imageNum", imageNum)
+                .addParam("orderId", task.getOrderId())
+                .addParam("school", task.getSchool())
+                .addParam("description", task.getDescription())
+                .addParam("content",task.getContent())
+                .addParam("cost", task.getCost())
+                .addParam("reward", task.getReward())
+                .addParam("limitTime", task.getLimitTime())
+                .addParam("payPassword", task.getPayPwd())
+                .addParam("voucherId", voucher == null ? 0 : voucher.getId())
+                .addParam("voucher", voucher == null ? new BigDecimal(0) : voucher.getMoney())
+                .addParam("imageNum", task.getImageNum())
                 .event(new ReleaseTaskEvent())
                 .post();
     }

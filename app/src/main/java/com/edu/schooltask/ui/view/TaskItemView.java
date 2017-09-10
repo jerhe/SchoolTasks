@@ -3,6 +3,8 @@ package com.edu.schooltask.ui.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -16,7 +18,7 @@ import com.edu.schooltask.ui.activity.WaitAcceptOrderActivity;
 import com.edu.schooltask.item.ImageItem;
 import com.edu.schooltask.beans.task.TaskItem;
 import com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView;
-import com.edu.schooltask.ui.view.useritem.UserItemReleaseView;
+import com.edu.schooltask.ui.view.useritem.UserItemTaskView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import server.api.SchoolTask;
  */
 
 public class TaskItemView extends LinearLayout{
-    private UserItemReleaseView userItemReleaseView;
+    private UserItemTaskView userItemTaskView;
     private TextView costText;
     private TextView contentText;
     private ImageRecyclerView imageRecyclerView;
@@ -38,7 +40,7 @@ public class TaskItemView extends LinearLayout{
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_task_item, this);
 
-        userItemReleaseView = (UserItemReleaseView) findViewById(R.id.task_uirv);
+        userItemTaskView = (UserItemTaskView) findViewById(R.id.task_uirv);
         costText = (TextView) findViewById(R.id.task_cost);
         contentText = (TextView) findViewById(R.id.task_content);
         imageRecyclerView = (ImageRecyclerView) findViewById(R.id.task_irv);
@@ -47,16 +49,19 @@ public class TaskItemView extends LinearLayout{
     //设置所有信息: isInfo:是否是任务信息页(WaitAcceptOrderActivity)
     public void setAll(TaskItem taskItem, boolean isInfo){
         final String orderId = taskItem.getOrderId();
-        userItemReleaseView.setAll(taskItem.getUserInfo(),taskItem.getReleaseTime(),
+        userItemTaskView.setAll(taskItem.getUserInfo(),taskItem.getReleaseTime(),
                 taskItem.getSchool(), taskItem.getDescription(), isInfo);
         costText.setText("¥" + taskItem.getReward()); //金额
         contentText.setText(taskItem.getContent()); //内容
         //图片
+        int imageNum = taskItem.getImageNum();
         String imageUrl = SchoolTask.TASK_IMAGE + orderId + "/";
         final List<ImageItem> imageItems = new ArrayList<>();
-        for(int i = 0; i< taskItem.getImageNum(); i++){
-            imageItems.add(new ImageItem(1,imageUrl + i + ".png"));
+        for(int i = 0; i < imageNum; i++){
+            imageItems.add(new ImageItem(imageNum == 1 ? 3 : 2, imageUrl + i + ".png"));
         }
+        int column = imageNum < 3 ? (imageNum == 0 ? 1 : imageNum) : 3;
+        imageRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), column));
         imageRecyclerView.clear(false);
         imageRecyclerView.add(imageItems);
         //点击跳转事件

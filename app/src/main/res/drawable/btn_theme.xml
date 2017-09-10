@@ -3,6 +3,7 @@
 
     <item android:state_pressed="true"
         android:drawable="@drawable/btn_theme_press"/>
-
+    <item android:state_enabled="false"
+        android:drawable="@drawable/btn_theme_press"/>
     <item android:drawable="@drawable/btn_theme_normal"/>
 </selector>

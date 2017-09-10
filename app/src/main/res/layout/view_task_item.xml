@@ -8,15 +8,16 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.edu.schooltask.ui.view.useritem.UserItemReleaseView
+        <com.edu.schooltask.ui.view.useritem.UserItemTaskView
             android:id="@+id/task_uirv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-        </com.edu.schooltask.ui.view.useritem.UserItemReleaseView>
+        </com.edu.schooltask.ui.view.useritem.UserItemTaskView>
         <TextView
             android:id="@+id/task_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="15sp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:layout_marginTop="15dp"
@@ -25,20 +26,19 @@
 
     <TextView
         android:id="@+id/task_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/darkColor"
         android:paddingRight="10dp"
         android:paddingLeft="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
     <com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView
         android:id="@+id/task_irv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="15dp"
-        android:nestedScrollingEnabled="false">
+        android:nestedScrollingEnabled="false"
+        android:layout_marginBottom="15dp">
     </com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView>
 </LinearLayout>

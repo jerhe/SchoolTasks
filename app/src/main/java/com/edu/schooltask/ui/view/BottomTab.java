@@ -3,12 +3,16 @@ package com.edu.schooltask.ui.view;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.edu.schooltask.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 夜夜通宵 on 2017/5/4.
@@ -19,8 +23,6 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
     public final static int PAGE_MESSAGE = 1;  //消息
     public final static int PAGE_ORDER = 2; //订单
     public final static int PAGE_USER = 3;  //用户
-
-    private OnMenuSelectedListener onMenuSelectedListener;  //菜单选择监听器
 
     private LinearLayout homeLayout;    //按钮
     private LinearLayout messageLayout;
@@ -42,8 +44,10 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
     int normalColor;
     int lightColor;
 
+    List<View> tabs = new ArrayList<>();
     int oldPosition = 0;
 
+    private HomeListener homeListener;
     private TextView messageTip;    //消息圆点
 
     private ViewPager viewPager;
@@ -56,6 +60,11 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
         orderLayout = (LinearLayout) findViewById(R.id.bm_order);
         userLayout = (LinearLayout) findViewById(R.id.bm_user);
         releaseLayout = (LinearLayout) findViewById(R.id.bm_release);
+
+        tabs.add(homeLayout);;
+        tabs.add(messageLayout);;
+        tabs.add(orderLayout);;
+        tabs.add(userLayout);;
 
         homeIcon = (ImageView) findViewById(R.id.bm_home_icon);
         messageIcon = (ImageView) findViewById(R.id.bm_message_icon);
@@ -81,9 +90,9 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        if(onMenuSelectedListener != null){
-            setIcon(v.getId());
-        }
+        int index = tabs.indexOf(v);
+        if(index == 0 && oldPosition == 0 && homeListener != null) homeListener.home();
+        else viewPager.setCurrentItem(index, false);
     }
 
     /**
@@ -93,7 +102,6 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
     public void setIcon(int lightViewId){
         switch (lightViewId){
             case R.id.bm_home:
-                onMenuSelectedListener.onMenuSelected(PAGE_HOME);
                 homeIcon.setImageResource(R.drawable.ic_home_light);
                 messageIcon.setImageResource(R.drawable.ic_message);
                 orderIcon.setImageResource(R.drawable.ic_order);
@@ -104,7 +112,6 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 userText.setTextColor(normalColor);
                 break;
             case R.id.bm_message:
-                onMenuSelectedListener.onMenuSelected(PAGE_MESSAGE);
                 homeIcon.setImageResource(R.drawable.ic_home);
                 messageIcon.setImageResource(R.drawable.ic_message_light);
                 orderIcon.setImageResource(R.drawable.ic_order);
@@ -116,7 +123,6 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 setMessageTip(false);
                 break;
             case R.id.bm_order:
-                onMenuSelectedListener.onMenuSelected(PAGE_ORDER);
                 homeIcon.setImageResource(R.drawable.ic_home);
                 messageIcon.setImageResource(R.drawable.ic_message);
                 orderIcon.setImageResource(R.drawable.ic_order_light);
@@ -127,7 +133,6 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 userText.setTextColor(normalColor);
                 break;
             case R.id.bm_user:
-                onMenuSelectedListener.onMenuSelected(PAGE_USER);
                 homeIcon.setImageResource(R.drawable.ic_home);
                 messageIcon.setImageResource(R.drawable.ic_message);
                 orderIcon.setImageResource(R.drawable.ic_order);
@@ -139,14 +144,6 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 break;
 
         }
-    }
-
-    /**
-     * setOnMenuSelectedListener 设置菜单切换事件监听器
-     * @param onMenuSelectedListener
-     */
-    public void setOnMenuSelectedListener(OnMenuSelectedListener onMenuSelectedListener){
-        this.onMenuSelectedListener = onMenuSelectedListener;
     }
 
     /**
@@ -170,13 +167,6 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
                 setIcon(R.id.bm_user);
                 break;
         }
-    }
-
-    /**
-     * OnMenuSelectedListener 菜单切换事件接口
-     */
-    public interface OnMenuSelectedListener{
-        void onMenuSelected(int position);
     }
 
     /**
@@ -218,6 +208,14 @@ public class BottomTab extends LinearLayout implements View.OnClickListener{
 
     public View getReleaseTab(){
         return releaseLayout;
+    }
+
+    public void setHomeListener(HomeListener listener){
+        this.homeListener = listener;
+    }
+
+    public interface HomeListener{
+        void home();
     }
 
 }

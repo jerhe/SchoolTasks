@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ud_head"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+    <TextView
+        android:id="@+id/ud_name"
+        android:textColor="@color/darkColor"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/ud_head"
+        android:textSize="13sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/ud_sex"
+        android:layout_alignTop="@id/ud_name"
+        android:layout_toRightOf="@id/ud_name"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="3dp"
+        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/ud_release_time"
+        android:layout_below="@id/ud_name"
+        android:layout_marginTop="5dp"
+        android:layout_alignLeft="@id/ud_name"
+        android:textColor="@color/hintColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"/>
+    <TextView
+        android:id="@+id/ud_school"
+        android:textSize="11sp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/ud_release_time"
+        android:layout_alignTop="@id/ud_release_time"
+        android:textColor="@color/hintColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

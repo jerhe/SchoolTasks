@@ -123,7 +123,10 @@
         <activity
             android:name=".ui.activity.FriendRequestActivity"
             android:label="验证消息" />
-        <activity android:name=".ui.activity.UpdatePayPwdActivity" android:label="修改支付密码" />
+        <activity
+            android:name=".ui.activity.UpdatePayPwdActivity"
+            android:label="修改支付密码" />
+        <activity android:name=".ui.activity.ImageSelectActivity" android:label="选择图片" />
     </application>
 
 </manifest>

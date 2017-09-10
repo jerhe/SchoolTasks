@@ -22,7 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by 夜夜通宵 on 2017/8/14.
  */
 
-public class UserItemReleaseView extends RelativeLayout {
+public class UserItemTaskView extends RelativeLayout {
     private CircleImageView headView;
     private TextView nameText;
     private TextView sexText;
@@ -32,16 +32,16 @@ public class UserItemReleaseView extends RelativeLayout {
 
 
 
-    public UserItemReleaseView(Context context, @Nullable AttributeSet attrs) {
+    public UserItemTaskView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.view_user_release, this);
+        LayoutInflater.from(context).inflate(R.layout.view_user_task, this);
 
-        headView = (CircleImageView) findViewById(R.id.ur_head);
-        nameText = (TextView) findViewById(R.id.ur_name);
-        sexText = (TextView) findViewById(R.id.ur_sex);
-        releaseTimeText = (TextView) findViewById(R.id.ur_release_time);
-        schoolText = (TextView) findViewById(R.id.ur_school);
-        desText = (TextView) findViewById(R.id.ur_des);
+        headView = (CircleImageView) findViewById(R.id.ut_head);
+        nameText = (TextView) findViewById(R.id.ut_name);
+        sexText = (TextView) findViewById(R.id.ut_sex);
+        releaseTimeText = (TextView) findViewById(R.id.ut_release_time);
+        schoolText = (TextView) findViewById(R.id.ut_school);
+        desText = (TextView) findViewById(R.id.ut_des);
     }
 
     //设置所有信息
@@ -49,7 +49,7 @@ public class UserItemReleaseView extends RelativeLayout {
         setHead(userInfo);
         setName(userInfo.getName());
         //setSex(userInfo.getSex());
-        setReleaseTime(releaseTime);
+        setReleaseTime(releaseTime, event);
         setSchool(school);
         setDes(des);
         //点击跳转到用户主页
@@ -92,8 +92,11 @@ public class UserItemReleaseView extends RelativeLayout {
     }
 
     //设置发布时间
-    public void setReleaseTime(String releaseTime){
-        releaseTimeText.setText(DateUtil.getLong(DateUtil.stringToCalendar(releaseTime)));
+    public void setReleaseTime(String releaseTime, boolean detail){
+        if(detail)
+            releaseTimeText.setText(DateUtil.getDetailTime(releaseTime));
+        else
+            releaseTimeText.setText(DateUtil.getLong(DateUtil.stringToCalendar(releaseTime)));
     }
 
     //设置学校

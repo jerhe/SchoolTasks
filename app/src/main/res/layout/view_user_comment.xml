@@ -7,8 +7,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/cui_head"
-        android:layout_width="30dp"
-        android:layout_height="30dp"/>
+        android:layout_width="35dp"
+        android:layout_height="35dp"/>
     <TextView
         android:id="@+id/cui_name"
         android:layout_marginLeft="10dp"
@@ -29,6 +29,7 @@
     <TextView
         android:id="@+id/cui_release_time"
         android:textSize="10sp"
+        android:layout_marginTop="2dp"
         android:textColor="@color/hintColor"
         android:layout_alignLeft="@id/cui_name"
         android:layout_below="@id/cui_name"

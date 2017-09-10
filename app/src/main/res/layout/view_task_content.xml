@@ -15,9 +15,10 @@
     <TextView
         android:id="@+id/content_num"
         android:padding="5dp"
+        android:layout_marginRight="5dp"
+        android:textSize="12sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/hintColor"/>
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

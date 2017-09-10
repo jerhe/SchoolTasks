@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 
 public class ImageItem implements Serializable{
-    int type;   //0：+号 1：path
+    int type;   //0:+号 1:本地 2:网络 3:网络单张
     String path;
 
     public ImageItem(int type){

@@ -7,39 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.ReleaseTaskActivity">
     <RelativeLayout
-        android:id="@+id/rt_bottom"
-        android:background="@color/backgroundColor"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="60dp">
-        <TextView
-            android:id="@+id/rt_voucher_btn"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_width="100dp"
-            android:layout_height="@dimen/btn_height"
-            android:gravity="center"
-            android:text="使用代金券"
-            android:background="@drawable/btn_white"/>
-        <TextView
-            android:id="@+id/rt_release_btn"
-            android:layout_width="80dp"
-            android:layout_height="@dimen/btn_height"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:background="@drawable/btn_theme"
-            android:textColor="@color/white"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:text="发布"/>
-        <TextView
-            android:id="@+id/rt_pay_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_above="@id/rt_bottom"
+        android:layout_above="@+id/rt_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include layout="@layout/toolbar"/>
@@ -63,7 +31,7 @@
                 </com.edu.schooltask.ui.view.InputTextView>
 
                 <com.edu.schooltask.ui.view.InputTextView
-                    android:id="@+id/rt_cost"
+                    android:id="@+id/rt_reward"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -99,11 +67,11 @@
                 </com.edu.schooltask.ui.view.TaskContentView>
                 <com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView
                     android:id="@+id/rt_irv"
-                    android:fadingEdge="none"
-                    android:overScrollMode="never"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:background="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:imageColumns="5">
@@ -121,7 +89,7 @@
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/rt_voucher_layout"
-        android:layout_above="@id/rt_bottom"
+        android:layout_above="@+id/rt_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone">
@@ -143,7 +111,39 @@
     <include layout="@layout/line_bottom"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_above="@id/rt_bottom"/>
+        android:layout_above="@+id/rt_bottom"/>
+    <RelativeLayout
+        android:id="@+id/rt_bottom"
+        android:background="@color/backgroundColor"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:id="@+id/rt_voucher_btn"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/btn_height"
+            android:gravity="center"
+            android:text="使用代金券"
+            android:background="@drawable/btn_white"/>
+        <TextView
+            android:id="@+id/rt_release_btn"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/btn_height"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:background="@drawable/btn_theme"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:text="发布"/>
+        <TextView
+            android:id="@+id/rt_pay_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
     <com.edu.schooltask.ui.view.PayView
         android:id="@+id/rt_pay"
         android:layout_width="match_parent"

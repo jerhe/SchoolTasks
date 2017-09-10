@@ -10,6 +10,7 @@
     <color name="pressedColor">#EEEEEE</color>
     <color name="trans">#00000000</color>    <!-- 透明色 -->
     <color name="shadow">#50000000</color>    <!-- 阴影色 -->
+    <color name="darkColor">#2c2c2c</color>
     <color name="border">#666666</color>    <!-- 边框色 -->
     <color name="lineColor">#D8D8D8</color> <!-- 分割线颜色 -->
     <color name="backgroundColor">#FAFAFA</color> <!-- 背景颜色 -->
@@ -20,6 +21,5 @@
     <color name="marketColor">#EC653B</color>
     <color name="schoolCircleColor">#A0CC3E</color>
     <color name="black">#000000</color>
-    <color name="imageBorderColor">#CFCFCF</color>
     <color name="labelBackgroundColor">#eeeeee</color>
 </resources>

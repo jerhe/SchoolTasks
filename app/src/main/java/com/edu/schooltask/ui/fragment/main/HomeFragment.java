@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -132,6 +133,11 @@ public class HomeFragment extends BaseFragment implements MyScrollView.OnScrollL
         initButton();
         initTab();
         clearList();
+        getSchoolTask();
+    }
+
+    public void refresh(){
+        refreshLayout.setRefreshing(true);
         getSchoolTask();
     }
 

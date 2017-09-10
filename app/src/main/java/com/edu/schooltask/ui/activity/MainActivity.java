@@ -113,12 +113,6 @@ public class MainActivity extends BaseActivity {
      * 初始化底部菜单
      */
     private void initBottomMenu(){
-        bottomTab.setOnMenuSelectedListener(new BottomTab.OnMenuSelectedListener() {
-            @Override
-            public void onMenuSelected(int position) {
-                viewPager.setCurrentItem(position, false);
-            }
-        });
         bottomTab.setPagePosition(0);
         bottomTab.setViewPager(viewPager);
 
@@ -131,6 +125,12 @@ public class MainActivity extends BaseActivity {
                 else {
                     releaseMenu.show();
                 }
+            }
+        });
+        bottomTab.setHomeListener(new BottomTab.HomeListener() {
+            @Override
+            public void home() {
+                ((HomeFragment)homeFragment).refresh();
             }
         });
         bottomTab.setReleaseLongListener(new View.OnLongClickListener() {
