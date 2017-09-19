@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,11 @@ import android.widget.TextView;
 
 import com.edu.schooltask.R;
 import com.edu.schooltask.rong.message.OrderMessage;
-import com.edu.schooltask.ui.activity.TaskOrderActivity;
+import com.edu.schooltask.activity.TaskOrderActivity;
 
 import io.rong.imkit.model.ProviderTag;
 import io.rong.imkit.model.UIMessage;
 import io.rong.imkit.widget.provider.IContainerItemProvider;
-import io.rong.imlib.model.Message;
-import io.rong.message.ContactNotificationMessage;
 
 /**
  * Created by 夜夜通宵 on 2017/8/25.

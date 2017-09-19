@@ -23,6 +23,7 @@
             android:id="@+id/os_state_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/darkColor"
             android:textSize="13sp"
             android:text="发布订单"/>
         <TextView
@@ -33,13 +34,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1111年11月11日 12:12:12"/>
-        <com.edu.schooltask.ui.view.useritem.UserItemSmallView
+        <com.edu.schooltask.view.useritem.UserItemSmallView
             android:id="@+id/os_uisv"
             android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone">
-        </com.edu.schooltask.ui.view.useritem.UserItemSmallView>
+        </com.edu.schooltask.view.useritem.UserItemSmallView>
     </LinearLayout>
 
 </RelativeLayout>

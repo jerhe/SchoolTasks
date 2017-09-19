@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="friend_request_id">验证消息</string>
+    <string name="friend_agree_message">已同意 %1$s 的好友请求</string>
+    <string name="friend_object_message">已拒绝 %1$s 的好友请求</string>
+</resources>

@@ -67,36 +67,41 @@ public class UserUtil {
     }
 
     //设置头像
-    public static void setHead(Context context, UserInfo userInfo, ImageView imageView){
-        String url = userInfo.getHead();
-        if(StringUtil.isEmpty(url)){    //头像为空
+    public static void setHead(Context context, String head, ImageView imageView){
+        if(StringUtil.isEmpty(head)){    //头像为空
             Glide.with(context) //设置默认头像
-                    .load(R.drawable.ic_head_default)
+                    .load(R.drawable.ic_default_head)
                     .dontAnimate()
-                    .placeholder(R.drawable.ic_head_default)
+                    .placeholder(R.drawable.ic_default_head)
                     .into(imageView);
             return;
         }
         Glide.with(context)
-                .load(url)
+                .load(head)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.ic_head_default)
-                .error(R.drawable.ic_head_default)
+                .placeholder(R.drawable.ic_default_head)
+                .error(R.drawable.ic_default_head)
+                .into(imageView);
+    }
+
+    public static void setHead(Context context, int resId, ImageView imageView){
+        Glide.with(context) //设置默认头像
+                .load(resId)
+                .dontAnimate()
                 .into(imageView);
     }
 
     //设置背景
-    public static void setBackground(Context context, UserInfo userInfo, ImageView imageView){
-        String url = userInfo.getBg();
-        if(StringUtil.isEmpty(url)){    //背景为空
+    public static void setBackground(Context context, String bg, ImageView imageView){
+        if(StringUtil.isEmpty(bg)){    //背景为空
             Glide.with(context) //设置默认背景
                     .load(R.drawable.background)
                     .into(imageView);
             return;
         }
         Glide.with(context)
-                .load(url)
+                .load(bg)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.background)
                 .error(R.drawable.background)

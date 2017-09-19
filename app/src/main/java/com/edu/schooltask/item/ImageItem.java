@@ -9,12 +9,8 @@ import java.io.Serializable;
  */
 
 public class ImageItem implements Serializable{
-    int type;   //0:+号 1:本地 2:网络 3:网络单张
-    String path;
-
-    public ImageItem(int type){
-        this.type = type;
-    }
+    private int type;   //1:本地 2:网络 3:网络单张
+    private String path;
 
     public ImageItem(int type, String path) {
         this.type = type;

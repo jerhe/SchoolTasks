@@ -188,12 +188,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_cs_leave_message_btn.xml"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_item_list_selector.xml",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_item_list_selector.xml"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_bg_menu.xml",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_bg_menu.xml"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_item_list_selector.xml",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable\\rc_item_list_selector.xml"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_btn_send.xml",

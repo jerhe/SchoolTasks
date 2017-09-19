@@ -7,9 +7,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.UserInfo;
 import com.edu.schooltask.item.OrderStateItem;
-import com.edu.schooltask.ui.view.useritem.UserItemSmallView;
-import com.edu.schooltask.ui.view.useritem.UserItemView;
-import com.edu.schooltask.utils.DateUtil;
+import com.edu.schooltask.view.useritem.UserItemSmallView;
 import com.edu.schooltask.utils.StringUtil;
 
 import java.util.List;
@@ -30,9 +28,9 @@ public class OrderStateAdapter extends BaseQuickAdapter<OrderStateItem, BaseView
     @Override
     protected void convert(BaseViewHolder helper, OrderStateItem item) {
         if(item.isFinish())
-            helper.setImageResource(R.id.state_state_flag, R.drawable.ic_icon_state_finish);
+            helper.setImageResource(R.id.state_state_flag, R.drawable.ic_action_finished);
         else
-            helper.setImageResource(R.id.state_state_flag, R.drawable.ic_icon_state_unfinish);
+            helper.setImageResource(R.id.state_state_flag, R.drawable.ic_action_unfinish);
 
         if(item.isAccept()){
             helper.setVisible(R.id.os_uisv, true);

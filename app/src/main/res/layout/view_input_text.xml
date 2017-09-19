@@ -31,13 +31,13 @@
                 android:layout_height="match_parent"
                 android:background="@null"/>
         </LinearLayout>
-        <com.edu.schooltask.ui.view.PayPasswordView
+        <com.edu.schooltask.view.PayPasswordView
             android:id="@+id/it_pay_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:visibility="gone">
-        </com.edu.schooltask.ui.view.PayPasswordView>
+        </com.edu.schooltask.view.PayPasswordView>
     </LinearLayout>
 
     <ImageView

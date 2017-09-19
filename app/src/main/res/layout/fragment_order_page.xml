@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,19 +8,18 @@
         android:id="@+id/op_space"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
-    <com.edu.schooltask.ui.view.recyclerview.TipRecyclerView
-        android:id="@+id/op_tr"
+    <FrameLayout
+        android:id="@+id/layout"
         android:layout_below="@id/op_space"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.edu.schooltask.ui.view.recyclerview.TipRecyclerView>
-    <com.edu.schooltask.ui.view.TaskFilterView
+        android:layout_height="match_parent"/>
+    <com.edu.schooltask.view.task.TaskFilterView
         android:id="@+id/op_tfv"
         android:layout_below="@id/op_space"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-    </com.edu.schooltask.ui.view.TaskFilterView>
+    </com.edu.schooltask.view.task.TaskFilterView>
     <RelativeLayout
         android:id="@+id/op_toolbar"
         android:background="@color/white"
@@ -30,28 +29,20 @@
             android:layout_width="match_parent"
             android:background="@color/backgroundColor"
             android:gravity="center"
+            android:textColor="@color/darkColor"
             android:layout_height="match_parent"
             android:text="我的订单"
-            android:textSize="18sp" />
-        <LinearLayout
+            android:textSize="17sp" />
+        <com.edu.schooltask.view.ImageTextView
             android:id="@+id/op_filter_btn"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_filter"/>
-            <TextView
-                android:textSize="13sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="筛选"/>
-        </LinearLayout>
-
+            android:layout_centerVertical="true"
+            app:ImageText_icon="@drawable/ic_filter"
+            app:ImageText_text="筛选"/>
 
         <View
             android:layout_alignParentBottom="true"

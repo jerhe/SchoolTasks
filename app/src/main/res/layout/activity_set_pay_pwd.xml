@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.SetPayPwdActivity">
+    tools:context=".activity.SetPayPwdActivity">
     <include layout="@layout/toolbar"/>
-    <com.edu.schooltask.ui.view.InputTextView
+    <com.edu.schooltask.view.InputTextView
         android:id="@+id/spp_pwd"
         android:layout_below="@id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:IT_inputType="payPassword"
         app:IT_text="请输入支付密码">
-    </com.edu.schooltask.ui.view.InputTextView>
-    <com.edu.schooltask.ui.view.InputTextView
+    </com.edu.schooltask.view.InputTextView>
+    <com.edu.schooltask.view.InputTextView
         android:id="@+id/spp_pwd_2"
         android:layout_below="@id/toolbar_layout"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:visibility="gone"
         app:IT_inputType="payPassword"
         app:IT_text="请再次输入支付密码">
-    </com.edu.schooltask.ui.view.InputTextView>
+    </com.edu.schooltask.view.InputTextView>
     <TextView
         android:id="@+id/spp_pre_btn"
         android:layout_width="wrap_content"
@@ -46,10 +46,10 @@
         android:textSize="20sp"
         android:text="设置成功"
         android:visibility="gone"/>
-    <com.edu.schooltask.ui.view.PayPasswordInputBoard
+    <com.edu.schooltask.view.PayPasswordInputBoard
         android:id="@+id/spp_ppib"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
-    </com.edu.schooltask.ui.view.PayPasswordInputBoard>
+    </com.edu.schooltask.view.PayPasswordInputBoard>
 </RelativeLayout>

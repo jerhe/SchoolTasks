@@ -6,34 +6,34 @@
     android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.edu.schooltask.ui.view.TextItem
+    <com.edu.schooltask.view.TextItem
         android:id="@+id/detail_id"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemName="交易号">
-    </com.edu.schooltask.ui.view.TextItem>
-    <com.edu.schooltask.ui.view.TextItem
+    </com.edu.schooltask.view.TextItem>
+    <com.edu.schooltask.view.TextItem
         android:id="@+id/detail_type"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemName="支出">
-    </com.edu.schooltask.ui.view.TextItem>
-    <com.edu.schooltask.ui.view.TextItem
+    </com.edu.schooltask.view.TextItem>
+    <com.edu.schooltask.view.TextItem
         android:layout_marginTop="5dp"
         android:id="@+id/detail_explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemName="说明">
-    </com.edu.schooltask.ui.view.TextItem>
-    <com.edu.schooltask.ui.view.TextItem
+    </com.edu.schooltask.view.TextItem>
+    <com.edu.schooltask.view.TextItem
         android:id="@+id/detail_time"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemName="时间">
-    </com.edu.schooltask.ui.view.TextItem>
+    </com.edu.schooltask.view.TextItem>
 </LinearLayout>

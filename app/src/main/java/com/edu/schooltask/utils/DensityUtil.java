@@ -39,4 +39,14 @@ public class DensityUtil {
         activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
         return metric.heightPixels;     // 屏幕高度（像素）
     }
+
+    public static int pxToSp(Context context, float pxValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (pxValue / fontScale + 0.5f);
+    }
+
+    public static int spToPx(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
 }

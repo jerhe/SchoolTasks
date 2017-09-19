@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.FriendRequest;
-import com.edu.schooltask.ui.view.useritem.UserItemView;
+import com.edu.schooltask.view.useritem.UserItemView;
 
 import java.util.List;
 
@@ -55,6 +55,12 @@ public class FriendRequestAdapter extends BaseQuickAdapter<FriendRequest, BaseVi
                 helper.setVisible(R.id.fr_reject, false);
                 helper.setVisible(R.id.fr_result, true);
                 helper.setText(R.id.fr_result, "已拒绝");
+                break;
+            case 6:
+                helper.setVisible(R.id.fr_agree, false);
+                helper.setVisible(R.id.fr_reject, false);
+                helper.setVisible(R.id.fr_result, true);
+                helper.setText(R.id.fr_result, "已删除");
                 break;
         }
     }

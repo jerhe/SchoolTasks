@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/toolbar"/>
-    <TextView
-        android:padding="5dp"
-        android:text="温馨提示：在您使用转出功能时请务必核对转出账户"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:textSize="12sp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
@@ -45,28 +38,72 @@
                 android:layout_height="30dp"
                 style="?android:attr/progressBarStyleLarge"/>
         </RelativeLayout>
-
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/money_recharge"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:text="充值" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.edu.schooltask.view.ImageTextView
+            android:id="@+id/money_recharge_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/bg_item_white"
+            app:ImageText_text="充值"
+            app:ImageText_icon="@drawable/ic_recharge" />
+        <include layout="@layout/line"/>
+        <RelativeLayout
+            android:id="@+id/money_recharge_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@color/baseBackgroundColor"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/money_recharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/btn_theme"
+                android:text="充值"/>
+            <com.edu.schooltask.view.TextSpinner
+                android:id="@+id/money_recharge_ts"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_toLeftOf="@id/money_recharge"
+                app:TS_text="充值金额"/>
+        </RelativeLayout>
+    </LinearLayout>
     <include layout="@layout/line"/>
-    <TextView
+    <com.edu.schooltask.view.ImageTextView
         android:id="@+id/money_transfer"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="20dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:text="转出"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_item_white"
+        android:padding="15dp"
+        app:ImageText_icon="@drawable/ic_transfer"
+        app:ImageText_text="转出" />
     <include layout="@layout/line"/>
-
+    <com.edu.schooltask.view.ImageTextView
+        android:id="@+id/money_alipay"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_item_white"
+        android:padding="15dp"
+        app:ImageText_icon="@drawable/ic_alipay"
+        app:ImageText_text="支付宝账号" />
+    <include layout="@layout/line"/>
 </LinearLayout>
 

@@ -2,11 +2,6 @@ package com.edu.schooltask.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -19,9 +14,9 @@ import java.util.List;
  */
 
 public class TextListAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
-
-    public TextListAdapter(@Nullable List<String> data) {
-        super(R.layout.item_text, data);
+    
+    public TextListAdapter(@LayoutRes int layoutResId, @Nullable List<String> data) {
+        super(layoutResId, data);
     }
 
     @Override

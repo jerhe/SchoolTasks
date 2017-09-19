@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/shadow"/>
-    <com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView
+    <com.edu.schooltask.view.recyclerview.IconMenuRecyclerView
         android:id="@+id/rm_imrv"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_alignParentBottom="true"
         android:background="@color/backgroundColor">
-    </com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView>
+    </com.edu.schooltask.view.recyclerview.IconMenuRecyclerView>
 
 </RelativeLayout>

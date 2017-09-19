@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  */
 
 public class Voucher {
-    private long id;	//代金券编号
+    private int id;	//代金券编号
     private String userId;	//所属用户
     private BigDecimal money;	//金额
     private String explanation;	//说明
@@ -17,11 +17,11 @@ public class Voucher {
 
     public Voucher(){}
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -75,7 +75,6 @@ public class Voucher {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Voucher)) return false;
-        return ((Voucher)obj).getId() == getId();
+        return obj instanceof Voucher && ((Voucher)obj).getId() == getId();
     }
 }

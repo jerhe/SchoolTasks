@@ -13,6 +13,7 @@ public class TaskPostBody {
     private String school;
     private String description;
     private String content;
+    private String hideContent;
     private BigDecimal cost;   //支付金额
     private BigDecimal reward;    //任务报酬
     private int limitTime;
@@ -98,5 +99,13 @@ public class TaskPostBody {
 
     public void setImageNum(int imageNum) {
         this.imageNum = imageNum;
+    }
+
+    public String getHideContent() {
+        return hideContent;
+    }
+
+    public void setHideContent(String hideContent) {
+        this.hideContent = hideContent;
     }
 }

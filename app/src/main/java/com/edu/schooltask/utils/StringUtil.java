@@ -1,19 +1,16 @@
 package com.edu.schooltask.utils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 
 import com.edu.schooltask.other.CustomClickableSpan;
-import com.edu.schooltask.ui.activity.UserActivity;
+import com.edu.schooltask.activity.UserActivity;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -133,5 +130,10 @@ public class StringUtil {
             sb.append(x);
         }
         return sb.toString();
+    }
+
+    public static void copy(Context context, String str){
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setPrimaryClip(ClipData.newPlainText("微任务", str));
     }
 }

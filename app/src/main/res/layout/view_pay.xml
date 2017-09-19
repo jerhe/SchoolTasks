@@ -30,21 +30,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.edu.schooltask.ui.view.InputTextView
+            <com.edu.schooltask.view.InputTextView
                 android:id="@+id/pay_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:IT_inputType="payPassword"
                 app:IT_text="支付密码">
-            </com.edu.schooltask.ui.view.InputTextView>
+            </com.edu.schooltask.view.InputTextView>
         </LinearLayout>
 
-        <com.edu.schooltask.ui.view.PayPasswordInputBoard
+        <com.edu.schooltask.view.PayPasswordInputBoard
             android:id="@+id/pay_ppib"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        </com.edu.schooltask.ui.view.PayPasswordInputBoard>
+        </com.edu.schooltask.view.PayPasswordInputBoard>
     </LinearLayout>
 
 </RelativeLayout>

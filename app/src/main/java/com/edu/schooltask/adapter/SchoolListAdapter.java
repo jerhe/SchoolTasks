@@ -15,7 +15,7 @@ import java.util.List;
 public class SchoolListAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     public SchoolListAdapter(@Nullable List<String> data) {
-        super(R.layout.item_school, data);
+        super(R.layout.item_text_match, data);
     }
 
     @Override

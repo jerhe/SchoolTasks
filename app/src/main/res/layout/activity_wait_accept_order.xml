@@ -3,51 +3,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.WaitAcceptOrderActivity">
+    tools:context=".activity.WaitAcceptOrderActivity">
     <RelativeLayout
         android:id="@+id/wao_bottom"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:background="@color/backgroundColor"
-        android:layout_height="wrap_content">
-        <com.edu.schooltask.ui.view.CommentInputBoard
-            android:id="@+id/wao_cib"
-            android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <com.edu.schooltask.view.ImageTextView
+            android:id="@+id/comment_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:layout_centerVertical="true"
-            android:visibility="invisible">
-        </com.edu.schooltask.ui.view.CommentInputBoard>
-        <RelativeLayout
-            android:id="@+id/wao_btn_layout"
-            android:gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            app:ImageText_icon="@drawable/ic_comment"
+            app:ImageText_text="评论" />
+        <TextView
+            android:id="@+id/wao_accept_btn"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:text="接单"
             android:layout_centerVertical="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/wao_comment_btn"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_comment"/>
-
-            <TextView
-                android:id="@+id/wao_accept_btn"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:text="接单"
-                android:textColor="@color/white"
-                android:background="@drawable/btn_theme"
-                android:layout_width="70dp"
-                android:gravity="center"
-                android:layout_height="@dimen/btn_height" />
-        </RelativeLayout>
-
+            android:textColor="@color/white"
+            android:background="@drawable/btn_theme"
+            android:layout_width="70dp"
+            android:gravity="center"
+            android:layout_height="@dimen/btn_height" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_above="@id/wao_bottom"
@@ -55,16 +39,14 @@
         android:layout_height="match_parent">
         <include layout="@layout/toolbar"/>
         <com.baoyz.widget.PullRefreshLayout
-            android:id="@+id/wao_prl"
+            android:id="@+id/comment_prl"
             android:layout_below="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:refreshColor="@color/colorPrimary">
-            <com.edu.schooltask.ui.view.MyScrollView
-                android:id="@+id/wao_msv"
+            <com.edu.schooltask.view.MyScrollView
+                android:id="@+id/comment_msv"
                 android:fillViewport="true"
-                android:fadingEdge="none"
-                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <LinearLayout
@@ -72,18 +54,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
-                        android:id="@+id/wao_header"
+                        android:id="@+id/comment_header"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <com.edu.schooltask.ui.view.TaskItemView
+                        <com.edu.schooltask.view.task.TaskItemView
                             android:id="@+id/wao_tiv"
+                            android:orientation="vertical"
                             android:layout_marginBottom="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                        </com.edu.schooltask.ui.view.TaskItemView>
+                            <TextView
+                                android:id="@+id/wao_hide_tip"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:textColor="@color/hintColor"
+                                android:textSize="12sp"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="60dp"
+                                android:text="*任务有隐藏内容，接单人可见"
+                                android:visibility="gone"/>
+                        </com.edu.schooltask.view.task.TaskItemView>
+
                     </LinearLayout>
                     <RelativeLayout
-                        android:id="@+id/wao_count_layout"
+                        android:id="@+id/comment_count_layout"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
@@ -91,40 +87,31 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView
-                            android:id="@+id/wao_crv"
+                        <com.edu.schooltask.view.recyclerview.CommentRecyclerView
+                            android:id="@+id/comment_crv"
                             android:nestedScrollingEnabled="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                        </com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView>
+                        </com.edu.schooltask.view.recyclerview.CommentRecyclerView>
                     </RelativeLayout>
-
                 </LinearLayout>
-
-            </com.edu.schooltask.ui.view.MyScrollView>
-
+            </com.edu.schooltask.view.MyScrollView>
         </com.baoyz.widget.PullRefreshLayout>
         <RelativeLayout
-            android:id="@+id/wao_count_layout_top"
+            android:id="@+id/comment_count_layout_top"
             android:layout_below="@id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="40dp">
         </RelativeLayout>
-        <com.edu.schooltask.ui.view.CommentReplyView
-            android:id="@+id/wao_comment_reply_view"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.edu.schooltask.ui.view.CommentReplyView>
     </RelativeLayout>
     <include layout="@layout/line_bottom"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_above="@id/wao_bottom"/>
-    <com.edu.schooltask.ui.view.PayView
+    <com.edu.schooltask.view.PayView
         android:id="@+id/wao_pv"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.edu.schooltask.ui.view.PayView>
+    </com.edu.schooltask.view.PayView>
 </RelativeLayout>

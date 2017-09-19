@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.edu.schooltask.view.useritem.UserItemDynamicView
+        android:id="@+id/dynamic_uidv"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </com.edu.schooltask.view.useritem.UserItemDynamicView>
+    <TextView
+        android:id="@+id/dynamic_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/darkColor"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.lzy.ninegrid.NineGridView
+        android:id="@+id/dynamic_image"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ngv_singleImageRatio="1.5"
+        app:ngv_maxSize="9"
+        app:ngv_mode="grid" />
+
+    <TextView
+        android:id="@+id/dynamic_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textSize="11sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginLeft="10dp"/>
+</LinearLayout>

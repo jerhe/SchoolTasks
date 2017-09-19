@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.edu.schooltask.ui.activity.UserActivity;
+import com.edu.schooltask.activity.UserActivity;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;

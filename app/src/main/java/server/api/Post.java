@@ -1,24 +1,24 @@
 package server.api;
 
+import com.edu.schooltask.beans.UserInfoWithToken;
+import com.edu.schooltask.event.UnloginEvent;
 import com.edu.schooltask.utils.EncriptUtil;
+import com.edu.schooltask.utils.UserUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import server.api.base.BaseCallBack;
-import server.api.base.BaseEvent;
-
-/**
- * 无Token请求体
- * Created by 夜夜通宵 on 2017/8/28.
- */
+import server.api.result.ResultCallBack;
+import server.api.result.Result;
 
 public class Post {
     private String url;
     private Map<String,String> params;
-    private BaseCallBack callBack;
+    private ResultCallBack callBack;
 
     public static Post newPost(){
         return new Post();
@@ -32,13 +32,22 @@ public class Post {
     }
 
     public Post addParam(String key, Object value) {
-        if(this.params == null) this.params = new HashMap<>();
-        this.params.put(key, String.valueOf(value));
+        if(params == null) params = new HashMap<>();
+        params.put(key, String.valueOf(value));
         return this;
     }
 
-    public Post event(BaseEvent event) {
-        callBack = new BaseCallBack(event);
+    public Post result(Result result) {
+        callBack = new ResultCallBack(result);
+        if(result.isWithToken()){
+            if(params == null) params = new HashMap<>();
+            UserInfoWithToken user = UserUtil.getLoginUser();
+            if(user == null) EventBus.getDefault().post(new UnloginEvent());
+            else{
+                params.put("userId", user.getUserId());
+                params.put("token", user.getToken());
+            }
+        }
         return this;
     }
 

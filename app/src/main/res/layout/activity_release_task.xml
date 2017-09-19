@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.ReleaseTaskActivity">
+    tools:context=".activity.ReleaseTaskActivity">
     <RelativeLayout
         android:layout_above="@+id/rt_bottom"
         android:layout_width="match_parent"
@@ -13,14 +13,15 @@
         <include layout="@layout/toolbar"/>
         <ScrollView
             android:layout_below="@+id/toolbar_layout"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
                 android:orientation="vertical"
-
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <com.edu.schooltask.ui.view.InputTextView
+                android:layout_height="wrap_content">
+                <com.edu.schooltask.view.InputTextView
                     android:id="@+id/rt_school"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
@@ -28,54 +29,48 @@
                     app:IT_hint="请输入学校"
                     app:IT_text="学校"
                     app:IT_tip="任务所在学校">
-                </com.edu.schooltask.ui.view.InputTextView>
-
-                <com.edu.schooltask.ui.view.InputTextView
+                </com.edu.schooltask.view.InputTextView>
+                <com.edu.schooltask.view.InputTextView
                     android:id="@+id/rt_reward"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:IT_text="报酬"
                     app:IT_hint="元"
                     app:IT_number="true"
                     app:IT_tip="任务完成后接受者可获得的报酬，最低是1元">
-                </com.edu.schooltask.ui.view.InputTextView>
-                <com.edu.schooltask.ui.view.InputTextView
+                </com.edu.schooltask.view.InputTextView>
+                <com.edu.schooltask.view.InputTextView
                     android:id="@+id/rt_limit_time"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:IT_text="时限"
                     app:IT_hint="小时"
                     app:IT_number="true"
                     app:IT_tip="任务发布有效的时间，超过时间还未被接受的任务将自动取消。每1小时需支付0.1元">
-                </com.edu.schooltask.ui.view.InputTextView>
-                <com.edu.schooltask.ui.view.TextSpinner
+                </com.edu.schooltask.view.InputTextView>
+                <com.edu.schooltask.view.TextSpinner
                     android:id="@+id/rt_des"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    app:TS_text="分类">
-                </com.edu.schooltask.ui.view.TextSpinner>
-                <com.edu.schooltask.ui.view.TaskContentView
+                    app:TS_text="分类" />
+                <include layout="@layout/line"/>
+                <com.edu.schooltask.view.ContentView
                     android:id="@+id/rt_content"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="140dp"
                     android:layout_marginTop="10dp"
                     app:maxLength="200"
-                    app:contentHint="任务内容">
-                </com.edu.schooltask.ui.view.TaskContentView>
-                <com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView
-                    android:id="@+id/rt_irv"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="20dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:background="@color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:imageColumns="5">
-                </com.edu.schooltask.ui.view.recyclerview.ImageRecyclerView>
+                    app:contentHint="任务内容" />
+                <include layout="@layout/line"/>
+                <com.edu.schooltask.view.ContentView
+                    android:id="@+id/rt_content_hide"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="10dp"
+                    app:maxLength="200"
+                    app:contentHint="隐藏内容，接单人可见" />
+                <include layout="@layout/layout_select_image"/>
+                <include layout="@layout/line"/>
             </LinearLayout>
         </ScrollView>
         <View
@@ -87,26 +82,14 @@
             android:visibility="gone"
             android:background="@color/black"/>
     </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/rt_voucher_layout"
+    <FrameLayout
+        android:id="@+id/layout"
         android:layout_above="@+id/rt_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@color/backgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:visibility="gone">
-        <com.baoyz.widget.PullRefreshLayout
-            android:id="@+id/rt_prl"
-            android:layout_width="wrap_content"
-            android:background="@color/white"
-            android:layout_height="200dp"
-            app:refreshColor="@color/colorPrimary">
-            <com.edu.schooltask.ui.view.recyclerview.VoucherRecyclerView
-                android:id="@+id/rt_vrv"
-                android:layout_width="match_parent"
-                android:fadingEdge="none"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"/>
-        </com.baoyz.widget.PullRefreshLayout>
-    </LinearLayout>
+    </FrameLayout>
 
     <include layout="@layout/line_bottom"
         android:layout_width="match_parent"
@@ -144,10 +127,10 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
-    <com.edu.schooltask.ui.view.PayView
+    <com.edu.schooltask.view.PayView
         android:id="@+id/rt_pay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-    </com.edu.schooltask.ui.view.PayView>
+    </com.edu.schooltask.view.PayView>
 </RelativeLayout>

@@ -5,9 +5,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.UpdateLoginPwdActivity">
+    tools:context=".activity.UpdateLoginPwdActivity">
     <include layout="@layout/toolbar"/>
-    <com.edu.schooltask.ui.view.InputTextView
+    <com.edu.schooltask.view.InputTextView
         android:id="@+id/ulp_old"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
         app:IT_inputType="password"
         app:IT_hint="请输入当前密码"
         app:IT_text="原\t密\t码">
-    </com.edu.schooltask.ui.view.InputTextView>
-    <com.edu.schooltask.ui.view.InputTextView
+    </com.edu.schooltask.view.InputTextView>
+    <com.edu.schooltask.view.InputTextView
         android:id="@+id/ulp_new"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -24,8 +24,8 @@
         app:IT_inputType="password"
         app:IT_hint="请输入新密码"
         app:IT_text="新\t密\t码">
-    </com.edu.schooltask.ui.view.InputTextView>
-    <com.edu.schooltask.ui.view.InputTextView
+    </com.edu.schooltask.view.InputTextView>
+    <com.edu.schooltask.view.InputTextView
         android:id="@+id/ulp_new_again"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
         app:IT_inputType="password"
         app:IT_text="确认密码"
         app:IT_hint="请再次输入新密码">
-    </com.edu.schooltask.ui.view.InputTextView>
+    </com.edu.schooltask.view.InputTextView>
     <Button
         android:id="@+id/ulp_btn"
         android:layout_width="match_parent"

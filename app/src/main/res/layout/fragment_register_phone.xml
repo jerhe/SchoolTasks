@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.ui.view.InputTextView
+    <com.edu.schooltask.view.InputTextView
         android:id="@+id/rp_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,19 +13,19 @@
         app:IT_text="手机号"
         app:IT_number="true"
         app:IT_hint="请输入手机号">
-    </com.edu.schooltask.ui.view.InputTextView>
+    </com.edu.schooltask.view.InputTextView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_height="wrap_content">
-        <com.edu.schooltask.ui.view.InputTextView
+        <com.edu.schooltask.view.InputTextView
             android:id="@+id/rp_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:IT_number="true"
             app:IT_text="验证码">
-        </com.edu.schooltask.ui.view.InputTextView>
+        </com.edu.schooltask.view.InputTextView>
         <TextView
             android:id="@+id/rp_get_code"
             android:layout_width="wrap_content"

@@ -5,56 +5,56 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.UserEditActivity">
+    tools:context=".activity.UserEditActivity">
     <include layout="@layout/toolbar"/>
-    <com.edu.schooltask.ui.view.UserEditItem
+    <com.edu.schooltask.view.UserEditItem
         android:id="@+id/ue_head"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:name="头像"
         app:type="head">
-    </com.edu.schooltask.ui.view.UserEditItem>
-    <com.edu.schooltask.ui.view.UserEditItem
+    </com.edu.schooltask.view.UserEditItem>
+    <com.edu.schooltask.view.UserEditItem
         android:id="@+id/ue_bg"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:name="背景"
         app:type="image">
-    </com.edu.schooltask.ui.view.UserEditItem>
-    <com.edu.schooltask.ui.view.UserEditItem
+    </com.edu.schooltask.view.UserEditItem>
+    <com.edu.schooltask.view.UserEditItem
         android:id="@+id/ue_name"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:name="昵称"
         app:type="text">
-    </com.edu.schooltask.ui.view.UserEditItem>
-    <com.edu.schooltask.ui.view.UserEditItem
+    </com.edu.schooltask.view.UserEditItem>
+    <com.edu.schooltask.view.UserEditItem
         android:id="@+id/ue_sign"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:name="简介"
         app:type="text">
-    </com.edu.schooltask.ui.view.UserEditItem>
-    <com.edu.schooltask.ui.view.UserEditItem
+    </com.edu.schooltask.view.UserEditItem>
+    <com.edu.schooltask.view.UserEditItem
         android:id="@+id/ue_school"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:name="学校"
         app:type="text">
-    </com.edu.schooltask.ui.view.UserEditItem>
-    <com.edu.schooltask.ui.view.UserEditItem
+    </com.edu.schooltask.view.UserEditItem>
+    <com.edu.schooltask.view.UserEditItem
         android:id="@+id/ue_sex"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:name="性别"
         app:type="text">
-    </com.edu.schooltask.ui.view.UserEditItem>
-    <com.edu.schooltask.ui.view.UserEditItem
+    </com.edu.schooltask.view.UserEditItem>
+    <com.edu.schooltask.view.UserEditItem
         android:id="@+id/ue_birth"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:name="生日"
         app:type="text">
-    </com.edu.schooltask.ui.view.UserEditItem>
+    </com.edu.schooltask.view.UserEditItem>
 </LinearLayout>

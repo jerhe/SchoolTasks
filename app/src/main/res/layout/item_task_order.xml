@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:paddingTop="10dp"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/bg_item"
+    android:background="@drawable/bg_item_white"
     android:layout_height="wrap_content">
     <LinearLayout
         android:orientation="horizontal"
@@ -75,4 +75,5 @@
             android:layout_height="wrap_content"
             android:text="3.5"/>
     </RelativeLayout>
+    <include layout="@layout/line"/>
 </LinearLayout>

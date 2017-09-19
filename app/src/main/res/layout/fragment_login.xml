@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.edu.schooltask.ui.view.InputTextView
+    <com.edu.schooltask.view.InputTextView
         android:id="@+id/login_id"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -13,7 +13,7 @@
         app:IT_text="手机号"
         app:IT_number="true"
         app:IT_hint="请输入手机号">
-    </com.edu.schooltask.ui.view.InputTextView>
+    </com.edu.schooltask.view.InputTextView>
     <RelativeLayout
         android:id="@+id/login_switch_layout"
         android:layout_width="match_parent"
@@ -23,14 +23,14 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.edu.schooltask.ui.view.InputTextView
+            <com.edu.schooltask.view.InputTextView
                 android:id="@+id/login_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:IT_inputType="password"
                 app:IT_hint="请输入密码"
                 app:IT_text="密\t\t码">
-            </com.edu.schooltask.ui.view.InputTextView>
+            </com.edu.schooltask.view.InputTextView>
             <TextView
                 android:layout_gravity="right"
                 android:layout_alignParentRight="true"
@@ -49,13 +49,13 @@
             android:id="@+id/login_sms_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.edu.schooltask.ui.view.InputTextView
+            <com.edu.schooltask.view.InputTextView
                 android:id="@+id/login_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:IT_number="true"
                 app:IT_text="验证码">
-            </com.edu.schooltask.ui.view.InputTextView>
+            </com.edu.schooltask.view.InputTextView>
             <TextView
                 android:id="@+id/login_get_code"
                 android:layout_width="wrap_content"

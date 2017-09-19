@@ -12,13 +12,13 @@
         android:textSize="16sp"
         android:text="简介"/>
     <include layout="@layout/line"/>
-    <com.edu.schooltask.ui.view.TaskContentView
+    <com.edu.schooltask.view.ContentView
         android:id="@+id/dis_content"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:contentHint="请输入简介"
         app:maxLength="40">
-    </com.edu.schooltask.ui.view.TaskContentView>
+    </com.edu.schooltask.view.ContentView>
     <include layout="@layout/line"/>
     <LinearLayout
         android:orientation="horizontal"
@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
-            android:background="@drawable/btn_dialog_left"
+            android:background="?attr/selectableItemBackground"
             android:layout_height="match_parent"
             android:text="取消"/>
         <View
@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
-            android:background="@drawable/btn_dialog_right"
+            android:background="?attr/selectableItemBackground"
             android:textColor="@color/colorPrimary"
             android:layout_height="match_parent"
             android:text="确定"/>

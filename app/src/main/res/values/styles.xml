@@ -6,12 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionMenuTextColor">@color/fontColor</item>  <!-- Menu字体颜色 -->
+        <item name="actionMenuTextColor">@color/darkColor</item>  <!-- Menu字体颜色 -->
         <item name="android:colorBackground">@color/baseBackgroundColor</item>
     </style>
 
     <style name="ImageStyle" parent="Theme.AppCompat.Light.NoActionBar" >
-        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>

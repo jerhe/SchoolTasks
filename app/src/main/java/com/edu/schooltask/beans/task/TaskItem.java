@@ -9,11 +9,11 @@ import java.math.BigDecimal;
  * Created by 夜夜通宵 on 2017/5/19.
  */
 
-public class TaskItem extends TaskInfo implements Serializable{
+public class TaskItem extends TaskInfo{
 
-    UserInfo userInfo;
-    String releaseTime;
-    String limitTime;
+    protected UserInfo userInfo;
+    private String releaseTime;
+    private String limitTime;
 
     public TaskItem(){}
 
@@ -39,5 +39,10 @@ public class TaskItem extends TaskInfo implements Serializable{
 
     public void setLimitTime(String limitTime) {
         this.limitTime = limitTime;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof TaskItem && orderId.equals(((TaskItem)obj).getOrderId());
     }
 }

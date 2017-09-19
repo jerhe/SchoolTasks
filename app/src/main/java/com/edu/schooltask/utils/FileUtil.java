@@ -111,6 +111,14 @@ public class FileUtil {
         return path;
     }
 
+    public static String getExternalStorageDirectory(String dir){
+        String path = Environment.getExternalStorageDirectory() + "/" + dir;
+        mkdir(path);
+        return path;
+    }
+
+
+
 //****公共文件夹**********************************************************************************************
 
     /**

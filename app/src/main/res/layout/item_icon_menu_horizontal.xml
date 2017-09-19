@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@drawable/bg_item"
+    android:background="@drawable/bg_item_white"
     android:layout_height="wrap_content">
     <LinearLayout
         android:padding="10dp"
@@ -13,11 +13,11 @@
         <ImageView
             android:layout_marginLeft="10dp"
             android:id="@+id/im_image"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
         <TextView
             android:id="@+id/im_name"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:gravity="center"
             android:layout_height="25dp"/>

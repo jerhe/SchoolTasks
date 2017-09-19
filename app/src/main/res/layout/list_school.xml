@@ -4,11 +4,11 @@
     android:background="@drawable/bg_text_list"
     android:layout_width="200dp"
     android:layout_height="wrap_content">
-    <com.edu.schooltask.ui.view.recyclerview.SchoolRecyclerView
+    <com.edu.schooltask.view.recyclerview.SchoolRecyclerView
         android:id="@+id/school_rv"
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:layout_width="200dp"
         android:layout_height="wrap_content">
-    </com.edu.schooltask.ui.view.recyclerview.SchoolRecyclerView>
+    </com.edu.schooltask.view.recyclerview.SchoolRecyclerView>
 </LinearLayout>

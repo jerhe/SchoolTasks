@@ -66,7 +66,6 @@ public class Detail {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Detail)) return false;
-        return ((Detail)obj).getId() == getId();
+        return obj instanceof Detail && id.equals(((Detail) obj).getId());
     }
 }

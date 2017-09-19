@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="task_release">发布任务</string>
+    <string name="task_release_failed">发布任务失败！</string>
+    <string name="task_wait_accept">等待接单</string>
+    <string name="task_accepted">已经接单</string>
+    <string name="task_wait_finish">等待完成</string>
+    <string name="task_finished">任务完成</string>
+    <string name="task_wait_confirm">等待确认</string>
+    <string name="task_order_finished">订单完成</string>
+    <string name="task_confirm_tip">超过三天将自动确认完成</string>
+    <string name="task_order_overtime">订单超时</string>
+    <string name="task_overtime">任务超时</string>
+    <string name="task_lost">订单失效</string>
+    <string name="task_cancel">订单取消</string>
+    <string name="task_abandon">放弃任务</string>
+    <string name="task_cancel_confirm">确定要取消该任务吗？</string>
+    <string name="task_lost_tip">订单的报酬将退回您的账户</string>
+    <string name="task_overtime_confirm">确定任务已经超时吗？</string>
+    <string name="task_finished_confirm">确定任务已经完成吗？</string>
+    <string name="task_finished_tip">接单人将收到您的报酬</string>
+    <string name="task_abandon_confirm">确定要放弃任务吗？</string>
+    <string name="task_abandon_tip">放弃任务将扣除您的信用值</string>
+</resources>

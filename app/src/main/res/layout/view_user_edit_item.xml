@@ -7,9 +7,10 @@
     <TextView
         android:id="@+id/uei_name"
         android:paddingLeft="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:paddingRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:text="昵称"/>
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/uei_head"
@@ -24,15 +25,17 @@
         android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
         android:layout_width="40dp"
-        android:layout_height="40dp"/>
+        android:layout_height="35dp"/>
     <TextView
         android:id="@+id/uei_text"
+        android:layout_toRightOf="@id/uei_name"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
+        android:paddingRight="20dp"
         android:gravity="right"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:hint="未设置"
         android:maxLines="1"/>
     <View

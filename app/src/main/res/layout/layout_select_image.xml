@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.edu.schooltask.view.ImageTextView
+    android:id="@+id/release_select_image_btn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/bg_item_white"
+    android:padding="15dp"
+    app:ImageText_icon="@drawable/ic_image"
+    app:ImageText_text="添加图片"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/release_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="清空"
+        android:textColor="@color/hintColor"
+        android:textSize="12sp"
+        android:paddingLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
+    <com.lzy.ninegrid.NineGridView
+        android:id="@+id/release_image"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+    <com.edu.schooltask.view.recyclerview.ImageRecyclerView
+        android:id="@+id/release_irv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:visibility="gone">
+    </com.edu.schooltask.view.recyclerview.ImageRecyclerView>
+</com.edu.schooltask.view.ImageTextView>

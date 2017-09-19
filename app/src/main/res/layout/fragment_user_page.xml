@@ -43,22 +43,19 @@
             android:textColor="@color/white"
             android:visibility="invisible"/>
     </RelativeLayout>
-
-    <com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView
+    <com.edu.schooltask.view.recyclerview.IconMenuRecyclerView
         android:id="@+id/up_rv"
         android:fadingEdge="none"
         android:overScrollMode="never"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView>
-
-    <com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView
+        android:layout_height="wrap_content"/>
+    <include layout="@layout/line"/>
+    <com.edu.schooltask.view.recyclerview.IconMenuRecyclerView
         android:id="@+id/up_rv2"
         android:layout_marginTop="10dp"
         android:fadingEdge="none"
         android:background="@color/white"
         android:overScrollMode="never"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.edu.schooltask.ui.view.recyclerview.IconMenuRecyclerView>
+        android:layout_height="match_parent"/>
 </LinearLayout>

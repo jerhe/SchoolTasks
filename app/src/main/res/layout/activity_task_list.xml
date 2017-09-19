@@ -5,29 +5,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.TaskListActivity">
-    <com.baoyz.widget.PullRefreshLayout
-        android:layout_below="@id/toolbar_layout"
-        android:id="@+id/tl_prl"
+    tools:context=".activity.TaskListActivity">
+    <FrameLayout
+        android:id="@+id/layout"
+        android:layout_below="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+    <include layout="@layout/line"
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar_layout"/>
+    <com.edu.schooltask.view.task.TaskFilterView
+        android:id="@+id/tl_tfv"
+        android:layout_below="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:refreshColor="@color/colorPrimary">
-        <com.edu.schooltask.ui.view.recyclerview.TaskItemRecyclerView
-            android:id="@+id/tl_rv"
-            android:fadingEdge="none"
-            android:overScrollMode="never"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.edu.schooltask.ui.view.recyclerview.TaskItemRecyclerView>
-    </com.baoyz.widget.PullRefreshLayout>
+        android:visibility="gone">
+    </com.edu.schooltask.view.task.TaskFilterView>
     <RelativeLayout
-        android:id="@+id/tl_search_layout"
-        android:layout_below="@+id/toolbar_layout"
-        android:background="@color/white"
+        android:id="@+id/toolbar_layout"
+        android:background="@color/backgroundColor"
         android:layout_width="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_height="40dp">
+        android:layout_height="50dp">
         <ImageView
             android:id="@+id/tl_search"
             android:layout_centerVertical="true"
@@ -42,48 +42,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:background="@color/white"
-            android:textColor="@color/black"
+            android:background="@color/backgroundColor"
             android:maxLines="1"
-            android:textColorHint="@color/white"
             android:textSize="14sp"
-            android:hint="搜索"
-            android:textCursorDrawable="@null"/>
-        <View
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/lineColor"/>
-    </RelativeLayout>
-    <com.edu.schooltask.ui.view.TaskFilterView
-        android:id="@+id/tl_tfv"
-        android:layout_below="@+id/toolbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-    </com.edu.schooltask.ui.view.TaskFilterView>
-    <RelativeLayout
-        android:id="@+id/toolbar_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include layout="@layout/toolbar"/>
-        <LinearLayout
+            android:hint="搜索"/>
+        <com.edu.schooltask.view.ImageTextView
             android:id="@+id/tl_tf_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true">
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_filter"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:text="筛选"/>
-        </LinearLayout>
+            android:layout_alignParentRight="true"
+            app:ImageText_icon="@drawable/ic_filter"
+            app:ImageText_text="筛选"/>
     </RelativeLayout>
-
 </RelativeLayout>

@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
+    
+    <RelativeLayout
+        android:id="@+id/mp_toolbar"
         android:layout_width="match_parent"
-        android:background="@color/backgroundColor"
-        android:layout_height="50dp"
-        android:text="消息"
-        android:gravity="center"
-        android:textSize="18sp"/>
-    <com.edu.schooltask.ui.view.ViewPagerTab
-        android:id="@+id/mp_tab"
-        android:layout_width="match_parent"
-        android:layout_height="35dp">
-    </com.edu.schooltask.ui.view.ViewPagerTab>
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/backgroundColor"
+            android:layout_height="match_parent"
+            android:textColor="@color/darkColor"
+            android:text="消息"
+            android:gravity="center"
+            android:textSize="18sp"/>
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor"/>
+    </RelativeLayout>
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
+        <android.support.v4.view.ViewPager
+            android:id="@+id/mp_vp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+        <com.edu.schooltask.view.ImageTextView
             android:id="@+id/mp_login_tip"
+            android:background="@color/baseBackgroundColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="请先登录"/>
-        <android.support.v4.view.ViewPager
-            android:id="@+id/mp_vp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v4.view.ViewPager>
-
+            app:ImageText_text="请先登录"
+            app:ImageText_icon="@drawable/ic_login"/>
     </RelativeLayout>
-
 </LinearLayout>

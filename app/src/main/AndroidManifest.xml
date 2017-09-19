@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 读取网络状态权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -14,16 +15,32 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <permission
+        android:name="com.edu.schooltask.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.edu.schooltask.permission.MIPUSH_RECEIVE" />
 
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launch"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="c5a07ad52c84fdf7f869eedb0aa3cc74" />
+
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/WithImageStyle">
             <intent-filter>
@@ -33,68 +50,68 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/login"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.activity.ReleaseTaskActivity"
+            android:name=".activity.ReleaseTaskActivity"
             android:label="发布任务"
             android:theme="@style/WithImageStyle"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.MoneyActivity"
+            android:name=".activity.MoneyActivity"
             android:label="我的钱包" />
         <activity
-            android:name=".ui.activity.WaitAcceptOrderActivity"
+            android:name=".activity.WaitAcceptOrderActivity"
             android:label="任务详情"
             android:theme="@style/WithImageStyle" />
         <activity
-            android:name=".ui.activity.ImageActivity"
-            android:label=""
+            android:name=".activity.ImageActivity"
+            android:label="查看图片"
             android:theme="@style/ImageStyle" />
         <activity
-            android:name=".ui.activity.UserActivity"
+            android:name=".activity.UserActivity"
             android:label="" />
         <activity
-            android:name=".ui.activity.TaskOrderActivity"
+            android:name=".activity.TaskOrderActivity"
             android:label="订单详情"
             android:theme="@style/WithImageStyle" />
         <activity
-            android:name=".ui.activity.SetPayPwdActivity"
+            android:name=".activity.SetPayPwdActivity"
             android:label="设置支付密码" />
         <activity
-            android:name=".ui.activity.UserEditActivity"
+            android:name=".activity.UserEditActivity"
             android:label="修改资料" />
         <activity
-            android:name=".ui.activity.TaskListActivity"
-            android:label="任务栏" />
+            android:name=".activity.TaskListActivity"
+            android:label="任务栏"
+            android:theme="@style/WithImageStyle" />
         <activity
-            android:name=".ui.activity.DetailActivity"
+            android:name=".activity.DetailActivity"
             android:label="账单" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.PersonalCenterActivity"
+            android:name=".activity.PersonalCenterActivity"
             android:label="个人中心" />
         <activity
-            android:name=".ui.activity.SettingActivity"
+            android:name=".activity.SettingActivity"
             android:label="设置" />
         <activity
-            android:name=".ui.activity.HelpActivity"
+            android:name=".activity.HelpActivity"
             android:label="帮助" />
         <activity
-            android:name=".ui.activity.AboutActivity"
+            android:name=".activity.AboutActivity"
             android:label="关于" />
         <activity
-            android:name=".ui.activity.UpdateLoginPwdActivity"
+            android:name=".activity.UpdateLoginPwdActivity"
             android:label="修改登录密码" />
-        <activity android:name="cn.bmob.pay.v3.act.PayAct" />
         <activity
-            android:name=".ui.activity.VoucherActivity"
+            android:name=".activity.VoucherActivity"
             android:label="我的代金券" />
         <activity
-            android:name=".ui.activity.ConversationActivity"
+            android:name=".activity.ConversationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
@@ -121,12 +138,96 @@
         </receiver>
 
         <activity
-            android:name=".ui.activity.FriendRequestActivity"
+            android:name=".activity.FriendRequestActivity"
             android:label="验证消息" />
         <activity
-            android:name=".ui.activity.UpdatePayPwdActivity"
+            android:name=".activity.UpdatePayPwdActivity"
             android:label="修改支付密码" />
-        <activity android:name=".ui.activity.ImageSelectActivity" android:label="选择图片" />
+        <activity
+            android:name=".activity.ImageSelectActivity"
+            android:label="选择图片" />
+        <activity
+            android:name=".activity.DynamicListActivity"
+            android:label=""
+            android:theme="@style/WithImageStyle" />
+        <activity
+            android:name=".activity.ReleaseDynamicActivity"
+            android:label="发布动态" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
+        <activity
+            android:name=".activity.LocationActivity"
+            android:label="正在获取位置..." />
+        <activity
+            android:name=".activity.DynamicActivity"
+            android:label="动态"
+            android:theme="@style/WithImageStyle" />
+        <activity
+            android:name=".activity.ReleaseCommentActivity"
+            android:label="编辑评论" />
+
+        <!-- 小米 配置开始 < -->
+        <service
+            android:name="com.xiaomi.push.service.XMPushService"
+            android:enabled="true" />
+        <service
+            android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name="com.xiaomi.mipush.sdk.MessageHandleService"
+            android:enabled="true" />
+        <!-- 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 -->
+
+        <service
+            android:name="com.xiaomi.push.service.XMJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!-- 注：此service必须在3.0.1版本以后（包括3.0.1版本）加入 -->
+
+        <receiver
+            android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.xiaomi.push.service.receivers.PingReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.xiaomi.push.PING_TIMER" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="io.rong.push.platform.MiMessageReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR" />
+            </intent-filter>
+        </receiver>
+        <!-- 小米 配置结束 < -->
+
+        <activity
+            android:name=".activity.AliUserActivity"
+            android:label="支付宝账号" />
+        <activity
+            android:name=".activity.ReplyActivity"
+            android:label="查看回复" />
+        <activity
+            android:name=".activity.FriendActivity"
+            android:label="我的好友" />
+        <activity android:name=".activity.LikeListActivity" android:label="喜欢列表" />
     </application>
 
 </manifest>

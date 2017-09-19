@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".activity.ReplyActivity">
+    <include layout="@layout/toolbar"/>
+    <com.edu.schooltask.view.CountView
+        android:id="@+id/reply_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.edu.schooltask.view.CountView>
+    <FrameLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+    </FrameLayout>
+    <include layout="@layout/line"/>
+    <LinearLayout
+        android:id="@+id/reply_reply"
+        android:gravity="center"
+        android:background="@color/backgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <com.edu.schooltask.view.ImageTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ImageText_icon="@drawable/ic_comment"
+            app:ImageText_text="回复">
+        </com.edu.schooltask.view.ImageTextView>
+    </LinearLayout>
+
+</LinearLayout>

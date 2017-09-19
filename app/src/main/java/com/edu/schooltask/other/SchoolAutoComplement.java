@@ -12,8 +12,8 @@ import android.widget.PopupWindow;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.edu.schooltask.R;
-import com.edu.schooltask.ui.view.recyclerview.SchoolRecyclerView;
-import com.edu.schooltask.ui.view.recyclerview.TextRecyclerView;
+import com.edu.schooltask.view.listener.ItemClickListener;
+import com.edu.schooltask.view.recyclerview.SchoolRecyclerView;
 import com.edu.schooltask.utils.DensityUtil;
 
 import java.util.ArrayList;
@@ -45,15 +45,14 @@ public class SchoolAutoComplement implements TextWatcher{
         popupView = LayoutInflater.from(editText.getContext()).inflate(R.layout.list_school,null);
         recyclerView = (SchoolRecyclerView) popupView.findViewById(R.id.school_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(popupView.getContext()));
-        recyclerView.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() { //选择学校
+        recyclerView.setItemClickListener(new ItemClickListener<String>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                editText.setText(recyclerView.get(position));
-                editText.setSelection(editText.getText().length());
+            public void onItemClick(int position, String s) {
+                editText.setText(s);
+                editText.setSelection(s.length());
                 popupWindow.dismiss();
             }
         });
-
         popupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT, false);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -76,7 +75,7 @@ public class SchoolAutoComplement implements TextWatcher{
         if(allSchools.size() == 0) return;
         if(s.length() == 0) return;
 
-        recyclerView.clear(true);
+        recyclerView.clear();
         String inputSchool = s.toString();
         List<String> findSchool = new ArrayList<>();
         for(String school : allSchools){

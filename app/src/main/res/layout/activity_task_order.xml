@@ -4,225 +4,219 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.activity.TaskOrderActivity">
+    tools:context=".activity.TaskOrderActivity">
     <RelativeLayout
         android:id="@+id/order_bottom"
         android:layout_alignParentBottom="true"
         android:background="@color/backgroundColor"
         android:layout_width="match_parent"
         android:visibility="gone"
-        android:layout_height="wrap_content">
-        <RelativeLayout
-            android:id="@+id/order_btn_layout"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/order_comment_btn"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_comment"/>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_alignParentRight="true">
-                <TextView
-                    android:id="@+id/order_abandon_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="35dp"
-                    android:gravity="center"
-                    android:text="放弃任务"
-                    android:background="@drawable/btn_white"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="20dp"
-                    android:visibility="gone"/>
-                <TextView
-                    android:id="@+id/order_cancel_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="35dp"
-                    android:gravity="center"
-                    android:text="取消任务"
-                    android:background="@drawable/btn_white"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="20dp"
-                    android:visibility="gone"/>
-                <TextView
-                    android:id="@+id/order_overtime_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="35dp"
-                    android:gravity="center"
-                    android:text="任务超时"
-                    android:background="@drawable/btn_white"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="20dp"
-                    android:visibility="gone"/>
-                <TextView
-                    android:id="@+id/order_finish_btn"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_width="80dp"
-                    android:gravity="center"
-                    android:layout_height="35dp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/btn_theme"
-                    android:text="完成任务"
-                    android:visibility="gone"/>
-                <TextView
-                    android:id="@+id/order_confirm_btn"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center"
-                    android:layout_width="80dp"
-                    android:layout_height="35dp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/btn_theme"
-                    android:text="确认完成"
-                    android:visibility="gone"/>
-            </LinearLayout>
-        </RelativeLayout>
-        <com.edu.schooltask.ui.view.CommentInputBoard
-            android:id="@+id/order_cib"
-            android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <com.edu.schooltask.view.ImageTextView
+            android:id="@+id/comment_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone">
-        </com.edu.schooltask.ui.view.CommentInputBoard>
+            android:paddingLeft="20dp"
+            android:layout_centerVertical="true"
+            app:ImageText_icon="@drawable/ic_comment"
+            app:ImageText_text="评论"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true">
+            <TextView
+                android:id="@+id/order_abandon_btn"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="放弃任务"
+                android:background="@drawable/btn_white"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/order_cancel_btn"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="取消任务"
+                android:background="@drawable/btn_white"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/order_overtime_btn"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="任务超时"
+                android:background="@drawable/btn_white"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/order_finish_btn"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="80dp"
+                android:gravity="center"
+                android:layout_height="35dp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_theme"
+                android:text="完成任务"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/order_confirm_btn"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_theme"
+                android:text="确认完成"
+                android:visibility="gone"/>
+        </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
         android:layout_above="@id/order_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <include layout="@layout/toolbar"/>
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/comment_prl"
+            android:layout_below="@id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <include layout="@layout/toolbar"/>
-            <com.baoyz.widget.PullRefreshLayout
-                android:id="@+id/order_prl"
-                android:layout_below="@id/toolbar_layout"
+            app:refreshColor="@color/colorPrimary">
+            <com.edu.schooltask.view.MyScrollView
+                android:id="@+id/comment_msv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:refreshColor="@color/colorPrimary">
-                <com.edu.schooltask.ui.view.MyScrollView
-                    android:id="@+id/order_msv"
+                android:fillViewport="true">
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true"
-                    android:fadingEdge="none"
-                    android:overScrollMode="never">
+                    android:layout_height="match_parent">
                     <LinearLayout
+                        android:id="@+id/comment_header"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:text="订单信息"
+                            android:background="@color/white"
+                            android:textSize="13sp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"/>
+                        <include layout="@layout/line_margin"/>
                         <LinearLayout
-                            android:id="@+id/order_header"
+                            android:paddingTop="10dp"
+                            android:background="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="订单号"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:textSize="12sp"
+                                android:gravity="center"/>
+                            <TextView
+                                android:id="@+id/order_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textSize="12sp"
+                                android:gravity="center_vertical"
+                                android:textIsSelectable="true"/>
+                        </LinearLayout>
+                        <com.edu.schooltask.view.task.TaskItemView
+                            android:id="@+id/order_tiv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <LinearLayout
+                            android:id="@+id/order_hide_layout"
                             android:orientation="vertical"
+                            android:background="@color/white"
+                            android:paddingLeft="60dp"
+                            android:paddingBottom="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:gravity="right"
+                                android:textSize="12sp"
+                                android:layout_height="wrap_content"
+                                android:text="隐藏内容:"/>
+                            <TextView
+                                android:id="@+id/order_hide_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                        <include layout="@layout/line"/>
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:text="订单状态"
+                            android:background="@color/white"
+                            android:textSize="13sp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"/>
+                        <include layout="@layout/line_margin"/>
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:text="订单信息"
-                                android:background="@color/white"
-                                android:textSize="13sp"
-                                android:gravity="center_vertical"
-                                android:paddingLeft="10dp"/>
-                            <include layout="@layout/line_margin"/>
-                            <LinearLayout
-                                android:paddingTop="10dp"
-                                android:background="@color/white"
-                                android:layout_width="match_parent"
-                                android:layout_height="30dp"
-                                android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="订单号"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="10dp"
-                                    android:textSize="12sp"
-                                    android:gravity="center"/>
-                                <TextView
-                                    android:id="@+id/order_id"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:textSize="12sp"
-                                    android:gravity="center_vertical"
-                                    android:textIsSelectable="true"/>
-                            </LinearLayout>
-                            <com.edu.schooltask.ui.view.TaskItemView
-                                android:id="@+id/order_tiv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                            </com.edu.schooltask.ui.view.TaskItemView>
-                            <TextView
-                                android:layout_marginTop="10dp"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:text="订单状态"
-                                android:background="@color/white"
-                                android:textSize="13sp"
-                                android:gravity="center_vertical"
-                                android:paddingLeft="10dp"/>
-                            <include layout="@layout/line_margin"/>
-                            <com.edu.schooltask.ui.view.recyclerview.OrderStateRecyclerView
+                            <com.edu.schooltask.view.recyclerview.OrderStateRecyclerView
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp"
                                 android:id="@+id/order_osrv"
                                 android:background="@color/white"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                            </com.edu.schooltask.ui.view.recyclerview.OrderStateRecyclerView>
-                            <include layout="@layout/divide"/>
-                        </LinearLayout>
-                        <RelativeLayout
-                            android:id="@+id/order_count_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp">
+                                android:layout_height="wrap_content" />
                         </RelativeLayout>
-                        <!-- 这个布局是为了防止RecyclerView显示不全 -->
-                        <RelativeLayout
+                        <include layout="@layout/line"/>
+                        <include layout="@layout/divide"/>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/comment_count_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp" />
+                    <!-- 这个布局是为了防止RecyclerView显示不全 -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.edu.schooltask.view.recyclerview.CommentRecyclerView
+                            android:id="@+id/comment_crv"
+                            android:background="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                            <com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView
-                                android:id="@+id/order_crv"
-                                android:background="@color/white"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                            </com.edu.schooltask.ui.view.recyclerview.CommentRecyclerView>
-                        </RelativeLayout>
-                    </LinearLayout>
-                </com.edu.schooltask.ui.view.MyScrollView>
-            </com.baoyz.widget.PullRefreshLayout>
-            <RelativeLayout
-                android:id="@+id/order_count_layout_top"
-                android:layout_below="@id/toolbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-            </RelativeLayout>
-        </RelativeLayout>
-
-        <com.edu.schooltask.ui.view.CommentReplyView
-            android:id="@+id/order_comment_reply_view"
+                        </com.edu.schooltask.view.recyclerview.CommentRecyclerView>
+                    </RelativeLayout>
+                </LinearLayout>
+            </com.edu.schooltask.view.MyScrollView>
+        </com.baoyz.widget.PullRefreshLayout>
+        <RelativeLayout
+            android:id="@+id/comment_count_layout_top"
+            android:layout_below="@id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible">
-        </com.edu.schooltask.ui.view.CommentReplyView>
+            android:layout_height="40dp" />
     </RelativeLayout>
     <include layout="@layout/line_bottom"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_above="@id/order_bottom"/>
-    <com.edu.schooltask.ui.view.PayView
+    <com.edu.schooltask.view.PayView
         android:id="@+id/order_pv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
-    </com.edu.schooltask.ui.view.PayView>
-
+        android:visibility="gone" />
 </RelativeLayout>

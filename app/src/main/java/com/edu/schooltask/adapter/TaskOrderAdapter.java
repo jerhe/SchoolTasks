@@ -19,6 +19,11 @@ import java.util.List;
  */
 
 public class TaskOrderAdapter extends BaseQuickAdapter<TaskOrderItem, BaseViewHolder> {
+    private final static int RELEASE_COLOR = Color.parseColor("#1b9dff");
+    private final static int ACCEPT_COLOR = Color.parseColor("#ffa500");
+    private final static int LOST_COLOR = Color.parseColor("#AAAAAA");
+    private final static int DARK_COLOR = Color.parseColor("#2C2C2C");
+
     public TaskOrderAdapter(List<TaskOrderItem> data) {
         super(R.layout.item_task_order, data);
     }
@@ -27,12 +32,13 @@ public class TaskOrderAdapter extends BaseQuickAdapter<TaskOrderItem, BaseViewHo
     protected void convert(BaseViewHolder helper, TaskOrderItem item) {
         TextView typeText = helper.getView(R.id.to_type);
         GradientDrawable typeGrad = (GradientDrawable)typeText.getBackground();
-        if(item.getType() == 0) typeGrad.setColor(Color.parseColor("#1b9dff"));
-        else typeGrad.setColor(Color.parseColor("#ffa500"));
+        if(item.getType() == 0) typeGrad.setColor(RELEASE_COLOR);
+        else typeGrad.setColor(ACCEPT_COLOR);
         String typeStr = item.getType() == 0 ? "发" : "接";
         typeText.setText(typeStr);
         helper.setText(R.id.to_content, item.getContent());
         helper.setText(R.id.to_cost, "¥" + item.getReward());
+        helper.setTextColor(R.id.to_state, item.getState() < 4 ? DARK_COLOR : LOST_COLOR);
         String stateStr;
         switch (item.getState()){
             case 0:

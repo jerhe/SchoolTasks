@@ -7,7 +7,7 @@
     <color name="red">#FF0000</color>
     <color name="fontColor">#757575</color>
     <color name="hintColor">#999999</color>
-    <color name="pressedColor">#EEEEEE</color>
+    <color name="pressedColor">#F0F0F0</color>
     <color name="trans">#00000000</color>    <!-- 透明色 -->
     <color name="shadow">#50000000</color>    <!-- 阴影色 -->
     <color name="darkColor">#2c2c2c</color>

@@ -42,7 +42,7 @@ public class DateUtil {
         boolean today = c2.get(Calendar.DAY_OF_MONTH) - c1.get(Calendar.DAY_OF_MONTH) == 0;
         if(thisYear){
             if(today){
-                if (time > 0 && time < 60 * 3) { // 3分钟内
+                if (time >= 0 && time < 60 * 3) { // 3分钟内
                     return "刚刚";
                 } else if (time < 3600) {   //一小时内
                     return time / 60 + "分钟前";

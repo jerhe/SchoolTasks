@@ -125,8 +125,7 @@ public class UserInfo extends DataSupport implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof UserInfo)) return false;
-		return ((UserInfo)obj).getUserId().equals(userId);
+		return obj instanceof UserInfo && ((UserInfo)obj).getUserId().equals(userId);
 	}
 
 }

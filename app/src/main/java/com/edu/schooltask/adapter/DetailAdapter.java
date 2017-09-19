@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.Detail;
-import com.edu.schooltask.ui.view.TextItem;
+import com.edu.schooltask.view.TextItem;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ import java.util.List;
 public class DetailAdapter extends BaseQuickAdapter<Detail, BaseViewHolder> {
     final String[] rechargeType = new String[]{"充值", "转出", "收入", "支出"};
 
-    public DetailAdapter(int layoutResId, List<Detail> data) {
-        super(layoutResId, data);
+    public DetailAdapter(List<Detail> data) {
+        super(R.layout.item_detail, data);
     }
 
     @Override

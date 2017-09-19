@@ -636,12 +636,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f648.png"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\u1f44a.png",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f44a.png"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_ic_bubble_left.9.png",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ic_bubble_left.9.png"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\u1f44a.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f44a.png"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\u1f37b.png",
@@ -692,12 +692,12 @@
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f61d.png"
     },
     {
-        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\u1f525.png",
-        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f525.png"
-    },
-    {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rc_voice_icon_right.png",
         "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_voice_icon_right.png"
+    },
+    {
+        "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\u1f525.png",
+        "source": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f525.png"
     },
     {
         "merged": "G:\\AndroidStudioCode\\SchoolTasks\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\u1f377.png",

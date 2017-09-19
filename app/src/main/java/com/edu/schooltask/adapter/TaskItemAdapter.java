@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.edu.schooltask.R;
 import com.edu.schooltask.beans.task.TaskItem;
-import com.edu.schooltask.ui.view.TaskItemView;
+import com.edu.schooltask.view.task.TaskItemView;
 
 import java.util.List;
 
@@ -23,6 +23,5 @@ public class TaskItemAdapter extends BaseQuickAdapter<TaskItem, BaseViewHolder> 
     protected void convert(BaseViewHolder helper, TaskItem item) {
         TaskItemView taskItemView = helper.getView(R.id.tv_tiv);
         taskItemView.setAll(item, false);
-        taskItemView.setLengthLimit();
     }
 }

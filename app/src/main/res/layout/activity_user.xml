@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/user_layout"
     android:visibility="invisible"
-    tools:context=".ui.activity.UserActivity">
+    tools:context=".activity.UserActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/user_abl"
@@ -109,11 +109,11 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.edu.schooltask.ui.view.ViewPagerTab
+            <com.edu.schooltask.view.ViewPagerTab
                 android:id="@+id/user_tab"
                 android:layout_width="match_parent"
                 android:layout_height="35dp">
-            </com.edu.schooltask.ui.view.ViewPagerTab>
+            </com.edu.schooltask.view.ViewPagerTab>
             <android.support.v4.view.ViewPager
                 android:id="@+id/user_vp"
                 android:layout_width="match_parent"

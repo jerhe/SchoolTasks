@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.MainActivity">
+    tools:context=".activity.MainActivity">
     <android.support.v4.view.ViewPager
         android:id="@+id/main_vp"
         android:layout_above="@+id/main_bm"
@@ -18,16 +18,16 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_above="@+id/main_bm"/>
-    <com.edu.schooltask.ui.view.ReleaseMenu
+    <com.edu.schooltask.view.ReleaseMenu
         android:id="@+id/main_rm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-    </com.edu.schooltask.ui.view.ReleaseMenu>
-    <com.edu.schooltask.ui.view.BottomTab
+    </com.edu.schooltask.view.ReleaseMenu>
+    <com.edu.schooltask.view.BottomTab
         android:id="@+id/main_bm"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="50dp">
-    </com.edu.schooltask.ui.view.BottomTab>
+    </com.edu.schooltask.view.BottomTab>
 </RelativeLayout>

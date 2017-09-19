@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.DynamicActivity">
+    <LinearLayout
+        android:id="@+id/dynamic_bottom"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/backgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <RelativeLayout
+            android:id="@+id/comment_btn"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <com.edu.schooltask.view.ImageTextView
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ImageText_text="评论"
+                app:ImageText_icon="@drawable/ic_comment">
+            </com.edu.schooltask.view.ImageTextView>
+        </RelativeLayout>
+        <View
+            android:layout_width="0.5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="match_parent"
+            android:background="@color/lineColor"/>
+        <RelativeLayout
+            android:id="@+id/dynamic_like_layout"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <com.edu.schooltask.view.ImageTextView
+                android:id="@+id/dynamic_like_btn"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ImageText_text="喜欢"
+                app:ImageText_icon="@drawable/ic_like">
+            </com.edu.schooltask.view.ImageTextView>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_above="@id/dynamic_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/toolbar"/>
+            <com.baoyz.widget.PullRefreshLayout
+                android:id="@+id/comment_prl"
+                android:layout_below="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:refreshColor="@color/colorPrimary">
+                <com.edu.schooltask.view.MyScrollView
+                    android:id="@+id/comment_msv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:id="@+id/comment_header"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <com.edu.schooltask.view.DynamicView
+                                android:id="@+id/dynamic_dv"
+                                android:paddingBottom="10dp"
+                                android:background="@color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                            </com.edu.schooltask.view.DynamicView>
+                            <include layout="@layout/layout_dynamic_head_list"/>
+                            <include layout="@layout/divide"/>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/comment_count_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"/>
+                        <!-- 这个布局是为了防止RecyclerView显示不全 -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <com.edu.schooltask.view.recyclerview.CommentRecyclerView
+                                android:id="@+id/comment_crv"
+                                android:background="@color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </com.edu.schooltask.view.MyScrollView>
+            </com.baoyz.widget.PullRefreshLayout>
+            <RelativeLayout
+                android:id="@+id/comment_count_layout_top"
+                android:layout_below="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+    <include layout="@layout/line_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@id/dynamic_bottom"/>
+
+</RelativeLayout>

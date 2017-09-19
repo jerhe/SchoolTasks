@@ -7,12 +7,12 @@ import java.math.BigDecimal;
  */
 
 public class TaskOrder {
-    long id;	//自增主键
+    int id;	//自增主键
     String orderId;	//订单号
     String releaseId;	//发布用户id
     String acceptId;	//接单用户id
     BigDecimal cost;	//支付金额
-    long voucherId;	//代金券编号
+    int voucherId;	//代金券编号
     String limitTime;	//订单时限
     int state;	//订单状态
     String releaseTime;	//发布时间
@@ -25,11 +25,11 @@ public class TaskOrder {
     public TaskOrder(){}
 
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -65,11 +65,11 @@ public class TaskOrder {
         this.cost = cost;
     }
 
-    public long getVoucherId() {
+    public int getVoucherId() {
         return voucherId;
     }
 
-    public void setVoucherId(long voucherId) {
+    public void setVoucherId(int voucherId) {
         this.voucherId = voucherId;
     }
 

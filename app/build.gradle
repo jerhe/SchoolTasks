@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
@@ -18,13 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    //so文件加载，需要添加下面代码
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
         }
-    }
-    productFlavors {
     }
     lintOptions {
         checkReleaseBuilds false
@@ -37,9 +33,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile project(":IMLib")
-    compile project(":IMKit")
+    compile project(':IMLib')
+    compile project(':IMKit')
+    compile files('libs/MiPush_SDK_Client_3_4_5.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
@@ -49,7 +45,7 @@ dependencies {
     compile 'org.litepal.android:core:1.5.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.alexvasilkov:gesture-views:2.3.0'
+    compile 'com.alexvasilkov:gesture-views:2.3.2'
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.jaredrummler:material-spinner:1.1.0'
@@ -60,8 +56,11 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.9'
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
+    compile 'com.amap.api:location:3.5.0'
+    compile 'com.amap.api:search:5.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.lzy.widget:ninegridview:0.2.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

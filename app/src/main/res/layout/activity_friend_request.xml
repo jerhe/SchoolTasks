@@ -3,19 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.edu.schooltask.ui.activity.FriendRequestActivity">
+    tools:context=".activity.FriendRequestActivity">
     <include layout="@layout/toolbar"/>
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/fr_prl"
+    <FrameLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:refreshColor="@color/colorPrimary">
-        <com.edu.schooltask.ui.view.recyclerview.FriendRequestRecyclerView
-            android:id="@+id/fr_frrv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.edu.schooltask.ui.view.recyclerview.FriendRequestRecyclerView>
-    </com.baoyz.widget.PullRefreshLayout>
+        android:layout_height="match_parent">
+    </FrameLayout>
 </LinearLayout>

@@ -3,9 +3,8 @@ package com.edu.schooltask.rong.receiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.edu.schooltask.ui.activity.FriendRequestActivity;
+import com.edu.schooltask.activity.FriendRequestActivity;
 
-import io.rong.push.RongPushClient;
 import io.rong.push.notification.PushMessageReceiver;
 import io.rong.push.notification.PushNotificationMessage;
 

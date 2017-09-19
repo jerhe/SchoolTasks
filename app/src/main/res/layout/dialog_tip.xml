@@ -23,7 +23,7 @@
             android:id="@+id/dt_ok"
             android:layout_width="match_parent"
             android:gravity="center"
-            android:background="@drawable/btn_dialog_center"
+            android:background="?attr/selectableItemBackground"
             android:textColor="@color/colorPrimary"
             android:layout_height="40dp"
             android:text="确定"/>

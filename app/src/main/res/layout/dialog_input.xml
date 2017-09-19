@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
-            android:background="@drawable/btn_dialog_left"
+            android:background="?attr/selectableItemBackground"
             android:layout_height="match_parent"
             android:text="取消"/>
         <View
@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
-            android:background="@drawable/btn_dialog_right"
+            android:background="?attr/selectableItemBackground"
             android:textColor="@color/colorPrimary"
             android:layout_height="match_parent"
             android:text="确定"/>

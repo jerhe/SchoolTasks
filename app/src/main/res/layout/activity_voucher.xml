@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.VoucherActivity">
+    tools:context=".activity.VoucherActivity">
     <include layout="@layout/toolbar"/>
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/voucher_prl"
+    <FrameLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:refreshColor="@color/colorPrimary">
-        <com.edu.schooltask.ui.view.recyclerview.VoucherRecyclerView
-            android:id="@+id/voucher_vrv"
-            android:fadingEdge="none"
-            android:overScrollMode="never"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.edu.schooltask.ui.view.recyclerview.VoucherRecyclerView>
-    </com.baoyz.widget.PullRefreshLayout>
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </LinearLayout>

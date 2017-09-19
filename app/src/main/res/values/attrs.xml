@@ -13,7 +13,7 @@
         <attr name="TS_text" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="TaskContentView">
+    <declare-styleable name="ContentView">
         <attr name="maxLength" format="integer"/>
         <attr name="contentHint" format="string"/>
     </declare-styleable>
@@ -38,5 +38,15 @@
     
     <declare-styleable name="ImageRecyclerView">
         <attr name="imageColumns" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="ImageTextView">
+        <attr name="ImageText_text" format="string"/>
+        <attr name="ImageText_icon" format="reference"/>
+        <attr name="ImageText_textColor" format="color" />
+        <attr name="ImageText_gravity" format="enum" >
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
     </declare-styleable>
 </resources>

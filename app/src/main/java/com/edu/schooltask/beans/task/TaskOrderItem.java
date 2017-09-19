@@ -5,10 +5,10 @@ package com.edu.schooltask.beans.task;
  */
 
 public class TaskOrderItem extends TaskInfo {
-    String releaseId;
-    String limitTime;
-    int state;  //订单状态
-    int type;   //发布/接单
+    private String releaseId;
+    private String limitTime;
+    private int state;  //订单状态
+    private int type;   //发布/接单
 
     public String getReleaseId() {
         return releaseId;

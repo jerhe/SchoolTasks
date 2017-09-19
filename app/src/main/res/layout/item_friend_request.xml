@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.edu.schooltask.ui.view.useritem.UserItemView
+    <com.edu.schooltask.view.useritem.UserItemView
         android:id="@+id/fr_user"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_message_top"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
-    </com.edu.schooltask.ui.view.useritem.UserItemView>
+    </com.edu.schooltask.view.useritem.UserItemView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
